@@ -1,0 +1,119 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    WEBSERV.txt                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/14 14:25:40 by nfordoxc          #+#    #+#              #
+#    Updated: 2025/04/14 14:25:45 by nfordoxc         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+1. GET
+
+    Description : Utilisée pour demander des données à un serveur. C'est la méthode la plus courante.
+
+    Exemple : Demander une page web ou un fichier (GET /index.html HTTP/1.1).
+
+    Caractéristiques :
+
+        Les données demandées sont envoyées dans l'URL.
+
+        Aucun corps de requête.
+
+        N'est pas conçue pour modifier des données sur le serveur (elle est "safe").
+
+2. POST
+
+    Description : Utilisée pour envoyer des données au serveur, généralement pour créer ou modifier des ressources.
+
+    Exemple : Soumettre un formulaire (POST /submit HTTP/1.1).
+
+    Caractéristiques :
+
+        Les données sont envoyées dans le corps de la requête.
+
+        Conçue pour provoquer des changements sur le serveur.
+
+        Pas "safe" ni "idempotente" (répéter la requête peut entraîner des effets multiples).
+
+3. PUT
+
+    Description : Utilisée pour mettre à jour ou créer une ressource sur le serveur.
+
+    Exemple : Ajouter ou remplacer un fichier (PUT /image.jpg HTTP/1.1).
+
+    Caractéristiques :
+
+        Les données sont envoyées dans le corps de la requête.
+
+        Idempotente : répéter la requête produit le même résultat.
+
+4. DELETE
+
+    Description : Utilisée pour supprimer une ressource sur le serveur.
+
+    Exemple : Supprimer un fichier ou une ressource (DELETE /file.txt HTTP/1.1).
+
+    Caractéristiques :
+
+        Idempotente : répéter la requête produit le même résultat.
+
+5. PATCH
+
+    Description : Utilisée pour mettre à jour partiellement une ressource sur le serveur.
+
+    Exemple : Modifier uniquement un champ d'une ressource (PATCH /user/123 HTTP/1.1).
+
+    Caractéristiques :
+
+        Pas forcément idempotente selon son utilisation.
+
+6. OPTIONS
+
+    Description : Utilisée pour demander les méthodes HTTP que le serveur accepte pour une ressource.
+
+    Exemple : Vérifier les autorisations (OPTIONS /resource HTTP/1.1).
+
+    Caractéristiques :
+
+        Ne modifie pas les ressources.
+
+7. HEAD
+
+    Description : Similaire à GET, mais ne renvoie que les en-têtes HTTP, pas le corps de la réponse.
+
+    Exemple : Vérifier les métadonnées d'une ressource (HEAD /index.html HTTP/1.1).
+
+    Caractéristiques :
+
+        Utile pour vérifier si une ressource existe ou pour connaître sa taille.
+
+8. TRACE
+
+    Description : Permet au client de tester la communication avec le serveur en renvoyant exactement ce qui a été reçu.
+
+    Exemple : Diagnostiquer les chemins réseau (TRACE /path HTTP/1.1).
+
+    Caractéristiques :
+
+        Rarement utilisé pour des raisons de sécurité.
+
+9. CONNECT
+
+    Description : Utilisée pour établir une connexion tunnel, souvent pour SSL/TLS.
+
+    Exemple : Établir une connexion sécurisée (CONNECT www.example.com:443 HTTP/1.1).
+
+    Caractéristiques :
+
+        Utilisée principalement pour les proxys.
+
+Propriétés importantes des méthodes HTTP
+
+    Safe : Les méthodes comme GET et HEAD sont "safe", car elles ne modifient pas les données sur le serveur.
+
+    Idempotente : Les méthodes comme PUT et DELETE produisent le même résultat si elles sont répétées.
+
+    Non-idempotente : Les méthodes comme POST peuvent provoquer des résultats différents si elles sont répétées.
