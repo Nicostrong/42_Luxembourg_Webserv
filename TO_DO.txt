@@ -1,0 +1,87 @@
+🧠 Logique Générale du Projet
+
+Voici la philosophie générale du projet Webserv :
+
+    Lire un fichier de configuration comme nginx.conf.
+
+    Créer un ou plusieurs serveurs (virtual hosts) selon la config.
+
+    Attendre les connexions entrantes avec des sockets.
+
+    Accepter les connexions et recevoir des requêtes HTTP.
+
+    Parser la requête HTTP (GET, POST, DELETE, headers, body…).
+
+    Appliquer les règles de configuration (routes, méthodes, erreurs, etc.).
+
+    Générer une réponse HTTP correcte (code 200, 404, etc.).
+
+    Envoyer la réponse au client.
+
+    Gérer plusieurs connexions via poll ou select.
+
+    Fermer proprement les connexions et libérer les ressources.
+
+🧩 Étapes Concrètes à Suivre
+1. Analyse du fichier de configuration
+
+    Lire et parser un fichier de type nginx.conf.
+
+    Supporter les directives : server, location, listen, root, index, error_page, etc.
+
+2. Architecture Serveur
+
+    Créer un socket d’écoute (socket, bind, listen).
+
+    Gérer plusieurs sockets (si plusieurs ports sont définis).
+
+    Utiliser poll() (ou select()) pour gérer plusieurs connexions de manière non-bloquante.
+
+3. Connexion et Réception
+
+    Accepter les connexions clients (accept).
+
+    Lire les données envoyées (recv) de manière non-bloquante.
+
+4. Parsing de Requête HTTP
+
+    Lire et découper la requête : méthode, URI, headers, body.
+
+    Supporter au minimum GET, POST, DELETE.
+
+5. Matching avec la configuration
+
+    Chercher le bon server block et location block correspondant à la requête.
+
+    Appliquer les règles définies (redirection, racine, fichiers autorisés, méthodes autorisées…).
+
+6. Construction de la réponse
+
+    Générer l’en-tête HTTP avec le bon code (200 OK, 404 Not Found, etc.).
+
+    Lire les fichiers statiques, ou exécuter un CGI si défini.
+
+    Envoyer les données au client avec send.
+
+7. Nettoyage et gestion des erreurs
+
+    Gérer les erreurs comme 400, 405, 500, etc.
+
+    Fermer les connexions si nécessaire.
+
+    Gérer les timeout/inactivité.
+
+📦 Classes Principales à Prévoir
+
+Voici les classes/logiques qu’il faut envisager sans entrer dans l'implémentation :
+Classe / Module	Rôle principal
+ConfigParser	Parser le fichier de configuration
+Server	Gérer un bloc server, créer les sockets
+Location	Gérer un bloc location (méthodes, redirection, racine, CGI, etc.)
+HTTPServer	Gérer les sockets, la boucle d'événement (poll)
+Client	Représenter un client connecté
+HTTPRequest	Parser une requête HTTP reçue
+HTTPResponse	Construire et envoyer une réponse HTTP
+Router	Trouver le bon server et location à partir de la requête
+CGIHandler (optionnel)	Exécuter un script CGI (si configuré)
+Logger (optionnel)	Afficher les logs (requêtes reçues, erreurs, etc.)
