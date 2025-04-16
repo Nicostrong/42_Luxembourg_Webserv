@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MethodsHTTP.hpp                                    :+:      :+:    :+:   */
+/*   MethodesHTTP.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/16 15:24:29 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/16 16:10:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ class	MethodesHTTP
 
 	private:
 
-		std::set<std::string>				_allowed;
-		std::set<std::string>				_denied;
+		std::set<std::string>			_allowed;
+		std::set<std::string>			_denied;
 
-		static const std::set<std::string>	_validMethodes;
+		static std::set<std::string>	_validMethodes;
 
 		MethodesHTTP( const MethodesHTTP &src_obj );
-		MethodesHTTP	&operator=( const MethodesHTTP &src_obj );
+		MethodesHTTP					&operator=( const MethodesHTTP &src_obj );
 
-		bool			isMethode( const std::string &methode ) const;
+		bool							isMethode( const std::string &methode ) const;
 
-		void			initValidMethodes( void );
+		static std::set<std::string>	initValidMethodes( void );
 
 	public:
 
@@ -38,15 +38,15 @@ class	MethodesHTTP
 		~MethodesHTTP( void );
 
 		/*	SETTER	*/
-		void			allow( const std::string &methode );
-		void			deny( const std::string &methode );
+		void							allow( const std::string &methode );
+		void							deny( const std::string &methode );
 
 		/*	GETTER	*/
-		bool			isAllowed( const std::string &methode ) const;
-		bool			isDenied( const std::string &methode ) const;
+		bool							isAllowed( const std::string &methode ) const;
+		bool							isDenied( const std::string &methode ) const;
 
 		/*	METHODE	*/
-		void			clear( void );
+		void							clear( void );
 
 		/*	class Exception	*/
 		class	MethodeUnknowException : public std::exception

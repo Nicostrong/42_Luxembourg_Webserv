@@ -59,7 +59,8 @@
 		"typeinfo": "cpp",
 		"variant": "cpp",
 		"list": "cpp",
-		"fstream": "cpp"
+		"fstream": "cpp",
+		"set": "cpp"
 	},
 	"editor.rulers": [80, ],
 	"files.exclude": {

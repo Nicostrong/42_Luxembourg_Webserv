@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/16 15:38:06 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/04/16 15:53:37 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 CXX				=	c++
 CXXFLAGS		=	-Wall -Werror -Wextra -g
 CXX_OPT			=	-std=c++98
-CXX_DEF			=	
+CXX_DEF			=	-DDEBUG=1
 
 DEB				=	valgrind
 DEB_OPT			=	--tool=memcheck \
@@ -151,7 +151,7 @@ SLEEP_TIME		=	0.001
 
 define compile_c_to_o
 	@$(eval CURRENT_FILE=$(shell echo $$(($(CURRENT_FILE)+1))))
-	@$(CXX) $(CXXFLAGS) $(CXX_OPT) -c -o $@ $<
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CXX_DEF) -c -o $@ $<
 	@printf $(BLUE)"\r\033[K\033[0KCompiling files => $< ["
 	@for i in $$(seq 0 $$(($(CURRENT_FILE)*100/$(NUM_FILES)))); do \
 		printf $(YELLOW)"="; \
