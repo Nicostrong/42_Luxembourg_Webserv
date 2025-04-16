@@ -1,0 +1,49 @@
+Liste des codes erreurs:
+
+	FAMILLE 1xx:	information
+		100		continue attente de la suite de la requete
+		101		changement de protocole
+		102		mise en attente du client
+	
+	FAMILLE 2xx:	success
+		200		OK requete execute avec success
+		201		OK creation du document
+		202		OK mais pas execute
+		205		OK effacement de la page
+	
+	FAMILLE 3xx:	redirection
+		300		l uri a plusieurs ressources
+		301		document deplace permanent
+		302		document deplace temporaire
+		303		on doit utiliser GET
+		307		redirection temporaire
+		308		redirection permanent
+		310		trop de redirection/boucle infini
+	
+	FAMILLE 4xx:	erreur HTTP
+		400		bad request
+		401		acces non autorise
+		402		paye pour acceder a la ressource
+		403		pas les bonne autorisation pour recevoir la ressource
+		404		not found
+		405		methode non autorise
+		408		timeout client
+		410		ressource plus dispo et pas de redirection
+		414		ur trop longue
+		418		I'm a teapot (1er avril 98)
+		423		ressource locked
+		429		trop de requete client
+		431		entete trop grande pour le serveur (taille limite depasse)
+		444		crash du server
+		450		site porno bloque par papa
+		498		token expire
+		499		le client a ferme la connection
+
+	FAMILLE 5xx:	erreur serveur
+		500		internal error
+		501		non supporte par le serveur
+		503		maintenance
+		504		timeout autre server
+		505		version HTTP non supporte
+		520		error
+		

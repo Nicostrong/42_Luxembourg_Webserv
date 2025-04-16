@@ -1,0 +1,24 @@
+le parser du fichier config:
+
+ignorer les comment (start with '#')
+il y a des structure imbrique (server { location { ... } ...})
+extraire les directives [cle] : [valeur] ;
+chaque directive se termine par un ';' //!\\ si manque afficher message erreur
+chaque [server] contient plusierus [location]
+
+Object list:
+    ConfigParser:
+        ouvrir, lire et parser le fichier .conf
+        Méthodes : parse(), tokenize(), buildAST()
+    ServerConfig:
+        Contient les directives du bloc server
+        Contient une map/list de LocationConfig
+    LocationConfig:
+        Contient les directives spécifiques à chaque location
+    Directive:
+        structure clé/valeurs pour chaque ligne
+
+//!\\ ERROR //!\\
+
+manque un ';'
+manque un '{' ou '}'
