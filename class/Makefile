@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/17 13:54:52 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/04/17 13:55:42 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 CXX				=	c++
 CXXFLAGS		=	-Wall -Werror -Wextra -g
 CXX_OPT			=	-std=c++98
-CXX_DEF			=	-DDEBUG=1
+CXX_DEF			=	-DTEST=1 -DDEBUG=1
 
 DEB				=	valgrind
 DEB_OPT			=	--tool=memcheck \
@@ -25,76 +25,17 @@ DEB_OPT			=	--tool=memcheck \
 					--show-leak-kinds=all \
 					--track-fds=yes
 
-
-ARG0			=	
-
-ARG1			=	
-
-ARG2			=	
-
-ARG3			=	
-
-ARG4			=	
-
 RM				=	rm -f
-
-################################################################################
-#	Librairies																   #
-################################################################################
-
-LIB_LIBFT_DIR	=	
-LIB_PRINTF_DIR	=	
-LIB_GNL_DIR		=	
-
-LIBFT_NAME		=	
-FTPRINTF_NAME	=	
-LIB_GNL_NAME	=	
-
-LIB_PROG		=
-LIB_OPTI		=
-LIB_OPTI		=
-LIB_NAME		=
-
-MYLIBS			=	
-
-MYLIBS_BONUS	=	
 
 ################################################################################
 #	Mandatory part															   #
 ################################################################################
 
-SRC				=	./src/main.cpp \
-					./class/Directive.cpp \
-					./class/Location.cpp \
-					./class/MethodesHTTP.cpp \
-					./class/Server.cpp
+SRC				=	$(file)
 
 OBJ				=	$(SRC:.cpp=.o)
 
-NAME			=	webserv
-
-################################################################################
-#	Bonus part																   #
-################################################################################
-
-SRC_BONUS		=	
-
-OBJ_BONUS		=	$(SRC_BONUS:.cpp=.o)
-
-NAME_BONUS		=	
-
-################################################################################
-#	Tester part
-################################################################################
-
-SRC_TESTER		=	
-BONUS_TESTER	=	
-
-OBJ_TESTER		=	$(SRC_TESTER:.cpp=.o)
-OBJ_BONUS_TESTER=	$(BONUS_TESTER:.cpp=.o)
-
-TESTER			=	
-TESTER_BONUS	=	
+NAME			=	test_class
 
 ################################################################################
 #	Colors																	   #
@@ -141,9 +82,6 @@ CWHITE			=	'\033[5;97m'
 
 CURRENT_FILE	= 	0
 NB_SRC			=	$(words $(SRC))
-NB_BONUS		=	$(words $(SRC_BONUS))
-NB_TESTER		=	$(words $(SRC_TESTER))
-NB_TESTER_BONUS	=	$(words $(BONUS_TESTER))
 SLEEP_TIME		=	0.001
 
 ################################################################################
@@ -163,20 +101,6 @@ define compile_c_to_o
 	fi
 	@$(eval CURRENT_FILE=$(if \
 		$(filter $(CURRENT_FILE), $(NUM_FILES)), 0, $(CURRENT_FILE)))
-endef
-
-define optimise_lib
-	@printf "$(BYELLOW)Optimisation of $(LIB_NAME)$(YELLOW)\n"
-	@$(LIB_OPTI) $(LIB_NAME) > /dev/null 2>&1
-	@for i in $$(seq 1 50); do \
-		printf "\r\033[K\033[0K["; \
-		for j in $$(seq 1 $$i); do \
-			printf "=="; \
-		done; \
-		printf " %d%% ]" $$((i * 2)); \
-		sleep $(SLEEP_TIME); \
-	done; \
-	echo $(RESET)
 endef
 
 define delete_progress
@@ -224,25 +148,10 @@ $(NAME):	$(OBJ)
 
 deb:			all
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-ifeq ($(arg),ARG0)
 	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG0) $(DEB_OUT)
-else ifeq ($(arg),ARG1)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG1) $(DEB_OUT)
-else ifeq ($(arg),ARG2)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG2) $(DEB_OUT)
-else ifeq ($(arg),ARG3)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG3) $(DEB_OUT)
-else ifeq ($(arg),ARG4)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG4) $(DEB_OUT)
-else ifneq ($(arg),)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(arg) $(DEB_OUT)
-else
-	@echo "$(RESET)Usage: make deb arg=ARG0|ARG1|ARG2|ARG3|ARG4|personal_arg"
-endif
 
 clean:
-	$(call delete_progress, ./src/*.o)
-	$(call delete_progress, ./class/*.o)
+	$(call delete_progress, *.o)
 
 fclean: 	clean
 	$(call delete_file, $(NAME))

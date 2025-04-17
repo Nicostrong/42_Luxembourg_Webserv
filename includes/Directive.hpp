@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/16 14:29:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/17 15:23:27 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /*
  *  Directive object for 
  */
-class   Directive
+class	Directive
 {
 
 	private:
@@ -27,9 +27,9 @@ class   Directive
 		std::vector<std::string>	_values;
 	
 		Directive( const Directive &src_obj );
-		Directive	&operator=( const Directive &src_obj );
+		Directive					&operator=( const Directive &src_obj );
 
-		bool		validate( void ) const;
+		bool						validate( void ) const;
 
 	public:
 
@@ -37,10 +37,14 @@ class   Directive
 		~Directive( void );
 
 		/*  SETTER  */
-		void		setName( std::string &name);
+		void						setName( std::string &name);
+		void						setValue( size_t index, std::string &value );
+		void						addValue( std::string &value );
 
 		/*  GETTER  */
-		std::string	getName( void ) const;
+		std::string					getName( void ) const;
+		std::string					getValue( int index ) const;
+		std::string					getAllValue( void ) const;
 
 		/*	class Exception	*/
 		class	DirectiveException : public std::exception
@@ -52,5 +56,7 @@ class   Directive
 		
 		};
 };
+
+std::ostream	&operator<<( std::ostream &out, Directive &src_object );
 
 #endif

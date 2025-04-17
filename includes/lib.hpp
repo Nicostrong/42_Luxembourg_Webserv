@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/16 15:54:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/17 09:45:36 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <string>
 # include <fstream>
 # include <sstream>
+# include <ostream>
 # include <iostream>
 # include <exception>
 

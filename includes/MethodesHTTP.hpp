@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/16 16:10:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/17 16:11:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ class	MethodesHTTP
 		void							deny( const std::string &methode );
 
 		/*	GETTER	*/
-		bool							isAllowed( const std::string &methode ) const;
-		bool							isDenied( const std::string &methode ) const;
+		std::string						getAllowed( void ) const;
+		std::string						getDenied( void ) const;
 
 		/*	METHODE	*/
 		void							clear( void );
+		bool							isAllowed( const std::string &methode ) const;
+		bool							isDenied( const std::string &methode ) const;
 
 		/*	class Exception	*/
 		class	MethodeUnknowException : public std::exception
@@ -59,5 +61,8 @@ class	MethodesHTTP
 		};
 		
 };
+
+std::ostream	&operator<<( std::ostream &out, MethodesHTTP const &src_object );
+std::set<std::string>	MethodesHTTP::_validMethodes = MethodesHTTP::initValidMethodes();
 
 #endif

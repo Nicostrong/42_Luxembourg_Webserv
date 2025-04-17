@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/16 15:03:06 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/17 14:14:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "lib.hpp"
 # include "Directive.hpp"
+# include "MethodesHTTP.hpp"
 
 /*
  *  LocationConfig object for
@@ -23,33 +24,23 @@ class	Location
 {
 	private:
 
-		enum								Methods
-		{
-			GET,
-			POST,
-			PUT,
-			DELETE,
-			PATCH,
-			OPTIONS,
-			HEAD
-		};
-		
+	
 		bool								_autoIndex;
 		std::string							_rootPath;
 		std::string							_returnPath;
-		std::list<Methods>					_methodOk;
-		std::list<Methods>					_methodDeny;
+		std::list<MethodesHTTP>				_methodOk;
+		std::list<MethodesHTTP>				_methodDeny;
 		std::map<std::string, Directive>	_directives;
 
 		Location( const Location &scr_obj );
 
-		Location	&operator=( const Location &src_obj );
+		Location							&operator=( const Location &src_obj );
 
-		bool		validate( void ) const;
+		bool								validate( void ) const;
 	
 	public:
 
-		Location( void );
+		Location( std::map<std::string, std::string> &data );
 		~Location( void );
 
 		/*	class Exception	*/
@@ -62,5 +53,7 @@ class	Location
 		
 		};
 };
+
+std::ostream	&operator<<( std::ostream &out, Location const &src_object );
 
 #endif
