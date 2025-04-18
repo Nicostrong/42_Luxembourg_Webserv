@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/17 12:06:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/18 07:41:26 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,3 +83,24 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 		<< RESET;
 	return (out);
 }
+
+
+/*******************************************************************************
+ *							TESTER CLASS									   *
+ ******************************************************************************/
+
+ #ifdef TEST
+
+ #include "../includes/Server.hpp"
+ 
+ int	main( void )
+ {
+	 std::string	filename = "monfichier.config";
+	 Server		toto(filename);
+	 
+	 std::cout << toto << std::endl;
+	 
+	 return (0);
+ }
+ 
+ #endif
