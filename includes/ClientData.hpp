@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:29:49 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 17:30:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/21 22:18:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "BaseData.hpp"
+#include "HttpRequest.hpp"
 
-# define BUFFER_SIZE 1024
 
 class ClientData : public BaseData
 {
@@ -33,10 +33,11 @@ class ClientData : public BaseData
 		ClientData(const ClientData &obj);
 		~ClientData();
 		ClientData &operator=(const ClientData &obj);
-		void readReceived(int clientSocket, int serverSocket);
+		
+		HttpRequest &getRequest();
 	private:
-		std::string _reiceived;
-		size_t 		_reiceivedCount;
+		HttpRequest _request;
+
 };
 
 #endif

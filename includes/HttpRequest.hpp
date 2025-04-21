@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 18:27:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/21 22:57:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 #include <list>
 #include <iostream>
 #include <cstring>
+#include <sstream>
+
+# define BUFFER_SIZE 1024
 
 class HttpRequest
 {
@@ -45,15 +48,19 @@ class HttpRequest
 		HttpRequest(const HttpRequest &obj);
 		~HttpRequest();
 		HttpRequest &operator=(const HttpRequest &obj);
-		static HttpRequest *decode(int clientSocket, int serverSocket);
+		void readReceived(int clientSocket, int serverSocket);
+		bool isBadRequest() const;
 	private:
-		void readRaw(int clientSocket, int serverSocket);
 		void parseRaw();
+		void parseStartLine(std::string &line);
 		bool _isValid;
 		bool _rawInit;
 		std::string _raw;
+		size_t _receivedCount;
+		size_t _lineParsed;
 		HttpMethod _method;
 		std::list<std::map<std::string, std::string>> _headers;
+		bool _isBadRequest;
 };
 
 #endif

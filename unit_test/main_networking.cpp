@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 21:52:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/21 22:59:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int main()
 				std::cout << "Socket closed by remote" << std::endl;
 				close(pFds.at(i).fd);
 				pmonitoring.unmonitor(pFds.at(i).fd);
+				continue;
 			}
 			switch (pFdsData.at(i)->getType())
 			{
@@ -94,12 +95,19 @@ int main()
 				{
 					if (pFds.at(i).revents & POLLIN)
 					{
-						static_cast<ClientData *>(pFdsData.at(i))->readReceived(
-							pFds.at(i).fd, serverSocket);
+						static_cast<ClientData *>(pFdsData.at(i))->getRequest().
+							readReceived(pFds.at(i).fd, serverSocket);
+							break;
 					}
 					else if (pFds.at(i).revents & POLLOUT)
 					{
-						
+						if (static_cast<ClientData *>(pFdsData.at(i))->getRequest().isBadRequest())
+						{
+							send(pFds.at(i).fd, "Bad Request\n", 13, 0);
+							close(pFds.at(i).fd);
+							pmonitoring.unmonitor(pFds.at(i).fd);
+							std::cout << "Bad Request: Socket closed"<< std::endl;
+						}
 					}
 					break;
 				}
