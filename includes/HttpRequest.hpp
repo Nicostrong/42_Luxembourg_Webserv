@@ -6,13 +6,12 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 11:39:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/21 18:27:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTP_REQUEST
 # define HTTP_REQUEST
-# define BUFFER_SIZE 4096
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <vector>

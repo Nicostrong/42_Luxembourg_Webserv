@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 16:03:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/21 18:27:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <poll.h>
 #include "../includes/HttpRequest.hpp"
 #include "../includes/PollMonitoring.hpp"
+#include "../includes/ClientData.hpp"
 
 #define MAX_CONNECTIONS 20
 
@@ -49,29 +50,43 @@ int main()
 		return (1);
 	}
 
-	pmonitoring.monitor(serverSocket, POLLIN);
+	pmonitoring.monitor(serverSocket, POLLIN, BaseData::SERVER);
 	std::cout << "Listening on port 8080" << std::endl;
 	
 	while (pmonitoring.updatePoll() != -1)
 	{
 		const std::vector<pollfd> pFds = pmonitoring.getFds();
-		std::vector<pollfd>::const_iterator it;
-		for (it = pFds.begin(); it != pFds.end(); ++it) {
-			if(it->revents & POLLIN) 
+		std::vector<BaseData*> pFdsData = pmonitoring.getFdsData();
+		
+		for (size_t i = 0; i < pFds.size(); i++) {
+			if(pFds.at(i).revents & POLLIN) 
 			{
-				if (it == pFds.begin())
+				switch (pFdsData.at(i)->getType())
 				{
-					int clientSocket = accept(serverSocket, NULL, NULL);
-					if (clientSocket != -1)
-						pmonitoring.monitor(clientSocket, POLLIN | POLLHUP | POLLRDHUP);
-					std::cout << "New socket connection" << std::endl;
+					case BaseData::SERVER:
+					{
+						int clientSocket = accept(serverSocket, NULL, NULL);
+						if (clientSocket != -1)
+							pmonitoring.monitor(clientSocket, 
+								POLLIN | POLLHUP | POLLRDHUP, BaseData::CLIENT);
+						std::cout << "New socket connection" << std::endl;
+						break;
+					}
+					case BaseData::CLIENT:
+					{
+						static_cast<ClientData*>(pFdsData.at(i))->readReceived(
+							pFds.at(i).fd, serverSocket);
+						break;
+					}
+					default:
+						break;
 				}
 			}
-			if(it->revents & (POLLERR | POLLHUP | POLLRDHUP)) 
+			if(pFds.at(i).revents & (POLLERR | POLLHUP | POLLRDHUP)) 
 			{
 				std::cout << "Socket closed by remote" << std::endl;
-				close(it->fd);
-				pmonitoring.unmonitor(it->fd);
+				close(pFds.at(i).fd);
+				pmonitoring.unmonitor(pFds.at(i).fd);
 			}
 		}
 		//std::cout << pFds.size();
