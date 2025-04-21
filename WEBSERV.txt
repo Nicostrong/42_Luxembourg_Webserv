@@ -28,6 +28,7 @@ Parsing d une requete HTTP:
 	Host: localhost
 	User-Agent: Mozilla/5.0
 
+	Avec une empty line a la fin des headers pour signifier leur fin.
 3) corps:
 
 	contient les donnees envoyer via POST
