@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 18:16:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/21 20:26:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 PollMonitoring::PollMonitoring() : _fds(0) {}
 
-PollMonitoring::PollMonitoring(const PollMonitoring &obj) 
+PollMonitoring::PollMonitoring(const PollMonitoring &obj)
 	: _fds(0)
 {
 	*this = obj;
@@ -34,16 +34,16 @@ const std::vector<pollfd> &PollMonitoring::getFds() const
 	return (this->_fds);
 }
 
-std::vector<BaseData*> &PollMonitoring::getFdsData() 
+std::vector<BaseData *> &PollMonitoring::getFdsData()
 {
 	return (this->_fdsData);
 }
 
-void PollMonitoring::monitor(int fd, short int events, 
-	BaseData::BaseDataType type)
+void PollMonitoring::monitor(int fd, short int events,
+							 BaseData::BaseDataType type)
 {
 	struct pollfd npollfd;
-	
+
 	if (_fds.size() == MAX_CONNECTIONS)
 		throw PollFullException();
 
@@ -51,7 +51,7 @@ void PollMonitoring::monitor(int fd, short int events,
 
 	npollfd.fd = fd;
 	npollfd.events = events;
-	
+
 	this->_fds.push_back(npollfd);
 	this->_fdsData.push_back(data);
 }
@@ -59,30 +59,30 @@ void PollMonitoring::monitor(int fd, short int events,
 void PollMonitoring::unmonitor(int fd)
 {
 	std::vector<pollfd>::iterator it = this->_fds.begin();
-	std::vector<BaseData*>::iterator itFdsData = this->_fdsData.begin();
-	
-    while (it != this->_fds.end() && itFdsData != this->_fdsData.end()) 
+	std::vector<BaseData *>::iterator itFdsData = this->_fdsData.begin();
+
+	while (it != this->_fds.end() && itFdsData != this->_fdsData.end())
 	{
-        if (it->fd == fd)
+		if (it->fd == fd)
 		{
 			delete *itFdsData;
-            itFdsData = this->_fdsData.erase(itFdsData);
+			itFdsData = this->_fdsData.erase(itFdsData);
 			it = this->_fds.erase(it);
 		}
-        else 
+		else
 		{
-            ++it;
+			++it;
 			++itFdsData;
 		}
-    }
+	}
 }
 
 int PollMonitoring::updatePoll()
 {
-	return (poll(this->_fds.data(), this->_fds.size(), TIMEOUT_POLL));
+	return (poll(this->_fds.data(), this->_fds.size(), -1));
 }
 
-//Exceptions
+// Exceptions
 
 const char *PollMonitoring::PollFullException::what()
 {
