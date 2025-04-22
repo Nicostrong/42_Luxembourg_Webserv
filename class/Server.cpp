@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 15:44:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 17:21:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,7 @@ std::map<size_t, std::string>	Server::getMapError( void ) const
  ******************************************************************************/
 
 /*
- *	Creation class Exception for parsong error with data
+ *	Creation class Exception for parsing error with data
  */
 Server::ParsingError::ParsingError( const std::string &data ) throw()
 {

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 17:07:42 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 17:26:23 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	MethodHTTP::parse( std::string &data )
 			continue;
 		}
 		if (!isMethod(word))
-			throw MethodUnknowException();
+			throw MethodUnknow(word);
 		if (isDenyBlock)
 		{
 			this->_denied.insert(word);
@@ -144,7 +144,7 @@ bool	MethodHTTP::isMethod( const std::string &method ) const
 void	MethodHTTP::allow( const std::string &method )
 {
 	if (!isMethod(method))
-		throw MethodUnknowException();
+		throw MethodUnknow(method);
 	this->_allowed.insert(method);
 	LOG_DEB("new method add on allowed methods");
 	return ;
@@ -156,7 +156,7 @@ void	MethodHTTP::allow( const std::string &method )
 void	MethodHTTP::deny( const std::string &method )
 {
 	if (!isMethod(method))
-		throw MethodUnknowException();
+		throw MethodUnknow(method);
 	this->_denied.insert(method);
 	LOG_DEB("new method add on  denied methods");
 	return ;
@@ -204,7 +204,6 @@ std::string		MethodHTTP::getDenied( void ) const
  *								METHOD 										   *
  ******************************************************************************/
 
-
 /*
  *	Check if the methode is allowed
  */
@@ -237,11 +236,28 @@ void	MethodHTTP::clear( void )
  ******************************************************************************/
 
 /*
- *	Exception for unknow methode
+ *	Creation class Exception for parsong error with data
  */
-const char	*MethodHTTP::MethodUnknowException::what() const throw()
+MethodHTTP::MethodUnknow::MethodUnknow( const std::string &method ) throw()
 {
-	return ("Unknown HTTP method specified");
+	this->_msg = RED"Error method unknow: " + method + RESET;
+	return ;
+}
+
+/*
+ *	Destructor for ParsingError
+ */
+MethodHTTP::MethodUnknow::~MethodUnknow( void ) throw()
+{
+	return ;
+}
+
+/*
+ *	Error parsing file.conf
+ */
+const char		*MethodHTTP::MethodUnknow::what() const throw()
+{
+	return (this->_msg.c_str());
 }
 
 /*******************************************************************************
@@ -382,20 +398,41 @@ void test_manual_allow_deny( void )
 	return ;
 }
 
+void test_unknown_method( const std::string &method )
+{
+	try
+	{
+		MethodHTTP	met;
+
+		met.allow(method);
+		std::cout << met << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	return ;
+}
+
 int main( void )
 {
-	std::cout << "EMPTY BLOCK TEST" << std::endl;
+	std::cout << BLUE << "EMPTY BLOCK TEST" << RESET << std::endl;
 	test_empty_block();
-	std::cout << "DENY ALL TEST" << std::endl;
+	std::cout << BLUE << "DENY ALL TEST" << RESET << std::endl;
 	test_deny_all();
-	std::cout << "ALLOW ALL TEST" << std::endl;
+	std::cout << BLUE << "ALLOW ALL TEST" << RESET << std::endl;
 	test_allow_all();
-	std::cout << "GET OK AND DENY ALL TEST" << std::endl;
+	std::cout << BLUE << "GET OK AND DENY ALL TEST" << RESET << std::endl;
 	test_get_deny_all();
-	std::cout << "ALLOW ALL DENY GET TEST" << std::endl;
+	std::cout << BLUE << "ALLOW ALL DENY GET TEST" << RESET << std::endl;
 	test_allow_all_deny_get();
-	std::cout << "MANUAL ALLOW/DENY TEST" << std::endl;
+	std::cout << BLUE << "MANUAL ALLOW/DENY TEST" << RESET << std::endl;
 	test_manual_allow_deny();
+	std::cout << BLUE << "UNKNOWN METHOD TEST" << RESET << std::endl;
+	test_unknown_method("UNKNOWN");
+	test_unknown_method("TATA");
+	test_unknown_method("FLAVIANT");
+	test_unknown_method("GIGI");
 	std::cout << "✅  [OK]  All MethodHTTP tests passed." << std::endl;
 	return (0);
 }

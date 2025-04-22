@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 16:09:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 17:18:35 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,20 @@ class	MethodHTTP
 		bool							isAllowed( const std::string &method ) const;
 		bool							isDenied( const std::string &method ) const;
 
-		/*	class Exception	*/
-		class	MethodUnknowException : public std::exception
+		/*	parsing error Exception	*/
+		class	MethodUnknow: public std::exception
 		{
+
+			private:
+
+				std::string				_msg;
 
 			public:
 
-				const char	*what() const throw();
-
+				MethodUnknow( const std::string &method ) throw();
+				virtual ~MethodUnknow( void ) throw();
+				virtual const char	*what() const throw();
+		
 		};
 		
 };
