@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 14:35:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 23:26:40 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() :  _raw(""), _receivedCount(0), _lineParsed(0),
-	_isBadRequest(false), _method(""), _uri(""), _httpVersion("") {}
+HttpRequest::HttpRequest() :  _raw(""), _receivedCount(0), _charParsed(0),
+	_lineParsed(0), _isBadRequest(false), _method(""), _uri(""), 
+	_httpVersion(""), _body(""), _isReqReceived(false) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : _raw(""), _receivedCount(0), 
-	_lineParsed(0), _isBadRequest(false), _method(""), _uri(""), 
-	_httpVersion("")
+	_charParsed(0), _lineParsed(0), _isBadRequest(false), _method(""), _uri(""), 
+	_httpVersion(""), _body(""), _isReqReceived(false)
 {
 	*this = obj;
 }
@@ -33,6 +34,9 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_lineParsed = obj._lineParsed;
 		this->_isBadRequest = obj._isBadRequest;
 		this->_headers = obj._headers;
+		this->_charParsed = obj._charParsed;
+		this->_body = obj._body;
+		this->_isReqReceived = obj._isReqReceived;
 	}
 	return (*this);
 }
@@ -56,6 +60,8 @@ void HttpRequest::readReceived(int clientSocket, int serverSocket)
 		std::cout << this->_raw << "size = " << this->_raw.size() << " Last content = " << (int)buffer[bytes - 2] << " " << (int)buffer[bytes - 1] << std::endl;
 		this->_receivedCount++;
 		parseRaw();
+		if (this->_isReqReceived)
+			std::cout << "Request received completely!" << std::endl;
 		return;
 	}
 }
@@ -75,9 +81,24 @@ void HttpRequest::parseRaw()
 	{
 		line = _raw.substr(0, pos);
 		parseStartLine(line);
+		this->_charParsed = pos + 2;
 		this->_lineParsed++;
 		if (this->_isBadRequest)
 			return ;
+	}
+	while ((pos = this->_raw.find("\r\n", this->_charParsed)) != std::string::npos)
+	{
+		line = _raw.substr(this->_charParsed, pos - this->_charParsed);
+		if (line.empty())
+		{
+			this->_body = _raw.substr(pos + 2);
+			this->_isReqReceived = true;
+			return ;
+		}
+		parseHeader(line);
+		if (this->_isBadRequest)
+			return ;
+		this->_charParsed = pos + 2;
 	}
 }
 
@@ -103,6 +124,23 @@ void HttpRequest::parseStartLine(std::string &line)
 	std::cout << "Start line correct with METHOD = \"" << this->_method 
 			  << "\" URI = \"" << this->_uri << "\" HTTP VERSION = \"" 
 			  << this->_httpVersion << "\"" <<  std::endl;
+}
+
+void HttpRequest::parseHeader(std::string &line)
+{
+	size_t sep = line.find(':');
+	
+	if (sep == std::string::npos || sep == 0)
+	{
+		this->_isBadRequest = true;
+		return ;
+	}
+
+	int	folding = (line.size() - sep > 1) ? 
+				  line.at(sep + 1) == ' ' || line.at(sep + 1) == '\t' : 0;
+	std::string name = line.substr(0, sep);
+	std::string value = line.substr(sep + folding + 1);
+	std::cout << "Name: " << name << " Value: " << value << std::endl;
 }
 
 bool HttpRequest::canBeValidMethod(std::string &method)
@@ -144,7 +182,34 @@ bool HttpRequest::canBeValidHttpProtocol(std::string &httpVersion)
 	return (true);
 }
 
+bool HttpRequest::isHeaderNameValid(std::string &name)
+{
+	std::string::const_iterator it;
+	for (it = name.begin(); it != name.end(); ++it) 
+	{
+		if (!std::isalnum(*it) && *it != '-' && *it != '_' )
+			return (false);
+	}
+	return (true);
+}
 
+bool HttpRequest::isHeaderValueValid(std::string &value)
+{
+	std::string::const_iterator it;
+	for (it = value.begin(); it != value.end(); ++it) 
+	{
+		bool isCharValid = std::isalnum(*it);
+
+		for (size_t i = 0; i < strlen(ALLOWED_HEADER_VAL); i++)
+		{
+			if (*it == ALLOWED_URI_SPECIALS[i])
+				isCharValid = true;
+		}
+		if (!isCharValid)
+			return (false);
+	}
+	return (true);
+}
 
 // Exceptions
 const char * HttpRequest::SocketReadException::what() const throw()

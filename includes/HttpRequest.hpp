@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 14:35:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 23:16:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 # define BUFFER_SIZE 1024
 # define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
+# define ALLOWED_HEADER_VAL "_ :;.,\\/\"'?!(){}[]@<>=-+*#$&`|~^%"
 
 class HttpRequest
 {
@@ -55,17 +56,23 @@ class HttpRequest
 	private:
 		void parseRaw();
 		void parseStartLine(std::string &line);
+		void parseHeader(std::string &line);
 		static bool canBeValidMethod(std::string &method);
 		static bool canBeValidPath(std::string &path);
 		static bool canBeValidHttpProtocol(std::string &httpVersion);
+		static bool isHeaderNameValid(std::string &name);
+		static bool isHeaderValueValid(std::string &value);
 		std::string _raw;
 		size_t _receivedCount;
+		size_t _charParsed;
 		size_t _lineParsed;
 		std::list<std::map<std::string, std::string>> _headers;
 		bool _isBadRequest;
 		std::string _method;
 		std::string _uri;
 		std::string _httpVersion;
+		std::string _body;
+		bool 		_isReqReceived;
 };
 
 #endif
