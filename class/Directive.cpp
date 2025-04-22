@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/17 15:31:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 08:25:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,24 @@
 /*
  *	Default constructor
  */
-Directive::Directive( void )
+Directive::Directive( std::string &data )
 {
-	this->_name = "directive name";
-	this->_values.resize(1);
-	this->_values[0] = "";
+	std::istringstream	stream(data);
+	std::string			token;
+	bool				first = true;
+
+	while (stream >> token)
+	{
+		if (first)
+		{
+			this->_name = token;
+			first = false;
+		}
+		else
+			this->_values.push_back(token);
+	}
+	if (this->_name.empty())
+		throw DirectiveException();
 	LOG_DEB("Directive constructor called");
 	return ;
 }
@@ -55,8 +68,8 @@ void			Directive::setName( std::string &name )
  */
 void			Directive::setValue( size_t index, std::string &value )
 {
-	if (index > this->_values.size())
-		return ;
+	if (index >= this->_values.size())
+		throw DirectiveException();
 	this->_values[index] = value;
 	return ;
 }
@@ -87,6 +100,8 @@ std::string		Directive::getName( void ) const
  */
 std::string		Directive::getValue( int index ) const
 {
+	if (index < 0 || static_cast<size_t>(index) >= this->_values.size())
+		throw DirectiveException();
 	return (this->_values[index]);
 }
 
@@ -99,7 +114,7 @@ std::string		Directive::getAllValue( void ) const
 
 	for (size_t i = 0; i < this->_values.size(); i++)
 	{
-		ret += this->_values.at(i);
+		ret += this->_values[i];
 		if (i < this->_values.size() - 1)
 			ret += ", ";
 	}
@@ -127,9 +142,9 @@ const char		*Directive::DirectiveException::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, Directive &src_object )
 {
-	out	<< GREEN << "DIRECTIVE INFORMATION"
-		<< "\nname: " << src_object.getName()
-		<< "\nvalues:" << src_object.getAllValue()
+	out	<< GREEN << "DIRECTIVE INFORMATION" << std::endl
+		<< "name: " << src_object.getName()
+		<< " => [" << src_object.getAllValue() << "]" << std::endl
 		<< RESET;
 	return (out);
 }

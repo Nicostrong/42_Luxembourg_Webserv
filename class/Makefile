@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/17 13:55:42 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/04/22 16:59:13 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 CXX				=	c++
 CXXFLAGS		=	-Wall -Werror -Wextra -g
 CXX_OPT			=	-std=c++98
-CXX_DEF			=	-DTEST=1 -DDEBUG=1
+CXX_DEF			=	-DTEST=1 -DDEBUG=0
 
 DEB				=	valgrind
 DEB_OPT			=	--tool=memcheck \
@@ -31,7 +31,7 @@ RM				=	rm -f
 #	Mandatory part															   #
 ################################################################################
 
-SRC				=	$(file)
+SRC				=	$(wordlist 1, $(words $(file)), $(file))
 
 OBJ				=	$(SRC:.cpp=.o)
 
@@ -134,7 +134,7 @@ endef
 #	Rules																	   #
 ################################################################################
 
-.PHONY : all $(NAME) deb clean fclean re
+.PHONY : all $(NAME) deb clean fclean re help
 
 all: 		$(NAME)
 
@@ -157,3 +157,7 @@ fclean: 	clean
 	$(call delete_file, $(NAME))
 
 re : 		fclean all
+
+help:
+	@echo "usage: make file=MaClass.cpp"
+	@echo "usage: make file=\"MaClass.cpp MaClass2.cpp ...\""

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/17 14:14:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 07:35:23 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "lib.hpp"
 # include "Directive.hpp"
-# include "MethodesHTTP.hpp"
+# include "MethodHTTP.hpp"
 
 /*
  *  LocationConfig object for
@@ -24,23 +24,15 @@ class	Location
 {
 	private:
 
-	
-		bool								_autoIndex;
-		std::string							_rootPath;
-		std::string							_returnPath;
-		std::list<MethodesHTTP>				_methodOk;
-		std::list<MethodesHTTP>				_methodDeny;
+		MethodHTTP							_method;
 		std::map<std::string, Directive>	_directives;
 
 		Location( const Location &scr_obj );
-
 		Location							&operator=( const Location &src_obj );
-
-		bool								validate( void ) const;
 	
 	public:
 
-		Location( std::map<std::string, std::string> &data );
+		Location( std::string &data );
 		~Location( void );
 
 		/*	class Exception	*/

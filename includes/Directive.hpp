@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/17 15:23:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 08:22:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,9 @@ class	Directive
 		Directive( const Directive &src_obj );
 		Directive					&operator=( const Directive &src_obj );
 
-		bool						validate( void ) const;
-
 	public:
 
-		Directive( void );
+		Directive( std::string &data );
 		~Directive( void );
 
 		/*  SETTER  */
