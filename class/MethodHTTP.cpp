@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 17:26:23 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:25:08 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ MethodHTTP::MethodHTTP( void )
 /*
  *	Default constructor with argument
  */
-MethodHTTP::MethodHTTP( std::string &data )
+MethodHTTP::MethodHTTP( const std::string &data )
 {
 	parse(data);
 	LOG_DEB("MethodHTTP constructor with argument called");
@@ -47,9 +47,31 @@ MethodHTTP::~MethodHTTP( void )
 }
 
 /*
+ *	Copy constructor
+ */
+MethodHTTP::MethodHTTP( const MethodHTTP &src_object )
+{
+	*this = src_object;
+	return ;
+}
+
+/*
+ *	Copy assignment operator
+ */
+MethodHTTP		&MethodHTTP::operator=( const MethodHTTP &src_object )
+{
+	if (this != &src_object)
+	{
+		this->_allowed = src_object._allowed;
+		this->_denied = src_object._denied;
+	}
+	return (*this);
+}
+
+/*
  *	Parser of data
  */
-void	MethodHTTP::parse( std::string &data )
+void	MethodHTTP::parse( const std::string &data )
 {
 	bool				isDenyBlock = false;
 	std::string			word;

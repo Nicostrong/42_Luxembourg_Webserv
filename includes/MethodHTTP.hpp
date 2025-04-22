@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 17:18:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:19:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@ class	MethodHTTP
 
 		static std::set<std::string>	_validMethods;
 
-		MethodHTTP( const MethodHTTP &src_obj );
-		MethodHTTP						&operator=( const MethodHTTP &src_obj );
-
 		bool							isMethod( const std::string &method ) const;
 
 # ifndef TEST
 		static std::set<std::string>	initValidMethods( void );
 # endif
 
-		void							parse( std::string &data );
+		void							parse( const std::string &data );
 
 	public:
 
-		MethodHTTP( std::string &data );
 		MethodHTTP( void );
+		MethodHTTP( const std::string &data );
+		MethodHTTP( const MethodHTTP &src_obj );
 		~MethodHTTP( void );
+
+		MethodHTTP						&operator=( const MethodHTTP &src_obj );
 
 # ifdef TEST
 		static std::set<std::string>	initValidMethods( void );
@@ -59,7 +59,7 @@ class	MethodHTTP
 		bool							isAllowed( const std::string &method ) const;
 		bool							isDenied( const std::string &method ) const;
 
-		/*	parsing error Exception	*/
+		/*	Unknow method exception	*/
 		class	MethodUnknow: public std::exception
 		{
 

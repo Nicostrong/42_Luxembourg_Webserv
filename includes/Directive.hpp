@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 08:22:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:19:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ class	Directive
 
 		std::string					_name;
 		std::vector<std::string>	_values;
-	
-		Directive( const Directive &src_obj );
-		Directive					&operator=( const Directive &src_obj );
 
 	public:
 
 		Directive( std::string &data );
+		Directive( const Directive &src_obj );
 		~Directive( void );
+		
+		Directive					&operator=( const Directive &src_obj );
 
 		/*  SETTER  */
 		void						setName( std::string &name);

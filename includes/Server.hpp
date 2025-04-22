@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 15:44:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:06:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class	Server
 		void							setMaxSizeBody( std::string &data );
 		void							setMapError( std::string &data );
 # ifndef TEST
-		void							setLocation( std::string &data );
+		void							setLocation( std::string &name, std::string &block );
 # endif
 		
 	public:

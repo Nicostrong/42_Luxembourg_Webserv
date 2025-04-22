@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 17:21:14 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:08:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ Server::Server( std::map< std::string, std::string> const &data )
 			setMapError(const_cast<std::string &>(it->second));
 #ifndef TEST
 		else if (it->first.find("location") == 0)
-			setLocation(const_cast<std::string &>(it->second));
+		{
+			std::string	name;
+
+			name = it->first.substr(9);
+			setLocation(name, const_cast<std::string &>(it->second));
+		}
 		else
 			throw ParsingError(it->first);
 #endif
@@ -186,12 +191,14 @@ void			Server::setMapError( std::string &data )
 /*
  *	save the location value
  */
-void			Server::setLocation( std::string &data )
+void			Server::setLocation( std::string &name, std::string &block )
 {
-	if (data.empty())
-		throw ParsingError(data);
+	std::map<std::string, std::string>	locationData;
+
+	locationData[name] = block;
+
+	Location							loc(locationData);
 	
-	Location		loc(data);
 	this->_location.push_back(loc);
 	LOG_DEB("Location added");
 	return ;

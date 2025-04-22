@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 08:25:40 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:30:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,28 @@ Directive::~Directive( void )
 {
 	LOG_DEB("Directive destructor called");
 	return ;
+}
+
+/*
+ *	Copy constructor
+ */
+Directive::Directive( const Directive &src_object )
+{
+	*this = src_object;
+	return ;
+}
+
+/*
+ *	Copy assignment operator
+ */
+Directive		&Directive::operator=( const Directive &src_object )
+{
+	if (this != &src_object)
+	{
+		this->_name = src_object._name;
+		this->_values = src_object._values;
+	}
+	return (*this);
 }
 
 /*******************************************************************************

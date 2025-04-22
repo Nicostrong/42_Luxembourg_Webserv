@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 15:57:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:19:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,20 @@
 /*
  *	Default constructor
  */
-Location::Location( std::string &data ) : _method()
+Location::Location( std::map<std::string, std::string> &data ) : _method()
 {
-	std::string	clean;
-	std::string	line;
+	std::string			raw;
+	std::string			line;
 
-	clean = data;
-	clean.erase(0, clean.find("{") + 1);
-	clean.erase(clean.find_last_of("}"));
-	std::istringstream	stream(clean);
+	if (data.size() != 1)
+		throw LocationException();
+	this->_name = data.begin()->first;
+	raw = data.begin()->second;
+	raw.erase(0, raw.find("{") + 1);
+	raw.erase(raw.find_last_of("}"));
+
+	std::istringstream	stream(raw);
+
 	while (std::getline(stream, line))
 	{
 		std::string			directive;
@@ -38,13 +43,18 @@ Location::Location( std::string &data ) : _method()
 		{
 			std::string limitData;
 			
-			limitData = line.substr(line.find("limit_except"));
+			limitData = line;
+			while (line.find("}") == std::string::npos && std::getline(stream, line))
+				limitData += "\n" + line;
 			this->_method = MethodHTTP(limitData);
 		}
 		else
 		{
 			std::string value;
+
 			lineStream >> value;
+			if (!value.empty() && value[value.size() - 1] == ';')
+				value.erase(value.size() - 1);
 			this->_directives[directive] = Directive(value);
 		}
 	}
@@ -59,6 +69,34 @@ Location::~Location( void )
 {
 	LOG_DEB("Location destructor called");
 	return ;
+}
+
+/*******************************************************************************
+ *								GETTER										   *
+ ******************************************************************************/
+
+/*
+ *	get _name value
+ */
+std::string							Location::getName( void ) const
+{
+	return (this->_name);
+}
+
+/*
+ *	get _method value
+ */
+MethodHTTP							Location::getMethod( void ) const
+{
+	return (this->_method);
+}
+
+/*
+ *	get _directives value
+ */
+std::map<std::string, Directive>	Location::getDirectives( void ) const
+{
+	return (this->_directives);
 }
 
 /*******************************************************************************
@@ -82,8 +120,13 @@ const char		*Location::LocationException::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 {
-	out	<< GREEN << "LOCATION INFORMATION"
-		<< RESET;
+	std::map<std::string, Directive>::const_iterator	it;
+
+	out	<< GREEN << "LOCATION INFORMATION" << std::endl
+		<< src_object.getMethod() << std::endl;
+	for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
+		out << "- " << it->first << " => [" << it->second.getAllValue() << "]" << std::endl;
+	out << RESET;
 	return (out);
 }
 
@@ -98,28 +141,17 @@ int	main( void )
 {
 	std::map< std::string, std::string>	data;
  
-	data["location /"] = "autoindex off;\nlimit_except GET POST { deny DELETE; }\nroot /var/www/html;";
-	data["location /images"] = "autoindex on;\nlimit_except GET { deny DELETE POST; }\nroot ./www/images;";
-	data["location /downloads"] = "autoindex on;\nroot ./www/files;";
-	data["location /redirect"] = "return\t\t301\thttp://intra.42.fr;";
-	data["location /cgi-bin"] = "cgi_pass\t\t./lib/cgi-bin;\nfastcgi_pass\t\tunix:/var/run/fcgiwrap.socket;\ninclude\t\tfastcgi_params;";
+	data["location /"] = "{autoindex off;\nlimit_except GET POST { deny DELETE; }\nroot /var/www/html;}";
+	data["location /images"] = "{autoindex on;\nlimit_except GET { deny DELETE POST; }\nroot ./www/images;}";
+	data["location /downloads"] = "{autoindex on;\nroot ./www/files;}";
+	data["location /redirect"] = "{return\t\t301\thttp://intra.42.fr;}";
+	data["location /cgi-bin"] = "{cgi_pass\t\t./lib/cgi-bin;\nfastcgi_pass\t\tunix:/var/run/fcgiwrap.socket;\ninclude\t\tfastcgi_params;}";
 
 	try
 	{
-		Server	s(data);
-		assert(s.getPort() == 8080);
-		std::cout << "✅ [OK] get Port test passed." << std::endl;
-		assert(s.getAdress() == "127.0.0.1");
-		std::cout << "✅ [OK] get Adress test passed." << std::endl;
-		assert(s.getName() == "localhost");
-		std::cout << "✅ [OK] get Name test passed." << std::endl;
-		assert(s.getPath() == "./www/html");
-		std::cout << "✅ [OK] get Path test passed." << std::endl;
-		assert(s.getMaxSizeBody() == 10485760);
-		std::cout << "✅ [OK] get MaxSizeBody test passed." << std::endl;
-		assert(s.getIndex() == "index.html");
+		Location	loc(data);
 		std::cout << "✅ [OK] get Index test passed." << std::endl;
-		std::cout << s << std::endl;
+		std::cout << loc << std::endl;
 		std::cout << "✅ [OK] Serverbasic config test passed." << std::endl;
 	}
 	catch(const std::exception& e)

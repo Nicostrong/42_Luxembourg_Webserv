@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 07:35:23 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 18:03:30 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class	Location
 {
 	private:
 
+		std::string							_name;
 		MethodHTTP							_method;
 		std::map<std::string, Directive>	_directives;
 
@@ -32,8 +33,13 @@ class	Location
 	
 	public:
 
-		Location( std::string &data );
+		Location( std::map<std::string, std::string> &data );
 		~Location( void );
+
+		/*	GETTER	*/
+		std::string							getName( void ) const;
+		MethodHTTP							getMethod( void ) const;
+		std::map<std::string, Directive>	getDirectives( void ) const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception
