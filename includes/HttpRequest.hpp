@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 18:27:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 14:35:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 #include <list>
 #include <iostream>
 #include <cstring>
+#include <sstream>
+#include <exception>
+
+# define BUFFER_SIZE 1024
+# define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
 
 class HttpRequest
 {
@@ -33,27 +38,34 @@ class HttpRequest
 
 		class SocketReadException : public std::exception {
 			public:
-				const char * what ();
+				const char * what ()  const throw();
 		};
 
 		class RawUninitializedException : public std::exception {
 			public:
-				const char * what ();
+				const char * what () const throw();
 		};
 		
 		HttpRequest();
 		HttpRequest(const HttpRequest &obj);
 		~HttpRequest();
 		HttpRequest &operator=(const HttpRequest &obj);
-		static HttpRequest *decode(int clientSocket, int serverSocket);
+		void readReceived(int clientSocket, int serverSocket);
+		bool isBadRequest() const;
 	private:
-		void readRaw(int clientSocket, int serverSocket);
 		void parseRaw();
-		bool _isValid;
-		bool _rawInit;
+		void parseStartLine(std::string &line);
+		static bool canBeValidMethod(std::string &method);
+		static bool canBeValidPath(std::string &path);
+		static bool canBeValidHttpProtocol(std::string &httpVersion);
 		std::string _raw;
-		HttpMethod _method;
+		size_t _receivedCount;
+		size_t _lineParsed;
 		std::list<std::map<std::string, std::string>> _headers;
+		bool _isBadRequest;
+		std::string _method;
+		std::string _uri;
+		std::string _httpVersion;
 };
 
 #endif

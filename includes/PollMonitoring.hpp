@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PollMonitoring.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 18:16:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 14:36:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class PollMonitoring
 	public:
 		class PollFullException : public std::exception {
 			public:
-				const char * what ();
+				const char * what () const throw();
 		};
 
 		PollMonitoring();
@@ -37,12 +37,14 @@ class PollMonitoring
 		PollMonitoring &operator=(const PollMonitoring &obj);
 		const std::vector<pollfd> &getFds() const;
 		std::vector<BaseData*> &getFdsData();
+		size_t getClientsConnected() const;
 		void monitor(int fd, short int events, BaseData::BaseDataType type);
 		void unmonitor(int fd);
 		int  updatePoll();
 	private:
 		std::vector<pollfd> _fds;
 		std::vector<BaseData*> _fdsData;
+		size_t _clientsConnected;
 };
 
 #endif
