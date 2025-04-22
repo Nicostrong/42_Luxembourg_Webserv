@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/17 13:46:05 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/22 15:44:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 # define SERVER_HPP
 
 # include "lib.hpp"
-# include "Location.hpp"
-
+# ifndef TEST
+#  include "Location.hpp"
+# endif
 
 /*
- *	Server object
+ *	Server object contain all parameters from the server.conf file
  */
 class	Server
 {
@@ -32,42 +33,42 @@ class	Server
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-		//std::list<Location>				_location;
-	
-		Server( const Server &src_obj );
+# ifndef TEST
+		std::list<Location>				_location;
+# endif
 
+		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
 
-		/*	PRIVATE METHODE	*/
-		//bool							validate( void ) const;
-
 		/*	SETTER	*/
-		void							setPort( std::string &data );
-		void							setMaxSizeBody( std::string &data );
-		void							setName( std::string &data );
 		void							setAdress( std::string &data );
+		void							setPort( std::string &data );
+		void							setName( std::string &data );
 		void							setPath( std::string &data );
 		void							setIndex( std::string &data );
+		void							setMaxSizeBody( std::string &data );
 		void							setMapError( std::string &data );
+# ifndef TEST
 		void							setLocation( std::string &data );
+# endif
 		
 	public:
 
-		Server( const std::string &filename );
+		Server( std::map< std::string, std::string> const &data );
 		~Server( void );
 
 		/*  GETTER  */
 		size_t							getPort( void ) const;
 		size_t							getMaxSizeBody( void ) const;
-		std::string						getName( void ) const;
+
 		std::string						getAdress( void ) const;
+		std::string						getName( void ) const;
 		std::string						getPath( void ) const;
 		std::string						getIndex( void ) const;
-		//void							getMapError( void ) const;
-		//void							getLocation( void ) const;
 
-		/*	METHODE	*/
-		void							initServer( const std::string &data );
+		std::map<size_t, std::string>	getMapError( void ) const;
+
+		/*	EXCEPTION	*/
 
 		/*	server error Exception	*/
 		class	ServerException : public std::exception
@@ -79,18 +80,24 @@ class	Server
 		
 		};
 
-		/*	open file.conf fail Exception	*/
-		class	OpenConfFailException : public std::exception
+		/*	parsing error Exception	*/
+		class	ParsingError: public std::exception
 		{
+
+			private:
+
+				std::string				_msg;
 
 			public:
 
-				const char	*what() const throw();
+				ParsingError( const std::string &data ) throw();
+				virtual ~ParsingError( void ) throw();
+				virtual const char	*what() const throw();
 		
 		};
 
-		/*	parsing error Exception	*/
-		class	ParsingErrorException : public std::exception
+		/*	port value error Exception	*/
+		class	PortValueException : public std::exception
 		{
 
 			public:
