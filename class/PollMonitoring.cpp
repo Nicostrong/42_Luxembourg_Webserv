@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PollMonitoring.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 10:44:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 14:36:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int PollMonitoring::updatePoll()
 
 // Exceptions
 
-const char *PollMonitoring::PollFullException::what()
+const char *PollMonitoring::PollFullException::what() const throw()
 {
 	return ("Poll full exception");
 }

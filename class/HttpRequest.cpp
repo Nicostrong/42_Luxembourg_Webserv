@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 10:09:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 14:35:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,15 @@ bool HttpRequest::canBeValidHttpProtocol(std::string &httpVersion)
 	return (true);
 }
 
+
+
 // Exceptions
-const char * HttpRequest::SocketReadException::what()
+const char * HttpRequest::SocketReadException::what() const throw()
 {
 	return ("Read Exception");
 }
 
-const char * HttpRequest::RawUninitializedException::what()
+const char * HttpRequest::RawUninitializedException::what() const throw()
 {
 	return ("Raw unitialized exception");
 }

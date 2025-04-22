@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 09:58:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 14:35:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <iostream>
 #include <cstring>
 #include <sstream>
+#include <exception>
 
 # define BUFFER_SIZE 1024
 # define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
@@ -37,12 +38,12 @@ class HttpRequest
 
 		class SocketReadException : public std::exception {
 			public:
-				const char * what ();
+				const char * what ()  const throw();
 		};
 
 		class RawUninitializedException : public std::exception {
 			public:
-				const char * what ();
+				const char * what () const throw();
 		};
 		
 		HttpRequest();

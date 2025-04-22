@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PollMonitoring.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 10:41:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 14:36:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class PollMonitoring
 	public:
 		class PollFullException : public std::exception {
 			public:
-				const char * what ();
+				const char * what () const throw();
 		};
 
 		PollMonitoring();
