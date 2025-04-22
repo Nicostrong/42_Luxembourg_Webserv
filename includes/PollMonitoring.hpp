@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 10:34:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 10:41:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ class PollMonitoring
 		PollMonitoring &operator=(const PollMonitoring &obj);
 		const std::vector<pollfd> &getFds() const;
 		std::vector<BaseData*> &getFdsData();
+		size_t getClientsConnected() const;
 		void monitor(int fd, short int events, BaseData::BaseDataType type);
 		void unmonitor(int fd);
 		int  updatePoll();
 	private:
-		size_t _clientsConnected;
 		std::vector<pollfd> _fds;
 		std::vector<BaseData*> _fdsData;
+		size_t _clientsConnected;
 };
 
 #endif

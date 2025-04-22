@@ -6,16 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 10:37:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 10:44:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/PollMonitoring.hpp"
 
-PollMonitoring::PollMonitoring() : _fds(0), _clientsConnected(0) {}
+PollMonitoring::PollMonitoring() : _fds(0), _fdsData(0), _clientsConnected(0) {}
 
 PollMonitoring::PollMonitoring(const PollMonitoring &obj)
-	: _fds(0), _clientsConnected(0)
+	: _fds(0), _fdsData(0), _clientsConnected(0)
 {
 	*this = obj;
 }
@@ -43,6 +43,11 @@ std::vector<BaseData *> &PollMonitoring::getFdsData()
 	return (this->_fdsData);
 }
 
+size_t PollMonitoring::getClientsConnected() const
+{
+	return (this->_clientsConnected);
+}
+
 void PollMonitoring::monitor(int fd, short int events,
 							 BaseData::BaseDataType type)
 {
@@ -58,7 +63,8 @@ void PollMonitoring::monitor(int fd, short int events,
 
 	this->_fds.push_back(npollfd);
 	this->_fdsData.push_back(data);
-	this->_clientsConnected++;
+	if (type == BaseData::CLIENT)
+		this->_clientsConnected++;
 }
 
 void PollMonitoring::unmonitor(int fd)

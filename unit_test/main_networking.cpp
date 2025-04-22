@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 22:59:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 10:46:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,11 @@ int main()
 		{
 			if (pFds.at(i).revents & (POLLERR | POLLHUP | POLLRDHUP))
 			{
-				std::cout << "Socket closed by remote" << std::endl;
 				close(pFds.at(i).fd);
 				pmonitoring.unmonitor(pFds.at(i).fd);
+				std::cout << "Socket closed by remote" << std::endl;
+				std::cout << pmonitoring.getClientsConnected() 
+						  << " clients connected." << std::endl; 
 				continue;
 			}
 			switch (pFdsData.at(i)->getType())
@@ -88,6 +90,8 @@ int main()
 												POLLIN | POLLOUT| POLLHUP | 
 												POLLRDHUP, BaseData::CLIENT);
 						std::cout << "New socket connection" << std::endl;
+						std::cout << pmonitoring.getClientsConnected() 
+						  		  << " clients connected." << std::endl; 
 					}
 					break;
 				}
@@ -107,6 +111,8 @@ int main()
 							close(pFds.at(i).fd);
 							pmonitoring.unmonitor(pFds.at(i).fd);
 							std::cout << "Bad Request: Socket closed"<< std::endl;
+							std::cout << pmonitoring.getClientsConnected() 
+						  			  << " clients connected." << std::endl; 
 						}
 					}
 					break;
