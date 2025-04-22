@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 22:57:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 09:58:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <sstream>
 
 # define BUFFER_SIZE 1024
+# define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
 
 class HttpRequest
 {
@@ -53,14 +54,17 @@ class HttpRequest
 	private:
 		void parseRaw();
 		void parseStartLine(std::string &line);
-		bool _isValid;
-		bool _rawInit;
+		static bool canBeValidMethod(std::string &method);
+		static bool canBeValidPath(std::string &path);
+		static bool canBeValidHttpProtocol(std::string &httpVersion);
 		std::string _raw;
 		size_t _receivedCount;
 		size_t _lineParsed;
-		HttpMethod _method;
 		std::list<std::map<std::string, std::string>> _headers;
 		bool _isBadRequest;
+		std::string _method;
+		std::string _uri;
+		std::string _httpVersion;
 };
 
 #endif
