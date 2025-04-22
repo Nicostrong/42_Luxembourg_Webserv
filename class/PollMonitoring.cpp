@@ -6,16 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 20:26:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 10:37:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/PollMonitoring.hpp"
 
-PollMonitoring::PollMonitoring() : _fds(0) {}
+PollMonitoring::PollMonitoring() : _fds(0), _clientsConnected(0) {}
 
 PollMonitoring::PollMonitoring(const PollMonitoring &obj)
-	: _fds(0)
+	: _fds(0), _clientsConnected(0)
 {
 	*this = obj;
 }
@@ -25,7 +25,11 @@ PollMonitoring::~PollMonitoring() {}
 PollMonitoring &PollMonitoring::operator=(const PollMonitoring &obj)
 {
 	if (this != &obj)
+	{
 		this->_fds = obj._fds;
+		this->_fdsData = obj._fdsData;
+		this->_clientsConnected = obj._clientsConnected;
+	}
 	return (*this);
 }
 
@@ -44,7 +48,7 @@ void PollMonitoring::monitor(int fd, short int events,
 {
 	struct pollfd npollfd;
 
-	if (_fds.size() == MAX_CONNECTIONS)
+	if (this->_clientsConnected + 1 == MAX_CONNECTIONS)
 		throw PollFullException();
 
 	BaseData *data = BaseData::getHerited(type);
@@ -54,6 +58,7 @@ void PollMonitoring::monitor(int fd, short int events,
 
 	this->_fds.push_back(npollfd);
 	this->_fdsData.push_back(data);
+	this->_clientsConnected++;
 }
 
 void PollMonitoring::unmonitor(int fd)
@@ -65,6 +70,8 @@ void PollMonitoring::unmonitor(int fd)
 	{
 		if (it->fd == fd)
 		{
+			if ((*itFdsData)->getType() == BaseData::CLIENT)
+				this->_clientsConnected--;
 			delete *itFdsData;
 			itFdsData = this->_fdsData.erase(itFdsData);
 			it = this->_fds.erase(it);

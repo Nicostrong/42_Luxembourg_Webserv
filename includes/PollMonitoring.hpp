@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 18:16:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 10:34:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class PollMonitoring
 		void unmonitor(int fd);
 		int  updatePoll();
 	private:
+		size_t _clientsConnected;
 		std::vector<pollfd> _fds;
 		std::vector<BaseData*> _fdsData;
 };
