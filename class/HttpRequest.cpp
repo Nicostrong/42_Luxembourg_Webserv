@@ -6,19 +6,18 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 23:26:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 23:38:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() :  _raw(""), _receivedCount(0), _charParsed(0),
-	_lineParsed(0), _isBadRequest(false), _method(""), _uri(""), 
-	_httpVersion(""), _body(""), _isReqReceived(false) {}
+HttpRequest::HttpRequest() :  _raw(""), _charParsed(0),_isBadRequest(false), 
+	_method(""), _uri(""), _httpVersion(""), _body(""), _isReqReceived(false) {}
 
-HttpRequest::HttpRequest(const HttpRequest &obj) : _raw(""), _receivedCount(0), 
-	_charParsed(0), _lineParsed(0), _isBadRequest(false), _method(""), _uri(""), 
-	_httpVersion(""), _body(""), _isReqReceived(false)
+HttpRequest::HttpRequest(const HttpRequest &obj) : _raw(""),  _charParsed(0), 
+	_isBadRequest(false), _method(""), _uri(""), _httpVersion(""), _body(""), 
+	_isReqReceived(false)
 {
 	*this = obj;
 }
@@ -30,8 +29,6 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 	if (this != &obj)
 	{
 		this->_raw = obj._raw;
-		this->_receivedCount = obj._receivedCount;
-		this->_lineParsed = obj._lineParsed;
 		this->_isBadRequest = obj._isBadRequest;
 		this->_headers = obj._headers;
 		this->_charParsed = obj._charParsed;
@@ -58,7 +55,6 @@ void HttpRequest::readReceived(int clientSocket, int serverSocket)
 		}
 		this->_raw.append(buffer.data(), bytes);
 		std::cout << this->_raw << "size = " << this->_raw.size() << " Last content = " << (int)buffer[bytes - 2] << " " << (int)buffer[bytes - 1] << std::endl;
-		this->_receivedCount++;
 		parseRaw();
 		if (this->_isReqReceived)
 			std::cout << "Request received completely!" << std::endl;
@@ -77,12 +73,11 @@ void HttpRequest::parseRaw()
 {
 	std::string line;
 	size_t pos = this->_raw.find("\r\n");
-	if (pos != std::string::npos && this->_lineParsed == 0)
+	if (pos != std::string::npos && this->_charParsed == 0)
 	{
 		line = _raw.substr(0, pos);
 		parseStartLine(line);
 		this->_charParsed = pos + 2;
-		this->_lineParsed++;
 		if (this->_isBadRequest)
 			return ;
 	}

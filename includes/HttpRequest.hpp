@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 23:16:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/22 23:39:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,7 @@ class HttpRequest
 		static bool isHeaderNameValid(std::string &name);
 		static bool isHeaderValueValid(std::string &value);
 		std::string _raw;
-		size_t _receivedCount;
 		size_t _charParsed;
-		size_t _lineParsed;
 		std::list<std::map<std::string, std::string>> _headers;
 		bool _isBadRequest;
 		std::string _method;
