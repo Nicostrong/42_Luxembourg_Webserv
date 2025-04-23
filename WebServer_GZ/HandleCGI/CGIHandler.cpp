@@ -12,10 +12,11 @@
 
 #include "CGIHandler.hpp"
 #include <cstdlib>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 CGI_Handler::CGI_Handler()
 {
-	compilers["python"] = "/usr/bin/python";
 }
 
 CGI_Handler::~CGI_Handler()
@@ -36,6 +37,11 @@ CGI_Handler& CGI_Handler::operator=(CGI_Handler& copy)
 
 bool CGI_Handler::DoCGI(const char *compiler, const char *script)
 {
+	if(!compiler || !script)
+	{
+		std::cerr << "Error: Compiler not in List.\n";
+		return 1;
+	}
 	pid_t c_pid = fork(); 
   
     if (c_pid == -1) { 
@@ -43,21 +49,16 @@ bool CGI_Handler::DoCGI(const char *compiler, const char *script)
         exit(EXIT_FAILURE); 
     } 
     else if (c_pid > 0) { 
-        //  wait(nullptr); 
+        //wait(NULL); 
         std::cout << "printed from parent process " << getpid() 
              << "\n";
     } 
     else { 
         std::cout << "printed from child process " << getpid() 
              << "\n";
-			 const char *cmd_list[3] = { compiler, script, NULL };
-			 execve(compiler, (char * const *)cmd_list, NULL);
+			 const char *cmd_list[] = { compiler, script, NULL };
+			 execve(cmd_list[0], (char * const *)cmd_list, NULL);
     } 
   
     return 0; 
-}
-
-std::map<std::string, std::string> CGI_Handler::getCompilers()
-{
-	return compilers;
 }

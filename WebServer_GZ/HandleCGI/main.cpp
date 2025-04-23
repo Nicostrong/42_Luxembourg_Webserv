@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:07:43 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 16:15:18 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 16:47:25 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 int main()
 {
 	CGI_Handler cgi;
-	cgi.DoCGI("/usr/bin/python", "cgitester.py");
+	cgi.DoCGI("/usr/bin/python3", "cgitest.py");
 	return 0;
 }
