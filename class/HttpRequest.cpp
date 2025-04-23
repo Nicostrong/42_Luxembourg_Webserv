@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 17:58:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/23 18:08:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,86 +161,6 @@ void HttpRequest::parseHeader(std::string &line)
 
 	this->_headers[name] = value;
 }
-
-bool HttpRequest::canBeValidMethod(std::string &method)
-{
-	std::string::const_iterator it;
-	for (it = method.begin(); it != method.end(); ++it) 
-	{
-		if (!std::isupper(*it))
-			return (false);
-	}
-	return (true);
-}
-
-bool HttpRequest::canBeValidPath(std::string &path)
-{
-	
-	if (*path.begin() != '/')
-		return (false);
-	std::string::const_iterator it;
-	for (it = path.begin(); it != path.end(); ++it) 
-	{
-		bool isCharValid = std::isalnum(*it);
-
-		for (size_t i = 0; i < strlen(ALLOWED_URI_SPECIALS); i++)
-		{
-			if (*it == ALLOWED_URI_SPECIALS[i])
-				isCharValid = true;
-		}
-		if (!isCharValid)
-			return (false);
-	}
-	return (true);
-}
-
-bool HttpRequest::canBeValidHttpProtocol(std::string &httpVersion)
-{
-	if (httpVersion.rfind("HTTP/", 0) == std::string::npos)
-		return (false);
-	return (true);
-}
-
-bool HttpRequest::isHeaderNameValid(std::string &name)
-{
-	std::string::const_iterator it;
-	for (it = name.begin(); it != name.end(); ++it) 
-	{
-		if (!std::isalnum(*it) && *it != '-' && *it != '_' )
-			return (false);
-	}
-	return (true);
-}
-
-bool HttpRequest::isHeaderValueValid(std::string &value)
-{
-	std::string::const_iterator it;
-	for (it = value.begin(); it != value.end(); ++it) 
-	{
-		bool isCharValid = std::isalnum(*it);
-
-		for (size_t i = 0; i < strlen(ALLOWED_HEADER_VAL); i++)
-		{
-			if (*it == ALLOWED_URI_SPECIALS[i])
-				isCharValid = true;
-		}
-		if (!isCharValid)
-			return (false);
-	}
-	return (true);
-}
-
-std::string HttpRequest::normalizeHeaderName(std::string &name)
-{
-	std::string normalized = "";
-
-	std::string::const_iterator it;
-	for (it = name.begin(); it != name.end(); ++it) 
-		normalized.push_back(std::tolower(*it));
-	return (normalized);
-}
-
-
 
 // Exceptions
 const char * HttpRequest::SocketReadException::what() const throw()
