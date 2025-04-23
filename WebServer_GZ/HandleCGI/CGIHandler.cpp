@@ -45,22 +45,25 @@ bool CGI_Handler::DoCGI(const char *compiler, const char *script)
 	pid_t c_pid = fork(); 
   
     if (c_pid == -1) { 
-        //perror("fork"); 
+        std::cerr << "fork\n"; 
         exit(EXIT_FAILURE); 
     } 
     else if (c_pid == 0) { 
         std::cout << "printed from child process " << getpid() 
              << "\n";
-			 const char *cmd_list[] = { compiler, script, NULL };
-			 execve(cmd_list[0], (char * const *)cmd_list, NULL);
+			 try
+			 {
+				const char *cmd_list[] = { compiler, script, NULL };
+			 	execve(cmd_list[0], (char * const *)cmd_list, NULL);
+			 } catch(std::exception &e)
+			 {
+				std::cout << e.what();
+			 }
     } 
 	else{
 		int status;
 		waitpid(c_pid, &status, 0);
 		std::cout << "Child finished. Parent resumes work.\n";
-        //wait(NULL); 
-        std::cout << "printed from parent process " << getpid() 
-             << "\n";
 		if (WIFEXITED(status)) {
 				std::cout << "Child exited with status: " << WEXITSTATUS(status) << "\n";
 			}
