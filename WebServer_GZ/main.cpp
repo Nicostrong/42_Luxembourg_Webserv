@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:30:19 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 13:38:07 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:55:23 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ int main(int argc, char **argv)
 {
 	if (argc == 2)
 	{
-		HandleConfig hc;
-		hc.readConfigFile(argv[1]);
-		hc.cleanMap();
-		hc.getNicoMap();
+		HandleConfig hc(argv[1]);
 	}
 	else
 	{

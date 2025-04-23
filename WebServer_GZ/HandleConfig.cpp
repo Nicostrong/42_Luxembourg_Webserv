@@ -6,13 +6,46 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 13:37:29 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:56:43 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "HandleConfig.hpp"
 #include <vector>
 #include <string>
+
+HandleConfig::HandleConfig()
+{
+	
+}
+
+HandleConfig::HandleConfig(const char *filename)
+{
+	readConfigFile(filename);
+	cleanMap();
+	//printNicoMap();
+}
+
+HandleConfig::HandleConfig(HandleConfig& copy)
+{
+	this->tmpMap = copy.tmpMap;
+	this->nicoMap = copy.nicoMap;
+}
+
+HandleConfig& HandleConfig::operator=(HandleConfig& copy)
+{
+	if(this != &copy)
+	{
+		this->tmpMap = copy.tmpMap;
+		this->nicoMap = copy.nicoMap;
+	}
+	return *this;
+}
+
+HandleConfig::~HandleConfig()
+{
+	
+}
 
 void HandleConfig::readConfigFile(const char *filename)
 {
@@ -124,18 +157,19 @@ void HandleConfig::cleanMap()
 		}
 		it++;
 	}
-	
-	// =======================================
-	
-	it = nicoMap.begin();
-	while(it != nicoMap.end())
-	{
-		std::cout << "" << it->first << "\n" << it->second << "\n";
-		it++;
-	}	
 }
 
 std::map<std::string, std::string> HandleConfig::getNicoMap()
 {
 	return this->nicoMap;
+}
+
+void HandleConfig::printNicoMap()
+{
+	std::map<std::string, std::string>::iterator it = nicoMap.begin();
+	while(it != nicoMap.end())
+	{
+		std::cout << "" << it->first << "\n" << it->second << "\n";
+		it++;
+	}
 }

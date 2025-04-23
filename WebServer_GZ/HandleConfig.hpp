@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 13:36:54 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:56:18 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,16 @@ class HandleConfig
 	private:
 		std::map<std::string, std::string> tmpMap;
 		std::map<std::string, std::string> nicoMap;
+		HandleConfig(HandleConfig& copy);
+		HandleConfig& operator=(HandleConfig& copy);
+		HandleConfig();
 	public:
+		HandleConfig(const char *filename);
+		~HandleConfig();
 		std::map<std::string, std::string> getNicoMap();
 		void readConfigFile(const char *filename);
 		void cleanMap();
+		void printNicoMap();
 		void handleSimpleLine(std::string& line);
 		void handleObjLine(std::string& first, std::string& second);
 };
