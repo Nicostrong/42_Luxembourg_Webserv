@@ -6,18 +6,19 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:30:19 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/17 08:48:14 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 10:42:17 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "WebServer.hpp"
+#include "HandleConfig.hpp"
 
 int main(int argc, char **argv)
 {
 	if (argc == 2)
 	{
-		WebServer ws;
-		ws.readConfigFile(argv[1]);
+		HandleConfig hc;
+		hc.readConfigFile(argv[1]);
+		hc.cleanMap();
 	}
 	else
 	{

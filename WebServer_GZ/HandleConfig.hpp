@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   WebServer.hpp                                      :+:      :+:    :+:   */
+/*   HandleConfig.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/17 14:14:32 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 11:53:05 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WEBSERVER_HPP
-#define WEBSERVER_HPP
+#ifndef HANDLECONFIG_HPP
+#define HANDLECONFIG_HPP
 
 #include <iostream>
 #include <fstream>
 #include <map>
 
-class WebServer
+class HandleConfig
 {
 	private:
-		//std::map<std::string, std::map<std::string, std::string>> globalmap;
+		std::map<std::string, std::string> tmpMap;
+		std::map<std::string, std::string> nicoMap;
 	public:
-		void readConfigFile(const char *filename) const;
+		void readConfigFile(const char *filename);
+		void cleanMap();
+		void handleSimpleLine(std::string& line);
+		void handleObjLine(std::string& first, std::string& second);
 };
 
 #endif
