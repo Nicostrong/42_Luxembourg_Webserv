@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 11:58:59 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:16:45 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void HandleConfig::readConfigFile(const char *filename)
 
 void HandleConfig::handleSimpleLine(std::string& line)
 {
+	//std::cout << "[debug simple line]." << line << "." << "\n";
 	std::string key, value;
 	key = line;
 	std::size_t start = key.find_first_not_of(" \t");
@@ -150,10 +151,9 @@ void HandleConfig::cleanMap()
 	// =======================================
 	
 	it = nicoMap.begin();
-	it++;
 	while(it != nicoMap.end())
 	{
-		std::cout << "[debug nicomap]:" << it->first << ":\n" << it->second << "\n";
+		std::cout << "" << it->first << "\n" << it->second << "\n";
 		it++;
-	}
+	}	
 }
