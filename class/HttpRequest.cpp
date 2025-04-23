@@ -6,17 +6,17 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 17:10:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/23 17:58:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() :  _raw(""), _charParsed(0),_isBadRequest(false), 
-	_method(""), _uri(""), _httpVersion(""), _body(""), _isReqReceived(false) {}
+HttpRequest::HttpRequest() :  _charParsed(0), _raw(""), _method(""), _uri(""), 
+	_httpVersion(""), _body(""), _isBadRequest(false), _isReqReceived(false) {}
 
-HttpRequest::HttpRequest(const HttpRequest &obj) : _raw(""),  _charParsed(0), 
-	_isBadRequest(false), _method(""), _uri(""), _httpVersion(""), _body(""), 
+HttpRequest::HttpRequest(const HttpRequest &obj) : _charParsed(0), _raw(""), 
+	_method(""), _uri(""), _httpVersion(""), _body(""), _isBadRequest(false), 
 	_isReqReceived(false)
 {
 	*this = obj;
@@ -28,11 +28,14 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 {
 	if (this != &obj)
 	{
-		this->_raw = obj._raw;
-		this->_isBadRequest = obj._isBadRequest;
-		this->_headers = obj._headers;
 		this->_charParsed = obj._charParsed;
+		this->_raw = obj._raw;
+		this->_method = obj._method;
+		this->_uri = obj._uri;
+		this->_httpVersion = obj._uri;
 		this->_body = obj._body;
+		this->_headers = obj._headers;
+		this->_isBadRequest = obj._isBadRequest;
 		this->_isReqReceived = obj._isReqReceived;
 	}
 	return (*this);
