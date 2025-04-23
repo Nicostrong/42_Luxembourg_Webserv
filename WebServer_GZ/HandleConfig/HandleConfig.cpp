@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 13:56:43 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 14:10:46 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void HandleConfig::readConfigFile(const char *filename)
 		vector.push_back(line);
 	}
 	countCurlyBrackets = 0;
-	for(int i = 1; i < vector.size(); i++)
+	for(size_t i = 1; i < vector.size(); i++)
 	{
 		found = vector[i].find('{');
 		if (found != std::string::npos)
