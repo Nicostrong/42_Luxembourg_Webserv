@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 13:24:42 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:37:29 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,9 @@ void HandleConfig::cleanMap()
 		std::cout << "" << it->first << "\n" << it->second << "\n";
 		it++;
 	}	
+}
+
+std::map<std::string, std::string> HandleConfig::getNicoMap()
+{
+	return this->nicoMap;
 }

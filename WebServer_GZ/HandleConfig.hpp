@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 11:53:05 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:36:54 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class HandleConfig
 		std::map<std::string, std::string> tmpMap;
 		std::map<std::string, std::string> nicoMap;
 	public:
+		std::map<std::string, std::string> getNicoMap();
 		void readConfigFile(const char *filename);
 		void cleanMap();
 		void handleSimpleLine(std::string& line);
