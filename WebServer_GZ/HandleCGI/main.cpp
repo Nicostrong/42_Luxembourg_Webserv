@@ -6,14 +6,15 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:07:43 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 14:08:54 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/23 16:15:18 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "HandleCGI.hpp"
+#include "CGIHandler.hpp"
 
 int main()
 {
-	HandleCGI cgi;
+	CGI_Handler cgi;
+	cgi.DoCGI("/usr/bin/python", "cgitester.py");
 	return 0;
 }

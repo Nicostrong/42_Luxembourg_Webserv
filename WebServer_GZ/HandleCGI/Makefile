@@ -1,7 +1,7 @@
 CC = c++
-#CFLAG = -Wall -Wextra -Werror -std=c++98
+CFLAG = -Wall -Wextra -Werror -std=c++98
 NAME = webserv
-SRC = main.cpp HandleCGI.cpp
+SRC = main.cpp CGIHandler.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
