@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 18:08:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/23 22:41:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() :  _charParsed(0), _raw(""), _method(""), _uri(""), 
-	_httpVersion(""), _body(""), _isBadRequest(false), _isReqReceived(false) {}
+HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), _isBadRequest(false), 
+	_isReqReceived(false) {}
 
-HttpRequest::HttpRequest(const HttpRequest &obj) : _charParsed(0), _raw(""), 
-	_method(""), _uri(""), _httpVersion(""), _body(""), _isBadRequest(false), 
-	_isReqReceived(false)
+HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
 	*this = obj;
 }
@@ -28,13 +26,8 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 {
 	if (this != &obj)
 	{
+		HttpBase::operator=(obj);
 		this->_charParsed = obj._charParsed;
-		this->_raw = obj._raw;
-		this->_method = obj._method;
-		this->_uri = obj._uri;
-		this->_httpVersion = obj._uri;
-		this->_body = obj._body;
-		this->_headers = obj._headers;
 		this->_isBadRequest = obj._isBadRequest;
 		this->_isReqReceived = obj._isReqReceived;
 	}

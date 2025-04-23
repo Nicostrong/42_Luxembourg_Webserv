@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 18:10:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/23 22:28:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@
 #include <cstring>
 #include <sstream>
 #include <exception>
+#include "HttpBase.hpp"
 
 #define BUFFER_SIZE 1024
 
-class HttpRequest
+class HttpRequest : public HttpBase
 {
 public:
 	enum HttpMethod
@@ -61,12 +62,6 @@ private:
 	
 
 	size_t _charParsed;
-	std::string _raw;
-	std::string _method;
-	std::string _uri;
-	std::string _httpVersion;
-	std::string _body;
-	std::map<std::string, std::string> _headers;
 	bool _isBadRequest;
 	bool _isReqReceived;
 };
