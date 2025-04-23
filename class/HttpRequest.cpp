@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 23:38:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/23 17:10:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,17 @@ void HttpRequest::readReceived(int clientSocket, int serverSocket)
 			throw SocketReadException();
 		}
 		this->_raw.append(buffer.data(), bytes);
-		std::cout << this->_raw << "size = " << this->_raw.size() << " Last content = " << (int)buffer[bytes - 2] << " " << (int)buffer[bytes - 1] << std::endl;
 		parseRaw();
 		if (this->_isReqReceived)
+		{
+			std::map<std::string, std::string>::const_iterator it;
+			std::cout << "############ Headers ############" << std::endl;
+			for (it = this->_headers.begin(); it != this->_headers.end(); it++)
+			{
+				std::cout << " " << it->first << " " << it->second << std::endl;
+			}
 			std::cout << "Request received completely!" << std::endl;
+		}
 		return;
 	}
 }
@@ -116,9 +123,9 @@ void HttpRequest::parseStartLine(std::string &line)
 	this->_method = tokens.at(0);
 	this->_uri = tokens.at(1);
 	this->_httpVersion = tokens.at(2);
-	std::cout << "Start line correct with METHOD = \"" << this->_method 
-			  << "\" URI = \"" << this->_uri << "\" HTTP VERSION = \"" 
-			  << this->_httpVersion << "\"" <<  std::endl;
+	//std::cout << "Start line correct with METHOD = \"" << this->_method 
+			  //<< "\" URI = \"" << this->_uri << "\" HTTP VERSION = \"" 
+			  //<< this->_httpVersion << "\"" <<  std::endl;
 }
 
 void HttpRequest::parseHeader(std::string &line)
@@ -135,7 +142,21 @@ void HttpRequest::parseHeader(std::string &line)
 				  line.at(sep + 1) == ' ' || line.at(sep + 1) == '\t' : 0;
 	std::string name = line.substr(0, sep);
 	std::string value = line.substr(sep + folding + 1);
-	std::cout << "Name: " << name << " Value: " << value << std::endl;
+
+	if (!isHeaderNameValid(name))
+	{
+		this->_isBadRequest = true;
+		return ;
+	}
+	name = normalizeHeaderName(name);
+
+	if (name == "host" && this->_headers.find(name) != this->_headers.end())
+	{
+		this->_isBadRequest = true;
+		return;
+	}
+
+	this->_headers[name] = value;
 }
 
 bool HttpRequest::canBeValidMethod(std::string &method)
@@ -205,6 +226,18 @@ bool HttpRequest::isHeaderValueValid(std::string &value)
 	}
 	return (true);
 }
+
+std::string HttpRequest::normalizeHeaderName(std::string &name)
+{
+	std::string normalized = "";
+
+	std::string::const_iterator it;
+	for (it = name.begin(); it != name.end(); ++it) 
+		normalized.push_back(std::tolower(*it));
+	return (normalized);
+}
+
+
 
 // Exceptions
 const char * HttpRequest::SocketReadException::what() const throw()

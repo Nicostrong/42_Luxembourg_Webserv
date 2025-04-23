@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 23:39:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/23 16:42:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ class HttpRequest
 		static bool canBeValidHttpProtocol(std::string &httpVersion);
 		static bool isHeaderNameValid(std::string &name);
 		static bool isHeaderValueValid(std::string &value);
+		static std::string normalizeHeaderName(std::string &name);
 		std::string _raw;
 		size_t _charParsed;
-		std::list<std::map<std::string, std::string>> _headers;
+		std::map<std::string, std::string> _headers;
 		bool _isBadRequest;
 		std::string _method;
 		std::string _uri;
