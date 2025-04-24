@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/24 14:50:19 by nfordoxc         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:27:51 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "HandleConfig.hpp"
-#include <vector>
-#include <string>
+#include "../includes/HandleConfig.hpp"
+#include "../includes/lib.hpp"
 
 HandleConfig::HandleConfig()
 {
@@ -23,7 +22,6 @@ HandleConfig::HandleConfig(const char *filename)
 {
 	readConfigFile(filename);
 	cleanMap();
-	printNicoMap();
 }
 
 HandleConfig::HandleConfig(HandleConfig& copy)

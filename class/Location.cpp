@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 18:19:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/23 11:33:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,17 @@
 /*
  *	Default constructor
  */
-Location::Location( std::map<std::string, std::string> &data ) : _method()
+Location::Location( std::pair< const std::string, std::string> &data ) : _method()
 {
-	std::string			raw;
-	std::string			line;
+	std::string				raw;
+	std::string				line;
 
-	if (data.size() != 1)
-		throw LocationException();
-	this->_name = data.begin()->first;
-	raw = data.begin()->second;
+	this->_name = data.first;
+	raw = data.second;
 	raw.erase(0, raw.find("{") + 1);
 	raw.erase(raw.find_last_of("}"));
 
-	std::istringstream	stream(raw);
+	std::istringstream		stream(raw);
 
 	while (std::getline(stream, line))
 	{
@@ -41,7 +39,7 @@ Location::Location( std::map<std::string, std::string> &data ) : _method()
 		lineStream >> directive;
 		if (directive == "limit_except")
 		{
-			std::string limitData;
+			std::string		limitData;
 			
 			limitData = line;
 			while (line.find("}") == std::string::npos && std::getline(stream, line))
@@ -50,7 +48,7 @@ Location::Location( std::map<std::string, std::string> &data ) : _method()
 		}
 		else
 		{
-			std::string value;
+			std::string		value;
 
 			lineStream >> value;
 			if (!value.empty() && value[value.size() - 1] == ';')
@@ -139,6 +137,7 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 
 int	main( void )
 {
+	int									i;
 	std::map< std::string, std::string>	data;
  
 	data["location /"] = "{autoindex off;\nlimit_except GET POST { deny DELETE; }\nroot /var/www/html;}";
@@ -149,17 +148,22 @@ int	main( void )
 
 	try
 	{
-		Location	loc(data);
-		std::cout << "✅ [OK] get Index test passed." << std::endl;
-		std::cout << loc << std::endl;
-		std::cout << "✅ [OK] Serverbasic config test passed." << std::endl;
+		i = 0;
+		for (std::map<std::string, std::string>::iterator it = data.begin(); it != data.end(); ++it)
+		{
+			Location loc(*it);
+			std::cout << loc << std::endl;
+			std::cout << "✅ [OK] test " << i++ << " passed." << std::endl;
+		}
+		std::cout << "✅ [OK] ALl test passed." << std::endl;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
+		return (1);
 	}
  
 	return (0);
 }
  
- #endif
+#endif

@@ -14,11 +14,16 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc != 2)
+	if (argc == 2)
 	{
-		std::cerr << "Usage:\twebserv [file_of_configuartion].conf" << std::endl;
-		return (1);
+		HandleConfig hc;
+		hc.readConfigFile(argv[1]);
+		hc.cleanMap();
+		hc.getNicoMap();
 	}
-	(void)argv;
+	else
+	{
+		std::cerr << "Usage: ./webserv <config_file>.\n";
+	}
 	return (0);
 }

@@ -3,20 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/17 09:45:36 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/24 14:27:11 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIB_HPP
 # define LIB_HPP
 
+# include <vector>
 # include <string>
 # include <fstream>
 # include <sstream>
 # include <ostream>
+# include <cstdlib>
 # include <iostream>
 # include <exception>
 

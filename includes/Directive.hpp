@@ -28,6 +28,7 @@ class	Directive
 
 	public:
 
+		Directive( void );
 		Directive( std::string &data );
 		Directive( const Directive &src_obj );
 		~Directive( void );

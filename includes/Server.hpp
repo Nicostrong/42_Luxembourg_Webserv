@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 18:06:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/24 15:12:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 # define SERVER_HPP
 
 # include "lib.hpp"
-# ifndef TEST
 #  include "Location.hpp"
-# endif
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -27,15 +25,14 @@ class	Server
 	private:
 
 		size_t							_port;
+		int								_maxConnectionClient;
 		size_t							_maxSizeBody;
 		std::string						_name;
 		std::string						_adress;
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-# ifndef TEST
 		std::list<Location>				_location;
-# endif
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -46,11 +43,10 @@ class	Server
 		void							setName( std::string &data );
 		void							setPath( std::string &data );
 		void							setIndex( std::string &data );
+		void							setMaxConnection( std::string &data );
 		void							setMaxSizeBody( std::string &data );
 		void							setMapError( std::string &data );
-# ifndef TEST
 		void							setLocation( std::string &name, std::string &block );
-# endif
 		
 	public:
 

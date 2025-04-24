@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 18:08:40 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/24 14:45:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ Server::Server( std::map< std::string, std::string> const &data )
 			setIndex(const_cast<std::string &>(it->second));
 		else if (it->first == "error_page")
 			setMapError(const_cast<std::string &>(it->second));
-#ifndef TEST
 		else if (it->first.find("location") == 0)
 		{
 			std::string	name;
@@ -50,7 +49,6 @@ Server::Server( std::map< std::string, std::string> const &data )
 		}
 		else
 			throw ParsingError(it->first);
-#endif
 	}
 	LOG_DEB("Server constructor called");
 	return ;
@@ -94,7 +92,7 @@ void			Server::setPort( std::string &data )
 		throw ParsingError(data);
 	this->_port = static_cast<size_t>(std::atoi(data.substr(pos + 1).c_str()));
 	if (this->_port < 0 || this->_port > 65535)
-		throw ParsingError(data);
+		throw PortValueException();
 	return ;
 }
 
@@ -187,23 +185,19 @@ void			Server::setMapError( std::string &data )
 	return ;
 }
 
-#ifndef TEST
 /*
  *	save the location value
  */
 void			Server::setLocation( std::string &name, std::string &block )
 {
-	std::map<std::string, std::string>	locationData;
+	std::pair< const std::string, std::string>	locationData(name, block);
 
-	locationData[name] = block;
-
-	Location							loc(locationData);
+	Location									loc(locationData);
 	
 	this->_location.push_back(loc);
 	LOG_DEB("Location added");
 	return ;
 }
-#endif
 
 /*******************************************************************************
  *								GETTER										   *
@@ -277,6 +271,7 @@ Server::ParsingError::ParsingError( const std::string &data ) throw()
 	this->_msg = RED"Error parsing data: " + data + RESET;
 	return ;
 }
+
 /*
  *	Destructor for ParsingError
  */
@@ -284,6 +279,7 @@ Server::ParsingError::~ParsingError( void ) throw()
 {
 	return ;
 }
+
 /*
  *	Error parsing file.conf
  */
@@ -299,7 +295,6 @@ const char		*Server::ServerException::what() const throw()
 {
 	return  (RED"Error creating Server !"RESET);
 }
-
 
 /*
  *	Port value exception
@@ -342,23 +337,17 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
  ******************************************************************************/
 
 #ifdef TEST
+
 # include <cassert>
+# include "../includes/HandleConfig.hpp"
 
 int	main( void )
 {
-	std::map< std::string, std::string>	data;
-	
-	data["listen"] = "127.0.0.1:8080";
-	data["server_name"] = "localhost";
-	data["root"] = "./www/html";
-	data["client_max_body_size"] = "10M";
-	data["index"] = "index.html";
-	data["error_page"] = "404 ./errors/404.html;\n500 ./errors/500.html;";
-	data["location /"] = "autoindex on;\nlimit_except GET POST { deny DELETE; }\nroot /var/www/html;";
+	HandleConfig	hg("webserv.conf");
 
 	try
 	{
-		Server	s(data);
+		Server	s(hg.getNicoMap());
 		assert(s.getPort() == 8080);
 		std::cout << "✅ [OK] get Port test passed." << std::endl;
 		assert(s.getAdress() == "127.0.0.1");
@@ -367,7 +356,7 @@ int	main( void )
 		std::cout << "✅ [OK] get Name test passed." << std::endl;
 		assert(s.getPath() == "./www/html");
 		std::cout << "✅ [OK] get Path test passed." << std::endl;
-		assert(s.getMaxSizeBody() == 10485760);
+		assert(s.getMaxSizeBody() == 5242880);
 		std::cout << "✅ [OK] get MaxSizeBody test passed." << std::endl;
 		assert(s.getIndex() == "index.html");
 		std::cout << "✅ [OK] get Index test passed." << std::endl;
