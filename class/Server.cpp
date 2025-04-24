@@ -6,11 +6,34 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/24 14:45:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/24 16:16:42 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
+
+/*******************************************************************************
+ *								TEMPLATE									   *
+ ******************************************************************************/
+
+/*
+ *	template to extract a single value from a string
+ */
+template <typename T>
+void			Server::setValue(T &target, std::string &data)
+{
+	std::string			end;
+	std::istringstream	stream(data);
+
+	if (data.empty())
+		throw ParsingError(data);
+	if (!(stream >> target))
+		throw ParsingError(data);
+	if (stream >> end)
+		throw ParsingError(data);
+	return ;
+}
+
 
 /*******************************************************************************
  *							CANONICAL FORM									   *
@@ -31,13 +54,15 @@ Server::Server( std::map< std::string, std::string> const &data )
 			setPort(const_cast<std::string &>(it->second));
 		}
 		else if (it->first == "root")
-			setPath(const_cast<std::string &>(it->second));
+			setValue(this->_path, const_cast<std::string &>(it->second));
 		else if (it->first == "server_name")
-			setName(const_cast<std::string &>(it->second));
+			setValue(this->_name, const_cast<std::string &>(it->second));
+		else if (it->first == "max_connection_client")
+			setValue(this->_maxConnectionClient, const_cast<std::string &>(it->second));
 		else if (it->first == "client_max_body_size")
 			setMaxSizeBody(const_cast<std::string &>(it->second));
 		else if (it->first == "index")
-			setIndex(const_cast<std::string &>(it->second));
+			setValue(this->_index, const_cast<std::string &>(it->second));
 		else if (it->first == "error_page")
 			setMapError(const_cast<std::string &>(it->second));
 		else if (it->first.find("location") == 0)
@@ -97,57 +122,22 @@ void			Server::setPort( std::string &data )
 }
 
 /*
- *	save the name of the server
- */
-void			Server::setName( std::string &data )
-{
-	if (data.empty())
-		throw ParsingError(data);
-	this->_name = data;
-	return ;
-}
-
-/*
- *	set the path value
- */
-void			Server::setPath( std::string &data )
-{
-	if (data.empty())
-		throw ParsingError(data);
-	this->_path = data;
-	return ;
-}
-
-/*
- *	set the index value
- */
-void			Server::setIndex( std::string &data )
-{
-	if (data.empty())
-		throw ParsingError(data);
-	this->_index = data;
-	return ;
-}
-
-/*
  *	save the max size of body
  */
 void			Server::setMaxSizeBody( std::string &data )
 {
-	int			value;
-	size_t		factor;
-	char		unit;
-	std::string	numberPart;
+	int					value;
+	size_t				factor = 1;
+	char				unit = 0;
+	std::string			numberPart;
+	std::istringstream	stream(data);
 
 	if (data.empty())
 		throw ParsingError(data);
-	factor = 1;
-	unit = data[data.size() - 1];
-	if (isdigit(unit))
-		numberPart = data;
-	else
+	if (!(stream >> value))
+		throw ParsingError(data);
+	if (stream >> unit)
 	{
-		numberPart = data.substr(0, data.size() - 1);
 		if (unit == 'M' || unit == 'm')
 			factor = 1024 * 1024;
 		else if (unit == 'K' || unit == 'k')
@@ -155,10 +145,6 @@ void			Server::setMaxSizeBody( std::string &data )
 		else
 			throw ParsingError(data);
 	}
-	for (size_t i = 0; i < numberPart.size(); ++i)
-		if (!isdigit(numberPart[i]))
-			throw ParsingError(numberPart);
-	value = std::atoi(numberPart.c_str());
 	this->_maxSizeBody = static_cast<size_t>(value) * factor;
 	return ;
 }

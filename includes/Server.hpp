@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/24 15:12:02 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/24 16:15:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ class	Server
 		/*	SETTER	*/
 		void							setAdress( std::string &data );
 		void							setPort( std::string &data );
-		void							setName( std::string &data );
-		void							setPath( std::string &data );
-		void							setIndex( std::string &data );
-		void							setMaxConnection( std::string &data );
 		void							setMaxSizeBody( std::string &data );
 		void							setMapError( std::string &data );
 		void							setLocation( std::string &name, std::string &block );
@@ -64,8 +60,11 @@ class	Server
 
 		std::map<size_t, std::string>	getMapError( void ) const;
 
-		/*	EXCEPTION	*/
 
+		template <typename T>
+		void							setValue(T &target, std::string &data);
+
+		/*	EXCEPTION	*/
 		/*	server error Exception	*/
 		class	ServerException : public std::exception
 		{
