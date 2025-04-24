@@ -74,7 +74,7 @@ std::string CGI_Handler::DoCGI(const char *compiler, const char *script)
         close(pipefd[1]);
         char buffer[1024];
         ssize_t count;
-        std::string output;
+        std::string output = "";
         while ((count = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
             output.append(buffer, count);
         }
