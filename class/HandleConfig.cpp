@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/24 14:27:51 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/24 15:59:58 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ HandleConfig::HandleConfig(const char *filename)
 
 HandleConfig::HandleConfig(HandleConfig& copy)
 {
-	this->tmpMap = copy.tmpMap;
 	this->nicoMap = copy.nicoMap;
 }
 
@@ -34,7 +33,6 @@ HandleConfig& HandleConfig::operator=(HandleConfig& copy)
 {
 	if(this != &copy)
 	{
-		this->tmpMap = copy.tmpMap;
 		this->nicoMap = copy.nicoMap;
 	}
 	return *this;
@@ -155,6 +153,7 @@ void HandleConfig::cleanMap()
 		}
 		it++;
 	}
+	this->tmpMap.clear();
 }
 
 std::map<std::string, std::string> HandleConfig::getNicoMap()
