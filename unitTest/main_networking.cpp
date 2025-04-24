@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 10:46:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 09:32:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int main()
 		return 1;
 	}
 
-
-	
 	if (bind(serverSocket, (struct sockaddr *)&addr, sizeof(addr)) == -1)
 	{
 		std::cerr << "Socket failed to start listening" << std::endl;

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PollMonitoring.hpp                                 :+:      :+:    :+:   */
+/*   EventMonitoring.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 14:36:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 09:58:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef POLLMONITORING_HPP
-# define POLLMONITORING_HPP
+#ifndef EVENTMONITORING_HPP
+# define EVENTMONITORING_HPP
 
 #include "BaseData.hpp"
 #include <vector>
@@ -19,11 +19,14 @@
 #include <utility>
 #include <algorithm>
 #include <poll.h>
+#include <sys/epoll.h>
+#include <unistd.h>
 
 #define MAX_CONNECTIONS 20
+#define MAX_EVENTS 20
 #define TIMEOUT_POLL 5000
 
-class PollMonitoring
+class EventMonitoring
 {
 	public:
 		class PollFullException : public std::exception {
@@ -31,20 +34,28 @@ class PollMonitoring
 				const char * what () const throw();
 		};
 
-		PollMonitoring();
-		PollMonitoring(const PollMonitoring &obj);
-		~PollMonitoring();
-		PollMonitoring &operator=(const PollMonitoring &obj);
+		class EPollFailedInitException : public std::exception {
+			public:
+				const char * what () const throw();
+		};
+
+		EventMonitoring();
+		EventMonitoring(const EventMonitoring &obj);
+		~EventMonitoring();
+		EventMonitoring &operator=(const EventMonitoring &obj);
 		const std::vector<pollfd> &getFds() const;
 		std::vector<BaseData*> &getFdsData();
 		size_t getClientsConnected() const;
-		void monitor(int fd, short int events, BaseData::BaseDataType type);
+		void monitor(int fd, uint32_t events, BaseData::BaseDataType type);
 		void unmonitor(int fd);
 		int  updatePoll();
 	private:
+		std::vector<epoll_event> _events;
+		std::vector<epoll_event> _openFds;
 		std::vector<pollfd> _fds;
 		std::vector<BaseData*> _fdsData;
-		size_t _clientsConnected;
+		size_t 	_clientsConnected;
+		int _epollFd;
 };
 
 #endif

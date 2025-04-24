@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:34:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/21 22:19:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 09:20:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,9 @@ ClientData &ClientData::operator=(const ClientData &obj)
 HttpRequest &ClientData::getRequest()
 {
 	return (this->_request);
+}
+
+HttpResponse &ClientData::getResponse()
+{
+	return (this->_response);
 }

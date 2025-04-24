@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 08:47:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 09:23:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 
 void HttpRequest::readReceived(int clientSocket, int serverSocket)
 {
+	(void)serverSocket;
 	std::vector<char> buffer(BUFFER_SIZE);
 	ssize_t bytes = recv(clientSocket, buffer.data(), BUFFER_SIZE, 0);
 	
@@ -61,6 +62,11 @@ bool HttpRequest::isBadRequest() const
 	return (this->_statusCode == BAD_REQUEST);
 }
 
+HttpBase::HttpCode HttpRequest::getStatusCode() const
+{
+	return (this->_statusCode);
+}
+
 // Helpers
 
 void HttpRequest::parseRaw()
@@ -72,7 +78,7 @@ void HttpRequest::parseRaw()
 		line = _raw.substr(0, pos);
 		parseStartLine(line);
 		this->_charParsed = pos + 2;
-		if (this->_statusCode = BAD_REQUEST)
+		if (this->_statusCode == BAD_REQUEST)
 			return ;
 	}
 	while ((pos = this->_raw.find("\r\n", this->_charParsed)) != std::string::npos)
@@ -85,7 +91,7 @@ void HttpRequest::parseRaw()
 			return ;
 		}
 		parseHeader(line);
-		if (this->_statusCode = BAD_REQUEST)
+		if (this->_statusCode == BAD_REQUEST)
 			return ;
 		this->_charParsed = pos + 2;
 	}

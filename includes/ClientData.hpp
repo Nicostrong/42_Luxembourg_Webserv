@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientData.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:29:49 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/22 14:36:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 09:20:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <netinet/in.h>
 #include "BaseData.hpp"
 #include "HttpRequest.hpp"
+#include "HttpResponse.hpp"
 
 
 class ClientData : public BaseData
@@ -30,9 +31,10 @@ class ClientData : public BaseData
 		ClientData &operator=(const ClientData &obj);
 		
 		HttpRequest &getRequest();
+		HttpResponse &getResponse();
 	private:
 		HttpRequest _request;
-
+		HttpResponse _response;
 };
 
 #endif
