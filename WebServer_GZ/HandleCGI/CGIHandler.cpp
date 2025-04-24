@@ -11,9 +11,16 @@
 /* ************************************************************************** */
 
 #include "CGIHandler.hpp"
-#include <cstdlib>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <string>
+
+extern char **environ;
 
 CGI_Handler::CGI_Handler()
 {
@@ -35,39 +42,45 @@ CGI_Handler& CGI_Handler::operator=(CGI_Handler& copy)
 	return *this;
 }
 
-bool CGI_Handler::DoCGI(const char *compiler, const char *script)
+std::string CGI_Handler::DoCGI(const char *compiler, const char *script)
 {
-	if(!compiler || !script)
-	{
-		std::cerr << "Error: Compiler not in List.\n";
-		return 1;
-	}
-	pid_t c_pid = fork(); 
-  
-    if (c_pid == -1) { 
-        std::cerr << "fork\n"; 
-        exit(EXIT_FAILURE); 
-    } 
-    else if (c_pid == 0) { 
-        std::cout << "printed from child process " << getpid() 
-             << "\n";
-			 try
-			 {
-				const char *cmd_list[] = { compiler, script, NULL };
-			 	execve(cmd_list[0], (char * const *)cmd_list, NULL);
-			 } catch(std::exception &e)
-			 {
-				std::cout << e.what();
-			 }
-    } 
-	else{
-		int status;
-		waitpid(c_pid, &status, 0);
-		std::cout << "Child finished. Parent resumes work.\n";
-		if (WIFEXITED(status)) {
-				std::cout << "Child exited with status: " << WEXITSTATUS(status) << "\n";
-			}
+    int pipefd[2];
+    if (pipe(pipefd) == -1) {
+        std::cerr << "pipe failed\n";
+        return "ERROR\n";
     }
-  
-    return 0; 
+
+    if(!compiler || !script)
+    {
+        std::cerr << "Error: Compiler not in List.\n";
+        return "ERROR\n";
+    }
+
+    pid_t pid = fork(); 
+
+    if (pid == -1) { 
+        std::cerr << "fork failed\n"; 
+        return "ERROR\n";
+    } 
+    else if (pid == 0) { 
+        close(pipefd[0]);
+        dup2(pipefd[1], STDOUT_FILENO);
+        close(pipefd[1]);
+        const char *cmd_list[] = { compiler, script, NULL };
+        execve(cmd_list[0], (char * const *)cmd_list, environ);
+        _exit(1);
+    } 
+    else {
+        close(pipefd[1]);
+        char buffer[1024];
+        ssize_t count;
+        std::string output;
+        while ((count = read(pipefd[0], buffer, sizeof(buffer))) > 0) {
+            output.append(buffer, count);
+        }
+        close(pipefd[0]);
+        waitpid(pid, NULL, 0);
+        return output;
+    }
+    return "ERROR\n"; 
 }

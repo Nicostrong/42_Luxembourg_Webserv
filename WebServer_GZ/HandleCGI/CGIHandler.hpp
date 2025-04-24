@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/23 16:46:51 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/24 15:18:34 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class CGI_Handler
 		CGI_Handler(CGI_Handler& copy);
 		CGI_Handler& operator=(CGI_Handler& copy);
 		~CGI_Handler();
-		bool DoCGI(const char *compiler, const char *script);
+		std::string DoCGI(const char *compiler, const char *script);
 };
 
 #endif
