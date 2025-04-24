@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 17:32:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 22:19:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,15 @@ int main()
 	pmonitoring.monitor(serverSocket, POLLIN, BaseData::SERVER);
 	std::cout << "Listening on port 8080" << std::endl;
 
-	while (pmonitoring.update() != -1)
+	int amount = 0;
+	while ((amount = pmonitoring.update()) != -1)
 	{
 		const std::vector<epoll_event> events = pmonitoring.getEvents();
 		std::vector<epoll_event>::const_iterator it;
 
-		for (it = events.begin(); it != events.end(); it++)
+		for (it = events.begin(); it != events.begin() + amount; it++)
 		{
 			BaseData *data = static_cast<BaseData *>(it->data.ptr);
-			std::cout << "Ptr1: " << data << " fd " << it->data.ptr << std::endl;
 			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
 			{
 				close(data->getFd());

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 17:34:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 22:20:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void EventMonitoring::monitor(int fd, uint32_t events,
 
 	event.events = events;
 	event.data.ptr = data;
-	std::cout << "Data 1 " << event.data.ptr << std::endl;
 	this->_openFds.push_back(event);
 	if (type == BaseData::CLIENT)
 		this->_clientsConnected++;
@@ -74,18 +73,21 @@ void EventMonitoring::monitor(int fd, uint32_t events,
 
 void EventMonitoring::unmonitor(int fd)
 {
-	std::vector<epoll_event>::iterator it;
+	std::vector<epoll_event>::iterator it = this->_openFds.begin();
 
-	for (it = this->_openFds.begin(); it != this->_openFds.end(); it++)
+	while (it != this->_openFds.end())
 	{
 		BaseData *data = static_cast<BaseData *>(it->data.ptr);
 		if (data->getFd() == fd)
 		{
-			
 			if (data->getType() == BaseData::CLIENT)
 				this->_clientsConnected--;
 			delete data;
 			it = this->_openFds.erase(it);
+		}
+		else
+		{
+			++it;
 		}
 	}
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
