@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientData.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:29:49 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 09:20:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 17:10:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 class ClientData : public BaseData
 {
 	public:
-		ClientData();
+		ClientData(int fd);
 		ClientData(const ClientData &obj);
 		~ClientData();
 		ClientData &operator=(const ClientData &obj);

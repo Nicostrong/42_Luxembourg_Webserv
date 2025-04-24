@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 09:58:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 17:06:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <poll.h>
 #include <sys/epoll.h>
 #include <unistd.h>
+#include <iostream>
 
 #define MAX_CONNECTIONS 20
 #define MAX_EVENTS 20
@@ -43,17 +44,14 @@ class EventMonitoring
 		EventMonitoring(const EventMonitoring &obj);
 		~EventMonitoring();
 		EventMonitoring &operator=(const EventMonitoring &obj);
-		const std::vector<pollfd> &getFds() const;
-		std::vector<BaseData*> &getFdsData();
+		const std::vector<epoll_event> getEvents() const;
 		size_t getClientsConnected() const;
 		void monitor(int fd, uint32_t events, BaseData::BaseDataType type);
 		void unmonitor(int fd);
-		int  updatePoll();
+		int  update();
 	private:
 		std::vector<epoll_event> _events;
 		std::vector<epoll_event> _openFds;
-		std::vector<pollfd> _fds;
-		std::vector<BaseData*> _fdsData;
 		size_t 	_clientsConnected;
 		int _epollFd;
 };

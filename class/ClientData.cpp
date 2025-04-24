@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ClientData.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:34:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 09:20:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 17:10:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ClientData.hpp"
 #include "../includes/BaseData.hpp"
 
-ClientData::ClientData() : BaseData(CLIENT), _request(HttpRequest()) {}
+ClientData::ClientData(int fd) : BaseData(fd, CLIENT), _request(HttpRequest()) 
+	{}
 
 ClientData::ClientData(const ClientData &obj) : BaseData(obj)
 , _request(HttpRequest())

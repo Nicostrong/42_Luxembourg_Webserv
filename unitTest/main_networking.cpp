@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 09:32:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 17:32:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
 #include <fcntl.h>
 #include <poll.h>
 #include "../includes/HttpRequest.hpp"
-#include "../includes/PollMonitoring.hpp"
+#include "../includes/EventMonitoring.hpp"
 #include "../includes/ClientData.hpp"
 
 #define MAX_CONNECTIONS 20
 
 int main()
 {
-	PollMonitoring pmonitoring;
+	EventMonitoring pmonitoring;
 	sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8080);
@@ -60,27 +60,29 @@ int main()
 	pmonitoring.monitor(serverSocket, POLLIN, BaseData::SERVER);
 	std::cout << "Listening on port 8080" << std::endl;
 
-	while (pmonitoring.updatePoll() != -1)
+	while (pmonitoring.update() != -1)
 	{
-		const std::vector<pollfd> pFds = pmonitoring.getFds();
-		std::vector<BaseData *> pFdsData = pmonitoring.getFdsData();
+		const std::vector<epoll_event> events = pmonitoring.getEvents();
+		std::vector<epoll_event>::const_iterator it;
 
-		for (size_t i = 0; i < pFds.size(); i++)
+		for (it = events.begin(); it != events.end(); it++)
 		{
-			if (pFds.at(i).revents & (POLLERR | POLLHUP | POLLRDHUP))
+			BaseData *data = static_cast<BaseData *>(it->data.ptr);
+			std::cout << "Ptr1: " << data << " fd " << it->data.ptr << std::endl;
+			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
 			{
-				close(pFds.at(i).fd);
-				pmonitoring.unmonitor(pFds.at(i).fd);
+				close(data->getFd());
+				pmonitoring.unmonitor(data->getFd());
 				std::cout << "Socket closed by remote" << std::endl;
 				std::cout << pmonitoring.getClientsConnected() 
 						  << " clients connected." << std::endl; 
 				continue;
 			}
-			switch (pFdsData.at(i)->getType())
+			switch (data->getType())
 			{
 				case BaseData::SERVER:
 				{
-					if (pFds.at(i).revents & POLLIN)
+					if (it->events & POLLIN)
 					{
 						int clientSocket = accept(serverSocket, NULL, NULL);
 						if (clientSocket != -1)
@@ -95,19 +97,19 @@ int main()
 				}
 				case BaseData::CLIENT:
 				{
-					if (pFds.at(i).revents & POLLIN)
+					if (it->events & POLLIN)
 					{
-						static_cast<ClientData *>(pFdsData.at(i))->getRequest().
-							readReceived(pFds.at(i).fd, serverSocket);
+						static_cast<ClientData *>(data)->getRequest().
+							readReceived(data->getFd(), serverSocket);
 							break;
 					}
-					else if (pFds.at(i).revents & POLLOUT)
+					else if (it->events & POLLOUT)
 					{
-						if (static_cast<ClientData *>(pFdsData.at(i))->getRequest().isBadRequest())
+						if (static_cast<ClientData *>(data)->getRequest().isBadRequest())
 						{
-							send(pFds.at(i).fd, "Bad Request\n", 13, 0);
-							close(pFds.at(i).fd);
-							pmonitoring.unmonitor(pFds.at(i).fd);
+							send(data->getFd(), "Bad Request\n", 13, 0);
+							close(data->getFd());
+							pmonitoring.unmonitor(data->getFd());
 							std::cout << "Bad Request: Socket closed"<< std::endl;
 							std::cout << pmonitoring.getClientsConnected() 
 						  			  << " clients connected." << std::endl; 
