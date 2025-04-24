@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 22:29:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 08:42:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 class HttpBase
 {
 	public:
+		enum HttpCode
+		{
+			OK = 200,
+			BAD_REQUEST = 400,
+		};
+		
 		HttpBase(const HttpBase &obj);
 		virtual ~HttpBase();
 		HttpBase &operator=(const HttpBase &obj);

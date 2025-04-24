@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 22:28:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 08:42:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ private:
 	size_t _charParsed;
 	bool _isBadRequest;
 	bool _isReqReceived;
+	HttpCode _statusCode;
 };
 
 #endif

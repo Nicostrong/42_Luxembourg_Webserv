@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 22:41:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/24 08:47:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
 HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), _isBadRequest(false), 
-	_isReqReceived(false) {}
+	_isReqReceived(false), _statusCode(OK) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -30,6 +30,7 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_charParsed = obj._charParsed;
 		this->_isBadRequest = obj._isBadRequest;
 		this->_isReqReceived = obj._isReqReceived;
+		this->_statusCode = obj._statusCode;
 	}
 	return (*this);
 }
@@ -37,37 +38,27 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 void HttpRequest::readReceived(int clientSocket, int serverSocket)
 {
 	std::vector<char> buffer(BUFFER_SIZE);
-	ssize_t bytes;
-
-	if (clientSocket > -1 && serverSocket > -1)
+	ssize_t bytes = recv(clientSocket, buffer.data(), BUFFER_SIZE, 0);
+	
+	if (bytes == -1)
+		throw SocketReadException();
+	this->_raw.append(buffer.data(), bytes);
+	parseRaw();
+	if (this->_isReqReceived)
 	{
-		while ((bytes = recv(clientSocket, buffer.data(), BUFFER_SIZE, 0)) == 
-				BUFFER_SIZE)
-			this->_raw.append(buffer.data(), bytes);
-		if (bytes == -1)
+		std::map<std::string, std::string>::const_iterator it;
+		std::cout << "############ Headers ############" << std::endl;
+		for (it = this->_headers.begin(); it != this->_headers.end(); it++)
 		{
-			this->_raw.clear();
-			throw SocketReadException();
-		}
-		this->_raw.append(buffer.data(), bytes);
-		parseRaw();
-		if (this->_isReqReceived)
-		{
-			std::map<std::string, std::string>::const_iterator it;
-			std::cout << "############ Headers ############" << std::endl;
-			for (it = this->_headers.begin(); it != this->_headers.end(); it++)
-			{
 				std::cout << " " << it->first << " " << it->second << std::endl;
-			}
-			std::cout << "Request received completely!" << std::endl;
 		}
-		return;
+		std::cout << "Request received completely!" << std::endl;
 	}
 }
 
 bool HttpRequest::isBadRequest() const
 {
-	return (this->_isBadRequest);
+	return (this->_statusCode == BAD_REQUEST);
 }
 
 // Helpers
@@ -81,7 +72,7 @@ void HttpRequest::parseRaw()
 		line = _raw.substr(0, pos);
 		parseStartLine(line);
 		this->_charParsed = pos + 2;
-		if (this->_isBadRequest)
+		if (this->_statusCode = BAD_REQUEST)
 			return ;
 	}
 	while ((pos = this->_raw.find("\r\n", this->_charParsed)) != std::string::npos)
@@ -94,7 +85,7 @@ void HttpRequest::parseRaw()
 			return ;
 		}
 		parseHeader(line);
-		if (this->_isBadRequest)
+		if (this->_statusCode = BAD_REQUEST)
 			return ;
 		this->_charParsed = pos + 2;
 	}
@@ -113,7 +104,7 @@ void HttpRequest::parseStartLine(std::string &line)
 	if (tokens.size() != 3 || !canBeValidMethod(tokens.at(0)) || 
 		!canBeValidPath(tokens.at(1)) || !canBeValidHttpProtocol(tokens.at(2)))
 	{
-		this->_isBadRequest = true;
+		this->_statusCode = BAD_REQUEST;
 		return ;
 	}
 	this->_method = tokens.at(0);
@@ -130,7 +121,7 @@ void HttpRequest::parseHeader(std::string &line)
 	
 	if (sep == std::string::npos || sep == 0)
 	{
-		this->_isBadRequest = true;
+		this->_statusCode = BAD_REQUEST;
 		return ;
 	}
 
@@ -141,14 +132,14 @@ void HttpRequest::parseHeader(std::string &line)
 
 	if (!isHeaderNameValid(name))
 	{
-		this->_isBadRequest = true;
+		this->_statusCode = BAD_REQUEST;
 		return ;
 	}
 	name = normalizeHeaderName(name);
 
 	if (name == "host" && this->_headers.find(name) != this->_headers.end())
 	{
-		this->_isBadRequest = true;
+		this->_statusCode = BAD_REQUEST;
 		return;
 	}
 
