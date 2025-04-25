@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/23 11:35:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 13:05:27 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
  *							CANONICAL FORM									   *
  ******************************************************************************/
 
+
 Directive::Directive( void )
 {
 	return ;
@@ -24,9 +25,10 @@ Directive::Directive( void )
 /*
  *	Default constructor
  */
-Directive::Directive( std::string &data )
+Directive::Directive( std::string &key, std::string &value )
+	: _name(key)
 {
-	std::istringstream	stream(data);
+	std::istringstream	stream(value);
 	std::string			token;
 	bool				first = true;
 
@@ -34,14 +36,17 @@ Directive::Directive( std::string &data )
 	{
 		if (first)
 		{
-			this->_name = token;
+			this->_values.push_back(token);
 			first = false;
 		}
 		else
 			this->_values.push_back(token);
 	}
-	if (this->_name.empty())
+	if (this->_values.empty())
 		throw DirectiveException();
+#ifdef DEBUG
+	std::cout << *this << std::endl;
+#endif
 	LOG_DEB("Directive constructor called");
 	return ;
 }
@@ -169,10 +174,10 @@ const char		*Directive::DirectiveException::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, Directive &src_object )
 {
-	out	<< GREEN << "DIRECTIVE INFORMATION" << std::endl
+	out	<< BLUE << "------------- DIRECTIVE BLOCK -------------" << std::endl
 		<< "name: " << src_object.getName()
 		<< " => [" << src_object.getAllValue() << "]" << std::endl
-		<< RESET;
+		<< "------------------------------------------"	<< RESET << std::endl;
 	return (out);
 }
 
@@ -180,7 +185,7 @@ std::ostream	&operator<<( std::ostream &out, Directive &src_object )
  *							TESTER CLASS									   *
  ******************************************************************************/
 
-#ifdef TEST
+#ifdef DIR
 
 #include "../includes/Directive.hpp"
  

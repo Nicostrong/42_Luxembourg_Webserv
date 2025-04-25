@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/24 16:15:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 09:38:23 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,15 @@ class	Server
 		void							setMapError( std::string &data );
 		void							setLocation( std::string &name, std::string &block );
 		
+		/*	PARSER	*/
+		void							parseData( const std::map< std::string, std::string> &data );
+
+		/*	CHECKER	*/
+		void							checkServer( void );
+		
 	public:
 
-		Server( std::map< std::string, std::string> const &data );
+		Server( const std::map< std::string, std::string> &data );
 		~Server( void );
 
 		/*  GETTER  */
@@ -59,6 +65,7 @@ class	Server
 		std::string						getIndex( void ) const;
 
 		std::map<size_t, std::string>	getMapError( void ) const;
+		std::list<Location>				getLocations( void ) const;
 
 
 		template <typename T>

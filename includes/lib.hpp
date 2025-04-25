@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/24 14:27:11 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 13:00:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,16 @@
 # include <vector>
 
 # define RESET		"\033[0m"
-# define BLACK		"\033[30m"
-# define RED		"\033[31m"
-# define GREEN		"\033[32m"
-# define YELLOW		"\033[33m"
-# define BLUE		"\033[34m"
-# define MAGENTA	"\033[35m"
+# define BLACK		"\033[90m"
+# define RED		"\033[91m"		//	error log
+# define GREEN		"\033[92m"		//	Server log
+# define YELLOW		"\033[93m"		//	Location log
+# define BLUE		"\033[94m"		//	Directive log
+# define MAGENTA	"\033[95m"		//	Method log
+# define CYAN		"\033[96m"		//	Debug log
 
 # if DEBUG
-#  define LOG_DEB(msg)	std::cout << YELLOW << "[DEBUG] " << msg << RESET << std::endl
+#  define LOG_DEB(msg)	std::cout << CYAN << "[DEBUG] " << msg << RESET << std::endl
 # else
 #  define LOG_DEB(msg)
 # endif

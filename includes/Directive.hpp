@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 18:19:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 12:50:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class	Directive
 	public:
 
 		Directive( void );
-		Directive( std::string &data );
+		Directive( std::string &key, std::string &value );
 		Directive( const Directive &src_obj );
 		~Directive( void );
 		

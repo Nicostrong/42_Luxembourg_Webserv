@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 18:25:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 13:05:04 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,11 +291,10 @@ const char		*MethodHTTP::MethodUnknow::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, MethodHTTP const &src_object )
 {
-	out	<< GREEN << "METHODS INFORMATION" << std::endl
+	out	<< MAGENTA << "------------- METHOD BLOCK -------------" << std::endl
 		<< "Methods Allow: [" << src_object.getAllowed() << "]" << std::endl
-		<< RED
 		<< "Methods Denied: [" << src_object.getDenied() << "]" << std::endl
-		<< RESET;
+		<< "------------------------------------------" <<RESET;
 	return (out);
 }
 
@@ -303,7 +302,7 @@ std::ostream	&operator<<( std::ostream &out, MethodHTTP const &src_object )
  *							TESTER CLASS									   *
  ******************************************************************************/
 
-#ifdef TEST
+#ifdef MET
 # include <cassert>
 
 void test_empty_block( void )
