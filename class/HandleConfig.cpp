@@ -6,11 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/25 14:29:56 by gzenner          ###   ########.fr       */
-=======
-/*   Updated: 2025/04/25 14:43:57 by nfordoxc         ###   Luxembourg.lu     */
->>>>>>> d858d1c7cddb1635018ee33f668c3ef3e8774a0b
+/*   Updated: 2025/04/25 16:03:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
