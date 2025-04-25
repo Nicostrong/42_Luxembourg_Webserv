@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 22:20:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:04:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,19 @@ size_t EventMonitoring::getClientsConnected() const
 }
 
 void EventMonitoring::monitor(int fd, uint32_t events,
-							 BaseData::BaseDataType type)
+					EventHandler::BaseDataType type)
 {
 	epoll_event event;
 
 	if (this->_clientsConnected + 1 == MAX_CONNECTIONS)
 		throw PollFullException();
 
-	BaseData *data = BaseData::getHerited(fd, type);
+	EventHandler *data = EventHandler::getHerited(fd, type);
 
 	event.events = events;
 	event.data.ptr = data;
 	this->_openFds.push_back(event);
-	if (type == BaseData::CLIENT)
+	if (type == EventHandler::CLIENT)
 		this->_clientsConnected++;
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }
@@ -77,10 +77,11 @@ void EventMonitoring::unmonitor(int fd)
 
 	while (it != this->_openFds.end())
 	{
-		BaseData *data = static_cast<BaseData *>(it->data.ptr);
+		EventHandler *data = static_cast<EventHandler *>(it->data.ptr);
 		if (data->getFd() == fd)
 		{
-			if (data->getType() == BaseData::CLIENT)
+			
+			if (data->getType() == EventHandler::CLIENT)
 				this->_clientsConnected--;
 			delete data;
 			it = this->_openFds.erase(it);

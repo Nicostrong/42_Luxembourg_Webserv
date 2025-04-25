@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BaseData.hpp                                       :+:      :+:    :+:   */
+/*   EventHandler.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 17:09:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:45:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BASEDATA_HPP
-# define BASEDATA_HPP
+#ifndef EVENT_HANDLER_HPP
+# define EVENT_HANDLER_HPP
 
-class BaseData
+class EventHandler
 {
 	public:
 		enum BaseDataType
@@ -23,13 +23,13 @@ class BaseData
 			FILE = 2,
 		};
 		
-		BaseData(int fd, BaseDataType type);
-		BaseData(const BaseData &obj);
-		virtual ~BaseData();
-		BaseData &operator=(const BaseData &obj);
+		EventHandler(int fd, BaseDataType type);
+		EventHandler(const EventHandler &obj);
+		virtual ~EventHandler();
+		EventHandler &operator=(const EventHandler &obj);
 		int getFd() const;
 		BaseDataType getType() const;
-		static BaseData *getHerited(int fd, BaseDataType type);
+		static EventHandler *getHerited(int fd, BaseDataType type);
 	protected:
 		const int _fd;
 		const BaseDataType _type;

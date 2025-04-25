@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 17:06:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:45:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENTMONITORING_HPP
 # define EVENTMONITORING_HPP
 
-#include "BaseData.hpp"
+#include "EventHandler.hpp"
 #include <vector>
 #include <list>
 #include <utility>
@@ -46,7 +46,7 @@ class EventMonitoring
 		EventMonitoring &operator=(const EventMonitoring &obj);
 		const std::vector<epoll_event> getEvents() const;
 		size_t getClientsConnected() const;
-		void monitor(int fd, uint32_t events, BaseData::BaseDataType type);
+		void monitor(int fd, uint32_t events, EventHandler::BaseDataType type);
 		void unmonitor(int fd);
 		int  update();
 	private:

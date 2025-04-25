@@ -1,41 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BaseData.cpp                                       :+:      :+:    :+:   */
+/*   EventHandler.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:54:35 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 17:10:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:44:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/BaseData.hpp"
+#include "../includes/EventHandler.hpp"
 #include "../includes/ClientData.hpp"
 
-BaseData::BaseData(int fd, BaseDataType type) : _fd(fd), _type(type) {}
+EventHandler::EventHandler(int fd, BaseDataType type) : _fd(fd), _type(type) {}
 
-BaseData::BaseData(const BaseData &obj) : _fd(obj._fd),  _type(obj._type) {}
+EventHandler::EventHandler(const EventHandler &obj) : _fd(obj._fd),  _type(obj._type) {}
 
-BaseData::~BaseData() {}
+EventHandler::~EventHandler() {}
 		
-BaseData &BaseData::operator=(const BaseData &obj)
+EventHandler &EventHandler::operator=(const EventHandler &obj)
 {
 	(void)obj;
 	return (*this);
 }
 
-int BaseData::getFd() const
+int EventHandler::getFd() const
 {
 	return (this->_fd);
 }
 
-BaseData::BaseDataType BaseData::getType() const
+EventHandler::BaseDataType EventHandler::getType() const
 {
 	return (this->_type);
 }
 
-BaseData *BaseData::getHerited(int fd, BaseDataType type)
+EventHandler *EventHandler::getHerited(int fd, BaseDataType type)
 {
 	switch (type)
 	{
@@ -43,7 +43,7 @@ BaseData *BaseData::getHerited(int fd, BaseDataType type)
 			return (new ClientData(fd));
 		
 		default:
-			return (new BaseData(fd, type));
+			return (new EventHandler(fd, type));
 	}
 }
 

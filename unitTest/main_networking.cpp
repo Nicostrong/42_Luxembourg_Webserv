@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 22:19:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:04:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int main()
 		return (1);
 	}
 
-	pmonitoring.monitor(serverSocket, POLLIN, BaseData::SERVER);
+	pmonitoring.monitor(serverSocket, POLLIN, EventHandler::SERVER);
 	std::cout << "Listening on port 8080" << std::endl;
 
 	int amount = 0;
@@ -68,7 +68,8 @@ int main()
 
 		for (it = events.begin(); it != events.begin() + amount; it++)
 		{
-			BaseData *data = static_cast<BaseData *>(it->data.ptr);
+			EventHandler *data = static_cast<EventHandler *>(it->data.ptr);
+			std::cout << "Ptr1: " << data << " fd " << it->data.ptr << std::endl;
 			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
 			{
 				close(data->getFd());
@@ -80,7 +81,7 @@ int main()
 			}
 			switch (data->getType())
 			{
-				case BaseData::SERVER:
+				case EventHandler::SERVER:
 				{
 					if (it->events & POLLIN)
 					{
@@ -88,14 +89,14 @@ int main()
 						if (clientSocket != -1)
 							pmonitoring.monitor(clientSocket,
 												POLLIN | POLLOUT| POLLHUP | 
-												POLLRDHUP, BaseData::CLIENT);
+												POLLRDHUP, EventHandler::CLIENT);
 						std::cout << "New socket connection" << std::endl;
 						std::cout << pmonitoring.getClientsConnected() 
 						  		  << " clients connected." << std::endl; 
 					}
 					break;
 				}
-				case BaseData::CLIENT:
+				case EventHandler::CLIENT:
 				{
 					if (it->events & POLLIN)
 					{
