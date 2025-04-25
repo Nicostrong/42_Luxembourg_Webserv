@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 14:45:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:17:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ class EventHandler
 			FILE = 2,
 		};
 		
-		EventHandler(int fd, BaseDataType type);
+		EventHandler(int fd, BaseDataType type, void(*read)(int), 
+			void(*write)(int), void(*close)(int));
 		EventHandler(const EventHandler &obj);
 		virtual ~EventHandler();
 		EventHandler &operator=(const EventHandler &obj);

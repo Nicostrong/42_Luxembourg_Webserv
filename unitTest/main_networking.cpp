@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:52:16 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 16:04:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:05:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int main()
 		for (it = events.begin(); it != events.begin() + amount; it++)
 		{
 			EventHandler *data = static_cast<EventHandler *>(it->data.ptr);
-			std::cout << "Ptr1: " << data << " fd " << it->data.ptr << std::endl;
 			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
 			{
 				close(data->getFd());
