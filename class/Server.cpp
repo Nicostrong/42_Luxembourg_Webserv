@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 14:46:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 16:54:35 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ Server::Server( std::map< std::string, std::string> const &data )
 	}
 	LOG_DEB("Server constructor called");
 	return ;
+}
+
+// Simple Constructor
+
+Server::Server(void)
+{
+	LOG_DEB("Simple Server Constructor called");
 }
 
 /*

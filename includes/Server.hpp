@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 09:38:23 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 16:55:43 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ class	Server
 		void							checkServer( void );
 		
 	public:
-
+	
+		// Simple Server Obj
+		Server();
 		Server( const std::map< std::string, std::string> &data );
 		~Server( void );
 
@@ -66,7 +68,12 @@ class	Server
 
 		std::map<size_t, std::string>	getMapError( void ) const;
 		std::list<Location>				getLocations( void ) const;
-
+		
+		// Functions For Checking Stuff for HandleRequest
+		bool checkMethod(std::string data){(void)data; return (true);};
+		bool checkUri(std::string data){(void)data; return (true);};
+		bool checkHttpVersion(std::string data){(void)data; return (true);};
+		bool checkBody(std::string data){(void)data; return (true);};
 
 		template <typename T>
 		void							setValue(T &target, std::string &data);

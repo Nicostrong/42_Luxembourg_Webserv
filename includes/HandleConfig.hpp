@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/24 14:44:14 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 16:25:21 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ class	HandleConfig
 		std::map<std::string, std::string>	tmpMap;
 		std::map<std::string, std::string>	nicoMap;
 		
-		HandleConfig( void );
-		HandleConfig( HandleConfig &copy );
-		HandleConfig	&operator=( HandleConfig &copy );
-
 	public:
 
 		HandleConfig( const char *filename );
+		HandleConfig( void );
+		HandleConfig( HandleConfig &copy );
+		HandleConfig	&operator=( HandleConfig &copy );
 		~HandleConfig( void );
 		
 		std::map<std::string, std::string>		getNicoMap( void );
