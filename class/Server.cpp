@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/24 16:16:42 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/25 14:46:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void			Server::setValue(T &target, std::string &data)
 	std::istringstream	stream(data);
 
 	if (data.empty())
-		throw ParsingError(data);
+		throw ParsingError("Data empty or not catched");
 	if (!(stream >> target))
 		throw ParsingError(data);
 	if (stream >> end)
@@ -34,46 +34,25 @@ void			Server::setValue(T &target, std::string &data)
 	return ;
 }
 
-
 /*******************************************************************************
  *							CANONICAL FORM									   *
  ******************************************************************************/
 
 /*
- *	Default constructor
+ *	Parsing of the map<string, string> who contain all value of the config file
+ *	to create an object Server
  */
-Server::Server( std::map< std::string, std::string> const &data )
+Server::Server( std::map< std::string, std::string> const &data ) 
+	: _port(0), _maxConnectionClient(0), _maxSizeBody(0)
 {
-	std::map< std::string, std::string>::const_iterator	it;
-
-	for (it = data.begin(); it != data.end(); ++it)
+	try
 	{
-		if (it->first == "listen")
-		{
-			setAdress(const_cast<std::string &>(it->second));
-			setPort(const_cast<std::string &>(it->second));
-		}
-		else if (it->first == "root")
-			setValue(this->_path, const_cast<std::string &>(it->second));
-		else if (it->first == "server_name")
-			setValue(this->_name, const_cast<std::string &>(it->second));
-		else if (it->first == "max_connection_client")
-			setValue(this->_maxConnectionClient, const_cast<std::string &>(it->second));
-		else if (it->first == "client_max_body_size")
-			setMaxSizeBody(const_cast<std::string &>(it->second));
-		else if (it->first == "index")
-			setValue(this->_index, const_cast<std::string &>(it->second));
-		else if (it->first == "error_page")
-			setMapError(const_cast<std::string &>(it->second));
-		else if (it->first.find("location") == 0)
-		{
-			std::string	name;
-
-			name = it->first.substr(9);
-			setLocation(name, const_cast<std::string &>(it->second));
-		}
-		else
-			throw ParsingError(it->first);
+		parseData(data);
+		checkServer();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
 	}
 	LOG_DEB("Server constructor called");
 	return ;
@@ -88,6 +67,79 @@ Server::~Server( void )
 	return ;
 }
 
+/*******************************************************************************
+ *							PRIVATE METHOD									   *
+ ******************************************************************************/
+
+/*
+ *	Parsing of the map data
+ */
+void		Server::parseData( const std::map< std::string, std::string> &data )
+{
+	std::map< std::string, std::string>::const_iterator		it;
+
+	for (it = data.begin(); it != data.end(); ++it)
+	{
+#ifdef DEBUG
+		std::cout << CYAN << "KEY PARSING: " << RESET << it->first << std::endl;
+#endif
+		std::string		value = it->second;
+
+		if (it->first == "listen")
+		{
+			setAdress(value);
+			setPort(value);
+		}
+		else if (it->first == "root")
+			setValue(this->_path, value);
+		else if (it->first == "server_name")
+			setValue(this->_name, value);
+		else if (it->first == "max_connection_client")
+			setValue(this->_maxConnectionClient, value);
+		else if (it->first == "client_max_body_size")
+			setMaxSizeBody(value);
+		else if (it->first == "index")
+			setValue(this->_index, value);
+		else if (it->first == "error_page")
+			setMapError(value);
+		else if (it->first.find("location") == 0)
+		{
+			std::string	name;
+
+			name = it->first.substr(8);
+#ifdef DEBUG
+			std::cout << CYAN << "Location_key: " << name << RESET << std::endl;
+			std::cout << CYAN << "Location_value: " << value << RESET << std::endl;
+#endif
+			setLocation(name, value);
+		}
+		else
+			throw ParsingError(it->first);
+	}
+	return ;
+}
+
+/*
+ *	Check if the Server contain correct value
+ */
+void		Server::checkServer( void )
+{
+	if (this->_port == 0)
+		throw ParsingError("port = 0");
+	if (this->_maxConnectionClient == 0)
+		throw ParsingError("max connection client = 0");
+	if (this->_maxSizeBody == 0)
+		throw ParsingError("max size body = 0");
+	if (this->_name.empty())
+		throw ParsingError("name is empty");
+	if (this->_adress.empty())
+		throw ParsingError("adress is empty");
+	if (this->_path.empty())
+		throw ParsingError("path is empty");
+	if (this->_index.empty())
+		throw ParsingError("index is empty");
+	return ;
+}
 
 /*******************************************************************************
  *								SETTER										   *
@@ -116,7 +168,7 @@ void			Server::setPort( std::string &data )
 	if (pos == std::string::npos)
 		throw ParsingError(data);
 	this->_port = static_cast<size_t>(std::atoi(data.substr(pos + 1).c_str()));
-	if (this->_port < 0 || this->_port > 65535)
+	if (this->_port <= 0 || this->_port > 65535)
 		throw PortValueException();
 	return ;
 }
@@ -155,17 +207,14 @@ void			Server::setMaxSizeBody( std::string &data )
 void			Server::setMapError( std::string &data )
 {
 	std::istringstream	stream(data);
-	std::string			line;
+	int					code;
+	std::string			path;
 
-	while (std::getline(stream, line))
+	std::cout << "data error map: " << data << std::endl;
+	while (stream >> code >> path)
 	{
-		std::istringstream	lineStream(line);
-		int					code;
-		std::string			path;
-
-		lineStream >> code >> path;
-		if (!path.empty())
-			path.erase(path.find_last_of(';'));
+		if (!path.empty() && path[path.size() - 1] == ';')
+			path.erase(path.size() - 1);
 		this->_mError[code] = path;
 	}
 	return ;
@@ -245,6 +294,15 @@ std::map<size_t, std::string>	Server::getMapError( void ) const
 	return (this->_mError);
 }
 
+/*
+ *	get all value of Location
+ */
+
+std::list<Location>				Server::getLocations( void ) const
+{
+	return (this->_location);
+}
+
 /*******************************************************************************
  *								EXCEPTION 									   *
  ******************************************************************************/
@@ -301,20 +359,25 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 {
 	std::map<size_t, std::string>::const_iterator	it;
 	std::map<size_t, std::string>					mError;
+	const std::list<Location>						&loc = src_object.getLocations();
+	
 	mError = src_object.getMapError();
-
-	out	<< GREEN << "SERVER INFORMATION" << std::endl
-		<< "name:\t" << src_object.getName() << std::endl
-		<< "listen adress:\t" << src_object.getAdress() << std::endl
-		<< "listen port:\t" << src_object.getPort() << std::endl
-		<< "root path:\t" << src_object.getPath() << std::endl
-		<< "index file:\t" << src_object.getIndex() << std::endl
-		<< "max size of body:\t" << src_object.getMaxSizeBody() << std::endl
-		<< "error pages:" << std::endl;
+	
+	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
+		<< GREEN << "Name:\t\t\t" << src_object.getName() << RESET <<std::endl
+		<< GREEN << "Listen adress:\t\t" << src_object.getAdress() << RESET << std::endl
+		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
+		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl
+		<< GREEN << "Index file:\t\t" << src_object.getIndex() << RESET << std::endl
+		<< GREEN << "Max size of body:\t" << src_object.getMaxSizeBody() << " bytes." << RESET << std::endl
+		<< GREEN << "Error pages:" << RESET << std::endl;
+	
 	for (it = mError.begin(); it != mError.end(); ++it)
-		out << "\t" << it->first << " => " << it->second << std::endl;
-	out << "location:\t" << "Afficher les blocs des locations"
-		<< RESET;
+		out << GREEN << "\t" << it->first << " => " << it->second << RESET << std::endl;
+	
+	out << GREEN << "Locations:" << RESET << std::endl;	
+	for (std::list<Location>::const_iterator it = loc.begin(); it != loc.end(); ++it)
+		out << *it << RESET << std::endl;
 	return (out);
 }
 
@@ -322,7 +385,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
  *							TESTER CLASS									   *
  ******************************************************************************/
 
-#ifdef TEST
+#ifdef SER
 
 # include <cassert>
 # include "../includes/HandleConfig.hpp"

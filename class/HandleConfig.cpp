@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/25 14:22:56 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/25 14:43:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ void HandleConfig::handleObjLine(std::string& first, std::string& second)
 	std::string key = first;
 	key.erase(0, key.find_first_not_of(" \t"));
 	key.erase(key.find_first_of("{"), key.size());
+	if (key[key.size() - 1] == ' ')
+		key.erase(key.size() - 1, ' ');
 	//key.erase(key.find_last_not_of(" /t")+1, key.size());
 	this->nicoMap[key] = second;
 }
