@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_test_full_Server.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 13:22:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ int	main( void )
 	try
 	{
 		Server	s(hg.getwebconfMap());
+		std::cout << std::endl << "------------ PRINT SERVER ----------" << std::endl << std::endl;
 		std::cout << s << std::endl;
-		std::cout << std::endl << "------------ END SERVER ----------" << std::endl << std::endl;
-		/*assert(s.getPort() == 8080);
+		std::cout << std::endl << "------------ TEST SERVER ----------" << std::endl << std::endl;
+		assert(s.getPort() == 8080);
 		std::cout << "✅ [OK] get Port test passed." << std::endl;
 		assert(s.getAdress() == "127.0.0.1");
 		std::cout << "✅ [OK] get Adress test passed." << std::endl;
@@ -37,9 +38,7 @@ int	main( void )
 		std::cout << "✅ [OK] get MaxSizeBody test passed." << std::endl;
 		assert(s.getIndex() == "index.html");
 		std::cout << "✅ [OK] get Index test passed." << std::endl;
-		std::cout << s << std::endl;
 		std::cout << "✅ [OK] Serverbasic config test passed." << std::endl;
-		*/
 	}
 	catch(const std::exception& e)
 	{

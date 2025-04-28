@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 13:05:04 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 12:35:37 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	MethodHTTP::parse( const std::string &data )
 
 	this->_allowed.clear();
 	this->_denied.clear();
-	while (stream >> word)
+	while (stream >> word && word != "}")
 	{
 		if (!word.empty() && word[word.size() - 1] == ';')
 			word.erase(word.size() - 1);
@@ -90,8 +90,6 @@ void	MethodHTTP::parse( const std::string &data )
 			isDenyBlock = true;
 			continue ;
 		}
-		if (word == "}")
-			break ;
 		if(word == "all")
 		{
 			if (isDenyBlock)
