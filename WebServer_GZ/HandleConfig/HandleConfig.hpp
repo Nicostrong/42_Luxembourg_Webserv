@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 12:12:55 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:15:50 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <map>
 
 class HandleConfig

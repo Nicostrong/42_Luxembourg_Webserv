@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 12:21:08 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:26:29 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ HandleConfig::HandleConfig(const char *filename)
 {
 	readConfigFile(filename);
 	cleanMap();
-	//printwebconfMap();
+	printwebconfMap();
 }
 
 std::string& HandleConfig::getValue(std::string key)
@@ -107,28 +107,9 @@ void HandleConfig::readConfigFile(const char *filename)
 void HandleConfig::handleSimpleLine(std::string& line)
 {
 	std::string key, value;
-	key = line;
-	std::size_t start = key.find_first_not_of(" \t");
-	key.erase(0, start);
-	std::size_t end = key.find_first_of(" \t");
-	if (end != std::string::npos)
-	{
-		key.erase(end, key.size());
-	}
-	else
-	{
-		std::cout << "Error: End of Word not found.\n";	
-	}
-	// =============================================
-
-	value = line;
-	end = value.find_last_not_of(" \t");
-	value.erase(end, value.size());
-	start = value.find_last_of(" \t");
-	value.erase(0, start);
-	start = value.find_first_not_of(" \t");
-	value.erase(0, start);
-	
+	std::stringstream ss(line);
+	ss >> key;
+	ss >> value;
 	this->webconfMap[key] = value;
 }
 
@@ -137,7 +118,7 @@ void HandleConfig::handleObjLine(std::string& first, std::string& second)
 	std::string key = first;
 	key.erase(0, key.find_first_not_of(" \t"));
 	key.erase(key.find_first_of("{"), key.size());
-	//key.erase(key.find_last_not_of(" /t")+1, key.size());
+	key.erase(key.find_last_not_of(" /t")+1, key.size());
 	this->webconfMap[key] = second;
 }
 
