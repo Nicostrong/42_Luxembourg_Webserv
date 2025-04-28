@@ -1,32 +1,23 @@
 #include "HandleRequests.hpp"
 
+/*0HandleRequests::HandleRequests()
+{
+
+}
+
+HandleRequests::~HandleRequests()
+{
+	
+}*/
+
 void HandleRequests::LoadParsing()
 {
 	HandleConfig hc("../HandleConfig/webserv.config");
-	Server server1(hc.getNicoMap());
-	server = server;
 }
 
 void HandleRequests::ExecuteRequest()
 {
 	std::cout << "[debug] Executing requests.\n";
-}
-
-bool HandleRequests::checkMethod(Server server)
-{	
-	return (server.checkMethod(this->_method));
-}
-bool HandleRequests::checkUri(Server server)
-{
-	return (server.checkUri(this->_uri));
-}
-bool HandleRequests::checkHttpVersion(Server server)
-{
-	return (server.checkHttpVersion(this->_httpVersion));
-}
-bool HandleRequests::checkBody(Server server)
-{
-	return (server.checkBody(this->_body));
 }
 
 void HandleRequests::Get()
