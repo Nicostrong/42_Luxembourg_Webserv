@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 14:09:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 20:27:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "lib.hpp"
 #  include "Location.hpp"
 # include "EventMonitoring.hpp"
+# include "IEventHandler.hpp"
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <unistd.h>
@@ -25,12 +26,11 @@
 /*
  *	Server object contain all parameters from the server.conf file
  */
-class	Server
+class	Server : public IEventHandler
 {
 	
 	private:
 
-		EventMonitoring					&_eventMonitoring;
 		size_t							_port;
 		int								_maxConnectionClient;
 		size_t							_maxSizeBody;
@@ -40,6 +40,7 @@ class	Server
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
 		std::list<Location>			_location;
+		EventMonitoring					&_eventMonitoring;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -88,10 +89,9 @@ class	Server
 		// Server exec related
 
 		void start();
-		void onServerReadEvent(int fd);
-		void onClientReadEvent(int socket);
-		void onClientWriteEvent(int socket);
-		void onClientCloseEvent(int socket);
+		void onReadEvent(int socke, int type);
+		void onWriteEvent(int socket, int type);
+		void onCloseEvent(int socket, int type);
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/

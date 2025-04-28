@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 14:50:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 20:33:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,13 +307,9 @@ std::list<Location>				Server::getLocations( void ) const
 
 // Server events and exec
 
-int Server::start()
+void Server::start()
 {
 	sockaddr_in addr;
-	EventHandler<Server>::EventsHooks<Server> serverHook;
-
-	serverHook.onClose = NULL;
-	serverHook.onRead = &onServerReadEvent;
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8080);
@@ -323,34 +319,52 @@ int Server::start()
 	if (serverSocket == -1)
 	{
 		std::cerr << "Socket failed to be created" << std::endl;
-		return (1);
+		return ;
 	}
 
 	int opt = 1;
 
 	if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
 		std::cerr << "Setsockopt failed: " << strerror(errno) << std::endl;
-		return 1;
+		return ;
 	}
 
 	if (bind(serverSocket, (struct sockaddr *)&addr, sizeof(addr)) == -1)
 	{
 		std::cerr << "Socket failed to start listening" << std::endl;
-		return (1);
+		return ;
 	}
 	if (listen(serverSocket, 5) == -1)
 	{
 		std::cerr << "Socket faield to start listening" << strerror(errno) << std::endl;
-		return (1);
+		return ;
 	}
+	std::cout << "Listening on port 8080" << std::endl;
 	
-	this->_eventMonitoring.monitor()
+	this->_eventMonitoring.monitor(serverSocket, POLLIN, EventData::SERVER, 
+		*this);
+	while (1)
+		this->_eventMonitoring.updateEvents();
 }
-		void onServerReadEvent(int fd);
-		void onClientReadEvent(int socket);
-		void onClientWriteEvent(int socket);
-		void onClientCloseEvent(int socket);
 
+void Server::onReadEvent(int socket, int type)
+{
+	(void)socket;
+	if (type == EventData::SERVER)
+		std::cout << "Incoming socket request" << std::endl;
+}
+
+void Server::onWriteEvent(int socket, int type)
+{
+	(void)socket;
+	(void)type;
+}
+
+void Server::onCloseEvent(int socket, int type)
+{
+	(void)socket;
+	(void)type;
+}
 
 /*******************************************************************************
  *								EXCEPTION 									   *
@@ -386,7 +400,7 @@ const char		*Server::ParsingError::what() const throw()
  */
 const char		*Server::ServerException::what() const throw()
 {
-	return  (RED"Error creating Server !"RESET);
+	return  (RED "Error creating Server !" RESET);
 }
 
 /*
@@ -394,7 +408,7 @@ const char		*Server::ServerException::what() const throw()
  */
 const char		*Server::PortValueException::what() const throw()
 {
-	return (RED"Value of port not correct !"RESET);
+	return (RED "Value of port not correct !" RESET);
 }
 
 /*******************************************************************************

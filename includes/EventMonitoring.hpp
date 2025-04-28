@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/28 14:42:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 20:14:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENTMONITORING_HPP
 # define EVENTMONITORING_HPP
 
-#include "EventHandler.hpp"
+#include "EventData.hpp"
 #include <vector>
 #include <list>
 #include <utility>
@@ -22,6 +22,7 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <iostream>
+#include "IEventHandler.hpp"
 
 #define MAX_CONNECTIONS 20
 #define MAX_EVENTS 20
@@ -40,20 +41,21 @@ class EventMonitoring
 				const char * what () const throw();
 		};
 
+		class EPollFailedWaitException : public std::exception {
+			public:
+				const char * what () const throw();
+		};
+
 		EventMonitoring();
 		EventMonitoring(const EventMonitoring &obj);
 		~EventMonitoring();
-		EventMonitoring &operator=(const EventMonitoring &obj);
+		EventMonitoring& operator=(const EventMonitoring& obj);
 		const std::vector<epoll_event> getEvents() const;
 		size_t getClientsConnected() const;
 		
-		template <typename T>
-		void monitor(int fd, uint32_t events, typename EventHandler<T>::EventsHooks hooks);
-		
-		template <typename T>
+		void monitor(int fd, uint32_t events, int type, IEventHandler& ctx);
 		void unmonitor(int fd);
-		
-		int  update();
+		void updateEvents();
 	private:
 		std::vector<epoll_event> _events;
 		std::vector<epoll_event> _openFds;

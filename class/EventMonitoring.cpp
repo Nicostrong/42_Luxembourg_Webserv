@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/28 14:41:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 20:13:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,8 @@ size_t EventMonitoring::getClientsConnected() const
 	return (this->_clientsConnected);
 }
 
-template <typename T>
-void EventMonitoring::monitor(int fd, uint32_t events, 
-	typename EventHandler<T>::EventsHooks hooks)
+void EventMonitoring::monitor(int fd, uint32_t events, int type, 
+	IEventHandler& ctx)
 {
 	epoll_event event;
 
@@ -63,38 +62,46 @@ void EventMonitoring::monitor(int fd, uint32_t events,
 		throw PollFullException();
 
 	event.events = events;
-	event.data.ptr = new EventHandler(fd, hooks);
+	event.data.ptr = new EventData(fd, type, ctx);
 	this->_openFds.push_back(event);
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }
 
-template <typename T>
 void EventMonitoring::unmonitor(int fd)
 {
 	std::vector<epoll_event>::iterator it = this->_openFds.begin();
 
 	while (it != this->_openFds.end())
 	{
-		EventHandler<T> *data = static_cast<EventHandler<T> *>(it->data.ptr);
+		EventData *data = static_cast<EventData *>(it->data.ptr);
 		if (data->getFd() == fd)
 		{
-			
-			if (data->getType() == EventHandler::CLIENT)
-				this->_clientsConnected--;
 			delete data;
 			it = this->_openFds.erase(it);
 		}
 		else
-		{
 			++it;
-		}
 	}
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
 }
 
-int EventMonitoring::update()
+void EventMonitoring::updateEvents()
 {
-	return (epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1));
+	int res = epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1);
+	if (res == -1)
+		throw EPollFailedWaitException();
+	
+	std::vector<epoll_event>::const_iterator it = this->_events.begin();
+	while (it != this->_events.begin() + res)
+	{
+		EventData *data = static_cast<EventData *>(it->data.ptr);
+		if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
+			data->onClose();
+		else if (it->events & POLLIN)
+			data->onRead();
+		else if (it->events & POLLOUT)
+			data->onWrite();
+	}
 }
 
 // Exceptions
@@ -107,4 +114,9 @@ const char *EventMonitoring::PollFullException::what() const throw()
 const char *EventMonitoring::EPollFailedInitException::what() const throw()
 {
 	return ("EPoll failed initialization exception");
+}
+
+const char *EventMonitoring::EPollFailedWaitException::what() const throw()
+{
+	return ("EPoll failed wait exception");
 }
