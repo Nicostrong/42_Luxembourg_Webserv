@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/22 18:19:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 13:43:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class	MethodHTTP
 
 		static std::set<std::string>	_validMethods;
 
+		void							initDefault( void );
 		bool							isMethod( const std::string &method ) const;
 
 # ifndef TEST

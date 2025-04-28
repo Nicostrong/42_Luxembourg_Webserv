@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:49:43 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:40:53 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ std::set<std::string>	MethodHTTP::_validMethods = MethodHTTP::initValidMethods()
  */
 MethodHTTP::MethodHTTP( void )
 {
+	initDefault();
 	LOG_DEB("MethodHTTP constructor witout argument called");
 	return ;
 }
@@ -32,6 +33,7 @@ MethodHTTP::MethodHTTP( void )
  */
 MethodHTTP::MethodHTTP( const std::string &data )
 {
+	initDefault();
 	parse(data);
 	LOG_DEB("MethodHTTP constructor with argument called");
 	return ;
@@ -152,6 +154,16 @@ bool	MethodHTTP::isMethod( const std::string &method ) const
 {
 	LOG_DEB("Checking if " + method + " is a valid method");
 	return (this->_validMethods.find(method) != this->_validMethods.end());
+}
+
+/*
+ *	By default all method are allowed
+ */
+void	MethodHTTP::initDefault( void )
+{
+	this->_allowed.insert(this->_validMethods.begin(), this->_validMethods.end());
+	LOG_DEB("All HTTP methods added to _allowed by default");
+	return ;
 }
 
 /*******************************************************************************
