@@ -3,7 +3,8 @@
 HandleRequests::HandleRequests(const char *config)
 {
 	LoadParsing(config);
-	getMethodRules("error_page");
+	//getMethodRules("error_page");
+	//getMethodRules("location /images");
 }
 
 HandleRequests::~HandleRequests()
@@ -49,31 +50,11 @@ const std::string& HandleRequests::getMethodRules(std::string type)
 			ALLOW = rules.find("ALLOW") != std::string::npos;
 			ALL = rules.find("ALL") != std::string::npos;
 			std::cout << "debugging getMethodRules map:" << it->first << "\n=======\n" << it->second << "\n--------\n";
+			break;
 		}
 		//std::cout << "debugging getMethodRules map:" << it->first << "\n=======\n" << it->second << "\n--------\n";
 		++it;
 	}
-/*
-	hc.printwebconfMap();
-	std::string rules = hc.getValue("error_page");
-	std::cout << "[debug] doing getMethodRules: " << rules  << "size : " << rules.size() << "\n";
-	std::cout << "[debug] map: " << webconfMap["error_page"] << "\n";
-	rules = webconfMap[type];*/
-	/*if (rules.size() > 0)
-	{
-		std::size_t found = rules.find("limit_except");
-		if (found != std::string::npos)
-			rules.erase(0, found);
-
-		std::cout << "[debug] rules:" << rules << "\n";
-
-		GET = rules.find("GET") != std::string::npos;
-		PUT = rules.find("PUT") != std::string::npos;
-		DELETE = rules.find("DELETE") != std::string::npos;
-		DENY = rules.find("DENY") != std::string::npos;
-		ALLOW = rules.find("ALLOW") != std::string::npos;
-		ALL = rules.find("ALL") != std::string::npos;
-	}*/
 	return "DEBUG\n";
 }
 
