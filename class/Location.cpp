@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 12:29:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 13:52:35 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 			out << YELLOW << "\t- " << it->getName() << "\t=> [" << it->getAllValue() << "]" << RESET << std::endl;
 	}*/
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
-	out << src_object.getMethod() << std::endl;
 	return (out);
 }
 
