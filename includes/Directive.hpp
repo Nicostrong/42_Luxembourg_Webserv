@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 12:50:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 13:59:03 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,6 @@ class	Directive
 		};
 };
 
-std::ostream	&operator<<( std::ostream &out, Directive &src_object );
+std::ostream	&operator<<( std::ostream &out, const Directive &src_object );
 
 #endif

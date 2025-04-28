@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 12:33:58 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 13:58:43 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ const char		*Directive::DirectiveException::what() const throw()
 /*
  *	output stream operator
  */
-std::ostream	&operator<<( std::ostream &out, Directive &src_object )
+std::ostream	&operator<<( std::ostream &out, const Directive &src_object )
 {
 	out	<< BLUE << "------------- DIRECTIVE BLOCK -------------" << std::endl
 		<< "name: " << src_object.getName()

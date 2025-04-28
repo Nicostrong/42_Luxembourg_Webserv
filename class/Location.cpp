@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:52:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 13:59:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,10 +154,8 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl
 		<< YELLOW << src_object.getMethod() << RESET << std::endl;
 	/*if (!src_object.getDirectives().empty())
-	{
 		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
-			out << YELLOW << "\t- " << it->getName() << "\t=> [" << it->getAllValue() << "]" << RESET << std::endl;
-	}*/
+			out << *it;*/
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	return (out);
 }
