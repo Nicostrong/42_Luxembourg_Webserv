@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_test_full_Server.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
-=======
-/*   Updated: 2025/04/28 12:32:20 by nfordoxc         ###   Luxembourg.lu     */
->>>>>>> 2384dcb ("update class Server, Location, Directive and Method")
+/*   Updated: 2025/04/28 13:22:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +22,8 @@ int	main( void )
 	
 	try
 	{
-<<<<<<< HEAD
 		Server	s(hg.getwebconfMap());
-=======
-		Server	s(hg.getNicoMap());
 		std::cout << std::endl << "------------ PRINT SERVER ----------" << std::endl << std::endl;
->>>>>>> 2384dcb ("update class Server, Location, Directive and Method")
 		std::cout << s << std::endl;
 		std::cout << std::endl << "------------ TEST SERVER ----------" << std::endl << std::endl;
 		assert(s.getPort() == 8080);
