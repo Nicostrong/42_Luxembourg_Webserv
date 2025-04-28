@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 13:05:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 12:33:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,6 @@ Directive::Directive( std::string &key, std::string &value )
 	}
 	if (this->_values.empty())
 		throw DirectiveException();
-#ifdef DEBUG
-	std::cout << *this << std::endl;
-#endif
 	LOG_DEB("Directive constructor called");
 	return ;
 }

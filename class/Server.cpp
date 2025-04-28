@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 12:41:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,6 @@ void		Server::parseData( const std::map< std::string, std::string> &data )
 
 	for (it = data.begin(); it != data.end(); ++it)
 	{
-#ifdef DEBUG
-		std::cout << CYAN << "KEY PARSING: " << RESET << it->first << std::endl;
-#endif
 		std::string		value = it->second;
 
 		if (it->first == "listen")
@@ -114,10 +111,6 @@ void		Server::parseData( const std::map< std::string, std::string> &data )
 			std::string	name;
 
 			name = it->first.substr(8);
-#ifdef DEBUG
-			std::cout << CYAN << "Location_key: " << name << RESET << std::endl;
-			std::cout << CYAN << "Location_value: " << value << RESET << std::endl;
-#endif
 			setLocation(name, value);
 		}
 		else

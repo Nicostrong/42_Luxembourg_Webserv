@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 08:39:56 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 12:39:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class	Server
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-		std::list<Location>				_location;
+		std::list<Location>			_location;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -66,7 +66,7 @@ class	Server
 		std::string						getIndex( void ) const;
 
 		std::map<size_t, std::string>	getMapError( void ) const;
-		std::list<Location>				getLocations( void ) const;
+		std::list<Location>			getLocations( void ) const;
 		
 		// Functions For Checking Stuff for HandleRequest
 		bool checkMethod(std::string data){(void)data; return (true);};

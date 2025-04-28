@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 16:24:30 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 12:29:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ void						Location::parseData( std::string &data )
 	
 	std::istringstream		stream(data);
 
-#ifdef DEBUG
-	std::cout << "DATA IN PARSER LOCATION: " << data << std::endl;
-#endif
-
 	while (stream >> directive)
 	{
 		if (directive == "limit_except")
@@ -82,11 +78,8 @@ void						Location::parseData( std::string &data )
 			std::string value = directive;
 
 			value += " ";
-			
-			while (stream >> data && data.find('}') == std::string::npos)
+						while (stream >> data && data.find('}') == std::string::npos)
 				value += data + " ";
-			
-			std::cout << "LIMIT DATA FOR METHOD: " << value << std::endl;
 			this->_method = MethodHTTP(value);
 		}
 		else
@@ -96,7 +89,6 @@ void						Location::parseData( std::string &data )
 			
 			while (stream >> temp && temp.find(';') == std::string::npos)
 				value += temp + " ";
-
 			value += temp;
 			if (!value.empty() && value[value.size() - 1] == ';')
 				value.erase(value.size() - 1);
@@ -161,8 +153,11 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 	out	<< YELLOW << "------------- LOCATION BLOCK -------------" << RESET << std::endl
 		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl
 		<< YELLOW << src_object.getMethod() << RESET << std::endl;
-	for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
-		out << YELLOW << "\t- " << it->getName() << "\t=> [" << it->getAllValue() << "]" << RESET << std::endl;
+	/*if (!src_object.getDirectives().empty())
+	{
+		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
+			out << YELLOW << "\t- " << it->getName() << "\t=> [" << it->getAllValue() << "]" << RESET << std::endl;
+	}*/
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	out << src_object.getMethod() << std::endl;
 	return (out);
