@@ -4,7 +4,7 @@ HandleRequests::HandleRequests(const char *config)
 {
 	LoadParsing(config);
 	//getMethodRules("error_page");
-	//getMethodRules("location /images");
+	getMethodRules("location / ");
 }
 
 HandleRequests::~HandleRequests()
@@ -19,6 +19,7 @@ void HandleRequests::LoadParsing(const char *config)
 
 const std::string& HandleRequests::getMethodRules(std::string type)
 {
+	std::map<std::string, bool> rulesMap;
 	bool GET;
 	bool PUT;
 	bool DELETE;
@@ -39,20 +40,45 @@ const std::string& HandleRequests::getMethodRules(std::string type)
 			std::string rules = it->second;
 			found = rules.find("limit_except");
 			if (found != std::string::npos)
+			{
 				rules.erase(0, found);
+			}
+			std::string permission = rules;
+			permission.erase(0, permission.find("{"));
+			if (permission.find("deny") != std::string::npos || permission.find("allow") != std::string::npos)
+			{
+				std::string permissionDirection;
+				if (permission.find("deny") != std::string::npos)
+					permissionDirection = "DENY";
+				if (permission.find("allow") != std::string::npos)
+					permissionDirection = "ALLOW";
+				permission.erase(0, permission.find("deny") + 4);
+				if ((found = permission.find_first_not_of(" \t")) != std::string::npos)
+					permission.erase(0, found);
+				if ((found = permission.find_first_of(";")) != std::string::npos)
+					permission.erase(found, permission.size());
+				
+				std::string permissionValue = permission;
+				std::cout << "[debug] permission:" << permissionDirection << " " << permissionValue << "\n";
+			}
+
+			found = rules.find("{");
+			if (found != std::string::npos)
+				rules.erase(found - 1, rules.size());
 
 			std::cout << "[debug] rules:" << rules << "\n";
+			std::cout << "[debug] permission:" << permission << "\n";
 
-			GET = rules.find("GET") != std::string::npos;
-			PUT = rules.find("PUT") != std::string::npos;
-			DELETE = rules.find("DELETE") != std::string::npos;
-			DENY = rules.find("DENY") != std::string::npos;
-			ALLOW = rules.find("ALLOW") != std::string::npos;
-			ALL = rules.find("ALL") != std::string::npos;
+			rulesMap["GET"] = (rules.find("GET") != std::string::npos);
+			rulesMap["PUT"] = (rules.find("PUT") != std::string::npos);
+			rulesMap["DELETE"] = (rules.find("DELETE") != std::string::npos);
+			rulesMap["DENY"] = (rules.find("DENY") != std::string::npos);
+			rulesMap["ALLOW"] = (rules.find("ALLOW") != std::string::npos);
+
 			std::cout << "debugging getMethodRules map:" << it->first << "\n=======\n" << it->second << "\n--------\n";
+			
 			break;
 		}
-		//std::cout << "debugging getMethodRules map:" << it->first << "\n=======\n" << it->second << "\n--------\n";
 		++it;
 	}
 	return "DEBUG\n";
