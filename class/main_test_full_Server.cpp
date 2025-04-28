@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_test_full_Server.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 14:38:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	main( void )
 {
 	HandleConfig	hg("webserv.conf");
 
-	//hg.printNicoMap();
+	//hg.printwebconfMap();
 	
 	try
 	{
-		Server	s(hg.getNicoMap());
+		Server	s(hg.getwebconfMap());
 		std::cout << s << std::endl;
 		std::cout << std::endl << "------------ END SERVER ----------" << std::endl << std::endl;
 		/*assert(s.getPort() == 8080);

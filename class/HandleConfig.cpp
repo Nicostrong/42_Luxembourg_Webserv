@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/25 16:03:33 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ HandleConfig::HandleConfig(const char *filename)
 
 HandleConfig::HandleConfig(HandleConfig& copy)
 {
-	this->nicoMap = copy.nicoMap;
+	this->webconfMap = copy.webconfMap;
 }
 
 HandleConfig& HandleConfig::operator=(HandleConfig& copy)
 {
 	if(this != &copy)
 	{
-		this->nicoMap = copy.nicoMap;
+		this->webconfMap = copy.webconfMap;
 	}
 	return *this;
 }
@@ -122,7 +122,7 @@ void HandleConfig::handleSimpleLine(std::string& line)
 	start = value.find_first_not_of(" \t");
 	value.erase(0, start);
 	
-	this->nicoMap[key] = value;
+	this->webconfMap[key] = value;
 }
 
 void HandleConfig::handleObjLine(std::string& first, std::string& second)
@@ -133,7 +133,7 @@ void HandleConfig::handleObjLine(std::string& first, std::string& second)
 	if (key[key.size() - 1] == ' ')
 		key.erase(key.size() - 1, ' ');
 	//key.erase(key.find_last_not_of(" /t")+1, key.size());
-	this->nicoMap[key] = second;
+	this->webconfMap[key] = second;
 }
 
 void HandleConfig::cleanMap()
@@ -158,15 +158,15 @@ void HandleConfig::cleanMap()
 	this->tmpMap.clear();
 }
 
-std::map<std::string, std::string> HandleConfig::getNicoMap()
+std::map<std::string, std::string> HandleConfig::getwebconfMap()
 {
-	return this->nicoMap;
+	return this->webconfMap;
 }
 
-void HandleConfig::printNicoMap()
+void HandleConfig::printwebconfMap()
 {
-	std::map<std::string, std::string>::iterator it = nicoMap.begin();
-	while(it != nicoMap.end())
+	std::map<std::string, std::string>::iterator it = webconfMap.begin();
+	while(it != webconfMap.end())
 	{
 		std::cout << "" << it->first << "\n" << it->second << "\n";
 		it++;

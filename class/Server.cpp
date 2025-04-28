@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 08:39:26 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,7 +403,7 @@ int	main( void )
 
 	try
 	{
-		Server	s(hg.getNicoMap());
+		Server	s(hg.getwebconfMap());
 		assert(s.getPort() == 8080);
 		std::cout << "✅ [OK] get Port test passed." << std::endl;
 		assert(s.getAdress() == "127.0.0.1");

@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 16:16:01 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 08:40:25 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 11:45:15 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class HttpRequest;
 class Server;
 class HandleConfig;
 
-class HandleRequests: public HttpRequest, public Server
+class HandleRequests: public HttpRequest
 {
 /*std::string _method;
 		std::string _uri;
@@ -31,14 +31,21 @@ class HandleRequests: public HttpRequest, public Server
 	
 	private:
 		void chooseMethod(Server server);
+		std::map<std::string, std::string> webconfMap;
+		std::map<std::string, std::string> handledRequests;
 	public:
-		/*HandleRequests();
-		~HandleRequests();*/
-		void LoadParsing();
+		HandleRequests(const char *config);
+		~HandleRequests();
+		void LoadParsing(const char *config);
 		void ExecuteRequest();
 		void Get();
 		void Post();
 		void Delete();
+		const std::string& getMethodRules(std::string type);
+		const std::string& getMethod();
+		const std::string& getURI();
+		const std::string& getHttpVersion();
+		const std::string& getBody();
 };
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:29:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/16 16:02:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 		HandleConfig hc;
 		hc.readConfigFile(argv[1]);
 		hc.cleanMap();
-		hc.getNicoMap();
+		hc.getwebconfMap();
 	}
 	else
 	{

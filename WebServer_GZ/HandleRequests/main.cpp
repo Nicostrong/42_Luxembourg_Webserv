@@ -6,15 +6,17 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:30:19 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/24 16:36:23 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 11:21:07 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "HandleRequests.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-	HandleRequests hr;
-	hr.ExecuteRequest();
+	if (ac == 2)
+	{
+		HandleRequests hr(av[1]);
+	}
 	return 0;
 }

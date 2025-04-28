@@ -1,18 +1,51 @@
 #include "HandleRequests.hpp"
 
-/*0HandleRequests::HandleRequests()
+HandleRequests::HandleRequests(const char *config)
 {
-
+	LoadParsing(config);
+	getMethodRules("error_page");
 }
 
 HandleRequests::~HandleRequests()
 {
 	
-}*/
+}
 
-void HandleRequests::LoadParsing()
+void HandleRequests::LoadParsing(const char *config)
 {
-	HandleConfig hc("../HandleConfig/webserv.config");
+	HandleConfig hc(config);
+}
+
+const std::string& HandleRequests::getMethodRules(std::string type)
+{
+	bool GET;
+	bool PUT;
+	bool DELETE;
+	bool DENY;
+	bool ALLOW;
+	bool ALL;
+
+	HandleConfig hc("webserv.conf");
+
+	std::string rules = hc.getValue(type);
+	/*std::cout << "[debug] map: " << webconfMap["error_page"] << "\n";
+	rules = webconfMap[type];*/
+	std::cout << "[debug] doing getMethodRules: " << rules  << "size : " << rules.size() << "\n";
+	/*if (rules.size() > 0)
+	{
+		std::size_t found = rules.find("limit_except");
+		if (found != std::string::npos)
+			rules.erase(0, found);
+
+		std::cout << "[debug] rules:" << rules << "\n";
+
+		GET = rules.find("GET") != std::string::npos;
+		PUT = rules.find("PUT") != std::string::npos;
+		DELETE = rules.find("DELETE") != std::string::npos;
+		DENY = rules.find("DENY") != std::string::npos;
+		ALLOW = rules.find("ALLOW") != std::string::npos;
+		ALL = rules.find("ALL") != std::string::npos;
+	}*/
 }
 
 void HandleRequests::ExecuteRequest()
@@ -37,11 +70,6 @@ void HandleRequests::Delete()
 
 void HandleRequests::chooseMethod(Server server)
 {
-	/*if (!checkMethod(server) || !checkUri(server) || !checkHttpVersion(server) || !checkBody(server))
-	{
-		std::cerr << "Error: Bad Input./n";
-		return;
-	}*/
 	if (_method == "GET")
 	{
 		Get();
@@ -56,7 +84,22 @@ void HandleRequests::chooseMethod(Server server)
 	}
 	return;
 }
-
+const std::string& HandleRequests::getMethod()
+{
+	return this->_method;
+}
+const std::string& HandleRequests::getURI()
+{
+	return this->_uri;
+}
+const std::string& HandleRequests::getHttpVersion()
+{
+	return this->_httpVersion;
+}
+const std::string& HandleRequests::getBody()
+{
+	return this->_body;
+}
 
 
 /*
