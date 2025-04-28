@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 16:04:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:41:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,31 +53,29 @@ size_t EventMonitoring::getClientsConnected() const
 	return (this->_clientsConnected);
 }
 
-void EventMonitoring::monitor(int fd, uint32_t events,
-					EventHandler::BaseDataType type)
+template <typename T>
+void EventMonitoring::monitor(int fd, uint32_t events, 
+	typename EventHandler<T>::EventsHooks hooks)
 {
 	epoll_event event;
 
 	if (this->_clientsConnected + 1 == MAX_CONNECTIONS)
 		throw PollFullException();
 
-	EventHandler *data = EventHandler::getHerited(fd, type);
-
 	event.events = events;
-	event.data.ptr = data;
+	event.data.ptr = new EventHandler(fd, hooks);
 	this->_openFds.push_back(event);
-	if (type == EventHandler::CLIENT)
-		this->_clientsConnected++;
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }
 
+template <typename T>
 void EventMonitoring::unmonitor(int fd)
 {
 	std::vector<epoll_event>::iterator it = this->_openFds.begin();
 
 	while (it != this->_openFds.end())
 	{
-		EventHandler *data = static_cast<EventHandler *>(it->data.ptr);
+		EventHandler<T> *data = static_cast<EventHandler<T> *>(it->data.ptr);
 		if (data->getFd() == fd)
 		{
 			

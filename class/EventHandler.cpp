@@ -6,45 +6,70 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:54:35 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 16:16:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:54:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/EventHandler.hpp"
 #include "../includes/ClientData.hpp"
 
-EventHandler::EventHandler(int fd, BaseDataType type, void(*read)(int), 
-	void(*write)(int), void(*close)(int)) : _fd(fd), _type(type) {}
+template <typename T>
+EventHandler<T>::EventHandler(int fd, EventsHooks<T> &hooks) 
+	: _fd(fd), _hooks(hooks) {}
 
-EventHandler::EventHandler(const EventHandler &obj) : _fd(obj._fd),  _type(obj._type) {}
+template <typename T>
+EventHandler<T>::EventHandler(const EventHandler &obj) : _fd(obj._fd), 
+	_hooks(obj._hooks) {}
 
-EventHandler::~EventHandler() {}
-		
-EventHandler &EventHandler::operator=(const EventHandler &obj)
+template <typename T>
+EventHandler<T>::~EventHandler() {}
+
+template <typename T>
+EventHandler<T> &EventHandler<T>::operator=(const EventHandler<T> &obj)
 {
-	(void)obj;
+	if (this != &obj)
+		this->_hooks = obj._hooks;
 	return (*this);
 }
 
-int EventHandler::getFd() const
+template <typename T>
+int EventHandler<T>::getFd() const
 {
 	return (this->_fd);
 }
 
-EventHandler::BaseDataType EventHandler::getType() const
+//Events
+
+template <typename T>
+void	EventHandler<T>::onRead() const
 {
-	return (this->_type);
+	if (this->_hooks.context && this->_hooks.onRead)
+		this->_hooks.context->*this->_hooks.onRead(this->_fd);
 }
 
-EventHandler *EventHandler::getHerited(int fd, BaseDataType type)
+template <typename T>
+void	EventHandler<T>::onWrite() const
+{
+	if (this->_hooks.context && this->_hooks.onWrite)
+		this->_hooks.context->*this->_hooks->onWrite(this->_fd);
+}
+
+template <typename T>
+void	EventHandler<T>::onClose() const
+{
+	if (this->_hooks.context && this->_hooks.onClose)
+		this->_hooks.context->*this->_hooks.onClose(this->_fd);
+}
+
+/*EventHandler *EventHandler::getHerited(int fd, EventsHooks &hooks)
 {
 	switch (type)
 	{
 		case CLIENT:
-			return (new ClientData(fd));
+			return (new ClientData(fd, hooks));
 		
 		default:
-			return (new EventHandler(fd, type));
+			return (new EventHandler(fd, type, hooks));
 	}
-}
+}*/
 

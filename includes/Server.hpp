@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 12:39:33 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 14:09:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 
 # include "lib.hpp"
 #  include "Location.hpp"
+# include "EventMonitoring.hpp"
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <cstring>
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -24,6 +30,7 @@ class	Server
 	
 	private:
 
+		EventMonitoring					&_eventMonitoring;
 		size_t							_port;
 		int								_maxConnectionClient;
 		size_t							_maxSizeBody;
@@ -52,8 +59,9 @@ class	Server
 		
 	public:
 		// Simple Server Obj
-		Server();
-		Server( const std::map< std::string, std::string> &data );
+		Server(EventMonitoring &eventMonitoring);
+		Server( const std::map< std::string, std::string> &data, 
+			EventMonitoring &eventMonitoring );
 		~Server( void );
 
 		/*  GETTER  */
@@ -76,6 +84,14 @@ class	Server
 
 		template <typename T>
 		void							setValue(T &target, std::string &data);
+
+		// Server exec related
+
+		void start();
+		void onServerReadEvent(int fd);
+		void onClientReadEvent(int socket);
+		void onClientWriteEvent(int socket);
+		void onClientCloseEvent(int socket);
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/

@@ -6,15 +6,15 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:34:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 14:42:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:51:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ClientData.hpp"
 #include "../includes/EventHandler.hpp"
 
-ClientData::ClientData(int fd) : EventHandler(fd, CLIENT), _request(HttpRequest()) 
-	{}
+ClientData::ClientData(int fd, EventsHooks hooks) : EventHandler(fd, CLIENT, 
+	hooks), _request(HttpRequest()) {}
 
 ClientData::ClientData(const ClientData &obj) : EventHandler(obj)
 , _request(HttpRequest())

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 12:41:05 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 14:50:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ void			Server::setValue(T &target, std::string &data)
  *	Parsing of the map<string, string> who contain all value of the config file
  *	to create an object Server
  */
-Server::Server( std::map< std::string, std::string> const &data ) 
-	: _port(0), _maxConnectionClient(0), _maxSizeBody(0)
+Server::Server( std::map< std::string, std::string> const &data, 
+	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
+	_maxSizeBody(0), _eventMonitoring(eventMonitoring)
 {
 	try
 	{
@@ -60,7 +61,8 @@ Server::Server( std::map< std::string, std::string> const &data )
 
 // Simple Constructor
 
-Server::Server(void)
+Server::Server(EventMonitoring &eventMonitoring) : 
+	_eventMonitoring(eventMonitoring)
 {
 	LOG_DEB("Simple Server Constructor called");
 }
@@ -302,6 +304,53 @@ std::list<Location>				Server::getLocations( void ) const
 {
 	return (this->_location);
 }
+
+// Server events and exec
+
+int Server::start()
+{
+	sockaddr_in addr;
+	EventHandler<Server>::EventsHooks<Server> serverHook;
+
+	serverHook.onClose = NULL;
+	serverHook.onRead = &onServerReadEvent;
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(8080);
+	addr.sin_addr.s_addr = INADDR_ANY;
+
+	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (serverSocket == -1)
+	{
+		std::cerr << "Socket failed to be created" << std::endl;
+		return (1);
+	}
+
+	int opt = 1;
+
+	if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+		std::cerr << "Setsockopt failed: " << strerror(errno) << std::endl;
+		return 1;
+	}
+
+	if (bind(serverSocket, (struct sockaddr *)&addr, sizeof(addr)) == -1)
+	{
+		std::cerr << "Socket failed to start listening" << std::endl;
+		return (1);
+	}
+	if (listen(serverSocket, 5) == -1)
+	{
+		std::cerr << "Socket faield to start listening" << strerror(errno) << std::endl;
+		return (1);
+	}
+	
+	this->_eventMonitoring.monitor()
+}
+		void onServerReadEvent(int fd);
+		void onClientReadEvent(int socket);
+		void onClientWriteEvent(int socket);
+		void onClientCloseEvent(int socket);
+
 
 /*******************************************************************************
  *								EXCEPTION 									   *

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:29:49 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 14:42:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:51:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 class ClientData : public EventHandler
 {
 	public:
-		ClientData(int fd);
+		ClientData(int fd, EventsHooks hooks);
 		ClientData(const ClientData &obj);
 		~ClientData();
 		ClientData &operator=(const ClientData &obj);

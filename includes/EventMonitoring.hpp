@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 14:45:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 14:42:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,13 @@ class EventMonitoring
 		EventMonitoring &operator=(const EventMonitoring &obj);
 		const std::vector<epoll_event> getEvents() const;
 		size_t getClientsConnected() const;
-		void monitor(int fd, uint32_t events, EventHandler::BaseDataType type);
+		
+		template <typename T>
+		void monitor(int fd, uint32_t events, typename EventHandler<T>::EventsHooks hooks);
+		
+		template <typename T>
 		void unmonitor(int fd);
+		
 		int  update();
 	private:
 		std::vector<epoll_event> _events;
