@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/29 14:51:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 15:33:46 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,15 @@ HandleConfig::~HandleConfig()
 
 HandleConfig::HandleConfig(const char *filename)
 {
-	readConfigFile(filename);
-	cleanMap();
+	configfilename = filename;
 }
 
-HandleConfig::HandleConfig(HandleConfig& copy)
+HandleConfig::HandleConfig(const HandleConfig& copy)
 {
 	this->webconfMap = copy.webconfMap;
 }
 
-HandleConfig& HandleConfig::operator=(HandleConfig& copy)
+HandleConfig& HandleConfig::operator=(const HandleConfig& copy)
 {
 	if(this != &copy)
 	{
@@ -43,12 +42,9 @@ HandleConfig& HandleConfig::operator=(HandleConfig& copy)
 	return *this;
 }
 
-void HandleConfig::readConfigFile(const char *filename)
+void HandleConfig::saveRawConfig(const char *filename)
 {
-	std::vector<std::string> vector;
 	std::ifstream file(filename);
-	int countCurlyBrackets;
-
 	if (!file.is_open())
 	{
         std::cerr << "Error opening file " << filename << std::endl;
@@ -57,32 +53,51 @@ void HandleConfig::readConfigFile(const char *filename)
 	std::string line;
 	while(getline(file, line))
 	{
-		vector.push_back(line);
+		config_vec.push_back(line);
 	}
-	countCurlyBrackets = 0;
-	for(size_t i = 1; i < vector.size(); i++)
+	file.close();
+}
+
+bool handleCurlyBrackets(std::string line, int *countCurlyBrackets)
+{
+	if (line.find("{") != std::string::npos)
+		(*countCurlyBrackets)++;
+	if (line.find("}") != std::string::npos)
+		(*countCurlyBrackets)--;
+	if (*countCurlyBrackets < 0)
 	{
-		if (vector[i].find('{') != std::string::npos)
+		std::cout << "Error: More closing } that {./n";
+		return (false);	
+	}
+	return (true);
+}
+
+void HandleConfig::genTmpMap()
+{
+	int countCurlyBrackets = 0;
+	std::vector<std::string>::iterator it;
+	for(it = config_vec.begin(); it != config_vec.end(); ++it)
+	{
+		if (it->find('{') != std::string::npos)
 		{
-			std::string key = vector[i];
+			std::string key = *it;
 			std::string concat = "";
 			countCurlyBrackets++;
-			i++;
+			it++;
 			while(countCurlyBrackets > 0)
 			{
-				concat += vector[i];
-				if(!handleCurlyBrackets(vector[i], &countCurlyBrackets))
+				concat += *it;
+				if(!handleCurlyBrackets(*it, &countCurlyBrackets))
 					return ;
-				i++;
+				it++;
 			}
 			tmpMap[key] = concat;
 		}
 		else
 		{
-			tmpMap[vector[i]] = vector[i];
+			tmpMap[*it] = *it;
 		}	
 	}
-	file.close();
 }
 
 void HandleConfig::handleSimpleLine(std::string& line)
@@ -104,7 +119,7 @@ void HandleConfig::handleObjLine(std::string& first, std::string& second)
 	this->webconfMap[key] = second;
 }
 
-void HandleConfig::cleanMap()
+void HandleConfig::genWebconfMap()
 {
 	
 	std::map<std::string, std::string>::iterator it = tmpMap.begin();

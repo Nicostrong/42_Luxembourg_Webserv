@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:29:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 13:10:14 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 15:34:30 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	main(int argc, char **argv)
 	if (argc == 2)
 	{
 		HandleConfig hc;
-		hc.readConfigFile(argv[1]);
-		hc.cleanMap();
+		hc.saveRawConfig(argv[1]);
+		hc.genTmpMap();
+		hc.genWebconfMap();
 		hc.getwebconfMap();
 	}
 	else
