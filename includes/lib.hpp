@@ -6,21 +6,24 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/25 13:00:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 14:44:52 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIB_HPP
 # define LIB_HPP
 
-# include <vector>
-# include <string>
 # include <fstream>
 # include <sstream>
 # include <ostream>
 # include <cstdlib>
+# include <fcntl.h>
+# include <cstring>
 # include <iostream>
+# include <unistd.h>
 # include <exception>
+# include <sys/socket.h>
+# include <netinet/in.h>
 
 # include <map>
 # include <set>

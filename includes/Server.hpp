@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/04/29 14:13:33 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 14:43:21 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,10 @@
 # define SERVER_HPP
 
 # include "lib.hpp"
-#  include "Location.hpp"
+# include "Location.hpp"
 # include "EventMonitoring.hpp"
 # include "IEventHandler.hpp"
 # include "Socket.hpp"
-# include <sys/socket.h>
-# include <netinet/in.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <cstring>
 
 /*
  *	Server object contain all parameters from the server.conf file

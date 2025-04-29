@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test_full_Server.cpp                          :+:      :+:    :+:   */
+/*   main_fullServer.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 13:08:05 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 14:45:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 
 int	main( void )
 {
-	HandleConfig	hg("webserv.conf");
+	HandleConfig		hg("webserv.conf");
+	EventMonitoring		em;
+
 
 	//hg.printwebconfMap();
 	
 	try
 	{
-		Server	s(hg.getwebconfMap());
+		Server	s(hg.getwebconfMap(), em);
 		std::cout << s << std::endl;
 
 		std::cout << std::endl << "------------ TEST SERVER ----------" << std::endl << std::endl;
