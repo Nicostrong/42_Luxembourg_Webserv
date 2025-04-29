@@ -90,18 +90,7 @@ void HandleConfig::genTmpMap()
 			while(countCurlyBrackets > 0)
 			{
 				concat += config_vec[i];
-                if (config_vec[i].find("{") != std::string::npos)
-                {
-                    countCurlyBrackets++;
-                }
-                if (config_vec[i].find("}") != std::string::npos)
-                {
-                    countCurlyBrackets--;
-                }
-                if (countCurlyBrackets < 0)
-                {
-                    std::cout << "Error: More closing } that {./n";
-                }
+                handleCurlyBrackets(config_vec[i], countCurlyBrackets);
 				++i;
 			}
 			tmpMap[key] = concat;
