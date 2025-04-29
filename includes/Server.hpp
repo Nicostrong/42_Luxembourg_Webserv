@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 09:48:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 13:15:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,6 @@ class	Server : public IEventHandler
 		std::map<size_t, std::string>	getMapError( void ) const;
 		std::list<Location>			getLocations( void ) const;
 		
-		// Functions For Checking Stuff for HandleRequest
-		bool checkMethod(std::string data){(void)data; return (true);};
-		bool checkUri(std::string data){(void)data; return (true);};
-		bool checkHttpVersion(std::string data){(void)data; return (true);};
-		bool checkBody(std::string data){(void)data; return (true);};
 
 		template <typename T>
 		void							setValue(T &target, std::string &data);

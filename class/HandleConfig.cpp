@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/29 13:56:19 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 14:00:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,12 @@
 
 HandleConfig::HandleConfig()
 {
-	
+	return ;
+}
+
+HandleConfig::~HandleConfig()
+{
+	return ;
 }
 
 HandleConfig::HandleConfig(const char *filename)
@@ -36,25 +41,6 @@ HandleConfig& HandleConfig::operator=(HandleConfig& copy)
 		this->webconfMap = copy.webconfMap;
 	}
 	return *this;
-}
-
-HandleConfig::~HandleConfig()
-{
-	
-}
-
-bool handleCurlyBrackets(std::string line, int *countCurlyBrackets)
-{
-	if (line.find("{") != std::string::npos)
-		(*countCurlyBrackets)++;
-	if (line.find("}") != std::string::npos)
-		(*countCurlyBrackets)--;
-	if (*countCurlyBrackets < 0)
-	{
-		std::cout << "Error: More closing } that {./n";
-		return (false);
-	}
-	return (true);
 }
 
 void HandleConfig::readConfigFile(const char *filename)
