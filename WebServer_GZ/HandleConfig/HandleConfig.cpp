@@ -94,6 +94,7 @@ void HandleConfig::genTmpMap()
 				concat += config_vec[i];
                 handleCurlyBrackets(config_vec[i], countCurlyBrackets);
 				++i;
+                
 			}
 			tmpMap[key] = concat;
 		}
