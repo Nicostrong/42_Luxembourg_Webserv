@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/29 15:42:17 by nfordoxc         ###   ########.fr        #
+#    Updated: 2025/04/29 16:23:44 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -171,7 +171,7 @@ endef
 
 all: 		help
 
-server:		NUM_FILES=$(NB_SERV)
+server:		NUM_FILES=$(NB_SERVER)
 server:		$(SERVER_OBJ)
 	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(SERVER_OBJ) $(MYLIBS) -o $(SERVER_NAME)
 	@echo "$(CGREEN)The programm $(SERVER_NAME) successfully compilled"
