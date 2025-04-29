@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 09:26:10 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/28 13:29:48 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,6 @@ void			Server::setMapError( std::string &data )
 	int					code;
 	std::string			path;
 
-	std::cout << "data error map: " << data << std::endl;
 	while (stream >> code >> path)
 	{
 		if (!path.empty() && path[path.size() - 1] == ';')

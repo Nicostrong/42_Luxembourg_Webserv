@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:22:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/28 13:30:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	main( void )
 	try
 	{
 		Server	s(hg.getwebconfMap());
-		std::cout << std::endl << "------------ PRINT SERVER ----------" << std::endl << std::endl;
 		std::cout << s << std::endl;
 		std::cout << std::endl << "------------ TEST SERVER ----------" << std::endl << std::endl;
 		assert(s.getPort() == 8080);

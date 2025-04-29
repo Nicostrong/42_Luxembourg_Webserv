@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 11:28:11 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 12:04:55 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 14:17:01 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,8 @@ Class2::Class2()
 int main()
 {
 	Class2 c2;
+	std::string test = "Hello World";
+	test.erase(0, test.find("World"));
+	std::cout << test << "\n";
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 11:22:00 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/28 15:25:41 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define HANDLECONFIG_HPP
 
 #include "lib.hpp"
+#include <sstream>
 
 class	HandleConfig
 {
