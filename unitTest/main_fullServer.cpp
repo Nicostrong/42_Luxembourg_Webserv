@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 14:45:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 15:46:39 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@
 
 int	main( void )
 {
-	HandleConfig		hg("webserv.conf");
-	EventMonitoring		em;
-
-
-	//hg.printwebconfMap();
-	
 	try
 	{
+		HandleConfig		hg("../config/webserver.conf");
+		hg.printwebconfMap();
+		/*EventMonitoring		em;
+		
 		Server	s(hg.getwebconfMap(), em);
 		std::cout << s << std::endl;
 
@@ -52,7 +50,7 @@ int	main( void )
 		std::cout << "Test checkMethod(/, POST) => " << (s.checkMethod("/", "POST") ? "✅ [OK]" : "❌ [KO]") << std::endl;
 		std::cout << "Test checkMethod(/blabla, GET) => " << (s.checkMethod("/blabla", "GET") ? "✅ [OK]" : "❌ [KO]") << std::endl;
 		std::cout << "Test checkMethod(/images, POST) => " << (s.checkMethod("/images", "POST") ? "❌ [OK]" : "✅  [KO]") << std::endl;
-		
+		*/
 	}
 	catch(const std::exception& e)
 	{
