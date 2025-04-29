@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 15:15:50 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 13:03:42 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class HandleConfig
 		std::map<std::string, std::string> tmpMap;
 		std::map<std::string, std::string> webconfMap;
 	public:
+		HandleConfig();
 		HandleConfig(const char *filename);
 		HandleConfig(HandleConfig& copy);
 		HandleConfig& operator=(HandleConfig& copy);

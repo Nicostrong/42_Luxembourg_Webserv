@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/28 15:25:23 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 13:05:45 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 #include "../includes/lib.hpp"
 
 HandleConfig::HandleConfig()
+{
+	
+}
+
+HandleConfig::~HandleConfig()
 {
 	
 }
@@ -108,11 +113,11 @@ void HandleConfig::handleSimpleLine(std::string& line)
 
 void HandleConfig::handleObjLine(std::string& first, std::string& second)
 {
-	std::string key = first;
-	key.erase(0, key.find_first_not_of(" \t"));
-	key.erase(key.find_first_of("{"), key.size());
-	if (key[key.size() - 1] == ' ')
-		key.erase(key.size() - 1, ' ');
+	std::stringstream ss(first);
+	std::string key, part1, part2;
+	ss >> part1;
+	ss >> part2;
+	key = part1 + " " + part2;
 	this->webconfMap[key] = second;
 }
 
