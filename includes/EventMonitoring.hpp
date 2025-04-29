@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/28 20:14:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 09:57:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ class EventMonitoring
 		void updateEvents();
 	private:
 		std::vector<epoll_event> _events;
-		std::vector<epoll_event> _openFds;
+		std::list<epoll_event> _openFds;
 		size_t 	_clientsConnected;
 		int _epollFd;
 };

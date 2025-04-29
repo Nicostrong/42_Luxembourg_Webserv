@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 09:26:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 10:02:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,22 @@ EventMonitoring::EventMonitoring(const EventMonitoring &obj)
 
 EventMonitoring::~EventMonitoring() 
 {
-	close(this->_epollFd);
+	std::list<epoll_event>::const_iterator it = this->_openFds.begin();
+	while (it != _openFds.end())
+	{
+		EventData *data = static_cast<EventData *>(it->data.ptr);
+		if (data->getFd() > 2)
+			close(data->getFd());
+		delete data;
+	}
+	this->_openFds.clear();
+	if (this->_epollFd > 2)
+		close(this->_epollFd);
 }
 
 EventMonitoring &EventMonitoring::operator=(const EventMonitoring &obj)
 {
-	if (this != &obj)
-	{
-		this->_events = obj._events;
-		this->_openFds = obj._openFds;
-		this->_clientsConnected = obj._clientsConnected;
-		close(this->_epollFd);
-		this->_epollFd = obj._epollFd;
-	}
+	(void)obj;
 	return (*this);
 }
 
@@ -63,13 +66,13 @@ void EventMonitoring::monitor(int fd, uint32_t events, int type,
 
 	event.events = events;
 	event.data.ptr = new EventData(fd, type, ctx);
-	this->_openFds.push_back(event);
+	this->_openFds.push_front(event);
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }
 
 void EventMonitoring::unmonitor(int fd)
 {
-	std::vector<epoll_event>::iterator it = this->_openFds.begin();
+	std::list<epoll_event>::iterator it = this->_openFds.begin();
 
 	while (it != this->_openFds.end())
 	{

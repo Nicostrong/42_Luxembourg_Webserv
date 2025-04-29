@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 09:13:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 09:48:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ class	Server : public IEventHandler
 
 		/*	CHECKER	*/
 		void							checkServer( void );
+
+		/* Cleanup func to close all sockets(server included)*/
+		void							cleanup();
 		
 	public:
 		// Simple Server Obj

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:29:48 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 09:55:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ Server::Server(EventMonitoring &eventMonitoring) :
 Server::~Server( void )
 {
 	LOG_DEB("Server destructor called");
+	cleanup();
 	return ;
 }
 
@@ -141,6 +142,23 @@ void		Server::checkServer( void )
 	if (this->_index.empty())
 		throw ParsingError("index is empty");
 	return ;
+}
+
+void Server::cleanup()
+{
+	std::list<Socket>::const_iterator it = this->_sockets.begin();;
+	while (it != this->_sockets.end())
+	{
+		this->_em.unmonitor(it->getSocket());
+		if (this->_serverSocket > 2)
+			close(it->getSocket());
+		++it;
+	}
+	this->_sockets.clear();
+	this->_em.unmonitor(this->_serverSocket);
+	if (this->_serverSocket > 2)
+		close(this->_serverSocket);
+	std::cout << "Server closed" << std::endl;
 }
 
 /*******************************************************************************
