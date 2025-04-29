@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 20:27:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 09:13:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #  include "Location.hpp"
 # include "EventMonitoring.hpp"
 # include "IEventHandler.hpp"
+# include "Socket.hpp"
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <unistd.h>
@@ -39,8 +40,10 @@ class	Server : public IEventHandler
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-		std::list<Location>			_location;
-		EventMonitoring					&_eventMonitoring;
+		std::list<Location>				_location;
+		EventMonitoring&				_em;
+		int								_serverSocket;
+		std::list<Socket>				_sockets;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -89,9 +92,10 @@ class	Server : public IEventHandler
 		// Server exec related
 
 		void start();
-		void onReadEvent(int socke, int type);
-		void onWriteEvent(int socket, int type);
-		void onCloseEvent(int socket, int type);
+		void onReadEvent(int fd, int type);
+		void onWriteEvent(int fd, int type);
+		void onCloseEvent(int fd, int type);
+		void onSocketClosedEvent(const Socket& s);
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/

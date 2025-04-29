@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 09:08:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 08:21:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ public:
 
 	HttpRequest();
 	HttpRequest(const HttpRequest &obj);
-	~HttpRequest();
+	virtual ~HttpRequest();
 	HttpRequest &operator=(const HttpRequest &obj);
-	void readReceived(int clientSocket, int serverSocket);
+	void readReceived(int clientSocket);
 	bool isBadRequest() const;
 	HttpCode getStatusCode() const;
 

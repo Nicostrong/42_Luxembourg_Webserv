@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 20:33:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 09:26:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void			Server::setValue(T &target, std::string &data)
  */
 Server::Server( std::map< std::string, std::string> const &data, 
 	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
-	_maxSizeBody(0), _eventMonitoring(eventMonitoring)
+	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0)
 {
 	try
 	{
@@ -62,7 +62,7 @@ Server::Server( std::map< std::string, std::string> const &data,
 // Simple Constructor
 
 Server::Server(EventMonitoring &eventMonitoring) : 
-	_eventMonitoring(eventMonitoring)
+	_em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Simple Server Constructor called");
 }
@@ -341,29 +341,48 @@ void Server::start()
 	}
 	std::cout << "Listening on port 8080" << std::endl;
 	
-	this->_eventMonitoring.monitor(serverSocket, POLLIN, EventData::SERVER, 
+	this->_serverSocket = serverSocket;
+	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
 		*this);
 	while (1)
-		this->_eventMonitoring.updateEvents();
+		this->_em.updateEvents();
 }
 
-void Server::onReadEvent(int socket, int type)
+void Server::onReadEvent(int fd, int type)
 {
-	(void)socket;
+	(void)fd;
+	int clientSocket = accept(this->_serverSocket, NULL, NULL);
+	if (clientSocket == -1)
+	{
+		return;
+		//Failed accepting the client socket
+	}
+	Socket s(clientSocket, this->_em, *this);
+	this->_sockets.push_front(s);
+	this->_em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
+		 EventData::CLIENT, *_sockets.begin());
 	if (type == EventData::SERVER)
 		std::cout << "Incoming socket request" << std::endl;
 }
 
-void Server::onWriteEvent(int socket, int type)
+void Server::onWriteEvent(int fd, int type)
 {
-	(void)socket;
+	(void)fd;
 	(void)type;
 }
 
-void Server::onCloseEvent(int socket, int type)
+void Server::onCloseEvent(int fd, int type)
 {
-	(void)socket;
+	(void)fd;
 	(void)type;
+}
+
+void Server::onSocketClosedEvent(const Socket& s)
+{
+	this->_em.unmonitor(s.getSocket());
+	close(s.getSocket());
+	this->_sockets.remove(s);
+	std::cout << "A client has disconnected" << std::endl;
 }
 
 /*******************************************************************************
