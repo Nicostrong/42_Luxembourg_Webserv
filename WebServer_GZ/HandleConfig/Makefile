@@ -1,5 +1,5 @@
 CC = c++
-CFLAG = -Wall -Wextra -Werror -std=c++98
+#CFLAG = -Wall -Wextra -Werror -std=c++98
 NAME = webserv
 SRC = main.cpp HandleConfig.cpp
 OBJ = $(SRC:.cpp=.o)

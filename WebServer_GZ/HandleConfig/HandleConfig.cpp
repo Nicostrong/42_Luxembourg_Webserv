@@ -11,32 +11,31 @@
 /* ************************************************************************** */
 
 #include "HandleConfig.hpp"
-#include <vector>
-#include <string>
+
+//#include "../includes/HandleConfig.hpp"
+#include "../../includes/lib.hpp"
 
 HandleConfig::HandleConfig()
 {
-	
+	return ;
+}
+
+HandleConfig::~HandleConfig()
+{
+	return ;
 }
 
 HandleConfig::HandleConfig(const char *filename)
 {
-	readConfigFile(filename);
-	cleanMap();
-	printwebconfMap();
+	configfilename = filename;
 }
 
-std::string& HandleConfig::getValue(std::string key)
-{
-	return webconfMap[key];
-}
-
-HandleConfig::HandleConfig(HandleConfig& copy)
+HandleConfig::HandleConfig(const HandleConfig& copy)
 {
 	this->webconfMap = copy.webconfMap;
 }
 
-HandleConfig& HandleConfig::operator=(HandleConfig& copy)
+HandleConfig& HandleConfig::operator=(const HandleConfig& copy)
 {
 	if(this != &copy)
 	{
@@ -45,18 +44,9 @@ HandleConfig& HandleConfig::operator=(HandleConfig& copy)
 	return *this;
 }
 
-HandleConfig::~HandleConfig()
+void HandleConfig::saveRawConfig(const char *filename)
 {
-	
-}
-
-void HandleConfig::readConfigFile(const char *filename)
-{
-	std::vector<std::string> vector;
 	std::ifstream file(filename);
-	std::size_t found;
-	int countCurlyBrackets;
-
 	if (!file.is_open())
 	{
         std::cerr << "Error opening file " << filename << std::endl;
@@ -65,43 +55,65 @@ void HandleConfig::readConfigFile(const char *filename)
 	std::string line;
 	while(getline(file, line))
 	{
-		vector.push_back(line);
+        if (line.compare("") != 0)
+        {
+            this->config_vec.push_back(line);
+        }
 	}
-	countCurlyBrackets = 0;
-	for(size_t i = 1; i < vector.size(); i++)
+	file.close();
+}
+
+bool handleCurlyBrackets(std::string line, int& countCurlyBrackets)
+{
+	if (line.find("{") != std::string::npos)
+		countCurlyBrackets++;
+	if (line.find("}") != std::string::npos)
+		countCurlyBrackets--;
+	if (countCurlyBrackets < 0)
 	{
-		found = vector[i].find('{');
-		if (found != std::string::npos)
+		std::cout << "Error: More closing } that {./n";
+		return (false);	
+	}
+	return (true);
+}
+
+void HandleConfig::genTmpMap()
+{
+	int countCurlyBrackets = 0;
+    std::size_t i = 1; // VITAL !!! Must be 1
+    while(i < config_vec.size())
+	{
+		if (config_vec[i].find('{') != std::string::npos)
 		{
-			std::string key = vector[i];
+			std::string key = config_vec[i];
 			std::string concat = "";
-			std::string tmp;
 			countCurlyBrackets++;
-			i++;
+			++i;
 			while(countCurlyBrackets > 0)
 			{
-				concat += vector[i];
-				found = vector[i].find("{");
-				if (found != std::string::npos)
-					countCurlyBrackets++;
-				found = vector[i].find("}");
-				if (found != std::string::npos)
-					countCurlyBrackets--;
-				if (countCurlyBrackets < 0)
-				{
-					std::cout << "Error: More closing } that {./n";
-					return ;	
-				}
-				i++;
+				concat += config_vec[i];
+                if (config_vec[i].find("{") != std::string::npos)
+                {
+                    countCurlyBrackets++;
+                }
+                if (config_vec[i].find("}") != std::string::npos)
+                {
+                    countCurlyBrackets--;
+                }
+                if (countCurlyBrackets < 0)
+                {
+                    std::cout << "Error: More closing } that {./n";
+                }
+				++i;
 			}
 			tmpMap[key] = concat;
 		}
 		else
 		{
-			tmpMap[vector[i]] = vector[i];
-		}	
+			tmpMap[config_vec[i]] = config_vec[i];
+		}
+        ++i;
 	}
-	file.close();
 }
 
 void HandleConfig::handleSimpleLine(std::string& line)
@@ -123,9 +135,8 @@ void HandleConfig::handleObjLine(std::string& first, std::string& second)
 	this->webconfMap[key] = second;
 }
 
-void HandleConfig::cleanMap()
+void HandleConfig::genWebconfMap()
 {
-	
 	std::map<std::string, std::string>::iterator it = tmpMap.begin();
 	it++;
 	while(it != tmpMap.end())
@@ -145,7 +156,7 @@ void HandleConfig::cleanMap()
 	this->tmpMap.clear();
 }
 
-std::map<std::string, std::string>& HandleConfig::getwebconfMap()
+std::map<std::string, std::string> HandleConfig::getwebconfMap()
 {
 	return this->webconfMap;
 }
@@ -153,9 +164,10 @@ std::map<std::string, std::string>& HandleConfig::getwebconfMap()
 void HandleConfig::printwebconfMap()
 {
 	std::map<std::string, std::string>::iterator it = webconfMap.begin();
+    std::cout << "[debug] web\n";
 	while(it != webconfMap.end())
 	{
-		std::cout << "" << it->first << "\n" << it->second << "\n";
+		std::cout << "\n==========\n" << it->first << "\n" << it->second << "\n==========\n";
 		it++;
 	}
 }

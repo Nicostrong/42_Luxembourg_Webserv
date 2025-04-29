@@ -14,9 +14,14 @@
 
 int main(int argc, char **argv)
 {
+    (void)argv;
 	if (argc == 2)
 	{
-		HandleConfig hc(argv[1]);
+		HandleConfig hc;
+        hc.saveRawConfig(argv[1]);
+        hc.genTmpMap();
+        hc.genWebconfMap();
+        hc.printwebconfMap();
 	}
 	else
 	{
