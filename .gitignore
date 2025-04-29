@@ -33,6 +33,12 @@
 ./../../*.DS_Store
 ./../../../*.DS_Store
 
+# vscode config
+.vscode
+./.vscode
+./../.vscode
+./../../.vscode
+
 # clion config
 *.idea
 ./*.idea
