@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/29 13:05:45 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 13:56:19 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 #include "../includes/lib.hpp"
 
 HandleConfig::HandleConfig()
-{
-	
-}
-
-HandleConfig::~HandleConfig()
 {
 	
 }
@@ -48,11 +43,24 @@ HandleConfig::~HandleConfig()
 	
 }
 
+bool handleCurlyBrackets(std::string line, int *countCurlyBrackets)
+{
+	if (line.find("{") != std::string::npos)
+		(*countCurlyBrackets)++;
+	if (line.find("}") != std::string::npos)
+		(*countCurlyBrackets)--;
+	if (*countCurlyBrackets < 0)
+	{
+		std::cout << "Error: More closing } that {./n";
+		return (false);
+	}
+	return (true);
+}
+
 void HandleConfig::readConfigFile(const char *filename)
 {
 	std::vector<std::string> vector;
 	std::ifstream file(filename);
-	std::size_t found;
 	int countCurlyBrackets;
 
 	if (!file.is_open())
@@ -68,28 +76,17 @@ void HandleConfig::readConfigFile(const char *filename)
 	countCurlyBrackets = 0;
 	for(size_t i = 1; i < vector.size(); i++)
 	{
-		found = vector[i].find('{');
-		if (found != std::string::npos)
+		if (vector[i].find('{') != std::string::npos)
 		{
 			std::string key = vector[i];
 			std::string concat = "";
-			std::string tmp;
 			countCurlyBrackets++;
 			i++;
 			while(countCurlyBrackets > 0)
 			{
 				concat += vector[i];
-				found = vector[i].find("{");
-				if (found != std::string::npos)
-					countCurlyBrackets++;
-				found = vector[i].find("}");
-				if (found != std::string::npos)
-					countCurlyBrackets--;
-				if (countCurlyBrackets < 0)
-				{
-					std::cout << "Error: More closing } that {./n";
-					return ;	
-				}
+				if(!handleCurlyBrackets(vector[i], &countCurlyBrackets))
+					return ;
 				i++;
 			}
 			tmpMap[key] = concat;

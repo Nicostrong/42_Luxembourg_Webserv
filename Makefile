@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42.luxembourg.lu>       +#+  +:+       +#+         #
+#    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/17 13:54:52 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/04/29 13:55:20 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,8 +66,20 @@ MYLIBS_BONUS	=
 SRC				=	./src/main.cpp \
 					./class/Directive.cpp \
 					./class/Location.cpp \
-					./class/MethodesHTTP.cpp \
-					./class/Server.cpp
+					./class/MethodHTTP.cpp \
+					./class/Server.cpp \
+					./class/HttpBase.cpp \
+					./class/HttpRequest.cpp \
+					./class/EventMonitoring.cpp \
+					./class/EventData.cpp \
+					./class/HttpResponse.cpp \
+					./class/Server.cpp \
+					./class/Location.cpp \
+					./class/MethodHTTP.cpp \
+					./class/Directive.cpp \
+					./class/Socket.cpp \
+					./class/HandleConfig.cpp
+
 
 OBJ				=	$(SRC:.cpp=.o)
 
