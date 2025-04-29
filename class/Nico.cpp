@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 21:11:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 21:19:10 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,10 +211,12 @@ void			ParserServerConfig::printServers( void ) const
 	{
 		std::map<std::string, std::string>::const_iterator		sub;
 
-		std::cout << "\n[SERVER ON PORT " << it->first << "]\n";
+		std::cout << std::endl << "[SERVER ON PORT " << it->first << "]" << std::endl;
 
 		for (sub = it->second.begin(); sub != it->second.end(); ++sub)
-			std::cout << sub->first << " : " << sub->second << "\n";
+			std::cout << sub->first << " : " << sub->second << std::endl;
+
+		std::cout << "--------------------------------------------------------------------------------" << std::endl;
 	}
 }
 
