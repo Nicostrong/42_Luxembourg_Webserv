@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/29 13:05:51 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 13:10:28 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ class	HandleConfig
 	public:
 		HandleConfig(void);
 		HandleConfig( const char *filename );
-		HandleConfig( void );
 		HandleConfig( HandleConfig &copy );
 		HandleConfig	&operator=( HandleConfig &copy );
 		~HandleConfig( void );
