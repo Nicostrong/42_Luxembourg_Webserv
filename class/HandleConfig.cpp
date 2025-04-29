@@ -53,18 +53,21 @@ void HandleConfig::saveRawConfig(const char *filename)
 	std::string line;
 	while(getline(file, line))
 	{
-		config_vec.push_back(line);
+        if (line.compare("") != 0)
+        {
+            this->config_vec.push_back(line);
+        }
 	}
 	file.close();
 }
 
-bool handleCurlyBrackets(std::string line, int *countCurlyBrackets)
+bool handleCurlyBrackets(std::string line, int& countCurlyBrackets)
 {
 	if (line.find("{") != std::string::npos)
-		(*countCurlyBrackets)++;
+		countCurlyBrackets++;
 	if (line.find("}") != std::string::npos)
-		(*countCurlyBrackets)--;
-	if (*countCurlyBrackets < 0)
+		countCurlyBrackets--;
+	if (countCurlyBrackets < 0)
 	{
 		std::cout << "Error: More closing } that {./n";
 		return (false);	
@@ -75,28 +78,39 @@ bool handleCurlyBrackets(std::string line, int *countCurlyBrackets)
 void HandleConfig::genTmpMap()
 {
 	int countCurlyBrackets = 0;
-	std::vector<std::string>::iterator it;
-	for(it = config_vec.begin(); it != config_vec.end(); ++it)
+    std::size_t i = 1; // VITAL !!! Must be 1
+    while(i < config_vec.size())
 	{
-		if (it->find('{') != std::string::npos)
+		if (config_vec[i].find('{') != std::string::npos)
 		{
-			std::string key = *it;
+			std::string key = config_vec[i];
 			std::string concat = "";
 			countCurlyBrackets++;
-			it++;
+			++i;
 			while(countCurlyBrackets > 0)
 			{
-				concat += *it;
-				if(!handleCurlyBrackets(*it, &countCurlyBrackets))
-					return ;
-				it++;
+				concat += config_vec[i];
+                if (config_vec[i].find("{") != std::string::npos)
+                {
+                    countCurlyBrackets++;
+                }
+                if (config_vec[i].find("}") != std::string::npos)
+                {
+                    countCurlyBrackets--;
+                }
+                if (countCurlyBrackets < 0)
+                {
+                    std::cout << "Error: More closing } that {./n";
+                }
+				++i;
 			}
 			tmpMap[key] = concat;
 		}
 		else
 		{
-			tmpMap[*it] = *it;
-		}	
+			tmpMap[config_vec[i]] = config_vec[i];
+		}
+        ++i;
 	}
 }
 
@@ -121,7 +135,6 @@ void HandleConfig::handleObjLine(std::string& first, std::string& second)
 
 void HandleConfig::genWebconfMap()
 {
-	
 	std::map<std::string, std::string>::iterator it = tmpMap.begin();
 	it++;
 	while(it != tmpMap.end())
@@ -149,9 +162,10 @@ std::map<std::string, std::string> HandleConfig::getwebconfMap()
 void HandleConfig::printwebconfMap()
 {
 	std::map<std::string, std::string>::iterator it = webconfMap.begin();
+    std::cout << "[debug] web\n";
 	while(it != webconfMap.end())
 	{
-		std::cout << "" << it->first << "\n" << it->second << "\n";
+		std::cout << "\n==========\n" << it->first << "\n" << it->second << "\n==========\n";
 		it++;
 	}
 }

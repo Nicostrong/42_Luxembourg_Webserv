@@ -13,33 +13,35 @@
 #ifndef HANDLECONFIG_HPP
 #define HANDLECONFIG_HPP
 
-#include "lib.hpp"
+#include <iostream>
+#include <fstream>
 #include <sstream>
+#include <map>
+#include <vector>
+#include <string>
 
-class	HandleConfig
+class HandleConfig
 {
 	private:
-
-		std::map<std::string, std::string>	tmpMap;
-		std::map<std::string, std::string>	webconfMap;
-		std::vector<std::string> config_vec;
-		std::string configfilename;
-		
+		std::map<std::string, std::string> tmpMap;
+		std::map<std::string, std::string> webconfMap;
+        std::vector<std::string> config_vec;
+        std::string configfilename;
 	public:
-		HandleConfig(void);
-		HandleConfig( const char *filename );
-		HandleConfig( const HandleConfig &copy );
-		HandleConfig	&operator=( const HandleConfig &copy );
-		~HandleConfig( void );
-		
-		std::map<std::string, std::string>		getwebconfMap( void );
+		HandleConfig();
+		HandleConfig(const char *filename);
+		HandleConfig(const HandleConfig& copy);
+		HandleConfig& operator=(const HandleConfig& copy);
+		~HandleConfig();
+
+        std::map<std::string, std::string>		getwebconfMap( void );
 		void									genTmpMap();
 		void									genWebconfMap( void );
 		void									printwebconfMap( void );
 		void									handleSimpleLine( std::string &line );
 		void									handleObjLine( std::string &first, std::string &second );
 		void									saveRawConfig(const char *filename);
-
+		std::string&                            getValue(std::string key);
 };
 
 #endif
