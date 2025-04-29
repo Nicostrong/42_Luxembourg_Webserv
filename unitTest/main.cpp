@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpResponse.hpp                                   :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 08:10:38 by fdehan           ###   ########.fr       */
+/*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
+/*   Updated: 2025/04/28 20:21:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTP_RESPONSE
-# define HTTP_RESPONSE
+#include "../includes/Server.hpp"
+#include "../includes/EventMonitoring.hpp"
 
-#include "HttpBase.hpp"
-#include "HttpRequest.hpp"
-
-class HttpResponse: public HttpBase
+int main()
 {
-	public:
-		HttpResponse();
-		HttpResponse(const HttpResponse &obj);
-		virtual ~HttpResponse();
-		HttpResponse &operator=(const HttpResponse &obj);
-		bool isEncoded();
-		void encodeResponse(const HttpRequest &req);
-	private:
-		bool _isEncoded;
-};
-
-# endif
+	EventMonitoring em;
+	Server s(em);
+	s.start();
+	return (0);
+}

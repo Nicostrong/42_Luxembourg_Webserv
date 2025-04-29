@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:37:37 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 09:13:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 
 # include "lib.hpp"
 #  include "Location.hpp"
+# include "EventMonitoring.hpp"
+# include "IEventHandler.hpp"
+# include "Socket.hpp"
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <cstring>
 
 /*
  *	Server object contain all parameters from the server.conf file
  */
-class	Server
+class	Server : public IEventHandler
 {
 	
 	private:
@@ -32,7 +40,10 @@ class	Server
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-		std::list<Location>			_location;
+		std::list<Location>				_location;
+		EventMonitoring&				_em;
+		int								_serverSocket;
+		std::list<Socket>				_sockets;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -52,8 +63,9 @@ class	Server
 		
 	public:
 		// Simple Server Obj
-		Server();
-		Server( const std::map< std::string, std::string> &data );
+		Server(EventMonitoring &eventMonitoring);
+		Server( const std::map< std::string, std::string> &data, 
+			EventMonitoring &eventMonitoring );
 		~Server( void );
 
 		/*  GETTER  */
@@ -76,6 +88,14 @@ class	Server
 
 		template <typename T>
 		void							setValue(T &target, std::string &data);
+
+		// Server exec related
+
+		void start();
+		void onReadEvent(int fd, int type);
+		void onWriteEvent(int fd, int type);
+		void onCloseEvent(int fd, int type);
+		void onSocketClosedEvent(const Socket& s);
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/

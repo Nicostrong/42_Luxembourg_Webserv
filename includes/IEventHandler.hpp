@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpResponse.hpp                                   :+:      :+:    :+:   */
+/*   IEventHandler.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 08:10:38 by fdehan           ###   ########.fr       */
+/*   Created: 2025/04/28 18:41:03 by fdehan            #+#    #+#             */
+/*   Updated: 2025/04/28 20:31:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTP_RESPONSE
-# define HTTP_RESPONSE
+#ifndef IEVENT_HANDLER_CPP
+# define IEVENT_HANDLER_CPP
 
-#include "HttpBase.hpp"
-#include "HttpRequest.hpp"
-
-class HttpResponse: public HttpBase
+class IEventHandler
 {
 	public:
-		HttpResponse();
-		HttpResponse(const HttpResponse &obj);
-		virtual ~HttpResponse();
-		HttpResponse &operator=(const HttpResponse &obj);
-		bool isEncoded();
-		void encodeResponse(const HttpRequest &req);
+		virtual 	 ~IEventHandler() {};
+		virtual void onReadEvent(int fd, int type) = 0;
+		virtual void onWriteEvent(int fd, int type) = 0;
+		virtual void onCloseEvent(int fd, int type) = 0;
 	private:
-		bool _isEncoded;
 };
 
-# endif
+#endif

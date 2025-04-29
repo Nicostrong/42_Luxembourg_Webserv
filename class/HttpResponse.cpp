@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/24 09:19:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 08:22:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ bool HttpResponse::isEncoded()
 
 void HttpResponse::encodeResponse(const HttpRequest &req)
 {
+	return;
 	std::stringstream ss;
 	ss << "HTTP/1.1 " << req.getStatusCode() << "Bad Request" << "\r\n";
 	ss << "\r\n";

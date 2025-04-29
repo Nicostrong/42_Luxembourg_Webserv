@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
 /*   Updated: 2025/04/28 13:29:48 by nfordoxc         ###   Luxembourg.lu     */
@@ -42,8 +42,9 @@ void			Server::setValue(T &target, std::string &data)
  *	Parsing of the map<string, string> who contain all value of the config file
  *	to create an object Server
  */
-Server::Server( std::map< std::string, std::string> const &data ) 
-	: _port(0), _maxConnectionClient(0), _maxSizeBody(0)
+Server::Server( std::map< std::string, std::string> const &data, 
+	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
+	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0)
 {
 	try
 	{
@@ -60,7 +61,8 @@ Server::Server( std::map< std::string, std::string> const &data )
 
 // Simple Constructor
 
-Server::Server(void)
+Server::Server(EventMonitoring &eventMonitoring) : 
+	_em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Simple Server Constructor called");
 }
@@ -302,6 +304,86 @@ std::list<Location>				Server::getLocations( void ) const
 	return (this->_location);
 }
 
+// Server events and exec
+
+void Server::start()
+{
+	sockaddr_in addr;
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(8080);
+	addr.sin_addr.s_addr = INADDR_ANY;
+
+	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (serverSocket == -1)
+	{
+		std::cerr << "Socket failed to be created" << std::endl;
+		return ;
+	}
+
+	int opt = 1;
+
+	if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+		std::cerr << "Setsockopt failed: " << strerror(errno) << std::endl;
+		return ;
+	}
+
+	if (bind(serverSocket, (struct sockaddr *)&addr, sizeof(addr)) == -1)
+	{
+		std::cerr << "Socket failed to start listening" << std::endl;
+		return ;
+	}
+	if (listen(serverSocket, 5) == -1)
+	{
+		std::cerr << "Socket faield to start listening" << strerror(errno) << std::endl;
+		return ;
+	}
+	std::cout << "Listening on port 8080" << std::endl;
+	
+	this->_serverSocket = serverSocket;
+	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
+		*this);
+	while (1)
+		this->_em.updateEvents();
+}
+
+void Server::onReadEvent(int fd, int type)
+{
+	(void)fd;
+	int clientSocket = accept(this->_serverSocket, NULL, NULL);
+	if (clientSocket == -1)
+	{
+		return;
+		//Failed accepting the client socket
+	}
+	Socket s(clientSocket, this->_em, *this);
+	this->_sockets.push_front(s);
+	this->_em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
+		 EventData::CLIENT, *_sockets.begin());
+	if (type == EventData::SERVER)
+		std::cout << "Incoming socket request" << std::endl;
+}
+
+void Server::onWriteEvent(int fd, int type)
+{
+	(void)fd;
+	(void)type;
+}
+
+void Server::onCloseEvent(int fd, int type)
+{
+	(void)fd;
+	(void)type;
+}
+
+void Server::onSocketClosedEvent(const Socket& s)
+{
+	this->_em.unmonitor(s.getSocket());
+	close(s.getSocket());
+	this->_sockets.remove(s);
+	std::cout << "A client has disconnected" << std::endl;
+}
+
 /*******************************************************************************
  *								EXCEPTION 									   *
  ******************************************************************************/
@@ -336,7 +418,7 @@ const char		*Server::ParsingError::what() const throw()
  */
 const char		*Server::ServerException::what() const throw()
 {
-	return  (RED"Error creating Server !"RESET);
+	return  (RED "Error creating Server !" RESET);
 }
 
 /*
@@ -344,7 +426,7 @@ const char		*Server::ServerException::what() const throw()
  */
 const char		*Server::PortValueException::what() const throw()
 {
-	return (RED"Value of port not correct !"RESET);
+	return (RED "Value of port not correct !" RESET);
 }
 
 /*******************************************************************************

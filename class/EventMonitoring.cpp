@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/25 16:04:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 09:26:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,17 @@ size_t EventMonitoring::getClientsConnected() const
 	return (this->_clientsConnected);
 }
 
-void EventMonitoring::monitor(int fd, uint32_t events,
-					EventHandler::BaseDataType type)
+void EventMonitoring::monitor(int fd, uint32_t events, int type, 
+	IEventHandler& ctx)
 {
 	epoll_event event;
 
 	if (this->_clientsConnected + 1 == MAX_CONNECTIONS)
 		throw PollFullException();
 
-	EventHandler *data = EventHandler::getHerited(fd, type);
-
 	event.events = events;
-	event.data.ptr = data;
+	event.data.ptr = new EventData(fd, type, ctx);
 	this->_openFds.push_back(event);
-	if (type == EventHandler::CLIENT)
-		this->_clientsConnected++;
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }
 
@@ -77,26 +73,35 @@ void EventMonitoring::unmonitor(int fd)
 
 	while (it != this->_openFds.end())
 	{
-		EventHandler *data = static_cast<EventHandler *>(it->data.ptr);
+		EventData *data = static_cast<EventData *>(it->data.ptr);
 		if (data->getFd() == fd)
 		{
-			
-			if (data->getType() == EventHandler::CLIENT)
-				this->_clientsConnected--;
 			delete data;
 			it = this->_openFds.erase(it);
 		}
 		else
-		{
 			++it;
-		}
 	}
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
 }
 
-int EventMonitoring::update()
+void EventMonitoring::updateEvents()
 {
-	return (epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1));
+	int res = epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1);
+	if (res == -1)
+		throw EPollFailedWaitException(); 
+	std::vector<epoll_event>::const_iterator it = this->_events.begin();
+	while (it != this->_events.begin() + res)
+	{
+		EventData *data = static_cast<EventData *>(it->data.ptr);
+		if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
+			data->onClose();
+		else if (it->events & POLLIN)
+			data->onRead();
+		else if (it->events & POLLOUT)
+			data->onWrite();
+		it++;
+	}
 }
 
 // Exceptions
@@ -109,4 +114,9 @@ const char *EventMonitoring::PollFullException::what() const throw()
 const char *EventMonitoring::EPollFailedInitException::what() const throw()
 {
 	return ("EPoll failed initialization exception");
+}
+
+const char *EventMonitoring::EPollFailedWaitException::what() const throw()
+{
+	return ("EPoll failed wait exception");
 }

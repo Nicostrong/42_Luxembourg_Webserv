@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
 /*   Updated: 2025/04/28 13:59:50 by nfordoxc         ###   Luxembourg.lu     */
@@ -136,7 +136,7 @@ std::vector<Directive>		Location::getDirectives( void ) const
  */
 const char		*Location::LocationException::what() const throw()
 {
-	return  (RED"Error parsing Location !"RESET);
+	return  (RED "Error parsing Location !" RESET);
 }
 
 /*******************************************************************************
