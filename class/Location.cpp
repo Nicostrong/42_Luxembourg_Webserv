@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:59:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 12:48:49 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
  *	Default constructor
  */
 Location::Location( std::pair< const std::string, std::string> &data )
-	: _name(data.first), _method()
+	: _name(data.first), _method(NULL)
 {
+	LOG_DEB("Location constructor called");
 	try
 	{
 		std::string		raw;
@@ -33,7 +34,6 @@ Location::Location( std::pair< const std::string, std::string> &data )
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	LOG_DEB("Location constructor called");
 	return ;
 }
 
@@ -51,7 +51,13 @@ Location::Location( const Location &src_obj )
  */
 Location::~Location( void )
 {
+	std::vector<Directive *>::iterator		it;
+
 	LOG_DEB("Location destructor called");
+	delete this->_method;
+	for ( it = this->_directives.begin(); it != this->_directives.end(); ++it)
+		delete *it;
+	this->_directives.clear();
 	return ;
 }
 
@@ -65,8 +71,10 @@ Location::~Location( void )
 void						Location::parseData( std::string &data )
 {
 	std::string				directive;
-
-	data.erase(data.find_last_of("}"), 1);
+	size_t					pos = data.find_last_of("}");
+	
+	if (pos != std::string::npos)
+		data.erase(pos, 1);
 	
 	std::istringstream		stream(data);
 
@@ -75,12 +83,11 @@ void						Location::parseData( std::string &data )
 		if (directive == "limit_except")
 		{
 			std::string data;
-			std::string value = directive;
+			std::string value = directive + " ";
 
-			value += " ";
-						while (stream >> data && data.find('}') == std::string::npos)
+			while (stream >> data && data.find('}') == std::string::npos)
 				value += data + " ";
-			this->_method = MethodHTTP(value);
+			this->_method = new MethodHTTP(value);
 		}
 		else
 		{
@@ -92,10 +99,10 @@ void						Location::parseData( std::string &data )
 			value += temp;
 			if (!value.empty() && value[value.size() - 1] == ';')
 				value.erase(value.size() - 1);
-			this->_directives.push_back(Directive(directive, value));
+			if (!directive.empty() && !value.empty())
+				this->_directives.push_back(new Directive(directive, value));
 		}
 	}
-	
 	return ;
 }
 
@@ -114,7 +121,7 @@ std::string					Location::getName( void ) const
 /*
  *	get _method value
  */
-MethodHTTP					Location::getMethod( void ) const
+MethodHTTP					*Location::getMethod( void ) const
 {
 	return (this->_method);
 }
@@ -122,7 +129,7 @@ MethodHTTP					Location::getMethod( void ) const
 /*
  *	get _directives value
  */
-std::vector<Directive>		Location::getDirectives( void ) const
+std::vector<Directive *>		Location::getDirectives( void ) const
 {
 	return (this->_directives);
 }
@@ -151,11 +158,13 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 	std::vector<Directive>::const_iterator	it;
 
 	out	<< YELLOW << "------------- LOCATION BLOCK -------------" << RESET << std::endl
-		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl
-		<< YELLOW << src_object.getMethod() << RESET << std::endl;
+		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl;
+	if (src_object.getMethod() != NULL)
+		out << YELLOW << *src_object.getMethod() << RESET << std::endl;
 	/*if (!src_object.getDirectives().empty())
 		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
-			out << *it;*/
+			out << *it;
+	*/
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	return (out);
 }

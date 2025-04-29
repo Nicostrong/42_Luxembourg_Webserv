@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 13:15:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/04/29 14:03:42 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
@@ -72,6 +73,8 @@ class	Server : public IEventHandler
 		~Server( void );
 
 		/*  GETTER  */
+		int								getMaxConnectionClient( void ) const;
+
 		size_t							getPort( void ) const;
 		size_t							getMaxSizeBody( void ) const;
 
@@ -81,7 +84,7 @@ class	Server : public IEventHandler
 		std::string						getIndex( void ) const;
 
 		std::map<size_t, std::string>	getMapError( void ) const;
-		std::list<Location>			getLocations( void ) const;
+		std::list<Location *>			getLocations( void ) const;
 		
 
 		template <typename T>

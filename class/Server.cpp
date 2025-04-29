@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 09:55:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/29 14:05:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ template <typename T>
 void			Server::setValue(T &target, std::string &data)
 {
 	std::string			end;
-	std::istringstream	stream(data);
 
 	if (data.empty())
 		throw ParsingError("Data empty or not catched");
+	if (!data.empty() && data[data.size() - 1] == ';')
+		data.erase(data.size() - 1);
+	
+	std::istringstream	stream(data);
+
 	if (!(stream >> target))
 		throw ParsingError(data);
 	if (stream >> end)
@@ -46,6 +50,7 @@ Server::Server( std::map< std::string, std::string> const &data,
 	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
 	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0)
 {
+	LOG_DEB("Server constructor called");
 	try
 	{
 		parseData(data);
@@ -55,7 +60,6 @@ Server::Server( std::map< std::string, std::string> const &data,
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	LOG_DEB("Server constructor called");
 	return ;
 }
 
@@ -72,8 +76,13 @@ Server::Server(EventMonitoring &eventMonitoring) :
  */
 Server::~Server( void )
 {
+	std::list<Location *>::iterator		it;
+
 	LOG_DEB("Server destructor called");
 	cleanup();
+	for ( it = this->_location.begin(); it != this->_location.end(); ++it)
+		delete *it;
+	this->_location.clear();
 	return ;
 }
 
@@ -113,7 +122,7 @@ void		Server::parseData( const std::map< std::string, std::string> &data )
 		{
 			std::string	name;
 
-			name = it->first.substr(8);
+			name = it->first.substr(9);
 			setLocation(name, value);
 		}
 		else
@@ -246,9 +255,7 @@ void			Server::setLocation( std::string &name, std::string &block )
 {
 	std::pair< const std::string, std::string>	locationData(name, block);
 
-	Location									loc(locationData);
-	
-	this->_location.push_back(loc);
+	this->_location.push_back(new Location(locationData));
 	LOG_DEB("Location added");
 	return ;
 }
@@ -258,9 +265,17 @@ void			Server::setLocation( std::string &name, std::string &block )
  ******************************************************************************/
 
 /*
+ *	get _maxConnectionClient value
+ */
+int								Server::getMaxConnectionClient( void ) const
+{
+	return (this->_maxConnectionClient);
+}
+
+/*
  *	get _port value
  */
-size_t			Server::getPort( void ) const
+size_t							Server::getPort( void ) const
 {
 	return (this->_port);
 }
@@ -268,7 +283,7 @@ size_t			Server::getPort( void ) const
 /*
  *	get _maxSizeBody value
  */
-size_t			Server::getMaxSizeBody( void ) const
+size_t							Server::getMaxSizeBody( void ) const
 {
 	return (this->_maxSizeBody);
 }
@@ -276,7 +291,7 @@ size_t			Server::getMaxSizeBody( void ) const
 /*
  *	get _name value
  */
-std::string		Server::getName( void ) const
+std::string						Server::getName( void ) const
 {
 	return (this->_name);
 }
@@ -284,7 +299,7 @@ std::string		Server::getName( void ) const
 /*
  *	get _adress value
  */
-std::string		Server::getAdress( void ) const
+std::string						Server::getAdress( void ) const
 {
 	return (this->_adress);
 }
@@ -292,7 +307,7 @@ std::string		Server::getAdress( void ) const
 /*
  *	get _path value
  */
-std::string		Server::getPath( void ) const
+std::string						Server::getPath( void ) const
 {
 	return (this->_path);
 }
@@ -300,7 +315,7 @@ std::string		Server::getPath( void ) const
 /*
  *	get _index value
  */
-std::string		Server::getIndex( void ) const
+std::string						Server::getIndex( void ) const
 {
 	return (this->_index);
 }
@@ -317,7 +332,7 @@ std::map<size_t, std::string>	Server::getMapError( void ) const
  *	get all value of Location
  */
 
-std::list<Location>				Server::getLocations( void ) const
+std::list<Location *>				Server::getLocations( void ) const
 {
 	return (this->_location);
 }
@@ -403,6 +418,43 @@ void Server::onSocketClosedEvent(const Socket& s)
 }
 
 /*******************************************************************************
+ *								CHECKER										   *
+ ******************************************************************************/
+
+/*
+ *	Check if the uri is in Location object or not
+ */
+bool							Server::checkUri( std::string uri )
+{
+	std::list<Location *>::iterator		it;
+
+	for (it = this->_location.begin(); it != this->_location.end(); it++)
+		if ((*it)->getName() == uri)
+			return (true);
+	return (false);
+}
+
+/*
+ *	Check if a method is allowed in a Location scope
+ */
+bool	Server::checkMethod( std::string uri, std::string method )
+{
+	std::list<Location *>::iterator	it;
+	Location						*locDef = NULL;
+	Location						*locExist = NULL;
+
+	for (it = this->_location.begin(); it != this->_location.end(); ++it)
+	{
+		if ((*it)->getName() == "/")
+			locDef = *it;
+		if ((*it)->getName() == uri)
+			locExist = *it;
+	}
+	return (locExist ? locExist->getMethod()->isAllowed(method) :
+           locDef ? locDef->getMethod()->isAllowed(method) : false);
+}
+
+/*******************************************************************************
  *								EXCEPTION 									   *
  ******************************************************************************/
 
@@ -458,7 +510,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 {
 	std::map<size_t, std::string>::const_iterator	it;
 	std::map<size_t, std::string>					mError;
-	const std::list<Location>						&loc = src_object.getLocations();
+	const std::list<Location *>						loc = src_object.getLocations();
 	
 	mError = src_object.getMapError();
 	
@@ -468,6 +520,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
 		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl
 		<< GREEN << "Index file:\t\t" << src_object.getIndex() << RESET << std::endl
+		<< GREEN << "Max connection client:\t" << src_object.getMaxConnectionClient() << RESET << std::endl
 		<< GREEN << "Max size of body:\t" << src_object.getMaxSizeBody() << " bytes." << RESET << std::endl
 		<< GREEN << "Error pages:" << RESET << std::endl;
 	
@@ -475,8 +528,8 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 		out << GREEN << "\t" << it->first << " => " << it->second << RESET << std::endl;
 	
 	out << GREEN << "Locations:" << RESET << std::endl;	
-	for (std::list<Location>::const_iterator it = loc.begin(); it != loc.end(); ++it)
-		out << *it << RESET << std::endl;
+	for (std::list<Location *>::const_iterator it = loc.begin(); it != loc.end(); ++it)
+		out << **it << RESET << std::endl;
 	return (out);
 }
 

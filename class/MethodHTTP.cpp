@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 14:40:53 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 08:05:34 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ std::set<std::string>	MethodHTTP::_validMethods = MethodHTTP::initValidMethods()
  */
 MethodHTTP::MethodHTTP( void )
 {
-	initDefault();
 	LOG_DEB("MethodHTTP constructor witout argument called");
+	initDefault();
 	return ;
 }
 
@@ -33,9 +33,9 @@ MethodHTTP::MethodHTTP( void )
  */
 MethodHTTP::MethodHTTP( const std::string &data )
 {
+	LOG_DEB("MethodHTTP constructor with argument called");
 	initDefault();
 	parse(data);
-	LOG_DEB("MethodHTTP constructor with argument called");
 	return ;
 }
 

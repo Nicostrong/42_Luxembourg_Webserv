@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 13:28:45 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 14:02:41 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,14 @@ Directive::Directive( void )
 Directive::Directive( std::string &key, std::string &value )
 	: _name(key)
 {
+	LOG_DEB("Directive constructor called");
 	std::istringstream	stream(value);
 	std::string			token;
-	bool				first = true;
 
 	while (stream >> token)
-	{
-		if (first)
-		{
-			this->_values.push_back(token);
-			first = false;
-		}
-		else
-			this->_values.push_back(token);
-	}
+		this->_values.push_back(token);
 	if (this->_values.empty())
 		throw DirectiveException();
-	LOG_DEB("Directive constructor called");
 	return ;
 }
 

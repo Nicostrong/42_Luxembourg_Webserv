@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:30:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 13:08:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ int	main( void )
 	{
 		Server	s(hg.getwebconfMap());
 		std::cout << s << std::endl;
+
 		std::cout << std::endl << "------------ TEST SERVER ----------" << std::endl << std::endl;
+		
 		assert(s.getPort() == 8080);
 		std::cout << "✅ [OK] get Port test passed." << std::endl;
 		assert(s.getAdress() == "127.0.0.1");
@@ -38,6 +40,17 @@ int	main( void )
 		assert(s.getIndex() == "index.html");
 		std::cout << "✅ [OK] get Index test passed." << std::endl;
 		std::cout << "✅ [OK] Serverbasic config test passed." << std::endl;
+
+		std::cout << std::endl << "------------ TEST BOOL GIGI ----------" << std::endl << std::endl;
+		
+		std::cout << "Test checkUri(/) => " << (s.checkUri("/") ? "✅ [OK]" : "❌ [KO]") << std::endl;
+		std::cout << "Test checkUri(/blabla) => " << (s.checkUri("/blabla") ? "❌ [OK]" : "✅ [KO]") << std::endl;
+		std::cout << "Test checkUri(/images) => " << (s.checkUri("/images") ? "✅ [OK]" : "❌ [KO]") << std::endl;
+
+		std::cout << "Test checkMethod(/, POST) => " << (s.checkMethod("/", "POST") ? "✅ [OK]" : "❌ [KO]") << std::endl;
+		std::cout << "Test checkMethod(/blabla, GET) => " << (s.checkMethod("/blabla", "GET") ? "✅ [OK]" : "❌ [KO]") << std::endl;
+		std::cout << "Test checkMethod(/images, POST) => " << (s.checkMethod("/images", "POST") ? "❌ [OK]" : "✅  [KO]") << std::endl;
+		
 	}
 	catch(const std::exception& e)
 	{
