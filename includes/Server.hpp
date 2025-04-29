@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/04/29 14:03:42 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/29 14:13:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class	Server : public IEventHandler
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-		std::list<Location>				_location;
+		std::list<Location *>			_location;
 		EventMonitoring&				_em;
 		int								_serverSocket;
 		std::list<Socket>				_sockets;
@@ -54,22 +54,24 @@ class	Server : public IEventHandler
 		void							setPort( std::string &data );
 		void							setMaxSizeBody( std::string &data );
 		void							setMapError( std::string &data );
-		void							setLocation( std::string &name, std::string &block );
+		void							setLocation( std::string &name,
+													std::string &block );
 		
 		/*	PARSER	*/
-		void							parseData( const std::map< std::string, std::string> &data );
+		void							parseData( const std::map< std::string,
+													std::string> &data );
 
 		/*	CHECKER	*/
 		void							checkServer( void );
 
 		/* Cleanup func to close all sockets(server included)*/
-		void							cleanup();
+		void							cleanup( void );
 		
 	public:
-		// Simple Server Obj
-		Server(EventMonitoring &eventMonitoring);
-		Server( const std::map< std::string, std::string> &data, 
-			EventMonitoring &eventMonitoring );
+
+		Server( EventMonitoring &eventMonitoring );
+		Server( const std::map< std::string, std::string> &data,
+				EventMonitoring &eventMonitoring );
 		~Server( void );
 
 		/*  GETTER  */
@@ -86,17 +88,21 @@ class	Server : public IEventHandler
 		std::map<size_t, std::string>	getMapError( void ) const;
 		std::list<Location *>			getLocations( void ) const;
 		
+		/*	Checker GIGI	*/
+		bool							checkUri( std::string uri );
+		bool							checkMethod( std::string uri,
+													std::string method );
 
+		/*	Template function for Server setting	*/
 		template <typename T>
 		void							setValue(T &target, std::string &data);
 
 		// Server exec related
-
-		void start();
-		void onReadEvent(int fd, int type);
-		void onWriteEvent(int fd, int type);
-		void onCloseEvent(int fd, int type);
-		void onSocketClosedEvent(const Socket& s);
+		void 							start( void );
+		void 							onReadEvent( int fd, int type );
+		void 							onWriteEvent( int fd, int type );
+		void 							onCloseEvent( int fd, int type );
+		void 							onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/
