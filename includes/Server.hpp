@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 13:40:09 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:37:37 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/29 11:25:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class	Server
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
-		std::list<Location>			_location;
+		std::list<Location *>			_location;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -57,6 +57,8 @@ class	Server
 		~Server( void );
 
 		/*  GETTER  */
+		int								getMaxConnectionClient( void ) const;
+
 		size_t							getPort( void ) const;
 		size_t							getMaxSizeBody( void ) const;
 
@@ -66,11 +68,13 @@ class	Server
 		std::string						getIndex( void ) const;
 
 		std::map<size_t, std::string>	getMapError( void ) const;
-		std::list<Location>			getLocations( void ) const;
+		std::list<Location *>			getLocations( void ) const;
 		
 		// Functions For Checking Stuff for HandleRequest
-		bool checkMethod(std::string data){(void)data; return (true);};
-		bool checkUri(std::string data){(void)data; return (true);};
+		bool							checkUri( std::string uri );
+		bool							checkMethod( std::string uri, std::string method );
+		
+		/*	//!\\ PAS A IMPLEMERTER DANS SERVER //!\\	*/
 		bool checkHttpVersion(std::string data){(void)data; return (true);};
 		bool checkBody(std::string data){(void)data; return (true);};
 
