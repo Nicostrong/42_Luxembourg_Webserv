@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		body{
+			background-color: aqua;
+		}
+		*
+		{
+			padding: 16px;	
+			margin: 16px;
+			border-radius: 16px;
+		}
+	</style>
+</head>
+<body>
+	<div>REGISTER TO (inexistant) NEWSLETTER</div>
+	<form>
+		<input id="username" placeholder="username" type="text"/>
+		<input id="useremail" placeholder="useremail" type="text"/>
+		<button id="btn">Click Me</button>
+	</form>
+	<script>
+		const btn = document.getElementById("btn");
+		const username = document.getElementById("username");
+		const useremail = document.getElementById("useremail");
+		const entereddata = document.getElementById("entereddata");
+		btn.addEventListener("click", ()=>{alert(username.value + useremail.value)});
+	</script>
+</body>
+</html>
