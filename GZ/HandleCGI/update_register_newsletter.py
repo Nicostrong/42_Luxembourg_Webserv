@@ -10,3 +10,5 @@ content = content.replace("USEREMAIL", useremail)
 
 with open("register_newsletter.html", "w+") as file:
 	file.write(content)
+
+print("Finished Updating Newsletter")

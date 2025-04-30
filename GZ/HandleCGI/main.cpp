@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:07:43 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/30 10:16:27 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 16:55:13 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int main()
 {
-	CGI_Handler cgi;
-	std::cout << cgi.DoCGI("/usr/bin/python3", "simplewindow.py") << "\n";
+	HandleCGI cgi;
+	
+	cgi.UpdateNewsLetter("/usr/bin/python3", "update_register_newsletter.py");
+	cgi.UpdateShowData("/usr/bin/python3", "update_showdata.py");
 	return 0;
 }
