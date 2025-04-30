@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/30 08:34:02 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 09:01:31 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ HandleConfig::~HandleConfig()
 
 HandleConfig::HandleConfig(const char *filename)
 {
-	configfilename = filename;
+	saveRawConfig(filename);
+	genTmpMap();
+	genWebconfMap();
 }
 
 HandleConfig::HandleConfig(const HandleConfig& copy)
