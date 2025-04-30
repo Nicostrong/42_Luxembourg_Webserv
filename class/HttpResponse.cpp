@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 08:22:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/30 17:05:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ bool HttpResponse::isEncoded()
 
 void HttpResponse::encodeResponse(const HttpRequest &req)
 {
-	return;
 	std::stringstream ss;
-	ss << "HTTP/1.1 " << req.getStatusCode() << "Bad Request" << "\r\n";
+	ss << "HTTP/1.1 " << this->_statusCode << "Bad Request" << "\r\n";
 	ss << "\r\n";
-	ss << "Bad Request";
+	ss << this->_body;
 	
 	this->_raw = ss.str();
 	this->_isEncoded = true;

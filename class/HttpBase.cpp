@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/23 22:29:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/30 16:59:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpBase.hpp"
 
 HttpBase::HttpBase() : _raw(""), _method(""), _uri(""), _httpVersion(""), 
-	_body(""), _headers() {}
+	_body(""), 	_statusCode(OK), _headers() {}
 
-HttpBase::HttpBase(const HttpBase &obj) 
+HttpBase::HttpBase(const HttpBase& obj) 
 {
 	*this = obj;
 }
 
 HttpBase::~HttpBase() {}
 
-HttpBase &HttpBase::operator=(const HttpBase &obj) 
+HttpBase& HttpBase::operator=(const HttpBase& obj) 
 {
 	if (this != &obj)
 	{
@@ -31,12 +31,23 @@ HttpBase &HttpBase::operator=(const HttpBase &obj)
 		this->_uri = obj._uri;
 		this->_httpVersion = obj._httpVersion;
 		this->_body = obj._body;
+		this->_statusCode = obj._statusCode;
 		this->_headers = obj._headers;
 	}
 	return (*this);
 }
 
-bool HttpBase::canBeValidMethod(std::string &method)
+HttpBase::HttpCode HttpBase::getStatusCode() const
+{
+	return (this->_statusCode);
+}
+
+void HttpBase::setStatusCode(HttpBase::HttpCode status)
+{
+	this->_statusCode = status;
+}
+
+bool HttpBase::canBeValidMethod(std::string& method)
 {
 	std::string::const_iterator it;
 	for (it = method.begin(); it != method.end(); ++it) 
@@ -47,7 +58,7 @@ bool HttpBase::canBeValidMethod(std::string &method)
 	return (true);
 }
 
-bool HttpBase::canBeValidPath(std::string &path)
+bool HttpBase::canBeValidPath(std::string& path)
 {
 	
 	if (*path.begin() != '/')
@@ -68,14 +79,14 @@ bool HttpBase::canBeValidPath(std::string &path)
 	return (true);
 }
 
-bool HttpBase::canBeValidHttpProtocol(std::string &httpVersion)
+bool HttpBase::canBeValidHttpProtocol(std::string& httpVersion)
 {
 	if (httpVersion.rfind("HTTP/", 0) == std::string::npos)
 		return (false);
 	return (true);
 }
 
-bool HttpBase::isHeaderNameValid(std::string &name)
+bool HttpBase::isHeaderNameValid(std::string& name)
 {
 	std::string::const_iterator it;
 	for (it = name.begin(); it != name.end(); ++it) 
@@ -86,7 +97,7 @@ bool HttpBase::isHeaderNameValid(std::string &name)
 	return (true);
 }
 
-bool HttpBase::isHeaderValueValid(std::string &value)
+bool HttpBase::isHeaderValueValid(std::string& value)
 {
 	std::string::const_iterator it;
 	for (it = value.begin(); it != value.end(); ++it) 
@@ -104,7 +115,7 @@ bool HttpBase::isHeaderValueValid(std::string &value)
 	return (true);
 }
 
-std::string HttpBase::normalizeHeaderName(std::string &name)
+std::string HttpBase::normalizeHeaderName(std::string& name)
 {
 	std::string normalized = "";
 

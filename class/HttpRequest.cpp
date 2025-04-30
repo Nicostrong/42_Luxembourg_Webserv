@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 08:21:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/04/30 16:53:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
 HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), _isBadRequest(false), 
-	_isReqReceived(false), _statusCode(OK) {}
+	_isReqReceived(false) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -30,7 +30,6 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_charParsed = obj._charParsed;
 		this->_isBadRequest = obj._isBadRequest;
 		this->_isReqReceived = obj._isReqReceived;
-		this->_statusCode = obj._statusCode;
 	}
 	return (*this);
 }

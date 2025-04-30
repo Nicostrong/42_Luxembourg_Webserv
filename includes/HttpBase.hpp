@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/28 11:03:47 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 16:59:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,25 @@ class HttpBase
 			BAD_REQUEST = 400,
 		};
 		
-		HttpBase(const HttpBase &obj);
-		virtual ~HttpBase();
-		HttpBase &operator=(const HttpBase &obj);
+		HttpBase(const HttpBase& obj);
+		virtual 	~HttpBase();
+		HttpBase&	operator=(const HttpBase& obj);
+		HttpCode	getStatusCode() const;
+		void		setStatusCode(HttpBase::HttpCode status);
 	protected:
 		HttpBase();
-		static bool canBeValidMethod(std::string &method);
-		static bool canBeValidPath(std::string &path);
-		static bool canBeValidHttpProtocol(std::string &httpVersion);
-		static bool isHeaderNameValid(std::string &name);
-		static bool isHeaderValueValid(std::string &value);
-		static std::string normalizeHeaderName(std::string &name);
+		static bool canBeValidMethod(std::string& method);
+		static bool canBeValidPath(std::string& path);
+		static bool canBeValidHttpProtocol(std::string& httpVersion);
+		static bool isHeaderNameValid(std::string& name);
+		static bool isHeaderValueValid(std::string& value);
+		static std::string normalizeHeaderName(std::string& name);
 		std::string _raw;
 		std::string _method;
 		std::string _uri;
 		std::string _httpVersion;
 		std::string _body;
+		HttpCode	_statusCode;
 		std::map<std::string, std::string> _headers;
 };
 
