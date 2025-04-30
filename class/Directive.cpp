@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 14:02:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 09:56:36 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ std::string		Directive::getAllValue( void ) const
  */
 const char		*Directive::DirectiveException::what() const throw()
 {
-	return  (RED "Error creating Directive !" RESET);
+	return  (RED "[ERROR] Creating Directive !" RESET);
 }
 
 /*******************************************************************************

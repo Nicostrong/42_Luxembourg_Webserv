@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 21:06:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 09:55:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class ParserServerConfig
 		std::string		trim( const std::string &s );
 		std::string		extractBlock( std::istringstream &iss );
 		std::string		stripComments( const std::string &line );
+		std::string		copyFileToString( const std::string &filename );
 
 	public:
 
@@ -43,8 +44,58 @@ class ParserServerConfig
 		~ParserServerConfig( void );
 
 		/*	GETTER	*/
-		const std::map<std::string, std::string>		&getServers( void ) const;
-		void											printServers( void ) const;
+		std::map<std::string, std::string>		getServer( size_t index ) const;
+		size_t									getNumberServer( void ) const;
+		
+		/*	PRINTER	*/
+		void									printServers( void ) const;
+		void									printOneServer( size_t index ) const;
+
+		/*	parsing error Exception	*/
+		class	ParsingError: public std::exception
+		{
+
+			private:
+
+				std::string				_msg;
+
+			public:
+
+				ParsingError( const std::string &data ) throw();
+				virtual ~ParsingError( void ) throw();
+				virtual const char	*what() const throw();
+		
+		};
+
+		/*	Open file config	*/
+		class	FileError : public std::exception
+		{
+
+			public:
+
+				const char	*what() const throw();
+		
+		};
+
+		/*	Get server map error	*/
+		class	GetServerMapError : public std::exception
+		{
+
+			public:
+
+				const char	*what() const throw();
+		
+		};
+		
+		/*	port value error Exception	*/
+		class	PortValueException : public std::exception
+		{
+
+			public:
+
+				const char	*what() const throw();
+		
+		};
 		
 };
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/29 16:23:44 by fdehan           ###   ########.fr        #
+#    Updated: 2025/04/30 09:07:26 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SERVER_SRC		=	../class/Server.cpp \
 					../class/EventData.cpp \
 					../class/HttpResponse.cpp \
 					../class/Socket.cpp \
+					../class/Nico.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)

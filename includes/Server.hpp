@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/04/29 14:43:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 10:44:08 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ class	Server : public IEventHandler
 		int								_maxConnectionClient;
 		size_t							_maxSizeBody;
 		std::string						_name;
-		std::string						_adress;
 		std::string						_path;
 		std::string						_index;
 		std::map<size_t, std::string>	_mError;
@@ -45,7 +44,6 @@ class	Server : public IEventHandler
 		Server							&operator=( const Server &src_obj );
 
 		/*	SETTER	*/
-		void							setAdress( std::string &data );
 		void							setPort( std::string &data );
 		void							setMaxSizeBody( std::string &data );
 		void							setMapError( std::string &data );
@@ -75,7 +73,6 @@ class	Server : public IEventHandler
 		size_t							getPort( void ) const;
 		size_t							getMaxSizeBody( void ) const;
 
-		std::string						getAdress( void ) const;
 		std::string						getName( void ) const;
 		std::string						getPath( void ) const;
 		std::string						getIndex( void ) const;
@@ -135,6 +132,7 @@ class	Server : public IEventHandler
 				const char	*what() const throw();
 		
 		};
+		
 };
 
 std::ostream	&operator<<( std::ostream &out, Server const &src_object );

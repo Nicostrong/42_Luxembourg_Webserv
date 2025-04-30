@@ -6,12 +6,19 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 21:19:10 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 09:56:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Nico.hpp"
 
+/*******************************************************************************
+ *							CANONICAL FORM									   *
+ ******************************************************************************/
+
+/*
+ *	Constructor
+ */
 ParserServerConfig::ParserServerConfig( const std::string &filename )
 {
 	try
@@ -20,32 +27,34 @@ ParserServerConfig::ParserServerConfig( const std::string &filename )
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 	}
 	LOG_DEB("ParserServerConfig constructor called.");
 	return ;
 }
 
+/*
+ *	Destructor
+ */
 ParserServerConfig::~ParserServerConfig( void )
 {
 	LOG_DEB("Destructor of ParserServerConfig called.");
 	return ;
 }
 
+/*******************************************************************************
+ *							PRIVATE METHOD									   *
+ ******************************************************************************/
+
+/*
+ *	Parser of the config file
+ */
 void		ParserServerConfig::parseConfigFile( const std::string &filename )
 {
-	std::ifstream		file(filename.c_str());
-	std::string			line;
 	std::string			content;
 	size_t				pos = 0;
 
-	if (!file.is_open())
-		throw std::runtime_error("Unable to open config file: " + filename);
-
-	while (std::getline(file, line))
-		content += stripComments(line) + "\n";
-	file.close();
-
+	content = copyFileToString(filename);
 	while ((pos = content.find("server", pos)) != std::string::npos)
 	{
 		size_t			blockStart = content.find("{", pos);
@@ -72,6 +81,24 @@ void		ParserServerConfig::parseConfigFile( const std::string &filename )
 		pos = i;
 	}
 	return ;
+}
+
+/*
+ *	Open the file and copy all in a string and return it
+ */
+std::string		ParserServerConfig::copyFileToString( const std::string &filename )
+{
+	std::ifstream		file(filename.c_str());
+	std::string			line;
+	std::string			content;
+
+	if (!file.is_open())
+		throw FileError();
+
+	while (std::getline(file, line))
+		content += stripComments(line) + "\n";
+	file.close();
+	return (content);
 }
 
 void			ParserServerConfig::parseServerBlock( const std::string &block )
@@ -196,29 +223,141 @@ std::string		ParserServerConfig::stripComments( const std::string &line )
 int				ParserServerConfig::parsePort( const std::string &value )
 {
 	size_t		colonPos;
+	int			port;
 	
 	colonPos = value.find(":");
 	if (colonPos != std::string::npos)
-		return std::atoi(value.substr(colonPos + 1).c_str());
-	return (std::atoi(value.c_str()));
+		port = std::atoi(value.substr(colonPos + 1).c_str());
+	else
+		port = std::atoi(value.c_str());
+	if (port <= 0 || port > 65535)
+		throw PortValueException();
+	return (port);
 }
 
-void			ParserServerConfig::printServers( void ) const
+/*******************************************************************************
+ *								GETTER										   *
+ ******************************************************************************/
+
+/*
+ *	Get just one map of one server
+ */
+std::map<std::string, std::string>		ParserServerConfig::getServer( size_t index ) const
+{
+	std::map<int, std::map<std::string, std::string> >::const_iterator		it;
+
+	if (index >= this->_servers.size()) 
+		throw GetServerMapError();
+	it = this->_servers.begin();
+	std::advance(it, index);
+	return (it->second);
+}
+
+size_t		ParserServerConfig::getNumberServer( void ) const
+{
+	return (this->_servers.size());
+}
+
+/*******************************************************************************
+ *								PRINTER										   *
+ ******************************************************************************/
+
+/*
+ *	Print all servers of the config file
+ */
+void		ParserServerConfig::printServers( void ) const
 {
 	std::map<int, std::map<std::string, std::string> >::const_iterator		it;
 
 	for (it = this->_servers.begin(); it != this->_servers.end(); ++it)
 	{
-		std::map<std::string, std::string>::const_iterator		sub;
+		std::map<std::string, std::string>::const_iterator					sub;
 
 		std::cout << std::endl << "[SERVER ON PORT " << it->first << "]" << std::endl;
-
 		for (sub = it->second.begin(); sub != it->second.end(); ++sub)
 			std::cout << sub->first << " : " << sub->second << std::endl;
-
 		std::cout << "--------------------------------------------------------------------------------" << std::endl;
 	}
+	return ;
 }
+
+
+void		ParserServerConfig::printOneServer( size_t index ) const
+{
+	std::map<int, std::map<std::string, std::string> >::const_iterator	it;
+	std::map<std::string, std::string>::const_iterator					sub;
+	
+	if (index >= this->_servers.size()) 
+	{
+		std::cout << "[ERROR] No server found at index: " << index << std::endl;
+		return ;
+	}
+	it = this->_servers.begin();
+	std::advance(it, index);
+	std::cout << std::endl << "[SERVER ON PORT " << it->first << "]" << std::endl;
+	for (sub = it->second.begin(); sub != it->second.end(); ++sub)
+		std::cout << sub->first << " : " << sub->second << std::endl;
+
+	std::cout << "--------------------------------------------------------------------------------" << std::endl;
+	return ;
+}
+
+/*******************************************************************************
+ *								EXCEPTION 									   *
+ ******************************************************************************/
+
+/*
+ *	Creation class Exception for parsing error with data
+ */
+ParserServerConfig::ParsingError::ParsingError( const std::string &data ) throw()
+{
+	this->_msg = RED"[ERROR] Parsing data: " + data + RESET;
+	return ;
+}
+
+/*
+ *	Destructor for ParsingError
+ */
+ParserServerConfig::ParsingError::~ParsingError( void ) throw()
+{
+	return ;
+}
+
+/*
+ *	Error parsing file.conf
+ */
+const char		*ParserServerConfig::ParsingError::what() const throw()
+{
+	return (this->_msg.c_str());
+}
+
+/*
+ *	Error while opening file config
+ */
+const char		*ParserServerConfig::FileError::what() const throw()
+{
+	return (RED "[ERROR] Opening file server config fail" RESET);
+}
+
+/*
+ *	Error while getting the server map
+ */
+const char		*ParserServerConfig::GetServerMapError::what() const throw()
+{
+	return (RED "[ERROR] Index out of range in getServer" RESET);
+}
+
+/*
+ *	Port value exception
+ */
+const char		*ParserServerConfig::PortValueException::what() const throw()
+{
+	return (RED "[ERROR] Value of port not correct !" RESET);
+}
+
+/*******************************************************************************
+ *							TESTER CLASS									   *
+ ******************************************************************************/
 
 #ifdef TEST
 
@@ -228,6 +367,10 @@ int main( void )
 	{
 		ParserServerConfig		parser("../config/webserver.conf");
 		parser.printServers();
+		std::cout << "Number of server detected: " << parser.getNumberServer() << std::endl;
+		std::cout << "Show of eatch server one by one." << std::endl;
+		for (size_t i = 0; i < parser.getNumberServer(); i++)
+			parser.printOneServer(i);
 	}
 	catch (const std::exception& e)
 	{

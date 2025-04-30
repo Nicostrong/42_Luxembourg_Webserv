@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 14:05:16 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 10:45:39 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,7 @@ void		Server::parseData( const std::map< std::string, std::string> &data )
 		std::string		value = it->second;
 
 		if (it->first == "listen")
-		{
-			setAdress(value);
 			setPort(value);
-		}
 		else if (it->first == "root")
 			setValue(this->_path, value);
 		else if (it->first == "server_name")
@@ -144,8 +141,6 @@ void		Server::checkServer( void )
 		throw ParsingError("max size body = 0");
 	if (this->_name.empty())
 		throw ParsingError("name is empty");
-	if (this->_adress.empty())
-		throw ParsingError("adress is empty");
 	if (this->_path.empty())
 		throw ParsingError("path is empty");
 	if (this->_index.empty())
@@ -175,28 +170,11 @@ void Server::cleanup()
  ******************************************************************************/
 
 /*
- *	extract the adress from the string
- */
-void			Server::setAdress( std::string &data )
-{
-	size_t	pos = data.find(":");
-
-	if (pos == std::string::npos)
-		throw ParsingError(data);
-	this->_adress = data.substr(0, pos);
-	return ;
-}
-
-/*
  *	extract the port from the string
  */
 void			Server::setPort( std::string &data )
 {
-	size_t	pos = data.find(":");
-	
-	if (pos == std::string::npos)
-		throw ParsingError(data);
-	this->_port = static_cast<size_t>(std::atoi(data.substr(pos + 1).c_str()));
+	this->_port = static_cast<size_t>(std::atoi(data.c_str()));
 	if (this->_port <= 0 || this->_port > 65535)
 		throw PortValueException();
 	return ;
@@ -294,14 +272,6 @@ size_t							Server::getMaxSizeBody( void ) const
 std::string						Server::getName( void ) const
 {
 	return (this->_name);
-}
-
-/*
- *	get _adress value
- */
-std::string						Server::getAdress( void ) const
-{
-	return (this->_adress);
 }
 
 /*
@@ -463,7 +433,7 @@ bool	Server::checkMethod( std::string uri, std::string method )
  */
 Server::ParsingError::ParsingError( const std::string &data ) throw()
 {
-	this->_msg = RED"Error parsing data: " + data + RESET;
+	this->_msg = RED"[ERROR] Parsing data: " + data + RESET;
 	return ;
 }
 
@@ -488,7 +458,7 @@ const char		*Server::ParsingError::what() const throw()
  */
 const char		*Server::ServerException::what() const throw()
 {
-	return  (RED "Error creating Server !" RESET);
+	return  (RED "[ERROR] Creating Server !" RESET);
 }
 
 /*
@@ -496,7 +466,7 @@ const char		*Server::ServerException::what() const throw()
  */
 const char		*Server::PortValueException::what() const throw()
 {
-	return (RED "Value of port not correct !" RESET);
+	return (RED "[ERROR] Value of port not correct !" RESET);
 }
 
 /*******************************************************************************
@@ -516,7 +486,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	
 	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
 		<< GREEN << "Name:\t\t\t" << src_object.getName() << RESET <<std::endl
-		<< GREEN << "Listen adress:\t\t" << src_object.getAdress() << RESET << std::endl
+		<< GREEN << "Listen adress:\t\t127.0.0.1" << RESET << std::endl
 		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
 		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl
 		<< GREEN << "Index file:\t\t" << src_object.getIndex() << RESET << std::endl
