@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/29 15:33:46 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 08:10:02 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ std::map<std::string, std::string> HandleConfig::getwebconfMap()
 void HandleConfig::printwebconfMap()
 {
 	std::map<std::string, std::string>::iterator it = webconfMap.begin();
-    std::cout << "[debug] web\n";
 	while(it != webconfMap.end())
 	{
 		std::cout << "\n==========\n" << it->first << "\n" << it->second << "\n==========\n";
