@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/30 09:07:26 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/04/30 12:56:58 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -168,7 +168,7 @@ endef
 #	Rules																	   #
 ################################################################################
 
-.PHONY : all server networking deb clean fclean re help
+.PHONY : all server networking deb_serv deb_net clean fclean re help
 
 all: 		help
 
@@ -185,9 +185,13 @@ networking:	$(NET_OBJ)
 %.o :		%.cpp
 	$(call compile_c_to_o)
 
-deb:			all
+deb_serv:		server 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG0) $(DEB_OUT)
+	$(DEB) $(DEB_OPT) ./$(SERVER_NAME) $(DEB_OUT)
+
+deb_net:		networking 
+	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
+	$(DEB) $(DEB_OPT) ./$(NET_NAME) $(DEB_OUT)
 
 clean:
 	$(call delete_progress, *.o)
@@ -201,3 +205,4 @@ re : 		fclean all
 
 help:
 	@echo "usage: make server|networking|..."
+	@echo "usage: make deb_serv | deb_net for running with valgrind"

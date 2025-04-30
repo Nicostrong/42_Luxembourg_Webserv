@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 10:45:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 13:12:21 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,9 @@ void		Server::checkServer( void )
 {
 	if (this->_port == 0)
 		throw ParsingError("port = 0");
-	if (this->_maxConnectionClient == 0)
-		throw ParsingError("max connection client = 0");
+	if (this->_maxConnectionClient < 0)
+		throw ParsingError("max connection client < 0");
+	/*	Not necessary using on config server
 	if (this->_maxSizeBody == 0)
 		throw ParsingError("max size body = 0");
 	if (this->_name.empty())
@@ -145,6 +146,7 @@ void		Server::checkServer( void )
 		throw ParsingError("path is empty");
 	if (this->_index.empty())
 		throw ParsingError("index is empty");
+	*/
 	return ;
 }
 
@@ -307,7 +309,23 @@ std::list<Location *>				Server::getLocations( void ) const
 	return (this->_location);
 }
 
-// Server events and exec
+/*
+ *	return the path of the code error in argument
+ */
+std::string						Server::getPathError( size_t error_code ) const
+{
+	std::map<size_t, std::string>::const_iterator		it;
+
+	for (it = this->_mError.begin(); it != this->_mError.end(); it++)
+		if (it->first == error_code)
+			return (it->second);
+	return ("[ERROR] Error page not found");
+}
+
+
+/*******************************************************************************
+ *							SERVER EVENTS									   *
+ ******************************************************************************/
 
 void Server::start()
 {

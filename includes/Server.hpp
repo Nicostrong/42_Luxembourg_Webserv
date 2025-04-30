@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/04/30 10:44:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 13:06:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ class	Server : public IEventHandler
 		std::string						getName( void ) const;
 		std::string						getPath( void ) const;
 		std::string						getIndex( void ) const;
+		std::string						getPathError( size_t error_code ) const;
 
 		std::map<size_t, std::string>	getMapError( void ) const;
 		std::list<Location *>			getLocations( void ) const;
@@ -89,7 +90,7 @@ class	Server : public IEventHandler
 		template <typename T>
 		void							setValue(T &target, std::string &data);
 
-		// Server exec related
+		/*	Server exec related	*/
 		void 							start( void );
 		void 							onReadEvent( int fd, int type );
 		void 							onWriteEvent( int fd, int type );

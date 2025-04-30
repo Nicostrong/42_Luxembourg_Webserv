@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_fullServer.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 10:54:10 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 14:01:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,24 @@ int	main( void )
 			std::cout << "Test checkMethod(/, POST) => " << (s.checkMethod("/", "POST") ? "✅ [OK]" : "❌ [KO]") << std::endl;
 			std::cout << "Test checkMethod(/blabla, GET) => " << (s.checkMethod("/blabla", "GET") ? "✅ [OK]" : "❌ [KO]") << std::endl;
 			std::cout << "Test checkMethod(/images, POST) => " << (s.checkMethod("/images", "POST") ? "❌ [OK]" : "✅  [KO]") << std::endl;
+			
+			std::cout << std::endl << "------------ TEST GET PATH ERROR ----------" << std::endl << std::endl;
+
+			std::cout << "Test getPathError(403) => " << s.getPathError(403) << std::endl;
+			std::cout << "Test getPathError(404) => " << s.getPathError(404) << std::endl;
+			std::cout << "Test getPathError(405) => " << s.getPathError(405) << std::endl;
+			std::cout << "Test getPathError(409) => " << s.getPathError(409) << std::endl;
+			std::cout << "Test getPathError(413) => " << s.getPathError(413) << std::endl;
+			std::cout << "Test getPathError(418) => " << s.getPathError(418) << std::endl;
+			std::cout << "Test getPathError(500) => " << s.getPathError(500) << std::endl;
+			std::cout << "Test getPathError(100) => " << s.getPathError(100) << std::endl;
+			std::cout << "Test getPathError(602) => " << s.getPathError(602) << std::endl;
+			std::cout << "Test getPathError(444) => " << s.getPathError(444) << std::endl;
+
+			
 		}
+		pc.printServers();
+
 	}
 	catch(const std::exception& e)
 	{

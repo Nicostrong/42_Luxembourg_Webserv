@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 12:48:49 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 13:56:13 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Location::Location( const Location &src_obj )
  */
 Location::~Location( void )
 {
-	std::vector<Directive *>::iterator		it;
+	std::list<Directive *>::iterator		it;
 
 	LOG_DEB("Location destructor called");
 	delete this->_method;
@@ -80,7 +80,7 @@ void						Location::parseData( std::string &data )
 
 	while (stream >> directive)
 	{
-		if (directive == "limit_except")
+		if (directive == "limit_except" && this->_method == NULL)
 		{
 			std::string data;
 			std::string value = directive + " ";
@@ -129,7 +129,7 @@ MethodHTTP					*Location::getMethod( void ) const
 /*
  *	get _directives value
  */
-std::vector<Directive *>		Location::getDirectives( void ) const
+std::list<Directive *>		Location::getDirectives( void ) const
 {
 	return (this->_directives);
 }
@@ -155,16 +155,21 @@ const char		*Location::LocationException::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 {
-	std::vector<Directive>::const_iterator	it;
+	std::list<Directive *>::const_iterator	it;
 
 	out	<< YELLOW << "------------- LOCATION BLOCK -------------" << RESET << std::endl
 		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl;
 	if (src_object.getMethod() != NULL)
 		out << YELLOW << *src_object.getMethod() << RESET << std::endl;
-	/*if (!src_object.getDirectives().empty())
+	if (!src_object.getDirectives().empty())
 		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
-			out << *it;
-	*/
+		{
+			if (*it)
+				out << **it;
+			else
+				out << "[ERROR] Directive invalide détectée !" << std::endl;
+		}
+	
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	return (out);
 }
