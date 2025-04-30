@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 13:50:26 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 15:59:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ Directive::Directive( std::string &key, std::string &value )
 		this->_values.push_back(token);
 	if (this->_values.empty())
 		throw DirectiveException();
+	std::cout << "Directice created with data:\n" << *this << std::endl;
 	return ;
 }
 

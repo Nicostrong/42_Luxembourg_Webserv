@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/04/30 13:06:16 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 16:19:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,23 @@ class	Server : public IEventHandler
 				EventMonitoring &eventMonitoring );
 		~Server( void );
 
-		/*  GETTER  */
-		int								getMaxConnectionClient( void ) const;
+		/*  GETTER  a modifier en const et ref */
+		const int&								getMaxConnectionClient( void ) const;
 
-		size_t							getPort( void ) const;
-		size_t							getMaxSizeBody( void ) const;
+		const size_t&							getPort( void ) const;
+		const size_t&							getMaxSizeBody( void ) const;
 
-		std::string						getName( void ) const;
-		std::string						getPath( void ) const;
-		std::string						getIndex( void ) const;
-		std::string						getPathError( size_t error_code ) const;
+		const std::string&						getName( void ) const;
+		const std::string&						getPath( void ) const;
+		const std::string&						getIndex( void ) const;
+		const std::string&						getPathError( size_t error_code ) const;
 
-		std::map<size_t, std::string>	getMapError( void ) const;
-		std::list<Location *>			getLocations( void ) const;
+		const std::map<size_t, std::string>&	getMapError( void ) const;
+		const std::list<Location *>&			getLocations( void ) const;
 		
 		/*	Checker GIGI	*/
-		bool							checkUri( std::string uri );
-		bool							checkMethod( std::string uri,
+		bool									checkUri( std::string uri );
+		bool									checkMethod( std::string uri,
 													std::string method );
 
 		/*	Template function for Server setting	*/

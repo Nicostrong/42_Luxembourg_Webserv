@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 13:39:16 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 16:16:04 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class	Location
 	private:
 
 		std::string							_name;
-		MethodHTTP							*_method;
+		MethodHTTP*							_method;
 		std::list<Directive *>				_directives;
 
 		Location							&operator=( const Location &src_obj );

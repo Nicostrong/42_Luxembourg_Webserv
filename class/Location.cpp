@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 13:56:13 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 16:04:49 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void						Location::parseData( std::string &data )
 
 	while (stream >> directive)
 	{
+		std::cout << "Directive evaluated: " << directive << std::endl;
 		if (directive == "limit_except" && this->_method == NULL)
 		{
 			std::string data;
@@ -100,7 +101,10 @@ void						Location::parseData( std::string &data )
 			if (!value.empty() && value[value.size() - 1] == ';')
 				value.erase(value.size() - 1);
 			if (!directive.empty() && !value.empty())
+			{
+				std::cout << "value for Directive: " << value << std::endl;
 				this->_directives.push_back(new Directive(directive, value));
+			}
 		}
 	}
 	return ;
@@ -161,7 +165,7 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl;
 	if (src_object.getMethod() != NULL)
 		out << YELLOW << *src_object.getMethod() << RESET << std::endl;
-	if (!src_object.getDirectives().empty())
+	/*if (!src_object.getDirectives().empty())
 		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
 		{
 			if (*it)
@@ -169,7 +173,7 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 			else
 				out << "[ERROR] Directive invalide détectée !" << std::endl;
 		}
-	
+	*/
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	return (out);
 }

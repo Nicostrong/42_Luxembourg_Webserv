@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 13:12:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 16:19:28 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,7 +304,7 @@ std::map<size_t, std::string>	Server::getMapError( void ) const
  *	get all value of Location
  */
 
-std::list<Location *>				Server::getLocations( void ) const
+const std::list<Location *>&				Server::getLocations( void ) const
 {
 	return (this->_location);
 }
@@ -312,14 +312,16 @@ std::list<Location *>				Server::getLocations( void ) const
 /*
  *	return the path of the code error in argument
  */
-std::string						Server::getPathError( size_t error_code ) const
+const std::string&						Server::getPathError( size_t error_code ) const
 {
 	std::map<size_t, std::string>::const_iterator		it;
+	std::string											ret;
 
 	for (it = this->_mError.begin(); it != this->_mError.end(); it++)
 		if (it->first == error_code)
 			return (it->second);
-	return ("[ERROR] Error page not found");
+	re
+	return ("<h1>Error "[error_code]" not fund</h1>");
 }
 
 
