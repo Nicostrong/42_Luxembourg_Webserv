@@ -21,3 +21,22 @@
     </ul>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Message en Django</title>
+</head>
+<body>
+    <h1>Message simple via Django</h1>
+    
+    <p>{{ message }}</p>
+
+</body>
+</html>
+
+from django.shortcuts import render
+
+def simple_message(request):
+    return render(request, "message.html", {"message": "Bonjour, bienvenue sur Django !"})
