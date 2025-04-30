@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 08:29:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 15:34:30 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 08:32:43 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(int argc, char **argv)
 		hc.genTmpMap();
 		hc.genWebconfMap();
 		hc.getwebconfMap();
+//		hc.printwebconfMap();
 	}
 	else
 	{
