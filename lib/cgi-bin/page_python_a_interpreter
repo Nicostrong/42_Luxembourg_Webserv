@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ma Page Django</title>
+</head>
+<body>
+    <h1>Bienvenue sur ma page Django</h1>
+    
+    {% if user.is_authenticated %}
+        <p>Bonjour, {{ user.username }} !</p>
+    {% else %}
+        <p>Veuillez vous connecter.</p>
+    {% endif %}
+
+    <h2>Liste des articles</h2>
+    <ul>
+        {% for article in articles %}
+            <li>{{ article.title }} - Publié le {{ article.date }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
