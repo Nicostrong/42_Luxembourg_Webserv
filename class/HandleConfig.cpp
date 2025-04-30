@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/30 12:58:08 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 13:38:47 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void HandleConfig::genTmpMap()
 		if (config_vec[i].find('{') != std::string::npos)
 		{
 			std::string key = config_vec[i];
-			std::string concat = "";
+			std::string concat;
 			countCurlyBrackets++;
 			++i;
 			while(countCurlyBrackets > 0)

@@ -39,22 +39,44 @@ void HandleRequests::passFdMonitoring(int fd)
 void HandleRequests::onReadEvent(int fd, int type)
 {
 	(void)type;
-	//char buffer[1024];
-	int result = read(fd, buffer, BUFFER_SIZE);
+	int result;
+	totalBuffer.clear();
+	while((result = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		totalBuffer.append(buffer, result);
+	}
 	if (result == -1)
 	{
 		printErrMsg("Reading from File");
 	}
+	em.unmonitor(fd);
 }
 void HandleRequests::onWriteEvent(int fd, int type)
 {
 	(void)type;
 	write(fd, buffer, BUFFER_SIZE);
+	em.unmonitor(fd);
 }
 void HandleRequests::onCloseEvent(int fd, int type)
 {
 	(void)type;
 	close(fd);
+	em.unmonitor(fd);
+}
+
+HandleRequests::HandleRequests(const HandleRequests& copy): em(copy.em), webconfMap(copy.webconfMap)
+{
+
+}
+
+HandleRequests& HandleRequests::operator=(const HandleRequests& copy)
+{
+	if (this != &copy)
+	{
+		this->em = copy.em;
+		this->webconfMap = copy.webconfMap;
+	}
+	return (*this);
 }
 
 /*

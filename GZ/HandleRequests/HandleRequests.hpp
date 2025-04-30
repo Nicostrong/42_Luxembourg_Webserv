@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 16:16:01 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/30 12:51:28 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/04/30 14:07:04 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ class HandleRequests: public HttpRequest, public IEventHandler
 	
 	private:
 		char buffer[1024];
+		std::string totalBuffer;
 		EventMonitoring& em;
 		std::map<std::string, std::string> webconfMap;
-		std::map<std::string, std::string> handledRequests;
 	public:
 		HandleRequests(EventMonitoring& ref);
+		HandleRequests(const HandleRequests& copy);
+		HandleRequests& operator=(const HandleRequests& copy);
 		~HandleRequests();
 		
 		const std::string& getMethod();
