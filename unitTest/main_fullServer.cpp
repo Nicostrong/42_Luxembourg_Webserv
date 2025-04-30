@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_fullServer.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 10:01:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/04/30 10:54:10 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -62,7 +62,7 @@ std::string CGI_Handler::DoCGI(const char *compiler, const char *script)
         std::cerr << "fork failed\n"; 
         return "ERROR\n";
     } 
-    else if (pid == 0) { 
+    else if (pid == 0) {
         close(pipefd[0]);
         dup2(pipefd[1], STDOUT_FILENO);
         close(pipefd[1]);
