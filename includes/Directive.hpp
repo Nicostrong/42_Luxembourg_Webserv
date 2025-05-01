@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 10:40:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 14:52:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class	Directive
 		
 		Directive					&operator=( const Directive &src_obj );
 
-		/*  SETTER  */
+		/*	SETTER	*/
 		void						setName( std::string &name);
 		void						setValue( size_t index, std::string &value );
 		void						addValue( std::string &value );
