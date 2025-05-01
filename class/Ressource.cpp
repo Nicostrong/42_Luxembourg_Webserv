@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:51:46 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 14:15:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 19:07:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Ressource.hpp"
 
-Ressource::Ressource(const std::string& loc, EventMonitoring& em) : _loc(loc), 
-	_em(em), _state(WAITING) 
+Ressource::Ressource(const std::string loc, EventMonitoring& em) : _loc(loc), 
+	_em(em), _fd(-1), _state(WAITING) 
 {
 	if (loc.empty())
 		this->_state = ERROR;
@@ -30,7 +30,7 @@ Ressource::Ressource(const std::string& loc, EventMonitoring& em) : _loc(loc),
 Ressource::Ressource(const Ressource& obj) : _loc(obj._loc), _em(obj._em), 
 	_state(obj._state), _raw(obj._raw) 
 {
-	if (obj._fd != -1 && obj._state != ERROR)
+	if (obj._fd != -1)
 	{
 		this->_fd = dup(obj._fd);
 		if (this->_fd == -1)

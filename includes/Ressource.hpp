@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:45:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 11:02:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 19:05:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Ressource : public IEventHandler
 			ERROR = 3,
 		};
 		
-		Ressource(const std::string& loc, EventMonitoring& em);
+		Ressource(const std::string loc, EventMonitoring& em);
 		Ressource(const Ressource& obj);
 		~Ressource();
 		Ressource&			operator=(const Ressource& obj);
@@ -42,7 +42,7 @@ class Ressource : public IEventHandler
 		void				onWriteEvent(int fd, int type, EventMonitoring& em);
 		void				onCloseEvent(int fd, int type, EventMonitoring& em);
 	private:
-		const std::string&	_loc;
+		const std::string	_loc;
 		EventMonitoring&	_em;
 		int 				_fd;
 		State 				_state;
