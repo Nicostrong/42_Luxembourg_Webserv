@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 13:53:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 14:54:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ class	Server : public IEventHandler
 		
 		/*	PARSER	*/
 		void							parseData( const std::map< std::string,
-													std::string> &data );
+														std::string> &data );
 
 		/*	CHECKER	*/
 		void							checkServer( void );
@@ -89,7 +89,7 @@ class	Server : public IEventHandler
 		/*	Checker GIGI	*/
 		bool									checkUri( std::string uri );
 		bool									checkMethod( std::string uri,
-													std::string method );
+																std::string method );
 
 		/*	Template function for Server setting	*/
 		template <typename T>
@@ -98,11 +98,11 @@ class	Server : public IEventHandler
 		/*	Server exec related	*/
 		void 							start( void );
 		void 							onReadEvent( int fd, int type, 
-			EventMonitoring& em );
+														EventMonitoring& em );
 		void 							onWriteEvent( int fd, int type, 
-			EventMonitoring& em );
+														EventMonitoring& em );
 		void 							onCloseEvent( int fd, int type, 
-			EventMonitoring& em );
+														EventMonitoring& em );
 		void 							onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/

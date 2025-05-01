@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 10:41:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 14:52:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ Directive::~Directive( void )
  *	Copy constructor
  */
 Directive::Directive( const Directive &src_object )
+	: _name(src_object._name), _values(src_object._values)
 {
-	*this = src_object;
 	return ;
 }
 
