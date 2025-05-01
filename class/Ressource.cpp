@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:51:46 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 10:18:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 10:22:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,17 @@ void Ressource::onReadEvent(int fd, int type, EventMonitoring& em)
 	while ((bytes = read(fd, buff.data(), RESSOURCE_BUFFER_SIZE)) == 
 		RESSOURCE_BUFFER_SIZE)
 		this->_raw.append(buff.data(), bytes);
+	close(fd);
 	
 	if (bytes == -1)
+	{
+		this->_state = ERROR;
 		return ;
+	}	
 	
 	this->_raw.append(buff.data(), bytes);
 	this->_state = RECEIVED;
 	em.unmonitor(fd);
-	close(fd);
 	(void)type;
 }
 
