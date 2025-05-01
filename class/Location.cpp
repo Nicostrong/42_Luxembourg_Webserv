@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 16:04:49 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 10:31:29 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl;
 	if (src_object.getMethod() != NULL)
 		out << YELLOW << *src_object.getMethod() << RESET << std::endl;
-	/*if (!src_object.getDirectives().empty())
+	if (!src_object.getDirectives().empty())
 		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
 		{
 			if (*it)
@@ -173,7 +173,7 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 			else
 				out << "[ERROR] Directive invalide détectée !" << std::endl;
 		}
-	*/
+	
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	return (out);
 }

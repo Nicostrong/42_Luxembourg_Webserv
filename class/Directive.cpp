@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 15:59:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 10:41:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void			Directive::addValue( std::string &value )
  */
 std::string		Directive::getName( void ) const
 {
+	if (this->_name.empty())
+		throw FieldsEmpty();
 	return (this->_name);
 }
 
@@ -133,6 +135,8 @@ std::string		Directive::getAllValue( void ) const
 {
 	std::string	ret;
 
+	if (this->_values.empty())
+		throw FieldsEmpty();
 	for (size_t i = 0; i < this->_values.size(); i++)
 	{
 		ret += this->_values[i];
@@ -152,6 +156,14 @@ std::string		Directive::getAllValue( void ) const
 const char		*Directive::DirectiveException::what() const throw()
 {
 	return  (RED "[ERROR] Creating Directive !" RESET);
+}
+
+/*
+ *	Error fields empty
+ */
+const char		*Directive::FieldsEmpty::what() const throw()
+{
+	return  (RED "[ERROR] Fields of Directive object empty !" RESET);
 }
 
 /*******************************************************************************
