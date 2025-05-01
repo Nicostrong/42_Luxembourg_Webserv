@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 10:31:29 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 18:49:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ MethodHTTP					*Location::getMethod( void ) const
 /*
  *	get _directives value
  */
-std::list<Directive *>		Location::getDirectives( void ) const
+const std::list<Directive *>&	Location::getDirectives( void ) const
 {
 	return (this->_directives);
 }
