@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 13:50:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 15:07:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,37 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
 }
 
 HttpResponse& RequestHandling::getResponse(Server& server, 
-	const HttpRequest& req)
+	const HttpRequest& req, HttpResponse& resp)
 {
-	HttpResponse resp;
-
-	if (req.getStatusCode() != HttpBase::OK)
-	{
+	//if (req.getStatusCode() != HttpBase::OK)
+	//{
 		resp.setStatusCode(req.getStatusCode());
 		getErrorResponse(server, req, resp);
-	}
+	//}
 	return (resp);
 }
 
 void RequestHandling::getErrorResponse(Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
+	(void)req;
 	const std::string path = server.getPathError(resp.getStatusCode());
 
-	if (path != "")
-	{
-		server.getRessourcesManager().loadRessource(path);
-		if (server.getRessourcesManager().getRessourceState(path) == 
-				Ressource::ERROR)
-		{
-			return ;
-		}
-			
-	}
+	server.getRessourcesManager().loadRessource(path);
 	
+	Ressource::State rState = 
+				server.getRessourcesManager().getRessourceState(path);
+
+	if (rState == Ressource::ERROR)
+	{
+		resp.setBody(
+				HttpBase::getDefaultErrorPage(resp.getStatusCode()));
+		resp.setAsComplete();
+	}
+	else if (rState == Ressource::RECEIVED)
+	{
+		resp.setBody(
+				server.getRessourcesManager().getRessource(path)->getRaw());
+		resp.setAsComplete();
+	}
 }

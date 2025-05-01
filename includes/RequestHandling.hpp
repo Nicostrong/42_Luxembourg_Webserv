@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 13:38:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 14:44:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class RequestHandling
 		~RequestHandling();
 		RequestHandling& 		operator=(const RequestHandling& obj);
 		static HttpResponse&	getResponse(Server& server, 
-			const HttpRequest& req);
+			const HttpRequest& req, HttpResponse& resp);
 		
 	private:
 		RequestHandling();

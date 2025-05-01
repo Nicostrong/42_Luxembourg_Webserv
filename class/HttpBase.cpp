@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/30 16:59:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 14:47:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,58 @@ HttpBase::HttpCode HttpBase::getStatusCode() const
 void HttpBase::setStatusCode(HttpBase::HttpCode status)
 {
 	this->_statusCode = status;
+}
+
+const std::string& HttpBase::getBody() const
+{
+	return (this->_body);
+}
+
+void HttpBase::setBody(const std::string body)
+{
+	this->_body = body;
+}
+
+const std::string& HttpBase::getRaw() const
+{
+	return (this->_raw);
+}
+
+void HttpBase::setRaw(const std::string raw)
+{
+	this->_raw = raw;
+}
+
+std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
+{
+	switch (statusCode)
+	{
+		case OK:
+			return ("OK");
+		case BAD_REQUEST:
+			return ("Bad request");
+		case INTERNAL_SERVER_ERROR:
+			return ("Internal Server Error");
+	default:
+		return ("Internal Server Error");
+	}
+}
+
+std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
+{
+	std::ostringstream oss;
+	std::string strStatusCode = getStrStatusCode(statusCode);
+	
+	oss << "<html>" << CRLF
+		<< "<head><title>" << statusCode << " " << strStatusCode
+		<< "</title></head>" << CRLF
+		<< "<body>" << CRLF
+		<< "<center><h1>" << statusCode << " " << strStatusCode
+		<< "</h1></center>" << CRLF
+		<< "<center>WebServ</center>" << CRLF
+		<< "</body>" << CRLF
+		<< "</html>" << CRLF;
+	return (oss.str());
 }
 
 bool HttpBase::canBeValidMethod(std::string& method)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/30 16:59:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 14:46:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 
 #define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
 #define ALLOWED_HEADER_VAL "_ :;.,\\/\"'?!(){}[]@<>=-+*#$&`|~^%"
+#define CRLF "\r\n"
 
-#include <iostream>
-#include <map>
-#include <cstring>
+#include "lib.hpp"
 
 class HttpBase
 {
@@ -27,13 +26,20 @@ class HttpBase
 		{
 			OK = 200,
 			BAD_REQUEST = 400,
+			INTERNAL_SERVER_ERROR = 500,
 		};
 		
 		HttpBase(const HttpBase& obj);
-		virtual 	~HttpBase();
-		HttpBase&	operator=(const HttpBase& obj);
-		HttpCode	getStatusCode() const;
-		void		setStatusCode(HttpBase::HttpCode status);
+		virtual 			~HttpBase();
+		HttpBase&			operator=(const HttpBase& obj);
+		HttpCode			getStatusCode() const;
+		void				setStatusCode(HttpBase::HttpCode status);
+		const std::string& 	getBody() const;
+		void 				setBody(const std::string body);
+		const std::string& 	getRaw() const;
+		void 				setRaw(const std::string raw);
+		static std::string	getStrStatusCode(HttpCode statusCode);
+		static std::string  getDefaultErrorPage(HttpCode statusCode);
 	protected:
 		HttpBase();
 		static bool canBeValidMethod(std::string& method);

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 13:46:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 14:46:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ class HttpResponse: public HttpBase
 		HttpResponse();
 		HttpResponse(const HttpResponse &obj);
 		virtual ~HttpResponse();
-		HttpResponse &operator=(const HttpResponse &obj);
-		bool isEncoded();
-		void encodeResponse(const HttpRequest &req);
+		HttpResponse&	operator=(const HttpResponse &obj);
+		void			setAsComplete();
+		bool			isComplete();
+		bool			isEncoded();
+		void 			encodeResponse();
 	private:
 		bool	_isEncoded;
 		bool	_isComplete;

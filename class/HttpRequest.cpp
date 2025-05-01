@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/30 16:53:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 15:01:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 
 void HttpRequest::readReceived(int clientSocket)
 {
+	if (this->_isReqReceived)
+		return ;
 	std::vector<char> buffer(BUFFER_SIZE);
 	ssize_t bytes = recv(clientSocket, buffer.data(), BUFFER_SIZE, 0);
 	
