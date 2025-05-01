@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 15:09:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 17:45:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,12 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 	(void)em;
 	this->_resp.encodeResponse();
 	if (this->_resp.isEncoded())
+	{
 		send(fd, this->_resp.getRaw().c_str(), this->_resp.getRaw().size(), 0);
-	this->_req = HttpRequest();
-	this->_resp = HttpResponse();
-	this->_ctx.onSocketClosedEvent(*this);
+		this->_req = HttpRequest();
+		this->_resp = HttpResponse();
+		//this->_ctx.onSocketClosedEvent(*this);
+	}
 }
 
 void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)

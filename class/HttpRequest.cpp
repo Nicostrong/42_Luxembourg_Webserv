@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 15:01:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 17:57:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), _isBadRequest(false), 
-	_isReqReceived(false) {}
+HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), 
+	_isReceived(false) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -28,24 +28,23 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 	{
 		HttpBase::operator=(obj);
 		this->_charParsed = obj._charParsed;
-		this->_isBadRequest = obj._isBadRequest;
-		this->_isReqReceived = obj._isReqReceived;
+		this->_isReceived = obj._isReceived;
 	}
 	return (*this);
 }
 
 void HttpRequest::readReceived(int clientSocket)
 {
-	if (this->_isReqReceived)
-		return ;
 	std::vector<char> buffer(BUFFER_SIZE);
+	if (this->_isReceived)
+		return ;
 	ssize_t bytes = recv(clientSocket, buffer.data(), BUFFER_SIZE, 0);
 	
 	if (bytes == -1)
 		throw SocketReadException();
 	this->_raw.append(buffer.data(), bytes);
 	parseRaw();
-	if (this->_isReqReceived)
+	if (this->_isReceived)
 	{
 		std::map<std::string, std::string>::const_iterator it;
 		std::cout << "############ Headers ############" << std::endl;
@@ -57,14 +56,14 @@ void HttpRequest::readReceived(int clientSocket)
 	}
 }
 
-bool HttpRequest::isBadRequest() const
-{
-	return (this->_statusCode == BAD_REQUEST);
-}
-
 HttpBase::HttpCode HttpRequest::getStatusCode() const
 {
 	return (this->_statusCode);
+}
+
+bool HttpRequest::isReceived() const
+{
+	return (this->_isReceived);
 }
 
 // Helpers
@@ -72,27 +71,26 @@ HttpBase::HttpCode HttpRequest::getStatusCode() const
 void HttpRequest::parseRaw()
 {
 	std::string line;
-	size_t pos = this->_raw.find("\r\n");
-	if (pos != std::string::npos && this->_charParsed == 0)
-	{
-		line = _raw.substr(0, pos);
-		parseStartLine(line);
-		this->_charParsed = pos + 2;
-		if (this->_statusCode == BAD_REQUEST)
-			return ;
-	}
+	size_t pos;
+	
 	while ((pos = this->_raw.find("\r\n", this->_charParsed)) != std::string::npos)
 	{
 		line = _raw.substr(this->_charParsed, pos - this->_charParsed);
-		if (line.empty())
+		if (this->_charParsed == 0)
+			parseStartLine(line);
+		else if (line.empty() && 
+					this->_charParsed > 0 && 
+					this->_headers.find("host") != this->_headers.end())
 		{
 			this->_body = _raw.substr(pos + 2);
-			this->_isReqReceived = true;
+			this->_statusCode = OK;
+			this->_isReceived = true;
 			return ;
 		}
-		parseHeader(line);
-		if (this->_statusCode == BAD_REQUEST)
-			return ;
+		else
+			parseHeader(line);
+		if (this->_isReceived)
+				return ;
 		this->_charParsed = pos + 2;
 	}
 }
@@ -110,15 +108,12 @@ void HttpRequest::parseStartLine(std::string &line)
 	if (tokens.size() != 3 || !canBeValidMethod(tokens.at(0)) || 
 		!canBeValidPath(tokens.at(1)) || !canBeValidHttpProtocol(tokens.at(2)))
 	{
-		this->_statusCode = BAD_REQUEST;
+		this->_isReceived = true;
 		return ;
 	}
 	this->_method = tokens.at(0);
 	this->_uri = tokens.at(1);
 	this->_httpVersion = tokens.at(2);
-	//std::cout << "Start line correct with METHOD = \"" << this->_method 
-			  //<< "\" URI = \"" << this->_uri << "\" HTTP VERSION = \"" 
-			  //<< this->_httpVersion << "\"" <<  std::endl;
 }
 
 void HttpRequest::parseHeader(std::string &line)
@@ -127,7 +122,7 @@ void HttpRequest::parseHeader(std::string &line)
 	
 	if (sep == std::string::npos || sep == 0)
 	{
-		this->_statusCode = BAD_REQUEST;
+		this->_isReceived = true;
 		return ;
 	}
 
@@ -138,14 +133,14 @@ void HttpRequest::parseHeader(std::string &line)
 
 	if (!isHeaderNameValid(name))
 	{
-		this->_statusCode = BAD_REQUEST;
+		this->_isReceived = true;
 		return ;
 	}
 	name = normalizeHeaderName(name);
 
 	if (name == "host" && this->_headers.find(name) != this->_headers.end())
 	{
-		this->_statusCode = BAD_REQUEST;
+		this->_isReceived = true;
 		return;
 	}
 

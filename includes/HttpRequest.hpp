@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/30 16:52:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 17:39:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,18 @@ public:
 	HttpRequest();
 	HttpRequest(const HttpRequest &obj);
 	virtual ~HttpRequest();
-	HttpRequest &operator=(const HttpRequest &obj);
-	void readReceived(int clientSocket);
-	bool isBadRequest() const;
-	HttpCode getStatusCode() const;
+	HttpRequest&	operator=(const HttpRequest &obj);
+	void			readReceived(int clientSocket);
+	HttpCode 		getStatusCode() const;
+	bool			isReceived() const;
 
 private:
 	void parseRaw();
 	void parseStartLine(std::string &line);
 	void parseHeader(std::string &line);
-	
 
 	size_t _charParsed;
-	bool _isBadRequest;
-	bool _isReqReceived;
+	bool _isReceived;
 };
 
 #endif

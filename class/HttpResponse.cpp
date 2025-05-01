@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 14:26:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 17:34:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ void HttpResponse::encodeResponse()
 		return ;
 	std::stringstream ss;
 	ss << "HTTP/1.1 " << this->_statusCode << " " 
-	   << getStrStatusCode(this->_statusCode) << "\r\n"
-	   << "\r\n"
+	   << getStrStatusCode(this->_statusCode) << CRLF
+	   << "Content-Type: text/html" << CRLF
+	   << "Content-Length: "<< this->_body.size() << CRLF
+	   << CRLF
 	   << this->_body;
 	
 	this->_raw = ss.str();

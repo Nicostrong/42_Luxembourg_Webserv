@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 15:07:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 17:57:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,16 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
 	return (*this);
 }
 
-HttpResponse& RequestHandling::getResponse(Server& server, 
+void RequestHandling::getResponse(Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
+	if (!req.isReceived())
+		return ;
 	//if (req.getStatusCode() != HttpBase::OK)
 	//{
 		resp.setStatusCode(req.getStatusCode());
 		getErrorResponse(server, req, resp);
 	//}
-	return (resp);
 }
 
 void RequestHandling::getErrorResponse(Server& server, 

@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 14:47:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 15:45:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpBase.hpp"
 
 HttpBase::HttpBase() : _raw(""), _method(""), _uri(""), _httpVersion(""), 
-	_body(""), 	_statusCode(OK), _headers() {}
+	_body(""), 	_statusCode(BAD_REQUEST), _headers() {}
 
 HttpBase::HttpBase(const HttpBase& obj) 
 {
@@ -74,7 +74,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 		case OK:
 			return ("OK");
 		case BAD_REQUEST:
-			return ("Bad request");
+			return ("Bad Request");
 		case INTERNAL_SERVER_ERROR:
 			return ("Internal Server Error");
 	default:
@@ -93,6 +93,7 @@ std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
 		<< "<body>" << CRLF
 		<< "<center><h1>" << statusCode << " " << strStatusCode
 		<< "</h1></center>" << CRLF
+		<< "<hr>" << CRLF
 		<< "<center>WebServ</center>" << CRLF
 		<< "</body>" << CRLF
 		<< "</html>" << CRLF;
