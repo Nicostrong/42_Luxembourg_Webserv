@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 09:31:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 09:56:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,7 +369,7 @@ void Server::start()
 		this->_em.updateEvents();
 }
 
-void Server::onReadEvent(int fd, int type)
+void Server::onReadEvent(int fd, int type, EventMonitoring& em)
 {
 	(void)fd;
 	int clientSocket = accept(this->_serverSocket, NULL, NULL);
@@ -378,22 +378,24 @@ void Server::onReadEvent(int fd, int type)
 		return;
 		//Failed accepting the client socket
 	}
-	Socket s(clientSocket, this->_em, *this);
+	Socket s(clientSocket, em, *this);
 	this->_sockets.push_front(s);
-	this->_em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
+	em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
 		 EventData::CLIENT, *_sockets.begin());
 	if (type == EventData::SERVER)
 		std::cout << "Incoming socket request" << std::endl;
 }
 
-void Server::onWriteEvent(int fd, int type)
+void Server::onWriteEvent(int fd, int type, EventMonitoring& em)
 {
+	(void)em;
 	(void)fd;
 	(void)type;
 }
 
-void Server::onCloseEvent(int fd, int type)
+void Server::onCloseEvent(int fd, int type, EventMonitoring& em)
 {
+	(void)em;
 	(void)fd;
 	(void)type;
 }

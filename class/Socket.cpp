@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 09:27:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 10:02:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,26 @@ int Socket::getSocket() const
 	return (this->_fd);
 }
 
-void Socket::onReadEvent(int fd, int type)
+void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 {
 	(void)type;
+	(void)em;
 	_req.readReceived(fd);
 	
 }
 
-void Socket::onWriteEvent(int fd, int type)
+void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 {
 	(void)type;
 	(void)fd;
+	(void)em;
 	//_resp.encodeResponse(_req);
 }
 
-void Socket::onCloseEvent(int fd, int type)
+void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
 {
 	this->_ctx.onSocketClosedEvent(*this);
 	(void)fd;
+	(void)em;
 	(void)type;
 }

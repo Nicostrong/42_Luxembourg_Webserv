@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/28 20:13:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 10:00:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EVENT_DATA_HPP
 
 #include "IEventHandler.hpp"
+#include "EventMonitoring.hpp"
 
 class EventData
 {
@@ -24,7 +25,7 @@ class EventData
 			CLIENT = 1,	
 		};
 
-		EventData(int fd, int type, IEventHandler& ctx);
+		EventData(int fd, int type, IEventHandler& ctx, EventMonitoring& em);
 		EventData(const EventData &obj);
 		~EventData();
 		EventData& 				operator=(const EventData& obj);
@@ -42,6 +43,7 @@ class EventData
 		const int 				_fd;
 		const int				_type;
 		IEventHandler& 			_ctx;
+		EventMonitoring&		_em;
 };
 
 #endif

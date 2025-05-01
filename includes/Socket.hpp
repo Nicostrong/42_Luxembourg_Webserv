@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 09:15:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 10:01:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ class Socket : public IEventHandler
 		Socket& 	operator=(const Socket& obj);
 		bool 		operator==(const Socket& obj);
 		int			getSocket() const;
-		void		onReadEvent(int fd, int type);
-		void		onWriteEvent(int fd, int type);
-		void		onCloseEvent(int fd, int type);
+		void		onReadEvent(int fd, int type, EventMonitoring& em);
+		void		onWriteEvent(int fd, int type, EventMonitoring& em);
+		void		onCloseEvent(int fd, int type, EventMonitoring& em);
 	private:
 		const int			_fd;
 		HttpRequest 		_req;

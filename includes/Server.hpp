@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/01 09:32:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 10:01:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,12 @@ class	Server : public IEventHandler
 
 		/*	Server exec related	*/
 		void 							start( void );
-		void 							onReadEvent( int fd, int type );
-		void 							onWriteEvent( int fd, int type );
-		void 							onCloseEvent( int fd, int type );
+		void 							onReadEvent( int fd, int type, 
+			EventMonitoring& em );
+		void 							onWriteEvent( int fd, int type, 
+			EventMonitoring& em );
+		void 							onCloseEvent( int fd, int type, 
+			EventMonitoring& em );
 		void 							onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/
