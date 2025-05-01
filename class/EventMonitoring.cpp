@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 09:59:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 11:25:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,13 @@ void EventMonitoring::remove()
 			{
 				delete data;
 				it = this->_openFds.erase(it);
-				itc = this->_closeFds.erase(itc);
 				break;
 			}
 			++itc;
 		}
 		++it;
 	}
+	this->_closeFds.clear();
 }
 
 // Exceptions

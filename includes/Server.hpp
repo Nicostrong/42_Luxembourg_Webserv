@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/01 10:01:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:37:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include "EventMonitoring.hpp"
 # include "IEventHandler.hpp"
 # include "Socket.hpp"
+# include "Ressource.hpp"
+# include "RessourcesManager.hpp"
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -39,6 +41,7 @@ class	Server : public IEventHandler
 		EventMonitoring&				_em;
 		int								_serverSocket;
 		std::list<Socket>				_sockets;
+		RessourcesManager				_rm;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -80,6 +83,7 @@ class	Server : public IEventHandler
 
 		const std::map<size_t, std::string>&	getMapError( void ) const;
 		const std::list<Location *>&			getLocations( void ) const;
+		RessourcesManager&						getRessourcesManager();
 		
 		/*	Checker GIGI	*/
 		bool									checkUri( std::string uri );

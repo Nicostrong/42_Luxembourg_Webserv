@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 09:56:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:37:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void			Server::setValue(T &target, std::string &data)
  */
 Server::Server( std::map< std::string, std::string> const &data, 
 	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
-	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0)
+	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0), 
+	_rm(eventMonitoring)
 {
 	LOG_DEB("Server constructor called");
 	try
@@ -66,7 +67,7 @@ Server::Server( std::map< std::string, std::string> const &data,
 // Simple Constructor
 
 Server::Server(EventMonitoring &eventMonitoring) : 
-	_em(eventMonitoring), _serverSocket(0)
+	_em(eventMonitoring), _serverSocket(0), _rm(eventMonitoring)
 {
 	LOG_DEB("Simple Server Constructor called");
 }
@@ -321,6 +322,11 @@ const std::string						Server::getPathError( size_t error_code ) const
 		if (it->first == error_code)
 			return (it->second);
 	return ("");
+}
+
+RessourcesManager&	Server::getRessourcesManager()
+{
+	return (this->_rm);
 }
 
 

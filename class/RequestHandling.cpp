@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/30 16:59:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:50:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
 	return (*this);
 }
 
-HttpResponse& RequestHandling::getResponse(const Server& server, 
+HttpResponse& RequestHandling::getResponse(Server& server, 
 	const HttpRequest& req)
 {
 	HttpResponse resp;
@@ -40,8 +40,20 @@ HttpResponse& RequestHandling::getResponse(const Server& server,
 	return (resp);
 }
 
-void RequestHandling::getErrorResponse(const Server& server, 
+void RequestHandling::getErrorResponse(Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
+	const std::string path = server.getPathError(resp.getStatusCode());
+
+	if (path != "")
+	{
+		server.getRessourcesManager().loadRessource(path);
+		if (server.getRessourcesManager().getRessourceState(path) == 
+				Ressource::ERROR)
+		{
+			return ;
+		}
+			
+	}
 	
 }

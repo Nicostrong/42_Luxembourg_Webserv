@@ -6,16 +6,17 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 09:32:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:49:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpResponse.hpp"
 
-HttpResponse::HttpResponse() : HttpBase(), _isEncoded(false) {}
+HttpResponse::HttpResponse() : HttpBase(), _isEncoded(false), _isComplete(false) 
+	{}
 
 HttpResponse::HttpResponse(const HttpResponse &obj) : HttpBase(obj), 
-	_isEncoded(false) {}
+	_isEncoded(false), _isComplete(false) {}
 
 HttpResponse::~HttpResponse() {}
 
@@ -25,6 +26,7 @@ HttpResponse &HttpResponse::operator=(const HttpResponse &obj)
 	{
 		HttpBase::operator=(obj);
 		this->_isEncoded = obj._isEncoded;
+		this->_isComplete = obj._isComplete;
 	}
 	return (*this);
 }
@@ -44,8 +46,4 @@ void HttpResponse::encodeResponse(const HttpRequest &req)
 	
 	this->_raw = ss.str();
 	this->_isEncoded = true;
-	//if (req.getStatusCode() >= 400)
-	//{
-		
-	//}
 }
