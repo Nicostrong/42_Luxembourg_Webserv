@@ -6,13 +6,13 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/29 10:02:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 09:34:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/EventMonitoring.hpp"
 
-EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS), _openFds(0), 
+EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
 	_clientsConnected(0)
 {
 	this->_epollFd = epoll_create1(0);
@@ -72,19 +72,7 @@ void EventMonitoring::monitor(int fd, uint32_t events, int type,
 
 void EventMonitoring::unmonitor(int fd)
 {
-	std::list<epoll_event>::iterator it = this->_openFds.begin();
-
-	while (it != this->_openFds.end())
-	{
-		EventData *data = static_cast<EventData *>(it->data.ptr);
-		if (data->getFd() == fd)
-		{
-			delete data;
-			it = this->_openFds.erase(it);
-		}
-		else
-			++it;
-	}
+	this->_closeFds.push_front(fd);
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
 }
 
@@ -97,13 +85,41 @@ void EventMonitoring::updateEvents()
 	while (it != this->_events.begin() + res)
 	{
 		EventData *data = static_cast<EventData *>(it->data.ptr);
-		if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
+		try
+		{
+			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
 			data->onClose();
-		else if (it->events & POLLIN)
-			data->onRead();
-		else if (it->events & POLLOUT)
-			data->onWrite();
+			else if (it->events & POLLIN)
+				data->onRead();
+			else if (it->events & POLLOUT)
+				data->onWrite();
+		}
+		catch(const std::exception& e) {}
 		it++;
+	}
+	remove();
+}
+
+void EventMonitoring::remove()
+{
+	std::list<epoll_event>::iterator it = this->_openFds.begin();
+
+	while (it != this->_openFds.end())
+	{
+		EventData *data = static_cast<EventData *>(it->data.ptr);
+		std::list<int>::iterator itc = this->_closeFds.begin();
+		while (itc != this->_closeFds.end())
+		{
+			if (data->getFd() == *itc)
+			{
+				delete data;
+				it = this->_openFds.erase(it);
+				itc = this->_closeFds.erase(itc);
+				break;
+			}
+			++itc;
+		}
+		++it;
 	}
 }
 

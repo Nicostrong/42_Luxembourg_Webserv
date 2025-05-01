@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 16:19:28 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 09:31:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ void			Server::setLocation( std::string &name, std::string &block )
 /*
  *	get _maxConnectionClient value
  */
-int								Server::getMaxConnectionClient( void ) const
+const int&						Server::getMaxConnectionClient( void ) const
 {
 	return (this->_maxConnectionClient);
 }
@@ -255,7 +255,7 @@ int								Server::getMaxConnectionClient( void ) const
 /*
  *	get _port value
  */
-size_t							Server::getPort( void ) const
+const size_t&							Server::getPort( void ) const
 {
 	return (this->_port);
 }
@@ -263,7 +263,7 @@ size_t							Server::getPort( void ) const
 /*
  *	get _maxSizeBody value
  */
-size_t							Server::getMaxSizeBody( void ) const
+const size_t&							Server::getMaxSizeBody( void ) const
 {
 	return (this->_maxSizeBody);
 }
@@ -271,7 +271,7 @@ size_t							Server::getMaxSizeBody( void ) const
 /*
  *	get _name value
  */
-std::string						Server::getName( void ) const
+const std::string&						Server::getName( void ) const
 {
 	return (this->_name);
 }
@@ -279,7 +279,7 @@ std::string						Server::getName( void ) const
 /*
  *	get _path value
  */
-std::string						Server::getPath( void ) const
+const std::string&						Server::getPath( void ) const
 {
 	return (this->_path);
 }
@@ -287,7 +287,7 @@ std::string						Server::getPath( void ) const
 /*
  *	get _index value
  */
-std::string						Server::getIndex( void ) const
+const std::string&						Server::getIndex( void ) const
 {
 	return (this->_index);
 }
@@ -295,7 +295,7 @@ std::string						Server::getIndex( void ) const
 /*
  *	get _mError value
  */
-std::map<size_t, std::string>	Server::getMapError( void ) const
+const std::map<size_t, std::string>&	Server::getMapError( void ) const
 {
 	return (this->_mError);
 }
@@ -304,7 +304,7 @@ std::map<size_t, std::string>	Server::getMapError( void ) const
  *	get all value of Location
  */
 
-const std::list<Location *>&				Server::getLocations( void ) const
+const std::list<Location *>&			Server::getLocations( void ) const
 {
 	return (this->_location);
 }
@@ -312,7 +312,7 @@ const std::list<Location *>&				Server::getLocations( void ) const
 /*
  *	return the path of the code error in argument
  */
-const std::string&						Server::getPathError( size_t error_code ) const
+const std::string						Server::getPathError( size_t error_code ) const
 {
 	std::map<size_t, std::string>::const_iterator		it;
 	std::string											ret;
@@ -320,8 +320,7 @@ const std::string&						Server::getPathError( size_t error_code ) const
 	for (it = this->_mError.begin(); it != this->_mError.end(); it++)
 		if (it->first == error_code)
 			return (it->second);
-	re
-	return ("<h1>Error "[error_code]" not fund</h1>");
+	return ("");
 }
 
 

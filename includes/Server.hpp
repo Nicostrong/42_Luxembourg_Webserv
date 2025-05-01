@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/04/30 16:19:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 09:32:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ class	Server : public IEventHandler
 		const std::string&						getName( void ) const;
 		const std::string&						getPath( void ) const;
 		const std::string&						getIndex( void ) const;
-		const std::string&						getPathError( size_t error_code ) const;
+		const std::string						getPathError( size_t error_code ) const;
 
 		const std::map<size_t, std::string>&	getMapError( void ) const;
 		const std::list<Location *>&			getLocations( void ) const;

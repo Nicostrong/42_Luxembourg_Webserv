@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/04/30 17:05:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/01 09:32:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ bool HttpResponse::isEncoded()
 
 void HttpResponse::encodeResponse(const HttpRequest &req)
 {
+	(void)req;
 	std::stringstream ss;
 	ss << "HTTP/1.1 " << this->_statusCode << "Bad Request" << "\r\n";
 	ss << "\r\n";
