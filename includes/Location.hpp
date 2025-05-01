@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 16:16:04 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/01 18:52:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class	Location
 		/*	GETTER	*/
 		std::string							getName( void ) const;
 		MethodHTTP							*getMethod( void ) const;
-		std::list<Directive *>				getDirectives( void ) const;
+		const std::list<Directive *>&		getDirectives( void ) const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception
