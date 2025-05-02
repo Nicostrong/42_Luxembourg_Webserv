@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 14:54:22 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/02 07:31:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ class	Server : public IEventHandler
 				EventMonitoring &eventMonitoring );
 		~Server( void );
 
-		/*  GETTER  a modifier en const et ref */
+		/*  GETTER	*/
 		const int&								getMaxConnectionClient( void ) const;
 
 		const size_t&							getPort( void ) const;

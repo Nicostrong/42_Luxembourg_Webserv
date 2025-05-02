@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 17:57:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/02 07:19:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void RequestHandling::getResponse(Server& server,
 		return ;
 	//if (req.getStatusCode() != HttpBase::OK)
 	//{
-		resp.setStatusCode(req.getStatusCode());
-		getErrorResponse(server, req, resp);
+	resp.setStatusCode(req.getStatusCode());
+	getErrorResponse(server, req, resp);
 	//}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 13:37:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/02 07:37:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,11 +317,15 @@ const std::string						Server::getPathError( size_t error_code ) const
 {
 	std::map<size_t, std::string>::const_iterator		it;
 	std::string											ret;
+	std::ostringstream									oss;
+	
+	oss << error_code;
+	ret = "[ERROR] Webserv code error: " + oss.str();
 
 	for (it = this->_mError.begin(); it != this->_mError.end(); it++)
 		if (it->first == error_code)
 			return (it->second);
-	return ("");
+	return (ret);
 }
 
 RessourcesManager&	Server::getRessourcesManager()
