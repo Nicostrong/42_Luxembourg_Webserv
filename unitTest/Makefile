@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/01 15:05:40 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/02 08:30:51 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ DEB_OPT			=	--tool=memcheck \
 					--leak-check=full \
 					--show-leak-kinds=all \
 					--track-fds=yes
+
+ARG0			=	"../config/bad.conf"
 
 RM				=	rm -f
 
@@ -53,7 +55,7 @@ SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
 SERVER_NAME		=	test_classServer
 
 ################################################################################
-#	Test networking												   #
+#	Test networking															   #
 ################################################################################
 
 NET_SRC			=	../class/Server.cpp \
@@ -75,6 +77,17 @@ NET_SRC			=	../class/Server.cpp \
 NET_OBJ			=	$(NET_SRC:.cpp=.o)
 
 NET_NAME		=	test_networking
+
+################################################################################
+#	Test parseur															   #
+################################################################################
+
+PAR_SRC			=	../class/Nico.cpp \
+					main_parser.cpp
+
+PAR_OBJ			=	$(PAR_SRC:.cpp=.o)
+
+PAR_NAME		=	test_parser
 
 ################################################################################
 #	Colors																	   #
@@ -122,6 +135,7 @@ CWHITE			=	'\033[5;97m'
 CURRENT_FILE	= 	0
 NB_SERVER		=	$(words $(SERVER_SRC))
 NB_NET			=	$(words $(NET_SRC))
+NB_PAR			=	$(words $(PAR_SRC))
 SLEEP_TIME		=	0.001
 
 ################################################################################
@@ -174,7 +188,7 @@ endef
 #	Rules																	   #
 ################################################################################
 
-.PHONY : all server networking deb_serv deb_net clean fclean re help
+.PHONY : all server networking parser deb_serv deb_net deb_par clean fclean re help
 
 all: 		help
 
@@ -188,16 +202,25 @@ networking:	$(NET_OBJ)
 	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(NET_OBJ) $(MYLIBS) -o $(NET_NAME)
 	@echo "$(CGREEN)The programm $(NET_NAME) successfully compilled"
 
+parser:		NUM_FILES=$(NB_PAR)
+parser:		$(PAR_OBJ)
+	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(PAR_OBJ) $(MYLIBS) -o $(PAR_NAME)
+	@echo "$(CGREEN)The programm $(PAR_NAME) successfully compilled"
+
 %.o :		%.cpp
 	$(call compile_c_to_o)
 
 deb_serv:		server 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(SERVER_NAME) $(DEB_OUT)
+	$(DEB) $(DEB_OPT) ./$(SERVER_NAME)
 
 deb_net:		networking 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(NET_NAME) $(DEB_OUT)
+	$(DEB) $(DEB_OPT) ./$(NET_NAME)
+
+deb_par:		parser 
+	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
+	$(DEB) $(DEB_OPT) ./$(PAR_NAME) $(ARG0)
 
 clean:
 	$(call delete_progress, *.o)
@@ -210,5 +233,5 @@ fclean: 	clean
 re : 		fclean all
 
 help:
-	@echo "usage: make server|networking|..."
-	@echo "usage: make deb_serv | deb_net for running with valgrind"
+	@echo "usage: make server|networking|parser|..."
+	@echo "usage: make deb_serv | deb_net | deb_par for running with valgrind"

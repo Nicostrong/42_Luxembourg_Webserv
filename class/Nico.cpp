@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 09:56:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/02 11:31:56 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,20 @@
 /*
  *	Constructor
  */
-ParserServerConfig::ParserServerConfig( const std::string &filename )
+ParserServerConfig::ParserServerConfig( const std::string& filename )
 {
 	try
 	{
+		checkHiddenFile(filename);
 		parseConfigFile(filename);
+		if (this->_servers.empty())
+			throw EmptyConfigError();
+		LOG_DEB("ParserServerConfig constructor called.");
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	LOG_DEB("ParserServerConfig constructor called.");
 	return ;
 }
 
@@ -47,6 +50,20 @@ ParserServerConfig::~ParserServerConfig( void )
  ******************************************************************************/
 
 /*
+ *	Check if the filename isn't an hidden file
+ */
+void		ParserServerConfig::checkHiddenFile( const std::string& filename )
+{
+	size_t		posSlash = filename.find("/.");
+
+	if (posSlash != std::string::npos)
+		throw HiddenFile();
+	if (filename.size() < 5 || filename.substr(filename.size() - 5) != ".conf")
+		throw BadExtensionFile();
+	return ;
+}
+
+/*
  *	Parser of the config file
  */
 void		ParserServerConfig::parseConfigFile( const std::string &filename )
@@ -57,9 +74,9 @@ void		ParserServerConfig::parseConfigFile( const std::string &filename )
 	content = copyFileToString(filename);
 	while ((pos = content.find("server", pos)) != std::string::npos)
 	{
+		int				braceCount = 1;
 		size_t			blockStart = content.find("{", pos);
 		size_t			i;
-		int				braceCount = 1;
 		std::string		block;
 
 		if (blockStart == std::string::npos)
@@ -74,8 +91,7 @@ void		ParserServerConfig::parseConfigFile( const std::string &filename )
 			i++;
 		}
 		if (braceCount != 0)
-			throw std::runtime_error("Unmatched braces in server block");
-
+			throw BraceError();
 		block = content.substr(blockStart + 1, i - blockStart - 2);
 		parseServerBlock(block);
 		pos = i;
@@ -94,13 +110,15 @@ std::string		ParserServerConfig::copyFileToString( const std::string &filename )
 
 	if (!file.is_open())
 		throw FileError();
-
 	while (std::getline(file, line))
 		content += stripComments(line) + "\n";
 	file.close();
 	return (content);
 }
 
+/*
+ *	Parsing of the config file after the keyword server
+ */
 void			ParserServerConfig::parseServerBlock( const std::string &block )
 {
 	std::istringstream					iss(block);
@@ -117,7 +135,8 @@ void			ParserServerConfig::parseServerBlock( const std::string &block )
 		line = trim(line);
 		if (line.empty())
 			continue ;
-		
+		if (requireSemicolon(line))
+			throw ParsingError(line);
 		if (line.find("location") == 0)
 		{
 			std::string		locationKey;
@@ -129,7 +148,6 @@ void			ParserServerConfig::parseServerBlock( const std::string &block )
 			config[locationKey] = locationBlock;
 			continue ;
 		}
-
 		if (line.find("error_page") == 0 && line.find("{") != std::string::npos)
 		{
 			std::string		errorBlock;
@@ -138,17 +156,15 @@ void			ParserServerConfig::parseServerBlock( const std::string &block )
 			config["error_page"] = errorBlock;
 			continue ;
 		}
-
 		if (line[line.length() - 1] != ';')
-			throw std::runtime_error("Syntax error: missing ';' in line: " + line);
-
+			throw ParsingError(line);
 		delim = line.find_first_of(" \t");
 		key = line.substr(0, delim);
 		value = line.substr(delim + 1);
-
 		if (!value.empty() && value[value.length() - 1] == ';')
 			value = value.substr(0, value.length() - 1);
-
+		else
+			throw ParsingError(line);
 		key = trim(key);
 		value = trim(value);
 
@@ -165,6 +181,9 @@ void			ParserServerConfig::parseServerBlock( const std::string &block )
 	return ;
 }
 
+/*
+ *	count the number of char passed in argument
+ */
 size_t			ParserServerConfig::countChar( const std::string &str, char c )
 {
 	size_t		count;
@@ -175,6 +194,9 @@ size_t			ParserServerConfig::countChar( const std::string &str, char c )
 	return (count);
 }
 
+/*
+ *	remove all spaces at de start and the end of the line
+ */
 std::string		ParserServerConfig::trim( const std::string &s )
 {
 	size_t		start;
@@ -187,23 +209,46 @@ std::string		ParserServerConfig::trim( const std::string &s )
 	return (s.substr(start, end - start + 1));
 }
 
+/*
+ *	check if the line need a semicolon at the end
+ */
+bool			ParserServerConfig::requireSemicolon( const std::string& line )
+{
+    if (!line.empty() && line.find('{') == std::string::npos && \
+		line.find('}') == std::string::npos)
+	{
+        size_t		lastChar;
+		
+		lastChar = line.find_last_not_of(" \t");
+        if (lastChar != std::string::npos && line[lastChar] != ';')
+            return (true);
+    }
+    return (false);
+}
+
+/*
+ *	Extract the complet block between brace
+ */
 std::string		ParserServerConfig::extractBlock( std::istringstream &iss )
 {
+	int				braceCount = 1;
 	std::string		block;
 	std::string		line;
-	int				braceCount = 1;
 
 	while (std::getline(iss, line) && braceCount != 0)
 	{
 		size_t		open;
 		size_t		close;
+
 		open = countChar(line, '{');
 		close = countChar(line, '}');
 		braceCount += open - close;
+		if (requireSemicolon(line))
+			throw ParsingError(line);
 		block += line + "\n";
 	}
 	if (braceCount != 0)
-		throw std::runtime_error("Unmatched braces in block");
+		throw BraceError();
 	return (block);
 }
 
@@ -216,10 +261,13 @@ std::string		ParserServerConfig::stripComments( const std::string &line )
 	
 	pos = line.find("#");
     if (pos != std::string::npos)
-        return line.substr(0, pos);
+        return (line.substr(0, pos));
     return (line);
 }
 
+/*
+ *	Catch the value of port and check if it's valid value
+ */
 int				ParserServerConfig::parsePort( const std::string &value )
 {
 	size_t		colonPos;
@@ -242,7 +290,7 @@ int				ParserServerConfig::parsePort( const std::string &value )
 /*
  *	Get just one map of one server
  */
-std::map<std::string, std::string>		ParserServerConfig::getServer( size_t index ) const
+const std::map<std::string, std::string>&		ParserServerConfig::getServer( size_t index ) const
 {
 	std::map<int, std::map<std::string, std::string> >::const_iterator		it;
 
@@ -311,7 +359,7 @@ void		ParserServerConfig::printOneServer( size_t index ) const
  */
 ParserServerConfig::ParsingError::ParsingError( const std::string &data ) throw()
 {
-	this->_msg = RED"[ERROR] Parsing data: " + data + RESET;
+	this->_msg = RED"[ERROR] Parsing data missed ';': " + data + RESET;
 	return ;
 }
 
@@ -337,6 +385,38 @@ const char		*ParserServerConfig::ParsingError::what() const throw()
 const char		*ParserServerConfig::FileError::what() const throw()
 {
 	return (RED "[ERROR] Opening file server config fail" RESET);
+}
+
+/*
+ *	Error hidden file config
+ */
+const char		*ParserServerConfig::HiddenFile::what() const throw()
+{
+	return (RED "[ERROR] hidden file not config valid file" RESET);
+}
+
+/*
+ *	Error bad extension file
+ */
+const char		*ParserServerConfig::BadExtensionFile::what() const throw()
+{
+	return (RED "[ERROR] Bad extension file." RESET);
+}
+
+/*
+ *	Error empty file config
+ */
+const char		*ParserServerConfig::EmptyConfigError::what() const throw()
+{
+	return (RED "[ERROR] Empty file config or not valid." RESET);
+}
+
+/*
+ *	Error brace number not correct
+ */
+const char		*ParserServerConfig::BraceError::what() const throw()
+{
+	return (RED "[ERROR] Brace open|close error." RESET);
 }
 
 /*
