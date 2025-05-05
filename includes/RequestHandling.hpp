@@ -32,6 +32,8 @@ class RequestHandling: public HttpBase
 			const HttpRequest& req, HttpResponse& resp);
 		bool _checkMethod(Server server);
 		bool _checkUri(Server server);
+		bool _checkHTTP();
+		bool _checkBody();
 };
 
 #endif

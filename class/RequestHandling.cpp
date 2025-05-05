@@ -81,3 +81,13 @@ bool RequestHandling::_checkUri(Server server)
 {
 	return (server.checkUri(_uri));
 }
+
+bool RequestHandling::_checkHTTP()
+{
+	return (true);
+}
+
+bool RequestHandling::_checkBody()
+{
+	return (true);
+}
