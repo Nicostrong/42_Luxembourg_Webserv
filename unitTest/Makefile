@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/02 08:30:51 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/05 09:28:13 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -229,6 +229,7 @@ clean:
 fclean: 	clean
 	$(call delete_file, $(SERVER_NAME))
 	$(call delete_file, $(NET_NAME))
+	$(call delete_file, $(PAR_NAME))
 
 re : 		fclean all
 

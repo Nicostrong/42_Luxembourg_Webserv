@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/29 14:44:52 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/05 09:56:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <cstring>
 # include <iostream>
 # include <unistd.h>
+# include <algorithm>
 # include <exception>
 # include <sys/socket.h>
 # include <netinet/in.h>

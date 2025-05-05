@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/02 11:31:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/05 14:00:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class ParserServerConfig
 
 		bool				requireSemicolon( const std::string& line );
 
-		void				checkHiddenFile( const std::string& filename );
+		//void				checkHiddenFile( const std::string& filename );
 		void				parseServerBlock( const std::string& block );
 		void				parseConfigFile( const std::string& filename );
 
@@ -74,11 +74,11 @@ class ParserServerConfig
 		};
 		
 		/*	Hidden file config	*/
-		class	HiddenFile : public std::exception
+		/*class	HiddenFile : public std::exception
 		{
 			public:
 				const char	*what() const throw();
-		};
+		};*/
 
 		/*	Bad extension file	*/
 		class	BadExtensionFile : public std::exception
