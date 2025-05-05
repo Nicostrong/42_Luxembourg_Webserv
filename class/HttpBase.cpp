@@ -37,6 +37,7 @@ HttpBase& HttpBase::operator=(const HttpBase& obj)
 	return (*this);
 }
 
+
 HttpBase::HttpCode HttpBase::getStatusCode() const
 {
 	return (this->_statusCode);
@@ -47,6 +48,26 @@ void HttpBase::setStatusCode(HttpBase::HttpCode status)
 	this->_statusCode = status;
 }
 
+const std::string& HttpBase::getMethod() const
+{
+	return (this->_method);
+}
+
+void HttpBase::setMethod(std::string method)
+{
+	this->_method = method;
+}
+
+const std::string& HttpBase::getUri() const
+{
+	return (this->_uri);
+}
+
+void HttpBase::setUri(const std::string uri)
+{
+	this->_uri = uri;
+}
+
 const std::string& HttpBase::getBody() const
 {
 	return (this->_body);
@@ -55,6 +76,16 @@ const std::string& HttpBase::getBody() const
 void HttpBase::setBody(const std::string body)
 {
 	this->_body = body;
+}
+
+const std::string& HttpBase::getHTTP() const
+{
+	return (this->_httpVersion);
+}
+
+void HttpBase::setHTTP(const std::string httpVersion)
+{
+	this->_httpVersion = httpVersion;
 }
 
 const std::string& HttpBase::getRaw() const

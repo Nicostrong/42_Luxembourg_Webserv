@@ -34,8 +34,14 @@ class HttpBase
 		HttpBase&			operator=(const HttpBase& obj);
 		HttpCode			getStatusCode() const;
 		void				setStatusCode(HttpBase::HttpCode status);
+		const std::string&	getMethod() const;
+		void				setMethod(std::string method);
+		const std::string&	getUri() const;
+		void				setUri(std::string uri);
 		const std::string& 	getBody() const;
 		void 				setBody(const std::string body);
+		const std::string& 	getHTTP() const;
+		void 				setHTTP(const std::string html);
 		const std::string& 	getRaw() const;
 		void 				setRaw(const std::string raw);
 		static std::string	getStrStatusCode(HttpCode statusCode);

@@ -35,6 +35,10 @@ void RequestHandling::getResponse(Server& server,
 	//if (req.getStatusCode() != HttpBase::OK)
 	//{
 	resp.setStatusCode(req.getStatusCode());
+	resp.setMethod(req.getMethod());
+	resp.setUri(req.getUri());
+	resp.setBody(req.getBody());
+	resp.setHTTP(req.getHTTP());
 	getErrorResponse(server, req, resp);
 	//}
 }
