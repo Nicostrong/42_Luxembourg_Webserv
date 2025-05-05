@@ -36,6 +36,23 @@ class HandleRequests: public HttpRequest, public IEventHandler
 		std::string totalBuffer;
 		EventMonitoring& em;
 		std::map<std::string, std::string> webconfMap;
+
+		enum ParseState {
+			METHOD_START,
+			METHOD,
+			URI_START,
+			URI,
+			VERSION_START,
+			VERSION_H,
+			VERSION_HT,
+			VERSION_HTT,
+			VERSION_HTTP,
+			VERSION_SLASH,
+			HEADER_KEY,
+			HEADER_VALUE,
+			BODY
+		};
+		
 	public:
 		HandleRequests(EventMonitoring& ref);
 		HandleRequests(const HandleRequests& copy);
@@ -51,6 +68,9 @@ class HandleRequests: public HttpRequest, public IEventHandler
 		void onReadEvent(int fd, int type);
 		void onWriteEvent(int fd, int type);
 		void onCloseEvent(int fd, int type);
+
+		ParseResult parse(std::string& raw, Request& req);
+		void HandleRequests::_buildResponse(int fd);
 };
 
 #endif
