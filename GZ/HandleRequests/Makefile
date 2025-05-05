@@ -6,7 +6,8 @@ SRC = main.cpp HandleRequests.cpp ../../class/HttpRequest.cpp \
 ../../class/HttpBase.cpp ../../class/Server.cpp ../../class/Directive.cpp \
 ../../class/MethodHTTP.cpp ../../class/Location.cpp ../../class/HandleConfig.cpp \
 ../../class/Socket.cpp ../../class/HttpResponse.cpp ../../class/EventMonitoring.cpp \
-../../class/EventData.cpp 
+../../class/EventData.cpp ../../class/RessourcesManager.cpp ../../class/Ressource.cpp \
+../../class/RequestHandling.cpp 
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
