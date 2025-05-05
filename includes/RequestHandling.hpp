@@ -17,7 +17,7 @@
 #include "HttpResponse.hpp"
 #include "Server.hpp"
 
-class RequestHandling
+class RequestHandling: public HttpBase
 {
 	public:
 		RequestHandling(const RequestHandling& obj);
@@ -30,6 +30,8 @@ class RequestHandling
 		RequestHandling();
 		static void getErrorResponse(Server& server, 
 			const HttpRequest& req, HttpResponse& resp);
+		bool _checkMethod(Server server);
+		bool _checkUri(Server server);
 };
 
 #endif

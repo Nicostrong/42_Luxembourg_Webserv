@@ -74,7 +74,10 @@ SRC				=	./src/main.cpp \
 					./class/EventData.cpp \
 					./class/HttpResponse.cpp \
 					./class/Socket.cpp \
-					./class/HandleConfig.cpp
+					./class/HandleConfig.cpp \
+					./class/RequestHandling.cpp \
+					./class/Ressource.cpp \
+					./class/RessourcesManager.cpp 
 
 
 OBJ				=	$(SRC:.cpp=.o)

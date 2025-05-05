@@ -14,7 +14,7 @@
 
 RequestHandling::RequestHandling() {}
 
-RequestHandling::RequestHandling(const RequestHandling& obj)
+RequestHandling::RequestHandling(const RequestHandling& obj): HttpBase()
 {
 	(void)obj;
 }
@@ -62,4 +62,18 @@ void RequestHandling::getErrorResponse(Server& server,
 				server.getRessourcesManager().getRessource(path)->getRaw());
 		resp.setAsComplete();
 	}
+}
+
+// ########################################
+// GZ - ADDED FUNCTIONS FROM HANDLEREQUESTS
+// ########################################
+
+bool RequestHandling::_checkMethod(Server server)
+{
+	return (server.checkMethod(_uri, _method));
+}
+
+bool RequestHandling::_checkUri(Server server)
+{
+	return (server.checkUri(_uri));
 }
