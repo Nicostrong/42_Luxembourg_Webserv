@@ -28,7 +28,7 @@ class HttpRequest;
 class Server;
 class HandleConfig;
 
-class HandleRequests: public HttpRequest//, public IEventHandler
+class HandleRequests: public HttpRequest
 {
 		/*std::string _method;
 		std::string _uri;
@@ -40,20 +40,21 @@ class HandleRequests: public HttpRequest//, public IEventHandler
 		std::string totalBuffer;
 		EventMonitoring& em;
 		std::map<std::string, std::string> webconfMap;
-		
+		std::map<std::string, std::string> response;
 	public:
 		HandleRequests(EventMonitoring& ref);
 		HandleRequests(const HandleRequests& copy);
 		HandleRequests& operator=(const HandleRequests& copy);
 		~HandleRequests();
 		
-		const std::string& getMethod();
-		const std::string& getURI();
-		const std::string& getHttpVersion();
-		const std::string& getBody();
+		const std::map<std::string, std::string>& _getResponse(Server server);
+		const std::string& _getMethod();
+		const std::string& _getUri();
+		const std::string& _getHttpVersion();
+		const std::string& _getBody();
 		
-		bool checkMethod(Server server);
-		bool checkUri(Server server);
+		bool _checkMethod(Server server);
+		bool _checkUri(Server server);
 };
 
 #endif

@@ -30,29 +30,44 @@ HandleRequests::~HandleRequests()
 	
 }
 
-const std::string& HandleRequests::getMethod()
+const std::map<std::string, std::string>& HandleRequests::_getResponse(Server server)
+{
+	if (!_checkMethod(server) || !_checkUri(server))
+	{
+		response["status"] = "ERROR";
+		return (response);
+	}
+	response["status"] = "SUCCESS";
+	response["method"] = _getMethod();
+	response["uri"] = _getUri();
+	response["http"] = _getHttpVersion();
+	response["body"] = _getBody();
+	return (response);
+}
+
+const std::string& HandleRequests::_getMethod()
 {
 	return this->_method;
 }
-const std::string& HandleRequests::getURI()
+const std::string& HandleRequests::_getUri()
 {
 	return this->_uri;
 }
-const std::string& HandleRequests::getHttpVersion()
+const std::string& HandleRequests::_getHttpVersion()
 {
 	return this->_httpVersion;
 }
-const std::string& HandleRequests::getBody()
+const std::string& HandleRequests::_getBody()
 {
 	return this->_body;
 }
 
-bool HandleRequests::checkMethod(Server server)
+bool HandleRequests::_checkMethod(Server server)
 {
 	return (server.checkMethod(_uri, _method));
 }
 
-bool HandleRequests::checkUri(Server server)
+bool HandleRequests::_checkUri(Server server)
 {
 	return (server.checkUri(_uri));
 }
