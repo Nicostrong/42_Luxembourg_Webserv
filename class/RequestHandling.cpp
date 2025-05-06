@@ -52,6 +52,8 @@ std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const Htt
     response << "Connection: close\r\n";
     response << "\r\n"; // Blank line to separate headers from body
     response << req.getBody();
+	response << "\r\n"; // Blank line end
+	std::cout << "[debug response]:\n" << response << "\n";
     return response.str();
 }
 
