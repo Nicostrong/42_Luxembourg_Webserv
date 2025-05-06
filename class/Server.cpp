@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/06 20:42:10 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/06 21:35:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,8 +424,12 @@ bool							Server::checkUri( std::string uri )
 	std::list<Location *>::iterator		it;
 
 	for (it = this->_location.begin(); it != this->_location.end(); it++)
-		if ((*it)->getName() == uri)
+	{
+		std::string loc = (*it)->getName();
+		if (uri.length() >= loc.length() && 
+			std::equal(loc.begin(), loc.end(), uri.begin()))
 			return (true);
+	}
 	return (false);
 }
 

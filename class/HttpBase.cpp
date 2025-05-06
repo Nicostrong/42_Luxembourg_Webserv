@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 15:45:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/06 21:40:35 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,10 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
 	switch (statusCode)
 	{
-		case OK:
-			return ("OK");
-		case BAD_REQUEST:
-			return ("Bad Request");
-		case INTERNAL_SERVER_ERROR:
-			return ("Internal Server Error");
+		case 200: return ("OK");
+		case 400: return ("Bad Request");
+		case 404: return ("Not Found");
+		case 500: return ("Internal Server Error");
 	default:
 		return ("Internal Server Error");
 	}

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/06 20:56:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/06 21:27:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,16 @@ void RequestHandling::getResponse(Server& server,
 {
 	if (!req.isReceived())
 		return ;
+	resp.setStatusCode(req.getStatusCode());
+	if (req.getStatusCode() != BAD_REQUEST)
+	{
+		if (!server.checkUri(req.getUri()))
+			resp.setStatusCode(NOT_FOUND);
+	}
+	
 	//if (req.getStatusCode() != HttpBase::OK)
 	//{
-	/*resp.setStatusCode(req.getStatusCode());
+	/*
 	resp.setBody(req.getBody());
 	resp.setHTTP(req.getHTTP());*/
 	getErrorResponse(server, req, resp);
@@ -90,6 +97,7 @@ void RequestHandling::getErrorResponse(Server& server,
 		HttpBase::getDefaultErrorPage(resp.getStatusCode()));
 	resp.setAsComplete();
 }
+
 
 // ########################################
 // GZ - ADDED FUNCTIONS FROM HANDLEREQUESTS

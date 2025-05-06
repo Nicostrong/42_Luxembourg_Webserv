@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 17:57:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/06 21:07:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,8 @@ void HttpRequest::readReceived(int clientSocket)
 	if (this->_isReceived)
 	{
 		std::map<std::string, std::string>::const_iterator it;
-		std::cout << "############ Headers ############" << std::endl;
-		for (it = this->_headers.begin(); it != this->_headers.end(); it++)
-		{
-				std::cout << " " << it->first << " " << it->second << std::endl;
-		}
-		std::cout << "Request received completely!" << std::endl;
+		if (this->_statusCode != BAD_REQUEST)
+			LOG_DEB(this->_method + " " + this->_uri + " " + this->_httpVersion);
 	}
 }
 
