@@ -121,6 +121,7 @@ const std::string 	HttpBase::getHeaders() const
 	{
 		result += it->first;
 		result += it->second;
+		result += "\n\r";
 		++it;
 	}
 	return (result);
