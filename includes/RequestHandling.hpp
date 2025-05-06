@@ -16,15 +16,18 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Server.hpp"
+#include <string>
+#include <sstream>
 
 class RequestHandling: public HttpBase
 {
 	public:
 		RequestHandling(const RequestHandling& obj);
 		~RequestHandling();
-		RequestHandling& 		operator=(const RequestHandling& obj);
+		RequestHandling& operator=(const RequestHandling& obj);
 		static void	getResponse(Server& server, 
 			const HttpRequest& req, HttpResponse& resp);
+		std::string	buildHttpResponse(const HttpRequest&);
 		
 	private:
 		RequestHandling();

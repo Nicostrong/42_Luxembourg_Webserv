@@ -43,6 +43,18 @@ void RequestHandling::getResponse(Server& server,
 	//}
 }
 
+std::string RequestHandling::buildHttpResponse(const HttpRequest& req)
+{
+    std::ostringstream response;
+    response << "HTTP/1.1 200 OK\r\n";
+    response << "Content-Type: text/html; charset=UTF-8\r\n";
+    response << "Content-Length: " << req.getBody().size() << "\r\n";
+    response << "Connection: close\r\n";
+    response << "\r\n"; // Blank line to separate headers from body
+    response << req.getBody();
+    return response.str();
+}
+
 void RequestHandling::getErrorResponse(Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
