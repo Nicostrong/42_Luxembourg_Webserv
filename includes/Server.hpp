@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/02 07:31:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/06 20:42:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include "IEventHandler.hpp"
 # include "Socket.hpp"
 # include "Ressource.hpp"
-# include "RessourcesManager.hpp"
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -42,7 +41,6 @@ class	Server : public IEventHandler
 		EventMonitoring&				_em;
 		int								_serverSocket;
 		std::list<Socket>				_sockets;
-		RessourcesManager				_rm;
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -84,7 +82,6 @@ class	Server : public IEventHandler
 
 		const std::map<size_t, std::string>&	getMapError( void ) const;
 		const std::list<Location *>&			getLocations( void ) const;
-		RessourcesManager&						getRessourcesManager();
 		
 		/*	Checker GIGI	*/
 		bool									checkUri( std::string uri );

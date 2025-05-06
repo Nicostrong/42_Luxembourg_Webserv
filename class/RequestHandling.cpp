@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/02 07:19:14 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/06 20:56:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,25 +76,19 @@ void RequestHandling::getErrorResponse(Server& server,
 	const HttpRequest& req, HttpResponse& resp)
 {
 	(void)req;
-	const std::string path = server.getPathError(resp.getStatusCode());
-
-	server.getRessourcesManager().loadRessource(path);
+	Ressource err(server.getPathError(resp.getStatusCode()));
 	
-	Ressource::State rState = 
-				server.getRessourcesManager().getRessourceState(path);
-
-	if (rState == Ressource::ERROR)
+	if (err.isFail())
+		LOG_ERROR("Failed to load custom error response");
+	else
 	{
-		resp.setBody(
-				HttpBase::getDefaultErrorPage(resp.getStatusCode()));
+		resp.setBody(err.getRaw());
 		resp.setAsComplete();
+		return ;
 	}
-	else if (rState == Ressource::RECEIVED)
-	{
-		resp.setBody(
-				server.getRessourcesManager().getRessource(path)->getRaw());
-		resp.setAsComplete();
-	}
+	resp.setBody(
+		HttpBase::getDefaultErrorPage(resp.getStatusCode()));
+	resp.setAsComplete();
 }
 
 // ########################################

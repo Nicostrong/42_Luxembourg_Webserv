@@ -6,52 +6,52 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:51:46 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 19:07:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/06 20:46:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Ressource.hpp"
 
-Ressource::Ressource(const std::string loc, EventMonitoring& em) : _loc(loc), 
-	_em(em), _fd(-1), _state(WAITING) 
+Ressource::Ressource(const std::string loc) : _loc(loc), _raw(), _isFail(false)
 {
-	if (loc.empty())
-		this->_state = ERROR;
-	else
+	
+	std::ifstream res(loc.c_str());
+	std::stringstream resStream;
+
+	if (!res || !res.is_open()) 
 	{
-		this->_fd = open(loc.c_str(), O_WRONLY);
-		if (this->_fd == -1)
-			this->_state = ERROR;
-		else
-			this->_em.monitor(this->_fd, POLLIN, 0, *this);
+		this->_isFail = true;
+		return ;
 	}
+	
+	resStream << res.rdbuf();
+	
+	if (res.bad()) 
+	{
+		this->_isFail = true;
+		res.close();
+		return ;
+	}
+	
+	res.close();
+	this->_raw = resStream.str();
 }
 
-Ressource::Ressource(const Ressource& obj) : _loc(obj._loc), _em(obj._em), 
-	_state(obj._state), _raw(obj._raw) 
+Ressource::Ressource(const Ressource& obj) 
 {
-	if (obj._fd != -1)
-	{
-		this->_fd = dup(obj._fd);
-		if (this->_fd == -1)
-			this->_state = ERROR;
-		else
-			this->_em.monitor(this->_fd, POLLIN, 0, *this);
-	}
+	*this = obj;
 }
 
-Ressource::~Ressource() 
-{
-	if (this->_fd != -1)
-	{
-		close(this->_fd);
-		this->_em.unmonitor(this->_fd);
-	}
-}
+Ressource::~Ressource() {}
 
 Ressource& Ressource::operator=(const Ressource& obj)
 {
-	(void)obj;
+	if (this != &obj)
+	{
+		this->_loc = obj._loc;
+		this->_raw = obj._raw;
+		this->_isFail = obj._isFail;
+	}
 	return (*this);
 }
 
@@ -60,49 +60,12 @@ const std::string&	Ressource::getLoc() const
 	return (this->_loc);
 }
 
-Ressource::State Ressource::getState() const
-{
-	return (this->_state);
-}
-
 const std::string& Ressource::getRaw() const
 {
 	return (this->_raw);
 }
 
-void Ressource::onReadEvent(int fd, int type, EventMonitoring& em)
+bool Ressource::isFail() const
 {
-	ssize_t bytes;
-	std::vector<char> buff(RESSOURCE_BUFFER_SIZE);
-
-	while ((bytes = read(fd, buff.data(), RESSOURCE_BUFFER_SIZE)) == 
-		RESSOURCE_BUFFER_SIZE)
-		this->_raw.append(buff.data(), bytes);
-	close(fd);
-	this->_fd = -1;
-	
-	if (bytes == -1)
-	{
-		this->_state = ERROR;
-		return ;
-	}	
-	
-	this->_raw.append(buff.data(), bytes);
-	this->_state = RECEIVED;
-	em.unmonitor(fd);
-	(void)type;
-}
-
-void Ressource::onWriteEvent(int fd, int type, EventMonitoring& em)
-{
-	(void)fd;
-	(void)type;
-	(void)em;
-}
-
-void Ressource::onCloseEvent(int fd, int type, EventMonitoring& em)
-{
-	(void)fd;
-	(void)type;
-	(void)em;
+	return (this->_isFail);
 }

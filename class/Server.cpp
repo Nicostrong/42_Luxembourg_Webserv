@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/02 07:37:46 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/06 20:42:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ void			Server::setValue(T &target, std::string &data)
  */
 Server::Server( std::map< std::string, std::string> const &data, 
 	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
-	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0), 
-	_rm(eventMonitoring)
+	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Server constructor called");
 	try
@@ -67,7 +66,7 @@ Server::Server( std::map< std::string, std::string> const &data,
 // Simple Constructor
 
 Server::Server(EventMonitoring &eventMonitoring) : 
-	_em(eventMonitoring), _serverSocket(0), _rm(eventMonitoring)
+	_em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Simple Server Constructor called");
 }
@@ -326,11 +325,6 @@ const std::string						Server::getPathError( size_t error_code ) const
 		if (it->first == error_code)
 			return (it->second);
 	return (ret);
-}
-
-RessourcesManager&	Server::getRessourcesManager()
-{
-	return (this->_rm);
 }
 
 
