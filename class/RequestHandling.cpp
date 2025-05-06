@@ -42,6 +42,9 @@ void RequestHandling::getResponse(Server& server,
 }
 
 // See GZ/example_response.txt for example of response
+// Explanations: This code concats a response similar to the on given in the textfile
+// I wrote the Getters (specifically getHeaders()) to return the values.
+// Code is pretty self-explaining, getHeader returns a string containing all keys/values from _headers
 
 std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const HttpResponse& res)
 {
