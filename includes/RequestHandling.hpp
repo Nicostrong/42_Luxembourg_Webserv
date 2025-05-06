@@ -27,8 +27,8 @@ class RequestHandling: public HttpBase
 		RequestHandling& operator=(const RequestHandling& obj);
 		static void	getResponse(Server& server, 
 			const HttpRequest& req, HttpResponse& resp);
-		std::string	buildHttpResponse(const HttpRequest&);
-		
+		std::string	buildHttpResponse(const HttpRequest& req, const HttpResponse& res);
+		std::string getReasonPhrase(HttpCode code);
 	private:
 		RequestHandling();
 		static void getErrorResponse(Server& server, 

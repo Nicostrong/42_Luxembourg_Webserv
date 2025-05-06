@@ -113,6 +113,19 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 	}
 }
 
+const std::string 	HttpBase::getHeaders() const
+{
+	std::string result;
+	std::map<std::string, std::string>::const_iterator it = _headers.begin();
+	while(it != _headers.end())
+	{
+		result += it->first;
+		result += it->second;
+		++it;
+	}
+	return (result);
+}
+
 std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
 {
 	std::ostringstream oss;

@@ -44,6 +44,7 @@ class HttpBase
 		void 				setHTTP(const std::string html);
 		const std::string& 	getRaw() const;
 		void 				setRaw(const std::string raw);
+		const std::string 	getHeaders() const;
 		static std::string	getStrStatusCode(HttpCode statusCode);
 		static std::string  getDefaultErrorPage(HttpCode statusCode);
 	protected:

@@ -35,24 +35,33 @@ void RequestHandling::getResponse(Server& server,
 	//if (req.getStatusCode() != HttpBase::OK)
 	//{
 	resp.setStatusCode(req.getStatusCode());
-	resp.setMethod(req.getMethod());
-	resp.setUri(req.getUri());
 	resp.setBody(req.getBody());
 	resp.setHTTP(req.getHTTP());
 	getErrorResponse(server, req, resp);
 	//}
 }
 
-std::string RequestHandling::buildHttpResponse(const HttpRequest& req)
+std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const HttpResponse& res)
 {
     std::ostringstream response;
-    response << "HTTP/1.1 200 OK\r\n";
-    response << "Content-Type: text/html; charset=UTF-8\r\n";
+	response << req.getHTTP() << " " << req.getStatusCode() << " " << getReasonPhrase(req.getStatusCode()) << "\r\n";
+    response << res.getHeaders() << "\r\n";
     response << "Content-Length: " << req.getBody().size() << "\r\n";
     response << "Connection: close\r\n";
     response << "\r\n"; // Blank line to separate headers from body
     response << req.getBody();
     return response.str();
+}
+
+std::string RequestHandling::getReasonPhrase(HttpCode code)
+{
+	switch (code)
+	{
+		case 200: return "OK";
+		case 400: return "BAD REQUEST";
+		case 500: return "INTERNAL SERVER ERROR";
+		default: return "UNKNOWN";
+	}
 }
 
 void RequestHandling::getErrorResponse(Server& server, 
