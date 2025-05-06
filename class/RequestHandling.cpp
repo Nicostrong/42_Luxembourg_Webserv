@@ -34,9 +34,9 @@ void RequestHandling::getResponse(Server& server,
 		return ;
 	//if (req.getStatusCode() != HttpBase::OK)
 	//{
-	resp.setStatusCode(req.getStatusCode());
+	/*resp.setStatusCode(req.getStatusCode());
 	resp.setBody(req.getBody());
-	resp.setHTTP(req.getHTTP());
+	resp.setHTTP(req.getHTTP());*/
 	getErrorResponse(server, req, resp);
 	//}
 }
@@ -45,6 +45,7 @@ void RequestHandling::getResponse(Server& server,
 // Explanations: This code concats a response similar to the on given in the textfile
 // I wrote the Getters (specifically getHeaders()) to return the values.
 // Code is pretty self-explaining, getHeader returns a string containing all keys/values from _headers
+// Research has told me the method and uri do NOT go into the Response!
 
 std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const HttpResponse& res)
 {
