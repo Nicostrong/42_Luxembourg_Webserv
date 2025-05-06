@@ -41,6 +41,8 @@ void RequestHandling::getResponse(Server& server,
 	//}
 }
 
+// See GZ/example_response.txt for example of response
+
 std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const HttpResponse& res)
 {
     std::ostringstream response;
