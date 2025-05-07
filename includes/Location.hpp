@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 18:52:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 09:25:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ class	Location
 		std::string							getName( void ) const;
 		MethodHTTP							*getMethod( void ) const;
 		const std::list<Directive *>&		getDirectives( void ) const;
+		/*std::string							buildUriOnServer(std::string uri) 
+			const;*/
+		bool								isMatching(const std::string& uri) 
+			const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception

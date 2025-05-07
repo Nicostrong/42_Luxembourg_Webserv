@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 10:04:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/07 12:55:52 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,6 +431,27 @@ bool							Server::checkUri( std::string uri )
 			return (true);
 	}
 	return (false);
+}
+
+const Location*						Server::getUri( const std::string& uri )
+{
+	std::list<Location *>::const_iterator	it;
+	Location* 								bestMatch = NULL;
+	
+	for (it = this->_location.begin(); it != this->_location.end(); it++)
+	{
+		if((*it)->isMatching(uri))
+		{
+			if (!bestMatch || 
+					bestMatch->getName().size() < (*it)->getName().size())
+				bestMatch = *it;
+		}
+	}
+	if (bestMatch)
+		LOG_DEB("Best match found for " + uri + " is " + bestMatch->getName());
+	else
+		LOG_DEB("No match found for " + uri);
+	return (bestMatch);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/06 21:27:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 08:52:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ void RequestHandling::getResponse(Server& server,
 {
 	if (!req.isReceived())
 		return ;
+
+	const Location* loc = server.getUri(req.getUri());
 	resp.setStatusCode(req.getStatusCode());
 	if (req.getStatusCode() != BAD_REQUEST)
 	{
-		if (!server.checkUri(req.getUri()))
+		if (!loc)
 			resp.setStatusCode(NOT_FOUND);
 	}
 	
