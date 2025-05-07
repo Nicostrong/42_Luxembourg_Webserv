@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/06 20:52:05 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/07 09:21:24 by nfordoxc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +82,7 @@ NET_NAME		=	test_networking
 ################################################################################
 
 PAR_SRC			=	../class/Nico.cpp \
+					../class/Ressource.cpp \
 					main_parser.cpp
 
 PAR_OBJ			=	$(PAR_SRC:.cpp=.o)

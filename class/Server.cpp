@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/06 21:35:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 10:04:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void			Server::setValue(T &target, std::string &data)
  */
 Server::Server( std::map< std::string, std::string> const &data, 
 	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
-	_maxSizeBody(0), _em(eventMonitoring), _serverSocket(0)
+	_maxSizeBody(0), _path("./www/html"), _index("index.html"), _em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Server constructor called");
 	try

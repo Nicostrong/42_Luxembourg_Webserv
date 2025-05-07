@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/05 12:55:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/07 11:46:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,26 @@
  ******************************************************************************/
 
 /*
- *	Constructor
+ *	The parser call ressoource and receive a string with all the file inside
+ *	it check if an error or the file is empty
+ *	start the parsing
+ *	first it split each block of server on list of server block without comments
+ *	each block of server are parsing to a map of string keyWord/string value
+ *	at the end the attribut _servers containt a map of server (port/config)
+ *	for each port we can creat a server object with specific config
  */
-ParserServerConfig::ParserServerConfig( const std::string& filename )
+ParserServerConfig::ParserServerConfig( std::string filename )
 {
 	try
 	{
-		//checkHiddenFile(filename);
-		parseConfigFile(filename);
+		std::string		content;
+
+		checkHiddenFile(filename);
+
+		Ressource		file(filename);
+
+		file.isFail() ? throw FileError() : content = file.getRaw();
+		content.empty() ? throw EmptyConfigError() : parseConfigFile(content);
 		if (this->_servers.empty())	
 			throw EmptyConfigError();
 		LOG_DEB("ParserServerConfig constructor called.");
@@ -52,7 +64,7 @@ ParserServerConfig::~ParserServerConfig( void )
 /*
  *	Check if the filename isn't an hidden file
  */
-/*void		ParserServerConfig::checkHiddenFile( const std::string& filename )
+void		ParserServerConfig::checkHiddenFile( const std::string& filename )
 {
 	size_t		posSlash = filename.find("/.");
 
@@ -61,181 +73,127 @@ ParserServerConfig::~ParserServerConfig( void )
 	if (filename.size() < 5 || filename.substr(filename.size() - 5) != ".conf")
 		throw BadExtensionFile();
 	return ;
-}*/
+}
 
 /*
- *	Parser of the config file
+ *	The parser of the config file split all server block and remove all comments
+ *	and save each server block on a list.
+ *	Each server blok are transformed on map of key/value
  */
-void		ParserServerConfig::parseConfigFile( const std::string &filename )
+void		ParserServerConfig::parseConfigFile( const std::string& content )
 {
-	std::string			content;
-	size_t				pos = 0;
+	int								index = -1;
+	size_t							pos = 0;
+	std::list<std::string>			servers;
+	std::list<std::string>::iterator	it;
 
-	content = copyFileToString(filename);
+	//	we extract all block server and save the block on a list of string
 	while ((pos = content.find("server", pos)) != std::string::npos)
-	{
-		int				braceCount = 1;
-		size_t			blockStart = content.find("{", pos);
-		size_t			i;
-		std::string		block;
-
-		if (blockStart == std::string::npos)
-			break;
-		i = blockStart + 1;
-		while (i < content.size() && braceCount > 0)
-		{
-			if (content[i] == '{')
-				braceCount++;
-			else if (content[i] == '}')
-				braceCount--;
-			i++;
-		}
-		if (braceCount != 0)
-			throw BraceError();
-		block = content.substr(blockStart + 1, i - blockStart - 2);
-		parseServerBlock(block);
-		pos = i;
-	}
+		servers.push_back(stripComments(extractBlock(content, "server", '}', &pos)));
+	if (servers.size() < 1)
+		throw ParsingError("ExtractBlock server.");
+	//	we transform each server block on map of key/value
+	for (it = servers.begin(); it != servers.end(); it++)
+		parseServerBlock(*it);
 	return ;
 }
 
 /*
- *	Open the file and copy all in a string and return it
+ *	This method extract a block of data from the keyword to the ending char
  */
-std::string		ParserServerConfig::copyFileToString( const std::string &filename )
+std::string		ParserServerConfig::extractBlock(	const std::string& content,
+													const std::string& keyword,
+													char end_char, size_t* pos)
 {
-	std::ifstream		file(filename.c_str());
-	std::string			line;
-	std::string			content;
+	size_t		blockStart;
+	int			openBraces;
+	std::string	block;
 
-	if (!file.is_open())
-		throw FileError();
-	while (std::getline(file, line))
-		content += stripComments(line) + "\n";
-	file.close();
-	return (content);
+	if (!pos || *pos >= content.size())
+		throw ParsingError("Bad position cursor");
+	*pos = content.find(keyword, *pos);
+	if (*pos == std::string::npos)
+		throw ParsingError("Start keyword not found.");
+	*pos += keyword.length();
+	while (*pos < content.size() && content[*pos] != (end_char - 2))
+		++(*pos);
+	if (*pos == content.size())
+		throw BraceError();
+	blockStart = *pos;
+	openBraces = 1;
+	++(*pos);
+	while (*pos < content.size() && openBraces > 0)
+	{
+		if (content[*pos] == (end_char - 2))
+			openBraces++;
+		else if (content[*pos] == end_char)
+			openBraces--;
+		++(*pos);
+	}
+	if (openBraces != 0)
+		throw BraceError();
+	block = content.substr(blockStart, *pos - blockStart);
+#ifdef DEBUG
+	std::cout << "BLOCK " << keyword << " TEST" << std::endl;
+	std::cout << block << std::endl;
+#endif
+	return (block);
 }
 
-/*
- *	Parsing of the config file after the keyword server
- */
-void			ParserServerConfig::parseServerBlock( const std::string &block )
+
+void		ParserServerConfig::parseServerBlock( const std::string& serverBlock )
 {
-	std::istringstream					iss(block);
-	std::string							line;
+	int									index = -1;
+	std::istringstream					iss(serverBlock);
+	std::string							token;
+	std::string							key;
 	std::map<std::string, std::string>	config;
-	int									port = -1;
+	std::vector<std::string>			tokens;
+	bool								readingDirective = false;
 
-	while (std::getline(iss, line))
+	while (iss >> token)
 	{
-		line = trim(line);
-		if (line.empty())
-			continue;
-		if (!config.empty() && requireSemicolon(line) && line.find("{") == std::string::npos)
-			throw ParsingError(line);
-		if (line.find("location") == 0 || line.find("error_page") == 0)
+		if (token == "{" || token == "}")
+			if (!readingDirective) continue;
+		else if (!readingDirective)
 		{
-			std::string		key = trim(line.substr(0, line.find("{")));
-			std::string		blockContent = extractBlock(iss);
-			config[key] = blockContent;
-			continue;
+			key = token;
+			tokens.clear();
+			readingDirective = true;
 		}
-		if (line[line.length() - 1] != ';')
-			throw ParsingError(line);
-		size_t		delim = line.find_first_of(" \t");
-		std::string	key = trim(line.substr(0, delim));
-		std::string	value = trim(line.substr(delim + 1));
+		else if (token == ";")
+		{
+			std::string		value;
 
-		if (!value.empty() && value[value.length() - 1] == ';')
-			value = value.substr(0, value.length() - 1);
+			for (size_t i = 0; i < tokens.size(); i++)
+			{
+				if (i) value += " ";
+				value += tokens[i];
+			}
+			config[key] = value;
+			readingDirective = false;
+		}
+		else if (token == "{")
+		{
+			std::string		blockValue = "{";
+			int				braceLevel = 1;
+			std::string		innerToken;
+
+			while (braceLevel > 0 && iss >> innerToken)
+			{
+				if (innerToken == "{") braceLevel++;
+				else if (innerToken == "}") braceLevel--;
+				blockValue += " " + innerToken;
+			}
+			config[key] = blockValue;
+			readingDirective = false;
+		}
 		else
-			throw ParsingError(line);
-		if (key == "listen")
-			port = parsePort(value);
-		config[key] = value;
-	}
-	if (port == -1)
-		throw std::runtime_error("Missing 'listen' directive in server block");
-	this->_servers[port] = config;
-}
-
-/*{
-	std::istringstream					iss(block);
-	std::string							line;
-	std::string							prevLine;
-	std::map<std::string, std::string>	config;
-	int									port = -1;
-
-	while (std::getline(iss, line))
-	{
-		size_t				delim;
-		std::string			key;
-		std::string			value;
-
-		line = trim(line);
-		if (line.empty())
-			continue ;
-		//if (requireSemicolon(line))
-		//	throw ParsingError(line);
-		if (!prevLine.empty() && requireSemicolon(prevLine) && line.find("{") == std::string::npos)
-			throw ParsingError(prevLine);
-		if (line.find("location") == 0)
 		{
-			std::string		locationKey;
-			std::string		locationBlock;
-
-			locationKey = trim(line.substr(0, line.find("{")));
-			locationBlock = extractBlock(iss);
-			config[locationKey] = locationBlock;
-			prevLine.clear();
-			continue ;
+			tokens.push_back(token);
 		}
-		if (line.find("error_page") == 0 && line.find("{") != std::string::npos)
-		{
-			std::string		errorBlock;
-			
-			errorBlock = extractBlock(iss);
-			config["error_page"] = errorBlock;
-			prevLine.clear();
-			continue ;
-		}
-		if (line[line.length() - 1] != ';')
-			throw ParsingError(line);
-		delim = line.find_first_of(" \t");
-		key = line.substr(0, delim);
-		value = line.substr(delim + 1);
-		if (!value.empty() && value[value.length() - 1] == ';')
-			value = value.substr(0, value.length() - 1);
-		else
-			throw ParsingError(line);
-		key = trim(key);
-		value = trim(value);
-
-		if (key == "listen")
-			port = parsePort(value);
-
-		config[key] = value;
-		prevLine = line;
 	}
-
-	if (port == -1)
-		throw std::runtime_error("Missing 'listen' directive in server block");
-
-	this->_servers[port] = config;
-	return ;
-}*/
-
-/*
- *	count the number of char passed in argument
- */
-size_t			ParserServerConfig::countChar( const std::string &str, char c )
-{
-	size_t		count;
-	
-	count = 0;
-	for (size_t i = 0; i < str.length(); ++i)
-		if (str[i] == c) ++count;
-	return (count);
+	this->_servers[index++] = config;
 }
 
 /*
@@ -277,42 +235,24 @@ bool			ParserServerConfig::requireSemicolon( const std::string& line )
 }
 
 /*
- *	Extract the complet block between brace
+ *	Remove all comments of the block
  */
-std::string		ParserServerConfig::extractBlock( std::istringstream &iss )
+std::string		ParserServerConfig::stripComments( const std::string &block )
 {
-	int				braceCount = 1;
-	std::string		block;
-	std::string		line;
-
-	while (std::getline(iss, line) && braceCount != 0)
-	{
-		size_t		open;
-		size_t		close;
-
-		open = countChar(line, '{');
-		close = countChar(line, '}');
-		braceCount += open - close;
-		if (requireSemicolon(line))
-			throw ParsingError(line);
-		block += line + "\n";
-	}
-	if (braceCount != 0)
-		throw BraceError();
-	return (block);
-}
-
-/*
- *	Remove comment of the line
- */
-std::string		ParserServerConfig::stripComments( const std::string &line )
-{
-	size_t		pos;
+	std::string			ret;
+	std::string			line;
+	std::istringstream	iss(block);
 	
-	pos = line.find("#");
-	if (pos != std::string::npos)
-		return (line.substr(0, pos));
-	return (line);
+	while (std::getline(iss, line))
+	{
+		size_t		pos;
+
+		pos = line.find("#");
+		if (pos != std::string::npos)
+			line = line.substr(0, pos);
+		ret += line + "\n";
+	}
+	return (ret);
 }
 
 /*
@@ -440,10 +380,10 @@ const char		*ParserServerConfig::FileError::what() const throw()
 /*
  *	Error hidden file config
  */
-/*const char		*ParserServerConfig::HiddenFile::what() const throw()
+const char		*ParserServerConfig::HiddenFile::what() const throw()
 {
 	return (RED "[ERROR] hidden file not config valid file" RESET);
-}*/
+}
 
 /*
  *	Error bad extension file
