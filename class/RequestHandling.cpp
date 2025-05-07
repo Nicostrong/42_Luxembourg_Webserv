@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/07 08:52:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 23:33:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
 	return (*this);
 }
 
+/*
+ * Should clean this abomination but its 23h30 so.. not now
+ * and getRealPath seems working, need to check if the path is valid and exist
+ * and excute cgi if the location let it run.
+ */
 void RequestHandling::getResponse(Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
@@ -39,15 +44,11 @@ void RequestHandling::getResponse(Server& server,
 	{
 		if (!loc)
 			resp.setStatusCode(NOT_FOUND);
+		else
+			server.getRealPath(loc, req.getUri());
 	}
 	
-	//if (req.getStatusCode() != HttpBase::OK)
-	//{
-	/*
-	resp.setBody(req.getBody());
-	resp.setHTTP(req.getHTTP());*/
 	getErrorResponse(server, req, resp);
-	//}
 }
 
 // See GZ/example_response.txt for example of response

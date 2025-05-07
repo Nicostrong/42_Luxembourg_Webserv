@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 09:26:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 23:13:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,11 +138,6 @@ const std::list<Directive *>&	Location::getDirectives( void ) const
 	return (this->_directives);
 }
 
-/*std::string	Location::buildUriOnServer(std::string uri) const
-{
-	uri.replace(0, this->_name.size(), this->_name);
-}*/
-
 /*
  *	Check if the location can match to a requested uri
  */
@@ -151,21 +146,31 @@ bool	Location::isMatching(const std::string& uri) const
 	if (this->_name.empty() || uri.empty())
 		return (false);
 		
-	if (uri.length() < this->_name.size() || 
+	if (uri.size() < this->_name.size() || 
 		!std::equal(this->_name.begin(), this->_name.end(), uri.begin()))
 		return (false);
 
-	if (this->_name.at(this->_name.size() - 1) != '/')
-	{
-		size_t s = uri.find('/', this->_name.size());
-		if (s == this->_name.size() || s == std::string::npos)
-			return (true);
+	if (uri.size() > this->_name.size() && 
+		this->_name.at(this->_name.size() - 1) != '/' && 
+			uri.at(this->_name.size()) != '/')
 		return (false);
-	}
-	
 	return (true);
 }
 
+/*
+ * Find a directive in the directive list
+ */
+const	Directive* Location::findDirective(const std::string& name) const
+{
+	std::list<Directive *>::const_iterator it;
+
+	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
+	{
+		if ((*it)->getName() == name)
+			return (*it);
+	}
+	return (NULL);
+}
 
 /*******************************************************************************
  *								EXCEPTION 									   *

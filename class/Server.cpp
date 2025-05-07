@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 08:52:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 23:26:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,6 +452,25 @@ const Location*						Server::getUri( const std::string& uri )
 	else
 		LOG_DEB("No match found for " + uri);
 	return (bestMatch);
+}
+
+const std::string	Server::getRealPath( const Location* loc, std::string uri) 
+	const
+{
+	const Directive* rootDirective = loc->findDirective("root");
+	std::string location = loc->getName();
+	std::string	rootPath = this->getPath();
+
+	if (rootDirective)
+		rootPath = rootDirective->getName();
+		
+	if (location.empty() && location.at(location.size() - 1) == '/')
+		location.erase(location.size() - 1);
+	if (rootPath.empty() && rootPath.at(rootPath.size() - 1) == '/')
+		rootPath.erase(rootPath.size() - 1);
+	uri = uri.replace(0, location.size(), rootPath);
+	LOG_DEB("Path constructed: " + uri);
+	return (uri);
 }
 
 /*
