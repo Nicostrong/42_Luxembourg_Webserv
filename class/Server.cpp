@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/06 21:35:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 08:07:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,6 +431,24 @@ bool							Server::checkUri( std::string uri )
 			return (true);
 	}
 	return (false);
+}
+
+Location*						Server::getUri( std::string uri )
+{
+	std::list<Location *>::iterator		it;
+	Location* bestMatch = NULL;
+	
+	for (it = this->_location.begin(); it != this->_location.end(); it++)
+	{
+		std::string loc = (*it)->getName();
+		if (uri.length() >= loc.length() && 
+			std::equal(loc.begin(), loc.end(), uri.begin()))
+		{
+			if (!bestMatch || bestMatch->getName().size() > loc.size())
+				bestMatch = *it;
+		}
+	}
+	return (bestMatch);
 }
 
 /*

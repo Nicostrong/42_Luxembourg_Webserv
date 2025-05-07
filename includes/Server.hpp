@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/06 20:42:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 08:05:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ class	Server : public IEventHandler
 		
 		/*	Checker GIGI	*/
 		bool									checkUri( std::string uri );
+		Location*								getUri( std::string uri );
 		bool									checkMethod( std::string uri,
 																std::string method );
 
