@@ -76,8 +76,7 @@ SRC				=	./src/main.cpp \
 					./class/Socket.cpp \
 					./class/HandleConfig.cpp \
 					./class/RequestHandling.cpp \
-					./class/Ressource.cpp \
-					./class/RessourcesManager.cpp 
+					./class/Ressource.cpp
 
 
 OBJ				=	$(SRC:.cpp=.o)

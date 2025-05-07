@@ -111,7 +111,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 	}
 }
 
-const std::string 	HttpBase::getHeaders() const
+std::string 	HttpBase::getHeaders_raw() const
 {
 	std::string result;
 	std::map<std::string, std::string>::const_iterator it = _headers.begin();
@@ -123,6 +123,11 @@ const std::string 	HttpBase::getHeaders() const
 		++it;
 	}
 	return (result);
+}
+
+const std::map<std::string, std::string>&	HttpBase::getHeaders() const
+{
+	return _headers;
 }
 
 std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)

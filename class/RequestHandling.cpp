@@ -52,7 +52,7 @@ void RequestHandling::getResponse(Server& server,
 
 // See GZ/example_response.txt for example of response
 // Explanations: This code concats a response similar to the on given in the textfile
-// I wrote the Getters (specifically getHeaders()) to return the values.
+// I wrote the Getters (specifically getHeaders_raw()) to return the values.
 // Code is pretty self-explaining, getHeader returns a string containing all keys/values from _headers
 // Research has told me the method and uri do NOT go into the Response!
 
@@ -60,13 +60,12 @@ std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const Htt
 {
     std::ostringstream response;
 	response << req.getHTTP() << " " << req.getStatusCode() << " " << getReasonPhrase(req.getStatusCode()) << "\r\n";
-    response << res.getHeaders() << "\r\n";
+    response << res.getHeaders_raw() << "\r\n";
     response << "Content-Length: " << req.getBody().size() << "\r\n";
     response << "Connection: close\r\n";
     response << "\r\n"; // Blank line to separate headers from body
     response << req.getBody();
-	response << "\r\n"; // Blank line end
-	std::cout << "[debug response]:\n" << response << "\n";
+	//std::cout << "[debug response]:\n" << response << "\n";
     return response.str();
 }
 
