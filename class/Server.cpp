@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 08:07:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/07 08:52:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -433,21 +433,24 @@ bool							Server::checkUri( std::string uri )
 	return (false);
 }
 
-Location*						Server::getUri( std::string uri )
+const Location*						Server::getUri( const std::string& uri )
 {
-	std::list<Location *>::iterator		it;
-	Location* bestMatch = NULL;
+	std::list<Location *>::const_iterator	it;
+	Location* 								bestMatch = NULL;
 	
 	for (it = this->_location.begin(); it != this->_location.end(); it++)
 	{
-		std::string loc = (*it)->getName();
-		if (uri.length() >= loc.length() && 
-			std::equal(loc.begin(), loc.end(), uri.begin()))
+		if((*it)->isMatching(uri))
 		{
-			if (!bestMatch || bestMatch->getName().size() > loc.size())
+			if (!bestMatch || 
+					bestMatch->getName().size() < (*it)->getName().size())
 				bestMatch = *it;
 		}
 	}
+	if (bestMatch)
+		LOG_DEB("Best match found for " + uri + " is " + bestMatch->getName());
+	else
+		LOG_DEB("No match found for " + uri);
 	return (bestMatch);
 }
 
