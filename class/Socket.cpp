@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 17:45:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 16:20:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 #include "../includes/Server.hpp"
 #include "../includes/RequestHandling.hpp"
 
-Socket::Socket(int fd, EventMonitoring&	em, Server& ctx) : _fd(fd), _req(), 
-	_resp(), _em(em), _ctx(ctx) {}
+Socket::Socket(int fd, EventMonitoring&	em, Server& ctx) : _fd(fd), 
+	_resp(), _em(em), _ctx(ctx) 
+	{
+		
+		std::cout << getReadableIp(addr1) << std::endl;
+
+
+		this->_req = HttpRequest();
+	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
 	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx) {}
@@ -71,4 +78,17 @@ void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
 	(void)fd;
 	(void)em;
 	(void)type;
+}
+
+std::string getSocketIp(int fd)
+{
+	std::string ip;
+	struct sockaddr_in addr;
+	socklen_t addr_len = sizeof(addr);
+	
+	if (getsockname(fd, (struct sockaddr*)&addr, &addr_len) == -1)
+		throw std::exception();
+
+	ip = Server::getReadableIp(addr);
+	return (ip);
 }

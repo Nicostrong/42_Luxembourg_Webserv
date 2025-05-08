@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 15:04:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 16:16:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class Socket : public IEventHandler
 		Socket& 	operator=(const Socket& obj);
 		bool 		operator==(const Socket& obj);
 		int			getSocket() const;
+		std::string getRemoteIp() const;
 		void		onReadEvent(int fd, int type, EventMonitoring& em);
 		void		onWriteEvent(int fd, int type, EventMonitoring& em);
 		void		onCloseEvent(int fd, int type, EventMonitoring& em);
@@ -39,6 +40,8 @@ class Socket : public IEventHandler
 		HttpResponse 		_resp;
 		EventMonitoring&	_em;
 		Server&				_ctx;
+		std::string			_remoteIp;
+		std::string			_remoteHost;
 	
 };
 

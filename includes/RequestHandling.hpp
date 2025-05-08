@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 08:44:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 13:50:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class RequestHandling: public HttpBase
 		RequestHandling();
 		static void getErrorResponse(Server& server, 
 			const HttpRequest& req, HttpResponse& resp);
-		static void RequestHandling::handleCGI(Server& server, 
+		static void handleCGI(Server& server, 
 			const HttpRequest& req, HttpResponse& resp);
 		bool _checkMethod(Server server);
 		bool _checkUri(Server server);

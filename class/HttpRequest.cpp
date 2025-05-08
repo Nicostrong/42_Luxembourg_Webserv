@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 09:23:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 16:10:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), 
-	_isReceived(false) {}
+HttpRequest::HttpRequest(const std::string& remoteIp, 
+	const std::string& remoteHost) : HttpBase(), _charParsed(0), 
+	_isReceived(false), _remoteIp(remoteIp), _remoteHost(remoteHost) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -29,6 +30,9 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		HttpBase::operator=(obj);
 		this->_charParsed = obj._charParsed;
 		this->_isReceived = obj._isReceived;
+		this->_pathTranslated = obj._pathTranslated;
+		this->_remoteIp = obj._remoteIp;
+		this->_remoteHost = obj._remoteHost;
 	}
 	return (*this);
 }
@@ -76,7 +80,7 @@ void HttpRequest::parseRaw()
 			parseStartLine(line);
 		else if (line.empty() && 
 					this->_charParsed > 0 && 
-					this->_headers.find("host") != this->_headers.end())
+					this->_headers.find("HOST") != this->_headers.end())
 		{
 			this->_body = _raw.substr(pos + 2);
 			this->_statusCode = OK;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 23:16:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 14:48:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ class	Server : public IEventHandler
 		EventMonitoring&				_em;
 		int								_serverSocket;
 		std::list<Socket>				_sockets;
+		std::string						_serverIp;
+
 
 		Server( const Server &src_obj );
 		Server							&operator=( const Server &src_obj );
@@ -70,7 +72,8 @@ class	Server : public IEventHandler
 		~Server( void );
 
 		/*  GETTER	*/
-		const int&								getMaxConnectionClient( void ) const;
+		const int&								getMaxConnectionClient( void ) 
+			const;
 
 		const size_t&							getPort( void ) const;
 		const size_t&							getMaxSizeBody( void ) const;
@@ -104,6 +107,9 @@ class	Server : public IEventHandler
 		void 							onCloseEvent( int fd, int type, 
 														EventMonitoring& em );
 		void 							onSocketClosedEvent( const Socket &s );
+
+		static std::string 				getReadableIp(
+			const struct sockaddr_in& addr);
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/
