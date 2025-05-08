@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/05 09:56:22 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/08 09:36:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@
 # include <set>
 # include <list>
 # include <vector>
+
+# define SERVER_SOFT "WebServ/1.0"
+# define CGI_REVISION "CGI/1.1"
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/06 21:07:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 09:23:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void HttpRequest::parseHeader(std::string &line)
 	}
 	name = normalizeHeaderName(name);
 
-	if (name == "host" && this->_headers.find(name) != this->_headers.end())
+	if (name == "HOST" && this->_headers.find(name) != this->_headers.end())
 	{
 		this->_isReceived = true;
 		return;

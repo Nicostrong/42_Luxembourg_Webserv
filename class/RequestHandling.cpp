@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/07 23:33:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 08:40:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ void RequestHandling::getResponse(Server& server,
 	}
 	
 	getErrorResponse(server, req, resp);
+}
+
+void RequestHandling::handleCGI(Server& server, 
+	const HttpRequest& req, HttpResponse& resp)
+{
+		
 }
 
 // See GZ/example_response.txt for example of response

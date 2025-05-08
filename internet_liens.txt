@@ -1,3 +1,4 @@
 https://www.rfc-editor.org/rfc/rfc9112
+https://datatracker.ietf.org/doc/html/rfc3875 //RFC for CGI
 https://en.wikipedia.org/wiki/HTTP
 https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP#Codes_d'%C3%A9tat

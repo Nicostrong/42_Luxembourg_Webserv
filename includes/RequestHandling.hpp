@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 17:35:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 08:44:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ class RequestHandling: public HttpBase
 	private:
 		RequestHandling();
 		static void getErrorResponse(Server& server, 
+			const HttpRequest& req, HttpResponse& resp);
+		static void RequestHandling::handleCGI(Server& server, 
 			const HttpRequest& req, HttpResponse& resp);
 		bool _checkMethod(Server server);
 		bool _checkUri(Server server);

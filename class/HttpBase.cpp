@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/06 21:40:35 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 09:35:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
 		<< "<center><h1>" << statusCode << " " << strStatusCode
 		<< "</h1></center>" << CRLF
 		<< "<hr>" << CRLF
-		<< "<center>WebServ</center>" << CRLF
+		<< "<center>" << SERVER_SOFT << "</center>" << CRLF
 		<< "</body>" << CRLF
 		<< "</html>" << CRLF;
 	return (oss.str());
@@ -222,6 +222,6 @@ std::string HttpBase::normalizeHeaderName(std::string& name)
 
 	std::string::const_iterator it;
 	for (it = name.begin(); it != name.end(); ++it) 
-		normalized.push_back(std::tolower(*it));
+		normalized.push_back(std::toupper(*it));
 	return (normalized);
 }
