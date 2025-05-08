@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/08 17:44:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:52:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,21 +365,8 @@ void Server::start()
 		std::cerr << "Socket faield to start listening" << strerror(errno) << std::endl;
 		return ;
 	}
-	char hostname[256];
-	gethostname(hostname, sizeof(hostname));
-
-	struct addrinfo hints, *res;
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-	
-	getaddrinfo(hostname, NULL, &hints, &res);
-	
-	struct sockaddr_in *addr1 = (struct sockaddr_in *)res->ai_addr;
-	std::cout << hostname << " " << getReadableIp(*addr1) << std::endl;
 
 	std::cout << "Listening on port 8080" << std::endl;
-	freeaddrinfo(res);
 	this->_serverSocket = serverSocket;
 	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
 		*this);
@@ -390,8 +377,12 @@ void Server::start()
 void Server::onReadEvent(int fd, int type, EventMonitoring& em)
 {
 	(void)fd;
+	(void)type;
+	struct sockaddr_in clientAddr;
+    socklen_t addrLen = sizeof(clientAddr);
 	
-	int clientSocket = accept(this->_serverSocket, NULL, NULL);
+	int clientSocket = accept(this->_serverSocket, 
+		(struct sockaddr*)&clientAddr, &addrLen);
 	if (clientSocket == -1)
 	{
 		return;
@@ -399,28 +390,10 @@ void Server::onReadEvent(int fd, int type, EventMonitoring& em)
 	}
 	
 	
-	Socket s(clientSocket, em, *this);
+	Socket s(clientSocket, em, *this, clientAddr);
 	this->_sockets.push_front(s);
 	em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
 		 EventData::CLIENT, *_sockets.begin());
-	if (type == EventData::SERVER)
-		std::cout << "Incoming socket request" << std::endl;
-}
-
-std::string Server::getReadableIp(const struct sockaddr_in& addr)
-{
-	std::stringstream ss;
-	std::cout << "Before " << addr.sin_addr.s_addr << std::endl; 
-    uint32_t ip_host = ntohl(addr.sin_addr.s_addr);
-    std::cout << "After " << ip_host << std::endl; 
-    int a = (ip_host >> 24) & 0xFF;
-    int b = (ip_host >> 16) & 0xFF;
-    int c = (ip_host >> 8) & 0xFF;
-    int d = ip_host & 0xFF;
-    
-    
-    ss << a << "." << b << "." << c << "." << d;
-    return (ss.str());
 }
 
 void Server::onWriteEvent(int fd, int type, EventMonitoring& em)

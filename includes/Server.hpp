@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/08 14:48:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:32:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,6 @@ class	Server : public IEventHandler
 		void 							onCloseEvent( int fd, int type, 
 														EventMonitoring& em );
 		void 							onSocketClosedEvent( const Socket &s );
-
-		static std::string 				getReadableIp(
-			const struct sockaddr_in& addr);
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/

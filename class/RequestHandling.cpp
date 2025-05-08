@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 14:45:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:57:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
  * and excute cgi if the location let it run.
  */
 void RequestHandling::getResponse(Server& server, 
-	const HttpRequest& req, HttpResponse& resp)
+	const HttpRequest& req, HttpResponse& resp, const std::string& remoteIp)
 {
 	if (!req.isReceived())
 		return ;
@@ -51,7 +51,7 @@ void RequestHandling::getResponse(Server& server,
 }
 
 void RequestHandling::handleCGI(Server& server, 
-	const HttpRequest& req, HttpResponse& resp)
+	const HttpRequest& req, HttpResponse& resp, const std::string& remoteIp)
 {
 		(void)req;
 		(void)server;

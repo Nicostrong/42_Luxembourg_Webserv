@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 16:10:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:01:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest(const std::string& remoteIp, 
-	const std::string& remoteHost) : HttpBase(), _charParsed(0), 
-	_isReceived(false), _remoteIp(remoteIp), _remoteHost(remoteHost) {}
+HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), 
+	_isReceived(false) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 16:20:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:51:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 #include "../includes/Server.hpp"
 #include "../includes/RequestHandling.hpp"
 
-Socket::Socket(int fd, EventMonitoring&	em, Server& ctx) : _fd(fd), 
-	_resp(), _em(em), _ctx(ctx) 
+Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
+	const sockaddr_in& sockAddr) : _fd(fd), _req(), _resp(), _em(em), _ctx(ctx) 
 	{
-		
-		std::cout << getReadableIp(addr1) << std::endl;
-
-
-		this->_req = HttpRequest();
+		this->_remoteIp = getReadableIp(sockAddr);
+		LOG_DEB(this->_remoteIp + " opened connection");
 	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx) {}
+	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp) {}
 
 Socket::~Socket() {}
 
@@ -80,15 +77,16 @@ void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
 	(void)type;
 }
 
-std::string getSocketIp(int fd)
+std::string Socket::getReadableIp(const struct sockaddr_in& addr)
 {
-	std::string ip;
-	struct sockaddr_in addr;
-	socklen_t addr_len = sizeof(addr);
+	std::stringstream ss;
+    uint32_t ip = ntohl(addr.sin_addr.s_addr);
 	
-	if (getsockname(fd, (struct sockaddr*)&addr, &addr_len) == -1)
-		throw std::exception();
-
-	ip = Server::getReadableIp(addr);
-	return (ip);
+    int a = (ip >> 24) & 0xFF;
+    int b = (ip >> 16) & 0xFF;
+    int c = (ip >> 8) & 0xFF;
+    int d = ip & 0xFF;
+    
+    ss << a << "." << b << "." << c << "." << d;
+    return (ss.str());
 }

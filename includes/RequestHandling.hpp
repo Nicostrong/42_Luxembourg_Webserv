@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 13:50:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:57:35 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ class RequestHandling: public HttpBase
 		RequestHandling(const RequestHandling& obj);
 		~RequestHandling();
 		RequestHandling& operator=(const RequestHandling& obj);
-		static void	getResponse(Server& server, 
-			const HttpRequest& req, HttpResponse& resp);
+		static void	getResponse(Server& server, const HttpRequest& req, 
+			HttpResponse& resp, const std::string& remoteIp);
 		std::string	buildHttpResponse(const HttpRequest& req, const HttpResponse& res);
 		std::string getReasonPhrase(HttpCode code);
 	private:
 		RequestHandling();
-		static void getErrorResponse(Server& server, 
-			const HttpRequest& req, HttpResponse& resp);
-		static void handleCGI(Server& server, 
-			const HttpRequest& req, HttpResponse& resp);
+		static void getErrorResponse(Server& server, const HttpRequest& req, 
+			HttpResponse& resp);
+		static void handleCGI(Server& server, const HttpRequest& req, 
+			HttpResponse& resp, const std::string& remoteIp);
 		bool _checkMethod(Server server);
 		bool _checkUri(Server server);
 		bool _checkHTTP();

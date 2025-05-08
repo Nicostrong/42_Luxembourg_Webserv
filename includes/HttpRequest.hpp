@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 16:09:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:01:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ public:
 		const char *what() const throw();
 	};
 
-	HttpRequest(const std::string& remoteIp, const std::string& remoteHost);
+	HttpRequest();
 	HttpRequest(const HttpRequest &obj);
 	virtual ~HttpRequest();
 	HttpRequest&	operator=(const HttpRequest &obj);
