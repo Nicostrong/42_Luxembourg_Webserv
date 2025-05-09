@@ -6,14 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:01:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:08:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() : HttpBase(), _charParsed(0), 
-	_isReceived(false) {}
+HttpRequest::HttpRequest() {}
+
+HttpRequest::HttpRequest(const std::string& remoteIp) : HttpBase(), 
+	_charParsed(0), _isReceived(false), _remoteIp(remoteIp), _loc(NULL) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -31,7 +33,11 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_isReceived = obj._isReceived;
 		this->_pathTranslated = obj._pathTranslated;
 		this->_remoteIp = obj._remoteIp;
-		this->_remoteHost = obj._remoteHost;
+		this->_loc = obj._loc;
+		this->_pathTranslated = obj._pathTranslated;
+		this->_queryParams = obj._queryParams;
+		this->_scriptLoc = obj._scriptLoc;
+		this->_pathInfo = obj._pathInfo;
 	}
 	return (*this);
 }
@@ -63,6 +69,56 @@ HttpBase::HttpCode HttpRequest::getStatusCode() const
 bool HttpRequest::isReceived() const
 {
 	return (this->_isReceived);
+}
+
+void HttpRequest::setLocation(const Location* const loc)
+{
+	this->_loc = loc;
+}
+
+void HttpRequest::setPathTranslated(const std::string& pathTranslated)
+{
+	this->_pathTranslated = pathTranslated;
+}
+
+void HttpRequest::setQueryParams(const std::string& queryParams)
+{
+	this->_queryParams = queryParams;
+}
+
+void HttpRequest::setScriptLoc(const std::string& scriptLoc)
+{
+	this->_scriptLoc =scriptLoc;
+}
+
+void HttpRequest::setPathInfo(const std::string& pathInfo)
+{
+	this->_pathInfo = pathInfo;
+}
+
+const Location* HttpRequest::getLocation() const
+{
+	return (this->_loc);
+}
+
+const std::string& HttpRequest::getPathTranslated() const
+{
+	return (this->_pathTranslated);
+}
+
+const std::string& HttpRequest::getQueryParams() const
+{
+	return (this->_queryParams);
+}
+
+const std::string& HttpRequest::getScriptLoc() const
+{
+	return (this->_scriptLoc);
+}
+
+const std::string& HttpRequest::getPathInfo() const
+{
+	return (this->_pathInfo);
 }
 
 // Helpers
@@ -110,9 +166,17 @@ void HttpRequest::parseStartLine(std::string &line)
 		this->_isReceived = true;
 		return ;
 	}
+
+	size_t queryPos = tokens.at(1).find('?');
+
+
 	this->_method = tokens.at(0);
-	this->_uri = tokens.at(1);
+	this->_uri = tokens.at(1).substr(0, queryPos);
+	if (queryPos != std::string::npos)
+		this->_queryParams = tokens.at(1).substr(queryPos + 1);
 	this->_httpVersion = tokens.at(2);
+
+	
 }
 
 void HttpRequest::parseHeader(std::string &line)

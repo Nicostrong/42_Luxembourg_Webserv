@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:57:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:09:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,52 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
  * and excute cgi if the location let it run.
  */
 void RequestHandling::getResponse(Server& server, 
-	const HttpRequest& req, HttpResponse& resp, const std::string& remoteIp)
+	HttpRequest& req, HttpResponse& resp)
 {
+	const Location* 		loc;
+	std::string 			realPath;
+	std::list<Directive*>	cgiDirectives;
+	
 	if (!req.isReceived())
 		return ;
 
-	resp.setStatusCode(req.getStatusCode());
-	if (req.getStatusCode() != BAD_REQUEST)
+	if (req.getStatusCode() == BAD_REQUEST)
 	{
-		const Location* loc = server.getUri(req.getUri());
-		if (!loc)
-			resp.setStatusCode(NOT_FOUND);
-		else
-			server.getRealPath(loc, req.getUri());
+		getErrorResponse(BAD_REQUEST, server, req, resp);
+		return ;
 	}
-	getErrorResponse(server, req, resp);
+
+	loc = server.getUri(req.getUri());
+	req.setLocation(loc);
+	if (!req.getLocation())
+	{
+		getErrorResponse(NOT_FOUND, server, req, resp);
+		return ;
+	}
+	std::cout << "hey" << std::endl;
+	realPath = server.getRealPath(loc, req.getUri());
+	req.setPathTranslated(realPath);
+	cgiDirectives = loc->findDirectives("cgi");
+	
+	if (cgiDirectives.size() > 0)
+	{
+		handleCGI(cgiDirectives, server, req, resp);
+		return ;
+	}
+	getErrorResponse(OK, server, req, resp);
 }
 
-void RequestHandling::handleCGI(Server& server, 
-	const HttpRequest& req, HttpResponse& resp, const std::string& remoteIp)
+void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives, 
+	Server& server, const HttpRequest& req, HttpResponse& resp)
 {
+	std::list<Directive*>::const_iterator it;
+
+	for (it = cgiDirectives.begin(); it != cgiDirectives.end(); it++)
+	{
+		std::cout << (*it)->getValue(0) << std::endl;
+		//if (req.getPathTranslated().find((*it)->getValue(0)) !)
+			// Try to exec
+	}
 		(void)req;
 		(void)server;
 		(void)resp;
@@ -88,11 +114,12 @@ std::string RequestHandling::getReasonPhrase(HttpCode code)
 	}
 }
 
-void RequestHandling::getErrorResponse(Server& server, 
+void RequestHandling::getErrorResponse(int statusCode, Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
 	(void)req;
-	Ressource err(server.getPathError(resp.getStatusCode()));
+	resp.setStatusCode((HttpBase::HttpCode)statusCode);
+	Ressource err(server.getPathError(statusCode));
 	
 	if (err.isFail())
 		LOG_ERROR("Failed to load custom error response");
@@ -103,7 +130,7 @@ void RequestHandling::getErrorResponse(Server& server,
 		return ;
 	}
 	resp.setBody(
-		HttpBase::getDefaultErrorPage(resp.getStatusCode()));
+		HttpBase::getDefaultErrorPage((HttpBase::HttpCode)statusCode));
 	resp.setAsComplete();
 }
 

@@ -6,35 +6,22 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:01:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 10:33:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTP_REQUEST
 #define HTTP_REQUEST
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <vector>
-#include <map>
-#include <list>
-#include <iostream>
-#include <cstring>
-#include <sstream>
-#include <exception>
+
+#include "lib.hpp"
 #include "HttpBase.hpp"
+#include "Location.hpp"
 
 #define BUFFER_SIZE 1024
 
 class HttpRequest : public HttpBase
 {
 public:
-	enum HttpMethod
-	{
-		GET = 0,
-		POST = 1,
-		DELETE = 2,
-		INVALID = 3,
-	};
 
 	class SocketReadException : public std::exception
 	{
@@ -49,23 +36,43 @@ public:
 	};
 
 	HttpRequest();
+	HttpRequest(const std::string& remoteIp);
 	HttpRequest(const HttpRequest &obj);
-	virtual ~HttpRequest();
-	HttpRequest&	operator=(const HttpRequest &obj);
-	void			readReceived(int clientSocket);
-	HttpCode 		getStatusCode() const;
-	bool			isReceived() const;
+	virtual 				~HttpRequest();
+	HttpRequest&			operator=(const HttpRequest &obj);
+	void					readReceived(int clientSocket);
+	HttpCode 				getStatusCode() const;
+	bool					isReceived() const;
+	void					setLocation(const Location* const loc);
+	void					setPathTranslated(const std::string& pathTranslated)
+		;
+	void					setQueryParams(const std::string& queryParams);
+	void					setScriptLoc(const std::string& scriptLoc);
+	void					setPathInfo(const std::string& pathInfo);
+	const Location* 		getLocation() const;
+	const std::string&		getPathTranslated() const;
+	const std::string&		getQueryParams() const;
+	const std::string&		getScriptLoc() const;
+	const std::string&		getPathInfo() const;
 
 private:
-	void parseRaw();
-	void parseStartLine(std::string &line);
-	void parseHeader(std::string &line);
+	void 					parseRaw();
+	void					parseStartLine(std::string &line);
+	void 					parseHeader(std::string &line);
 
-	size_t _charParsed;
-	bool _isReceived;
-	std::string	_pathTranslated;
-	std::string _remoteIp;
-	std::string	_remoteHost;
+	// Reading variables
+	size_t			_charParsed;
+	bool 			_isReceived;
+	
+	// Handling variables
+	std::string		_remoteIp;
+	const Location*	_loc;
+	std::string		_pathTranslated;
+	std::string		_queryParams;
+	
+	// CGI related
+	std::string		_scriptLoc;
+	std::string		_pathInfo;
 };
 
 #endif

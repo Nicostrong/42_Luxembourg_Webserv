@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:57:35 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 10:38:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ class RequestHandling: public HttpBase
 		RequestHandling(const RequestHandling& obj);
 		~RequestHandling();
 		RequestHandling& operator=(const RequestHandling& obj);
-		static void	getResponse(Server& server, const HttpRequest& req, 
-			HttpResponse& resp, const std::string& remoteIp);
+		static void	getResponse(Server& server, HttpRequest& req, 
+			HttpResponse& resp);
 		std::string	buildHttpResponse(const HttpRequest& req, const HttpResponse& res);
 		std::string getReasonPhrase(HttpCode code);
 	private:
 		RequestHandling();
-		static void getErrorResponse(Server& server, const HttpRequest& req, 
+		static void getErrorResponse(int statusCode, Server& server, const HttpRequest& req, 
 			HttpResponse& resp);
-		static void handleCGI(Server& server, const HttpRequest& req, 
-			HttpResponse& resp, const std::string& remoteIp);
+		static void handleCGI(const std::list<Directive*>& cgiDirectives, 
+			Server& server, const HttpRequest& req, HttpResponse& resp);
 		bool _checkMethod(Server server);
 		bool _checkUri(Server server);
 		bool _checkHTTP();

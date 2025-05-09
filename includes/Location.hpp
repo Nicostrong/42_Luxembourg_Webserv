@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 23:12:10 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 10:20:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ class	Location
 		bool								isMatching(const std::string& uri) 
 			const;
 		const	Directive* 					findDirective(
+			const std::string& name) const;
+		const std::list<Directive*>			findDirectives(
 			const std::string& name) const;
 
 		/*	class Exception	*/

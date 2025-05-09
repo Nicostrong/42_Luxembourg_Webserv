@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 23:13:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 10:53:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ bool	Location::isMatching(const std::string& uri) const
  */
 const	Directive* Location::findDirective(const std::string& name) const
 {
-	std::list<Directive *>::const_iterator it;
+	std::list<Directive*>::const_iterator it;
 
 	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
 	{
@@ -170,6 +170,23 @@ const	Directive* Location::findDirective(const std::string& name) const
 			return (*it);
 	}
 	return (NULL);
+}
+
+/*
+ * Find all directives in the directive list
+ */
+const std::list<Directive*> Location::findDirectives(const std::string& name) 
+	const
+{
+	std::list<Directive*>::const_iterator it;
+	std::list<Directive*> directives;
+
+	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
+	{
+		if ((*it)->getName() == name)
+			directives.push_back(*it);
+	}
+	return (directives);
 }
 
 /*******************************************************************************

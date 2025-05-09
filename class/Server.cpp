@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/08 22:52:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 10:59:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -466,14 +466,14 @@ const std::string	Server::getRealPath( const Location* loc, std::string uri)
 	const Directive* rootDirective = loc->findDirective("root");
 	std::string location = loc->getName();
 	std::string	rootPath = this->getPath();
-
+	
 	if (rootDirective)
-		rootPath = rootDirective->getName();
-		
+		rootPath = rootDirective->getValue(0);
 	if (location.empty() && location.at(location.size() - 1) == '/')
 		location.erase(location.size() - 1);
 	if (rootPath.empty() && rootPath.at(rootPath.size() - 1) == '/')
 		rootPath.erase(rootPath.size() - 1);
+	
 	uri = uri.replace(0, location.size(), rootPath);
 	LOG_DEB("Path constructed: " + uri);
 	return (uri);

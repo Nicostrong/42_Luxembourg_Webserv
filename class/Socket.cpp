@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:51:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 10:51:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 #include "../includes/RequestHandling.hpp"
 
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
-	const sockaddr_in& sockAddr) : _fd(fd), _req(), _resp(), _em(em), _ctx(ctx) 
+	const sockaddr_in& sockAddr) : _fd(fd), _resp(), _em(em), _ctx(ctx) 
 	{
 		this->_remoteIp = getReadableIp(sockAddr);
+		this->_req 		= HttpRequest(this->_remoteIp);
 		LOG_DEB(this->_remoteIp + " opened connection");
 	}
 
@@ -63,7 +64,7 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 	if (this->_resp.isEncoded())
 	{
 		send(fd, this->_resp.getRaw().c_str(), this->_resp.getRaw().size(), 0);
-		this->_req = HttpRequest();
+		this->_req = HttpRequest(this->_remoteIp);
 		this->_resp = HttpResponse();
 		//this->_ctx.onSocketClosedEvent(*this);
 	}
