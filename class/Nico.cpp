@@ -6,11 +6,12 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 11:46:14 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/09 17:45:41 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Nico.hpp"
+#include "../includes/Token.hpp"
 
 /*******************************************************************************
  *							CANONICAL FORM									   *
@@ -25,20 +26,26 @@
  *	at the end the attribut _servers containt a map of server (port/config)
  *	for each port we can creat a server object with specific config
  */
-ParserServerConfig::ParserServerConfig( std::string filename )
+ParserServerConfig::ParserServerConfig( const std::string& filename )
 {
 	try
 	{
-		std::string		content;
+		std::string			content;
+		std::vector<Token>	tokens;
+		Token*				head = NULL;
 
 		checkHiddenFile(filename);
 
 		Ressource		file(filename);
 
 		file.isFail() ? throw FileError() : content = file.getRaw();
-		content.empty() ? throw EmptyConfigError() : parseConfigFile(content);
-		if (this->_servers.empty())	
-			throw EmptyConfigError();
+		content.empty() ? throw EmptyConfigError() : extractServerBlock(content);
+		head->tokenize(this->_serverBlock[0]);
+		head->printToken();
+		//if (this->_serverBlock.empty())	
+		//	throw EmptyConfigError();
+		this->_servers.clear();
+		this->_serverBlock.clear();
 		LOG_DEB("ParserServerConfig constructor called.");
 	}
 	catch(const std::exception& e)
@@ -80,21 +87,84 @@ void		ParserServerConfig::checkHiddenFile( const std::string& filename )
  *	and save each server block on a list.
  *	Each server blok are transformed on map of key/value
  */
-void		ParserServerConfig::parseConfigFile( const std::string& content )
+void		ParserServerConfig::extractServerBlock( const std::string& content )
 {
-	int								index = -1;
 	size_t							pos = 0;
-	std::list<std::string>			servers;
-	std::list<std::string>::iterator	it;
 
-	//	we extract all block server and save the block on a list of string
 	while ((pos = content.find("server", pos)) != std::string::npos)
-		servers.push_back(stripComments(extractBlock(content, "server", '}', &pos)));
-	if (servers.size() < 1)
+	{
+		std::string		block;
+		
+		block = extractBlock(content, "server", '}', &pos);
+		block = stripComments(block);
+		block = removeWhitespace(block);
+		insertChar(block, ';', ' ');
+#ifdef DEBUG
+		std::cout << "SERVER BLOCK CLEAN" << std::endl;
+		std::cout << block << std::endl;
+#endif
+		this->_serverBlock.push_back(block);
+	}
+	if (this->_serverBlock.size() < 1)
 		throw ParsingError("ExtractBlock server.");
-	//	we transform each server block on map of key/value
-	for (it = servers.begin(); it != servers.end(); it++)
-		parseServerBlock(*it);
+	return ;
+}
+
+/*
+ *	Remove all comments of the block
+ */
+std::string		ParserServerConfig::stripComments( const std::string &block )
+{
+	std::string			ret;
+	std::string			line;
+	std::istringstream	iss(block);
+	
+	while (std::getline(iss, line))
+	{
+		size_t		pos;
+
+		pos = line.find("#");
+		if (pos != std::string::npos)
+			line = line.substr(0, pos);
+		ret += line + "\n";
+	}
+	return (ret);
+}
+
+/*
+ *	Remove all spaces and put just one space betwenn each word
+ */
+std::string		ParserServerConfig::removeWhitespace(const std::string& input)
+{
+	std::string		output;
+
+	for (size_t i = 0; i < input.length(); ++i)
+	{
+		if (std::isspace(input[i]))
+		{
+			if (!output.empty() && output.back() != ' ')
+				output += ' ';
+		}
+		else
+			output += input[i];
+	}
+	return (output);
+}
+
+
+/*
+ *	Add a space before a semicolon
+ */
+void			ParserServerConfig::insertChar( std::string &str, char target, char toInsert )
+{
+	for (size_t i = 0; i < str.length(); ++i)
+	{
+		if (str[i] == target)
+		{
+			str.insert(i, 1, toInsert);
+			++i;
+		}
+	}
 	return ;
 }
 
@@ -133,126 +203,7 @@ std::string		ParserServerConfig::extractBlock(	const std::string& content,
 	if (openBraces != 0)
 		throw BraceError();
 	block = content.substr(blockStart, *pos - blockStart);
-#ifdef DEBUG
-	std::cout << "BLOCK " << keyword << " TEST" << std::endl;
-	std::cout << block << std::endl;
-#endif
 	return (block);
-}
-
-
-void		ParserServerConfig::parseServerBlock( const std::string& serverBlock )
-{
-	int									index = -1;
-	std::istringstream					iss(serverBlock);
-	std::string							token;
-	std::string							key;
-	std::map<std::string, std::string>	config;
-	std::vector<std::string>			tokens;
-	bool								readingDirective = false;
-
-	while (iss >> token)
-	{
-		if (token == "{" || token == "}")
-			if (!readingDirective) continue;
-		else if (!readingDirective)
-		{
-			key = token;
-			tokens.clear();
-			readingDirective = true;
-		}
-		else if (token == ";")
-		{
-			std::string		value;
-
-			for (size_t i = 0; i < tokens.size(); i++)
-			{
-				if (i) value += " ";
-				value += tokens[i];
-			}
-			config[key] = value;
-			readingDirective = false;
-		}
-		else if (token == "{")
-		{
-			std::string		blockValue = "{";
-			int				braceLevel = 1;
-			std::string		innerToken;
-
-			while (braceLevel > 0 && iss >> innerToken)
-			{
-				if (innerToken == "{") braceLevel++;
-				else if (innerToken == "}") braceLevel--;
-				blockValue += " " + innerToken;
-			}
-			config[key] = blockValue;
-			readingDirective = false;
-		}
-		else
-		{
-			tokens.push_back(token);
-		}
-	}
-	this->_servers[index++] = config;
-}
-
-/*
- *	remove all spaces at de start and the end of the line
- */
-std::string		ParserServerConfig::trim( const std::string &s )
-{
-	size_t		start;
-	size_t		end;
-
-	start = s.find_first_not_of(" \t\n\r");
-	end = s.find_last_not_of(" \t\n\r");
-	if (start == std::string::npos || end == std::string::npos)
-		return ("");
-	return (s.substr(start, end - start + 1));
-}
-
-/*
- *	check if the line need a semicolon at the end
- */
-bool			ParserServerConfig::requireSemicolon( const std::string& line )
-{
-#ifdef DEBUG
-	std::cout << "LINE ON REQUIRE SSMICOLON:" << std::endl;
-	std::cout << line <<std::endl;
-#endif
-	if (line.find("error_page") == 0 || line.find("location") == 0 || line.find("limit_except") == 0)
-		return  (false);
-	if (!line.empty() && line.find('{') == std::string::npos && \
-		line.find('}') == std::string::npos)
-	{
-		size_t		lastChar;
-		
-		lastChar = line.find_last_not_of(" \t");
-		if (lastChar != std::string::npos && line[lastChar] != ';')
-			return (true);
-	}
-	return (false);
-}
-
-/*
- *	Remove all comments of the block
- */
-std::string		ParserServerConfig::stripComments( const std::string &block )
-{
-	std::string			ret;
-	std::string			line;
-	std::istringstream	iss(block);
-	
-	while (std::getline(iss, line))
-	{
-		size_t		pos;
-
-		pos = line.find("#");
-		if (pos != std::string::npos)
-			line = line.substr(0, pos);
-		ret += line + "\n";
-	}
-	return (ret);
 }
 
 /*

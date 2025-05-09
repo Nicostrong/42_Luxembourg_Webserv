@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 11:14:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/09 16:41:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 # define N
 
 # include "./lib.hpp"
-# include "./EventMonitoring.hpp"
 # include "./Ressource.hpp"
 
+class Token;
 /*
- *	The parser take the filename in argument.
- *	Check if it's a valid file (extension) and call Ressource.
- *	It call a function who read the file and return the part for one server.
- *	With this part, it creat a map with all element of the server.
- *	Key are the first and the second word (for location) and the value the part
- *	between '{}' or the value before the ';'.
- *	when all the file is read, it contain a map of server config.
- *	The Key is the value of the listening port and the value a map of config for
- *	one server.
+ *	Parser of configfile
+ *	- check the file (hidden file, extension)
+ *	- call Ressource to get the content of the file
+ *	- check if error with Ressource and get content
+ *	- check if the file is empty and strat parsing
+ *	- split the file in block of server
+ *	- remove all comments
+ *	- tokenize each block of server
  */
 class ParserServerConfig
 {
@@ -34,6 +33,7 @@ class ParserServerConfig
 	private:
 
 		std::map<int, std::map<std::string, std::string> >		_servers;
+		std::vector<std::string>								_serverBlock;
 
 		ParserServerConfig( void );
 		ParserServerConfig( const ParserServerConfig& src );
@@ -41,21 +41,20 @@ class ParserServerConfig
 
 		int						parsePort( const std::string& value );
 
-		bool					requireSemicolon( const std::string& line );
-
 		void					checkHiddenFile( const std::string& filename );
-		void					parseConfigFile( const std::string& content );
-		void					parseServerBlock( const std::string& serverBlock );
+		void					extractServerBlock( const std::string& content );
+		void					insertChar( std::string &str, char target, char toInsert );
+		void					debugTokens( const std::vector<Token>& tokens, int indent);
 
-		std::string				trim( const std::string& s );
 		std::string				extractBlock(	const std::string& content,
 												const std::string& keyword,
 												char end_char, size_t* pos);
 		std::string				stripComments( const std::string& line );
+		std::string				removeWhitespace( const std::string& input );
 
 	public:
 
-		ParserServerConfig( std::string filename );
+		ParserServerConfig( const std::string& filename );
 		~ParserServerConfig( void );
 
 		/*	GETTER	*/

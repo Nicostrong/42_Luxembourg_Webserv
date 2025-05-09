@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/07 09:21:24 by nfordoxc         ###   ########.fr        #
+#    Updated: 2025/05/09 13:55:13 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +82,7 @@ NET_NAME		=	test_networking
 ################################################################################
 
 PAR_SRC			=	../class/Nico.cpp \
+					../class/Token.cpp \
 					../class/Ressource.cpp \
 					main_parser.cpp
 
