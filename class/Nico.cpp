@@ -3,35 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   Nico.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/09 17:45:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/10 17:44:32 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Nico.hpp"
 #include "../includes/Token.hpp"
+#include "../includes/CheckerTokens.hpp"
 
 /*******************************************************************************
  *							CANONICAL FORM									   *
  ******************************************************************************/
 
 /*
- *	The parser call ressoource and receive a string with all the file inside
- *	it check if an error or the file is empty
- *	start the parsing
- *	first it split each block of server on list of server block without comments
- *	each block of server are parsing to a map of string keyWord/string value
- *	at the end the attribut _servers containt a map of server (port/config)
- *	for each port we can creat a server object with specific config
+ *	le Parser recoit un path d un fichier de config
+ *	il la passe a Ressource qui l ouvre et le lit
+ *	Parser verifie les erreur et recupere le contenu du fichier
+ *	il format le contenue en supprimant les comments, les tab et les \n
+ *	il ajoute un espace devant chaque ';' et '{'
+ *	il tokenize la string qui sera check par la class Token
+ *	il split les token en plusieurs token de server
+ *	il cree les server avec les tokens
  */
 ParserServerConfig::ParserServerConfig( const std::string& filename )
 {
 	try
 	{
 		std::string			content;
-		std::vector<Token>	tokens;
 		Token*				head = NULL;
 
 		checkHiddenFile(filename);
@@ -39,13 +40,17 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 		Ressource		file(filename);
 
 		file.isFail() ? throw FileError() : content = file.getRaw();
-		content.empty() ? throw EmptyConfigError() : extractServerBlock(content);
-		head->tokenize(this->_serverBlock[0]);
+		content.empty() ? throw EmptyConfigError() : formatString(content);
+		head = Token::tokenize(this->_formatedString);
 		head->printToken();
-		//if (this->_serverBlock.empty())	
-		//	throw EmptyConfigError();
-		this->_servers.clear();
-		this->_serverBlock.clear();
+		this->_allTokens = head;
+		if (!this->_allTokens)	
+			throw EmptyConfigError();
+
+		CheckerTokens		checker(this->_allTokens);
+
+		checker.validate();
+		this->_serverToken.clear();
 		LOG_DEB("ParserServerConfig constructor called.");
 	}
 	catch(const std::exception& e)
@@ -60,6 +65,7 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
  */
 ParserServerConfig::~ParserServerConfig( void )
 {
+	delete this->_allTokens;
 	LOG_DEB("Destructor of ParserServerConfig called.");
 	return ;
 }
@@ -87,26 +93,16 @@ void		ParserServerConfig::checkHiddenFile( const std::string& filename )
  *	and save each server block on a list.
  *	Each server blok are transformed on map of key/value
  */
-void		ParserServerConfig::extractServerBlock( const std::string& content )
+void		ParserServerConfig::formatString( const std::string& content )
 {
-	size_t							pos = 0;
-
-	while ((pos = content.find("server", pos)) != std::string::npos)
-	{
-		std::string		block;
+	std::string		block;
 		
-		block = extractBlock(content, "server", '}', &pos);
-		block = stripComments(block);
-		block = removeWhitespace(block);
-		insertChar(block, ';', ' ');
-#ifdef DEBUG
-		std::cout << "SERVER BLOCK CLEAN" << std::endl;
-		std::cout << block << std::endl;
-#endif
-		this->_serverBlock.push_back(block);
-	}
-	if (this->_serverBlock.size() < 1)
-		throw ParsingError("ExtractBlock server.");
+	block = content;
+	block = stripComments(block);
+	block = removeWhitespace(block);
+	insertChar(block, ';', ' ');
+	insertChar(block, '{', ' ');
+	this->_formatedString = block;
 	return ;
 }
 
@@ -142,7 +138,7 @@ std::string		ParserServerConfig::removeWhitespace(const std::string& input)
 	{
 		if (std::isspace(input[i]))
 		{
-			if (!output.empty() && output.back() != ' ')
+			if (!output.empty() && output[output.length() - 1] != ' ')
 				output += ' ';
 		}
 		else
@@ -222,73 +218,6 @@ int				ParserServerConfig::parsePort( const std::string &value )
 	if (port <= 0 || port > 65535)
 		throw PortValueException();
 	return (port);
-}
-
-/*******************************************************************************
- *								GETTER										   *
- ******************************************************************************/
-
-/*
- *	Get just one map of one server
- */
-const std::map<std::string, std::string>&		ParserServerConfig::getServer( size_t index ) const
-{
-	std::map<int, std::map<std::string, std::string> >::const_iterator		it;
-
-	if (index >= this->_servers.size()) 
-		throw GetServerMapError();
-	it = this->_servers.begin();
-	std::advance(it, index);
-	return (it->second);
-}
-
-size_t		ParserServerConfig::getNumberServer( void ) const
-{
-	return (this->_servers.size());
-}
-
-/*******************************************************************************
- *								PRINTER										   *
- ******************************************************************************/
-
-/*
- *	Print all servers of the config file
- */
-void		ParserServerConfig::printServers( void ) const
-{
-	std::map<int, std::map<std::string, std::string> >::const_iterator		it;
-
-	for (it = this->_servers.begin(); it != this->_servers.end(); ++it)
-	{
-		std::map<std::string, std::string>::const_iterator					sub;
-
-		std::cout << std::endl << "[SERVER ON PORT " << it->first << "]" << std::endl;
-		for (sub = it->second.begin(); sub != it->second.end(); ++sub)
-			std::cout << sub->first << " : " << sub->second << std::endl;
-		std::cout << "--------------------------------------------------------------------------------" << std::endl;
-	}
-	return ;
-}
-
-
-void		ParserServerConfig::printOneServer( size_t index ) const
-{
-	std::map<int, std::map<std::string, std::string> >::const_iterator	it;
-	std::map<std::string, std::string>::const_iterator					sub;
-	
-	if (index >= this->_servers.size()) 
-	{
-		std::cout << "[ERROR] No server found at index: " << index << std::endl;
-		return ;
-	}
-	it = this->_servers.begin();
-	std::advance(it, index);
-	std::cout << std::endl << "[SERVER ON PORT " << it->first << "]" << std::endl;
-	for (sub = it->second.begin(); sub != it->second.end(); ++sub)
-		std::cout << sub->first << " : " << sub->second << std::endl;
-
-	std::cout << "--------------------------------------------------------------------------------" << std::endl;
-	return ;
 }
 
 /*******************************************************************************
@@ -380,7 +309,7 @@ const char		*ParserServerConfig::PortValueException::what() const throw()
  *							TESTER CLASS									   *
  ******************************************************************************/
 
-#ifdef TEST
+#ifdef TESTMAIN
 
 int main( void )
 {

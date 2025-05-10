@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/09 18:05:06 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/10 17:56:47 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class 	Token
 
 		enum	Type
 		{
+			SERVER,			//	server block
 			BLK_S,			//	block start
 			DIR_K,			//	key directive
 			DIR_V,			//	value directive
@@ -47,7 +48,9 @@ class 	Token
 		Token&						operator=( const Token& src_obj );
 
 		/*	GETTER	*/
-		std::string					getType( void ) const;
+		int							getType( void ) const;
+		
+		std::string					getTypeName( void ) const;
 		std::string					getValue( void ) const;
 
 		Token*						getNext( void ) const;
@@ -55,7 +58,7 @@ class 	Token
 		/*	METHOD	*/
 		void						printToken( void ) const;
 
-		Token*						tokenize( const std::string& serverConfig );
+		static Token*				tokenize( const std::string& serverConfig );
 
 	private:
 
@@ -64,34 +67,35 @@ class 	Token
 		Token*						_next;
 
 		/*	PRIVATE METHODS	*/
-		void						attachToken(	Token*& head,
+		static void					attachToken(	Token*& head,
 													Token*& current,
 													Token* newToken );
+		static void					deleteChain( Token* head );
 
-		bool						isDirectiveKey( const std::string& word );
+		static bool					isDirectiveKey( const std::string& word );
 
-		Token*						createErrorPage(	std::istringstream& iss,
+		static Token*				createErrorPage(	std::istringstream& iss,
 														std::string word,
 														Token*& head,
 														Token*& current,
 														int& braceCount,
 														bool& inErrorBlk );
-		Token*						createBrace(	const std::string& word,
+		static Token*				createBrace(	const std::string& word,
 													Token*& head,
 													Token*& current,
 													int& braceCount,
 													bool& inLocation,
 													bool& inErrorBlk,
 													bool& inServer);
-		Token*						createSemicolon(	const std::string& word,
+		static Token*				createSemicolon(	const std::string& word,
 														Token*& head,
 														Token*& current,
 														bool& inHTTP);
-		Token*						createDirective(	std::istringstream& iss,
+		static Token*				createDirective(	std::istringstream& iss,
 														const std::string& word,
 														Token*& head,
 														Token*& current);
-		Token*						createLocation( std::istringstream& iss,
+		static Token*				createLocation( std::istringstream& iss,
 													Token*& head,
 													Token*& current,
 													int& braceCount,

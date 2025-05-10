@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/09 13:55:13 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/10 17:45:02 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ DEB_OPT			=	--tool=memcheck \
 					--show-leak-kinds=all \
 					--track-fds=yes
 
-ARG0			=	"../config/bad.conf"
+ARG0			=	"./good_config/good_2.conf"
 
 RM				=	rm -f
 
@@ -84,6 +84,7 @@ NET_NAME		=	test_networking
 PAR_SRC			=	../class/Nico.cpp \
 					../class/Token.cpp \
 					../class/Ressource.cpp \
+					../class/CheckerTokens.cpp \
 					main_parser.cpp
 
 PAR_OBJ			=	$(PAR_SRC:.cpp=.o)

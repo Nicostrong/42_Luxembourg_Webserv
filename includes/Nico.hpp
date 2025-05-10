@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nico.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/09 16:41:22 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/10 17:02:12 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ class ParserServerConfig
 
 	private:
 
-		std::map<int, std::map<std::string, std::string> >		_servers;
-		std::vector<std::string>								_serverBlock;
+		std::string				_formatedString;
+		Token*					_allTokens;
+		std::list<Token*>		_serverToken;
 
 		ParserServerConfig( void );
 		ParserServerConfig( const ParserServerConfig& src );
@@ -42,7 +43,7 @@ class ParserServerConfig
 		int						parsePort( const std::string& value );
 
 		void					checkHiddenFile( const std::string& filename );
-		void					extractServerBlock( const std::string& content );
+		void					formatString( const std::string& content );
 		void					insertChar( std::string &str, char target, char toInsert );
 		void					debugTokens( const std::vector<Token>& tokens, int indent);
 
@@ -56,14 +57,6 @@ class ParserServerConfig
 
 		ParserServerConfig( const std::string& filename );
 		~ParserServerConfig( void );
-
-		/*	GETTER	*/
-		const std::map<std::string, std::string>&	getServer( size_t index ) const;
-		size_t										getNumberServer( void ) const;
-		
-		/*	PRINTER	*/
-		void										printServers( void ) const;
-		void										printOneServer( size_t index ) const;
 
 		/*	parsing error Exception	*/
 		class	ParsingError: public std::exception

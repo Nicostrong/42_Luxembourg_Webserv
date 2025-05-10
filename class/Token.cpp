@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/09 18:17:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/10 17:58:14 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,16 @@ Token::Token( Type type, const std::string& value ) : _type(type), _value(value)
 
 Token::Token( const Token& src_obj ) : _type(src_obj._type), _value(src_obj._value), _next(NULL)
 {
+	if (src_obj._next)
+		this->_next = new Token(*src_obj._next);
 	return ;
 }
 
-Token::~Token( void ) { return ; }
+Token::~Token( void )
+{
+	delete this->_next;
+	return ;
+}
 
 Token&		Token::operator=( const Token& src_obj )
 {
@@ -30,18 +36,41 @@ Token&		Token::operator=( const Token& src_obj )
 	{
 		this->_type = src_obj._type;
 		this->_value = src_obj._value;
-		this->_next = NULL;
+		
+		Token*		next = NULL;
+		if (src_obj._next)
+			next = new Token(*src_obj._next);
+		delete this->_next;
+		this->_next = next;
 	}
 	return (*this);
 }
 
+void		Token::deleteChain( Token* head )
+{
+	while (head)
+	{
+		Token*		tmp = head;
+
+		head = head->_next;
+		tmp->_next = NULL;
+		delete tmp;
+	}
+	return ;
+}
+
+int				Token::getType( void ) const { return (this->_type); }
+
 std::string		Token::getValue( void ) const { return (this->_value); }
 
-std::string		Token::getType( void ) const
+std::string		Token::getTypeName( void ) const
 {
 	std::string		tokenName;
 	switch (this->_type)
 	{
+		case SERVER:
+			tokenName = "SERVER";
+			break;
 		case BLK_S:
 			tokenName = "BLK_S";
 			break;
@@ -88,7 +117,7 @@ std::string		Token::getType( void ) const
 			tokenName = "SEMICOLON";
 			break;
 		default:
-			tokenName = "UNKNOWN_TYPE"; // Invalid type
+			tokenName = "UNKNOWN_TYPE";
 	}
 	return (tokenName);
 }
@@ -97,7 +126,7 @@ Token*		Token::getNext( void ) const { return (this->_next); }
 
 void		Token::printToken( void ) const
 {
-	std::cout << "Token [" << getType() << "] - Value: " << this->_value << std::endl;
+	std::cout << "Token [" << getTypeName() << "] - Value: " << this->_value << std::endl;
 	if (this->_next)
 	{
 		std::cout << "Next -> ";
@@ -195,23 +224,15 @@ Token*		Token::createLocation(	std::istringstream& iss, Token*& head,
 	inLocation = true;
 	while (iss >> token && token != "}")
 	{
-#ifdef DEBUG
-		std::cout << "LOCATION KEY: " << token << std::endl;
-#endif
-		if (token == "allow" || token == "limit_except" || token == "deny")
+		if (token == "allow")
 		{
 			std::string		method;
 
 			attachToken(head, current, new Token(Token::HTTP_K, token));
 			while (iss >> method && method != ";")
-			{
-#ifdef DEBUG
-				std::cout << "LOCATION VALUE: " << method << std::endl;
-#endif
 				attachToken(head, current, new Token(Token::HTTP_V, method));
-			}
 			if (method != ";")
-				throw ParserServerConfig::ParsingError("Missing ';' after allow/limit_except");
+				throw ParserServerConfig::ParsingError("Missing ';' after allow");
 			attachToken(head, current, new Token(Token::SEMICOLON, ";"));
 		}
 		else if (isDirectiveKey(token))
@@ -249,7 +270,6 @@ Token*		Token::createErrorPage(	std::istringstream& iss,
 	attachToken(head, current, errorStart);
 	if (!(iss >> next) || next != "{")
 		throw ParserServerConfig::ParsingError("Expected '{' after error_page");
-
 	braceCount++;
 
 	Token*			errBraceStart = new Token(Token::BRACE_S, "{");
@@ -258,16 +278,10 @@ Token*		Token::createErrorPage(	std::istringstream& iss,
 	inErrorBlk = true;
 	while (iss >> code && code != "}")
 	{
-#ifdef DEBUG
-		std::cout << "ERROR_PAGE KEY: " << code << std::endl;
-#endif
 		if (!(iss >> path))
 			throw ParserServerConfig::ParsingError("Missing path after error code '" + code + "'");
 		if (!(iss >> semi) || semi != ";")
 			throw ParserServerConfig::ParsingError("Missing ';' after error_page value");
-#ifdef DEBUG
-			std::cout << "ERROR_PAGE VALUE: " << path << std::endl;
-#endif
 		attachToken(head, current, new Token(Token::ERR_K, code));
 		attachToken(head, current, new Token(Token::DIR_V, path));
 		attachToken(head, current, new Token(Token::SEMICOLON, ";"));
@@ -297,7 +311,8 @@ Token*		Token::createBrace(	const std::string& word, Token*& head, Token*& curre
 	if (word == "{")
 	{
 		braceCount++;
-		!inServer ? inServer = true : 
+		if (inServer)
+			return (current);
 		!inErrorBlk ? inErrorBlk = true : 
 		!inLocation ? inLocation = true : 
 		throw ParserServerConfig::ParsingError("Unexpected '{' inside a block");
@@ -305,9 +320,10 @@ Token*		Token::createBrace(	const std::string& word, Token*& head, Token*& curre
 	else 
 	{
 		braceCount--;
-		inLocation = false;
-		inErrorBlk = false;
-		inServer = false;
+		inLocation ? inLocation = false :
+		inErrorBlk ? inErrorBlk = false :
+		inServer ? inServer = false :
+		throw ParserServerConfig::ParsingError("Unexpected '}' inside a block");
 	}
 	return (current);
 }
@@ -325,9 +341,6 @@ Token*		Token::createSemicolon(	const std::string& word, Token*& head,
     return (current);
 }
 
-
-
-
 Token*		Token::tokenize( const std::string& input )
 {
 	std::istringstream		iss(input);
@@ -340,34 +353,74 @@ Token*		Token::tokenize( const std::string& input )
 	bool					inErrorBlk = false;
 	bool					inHTTP = false;
 
-	while (iss >> word)
+	try
 	{
-#ifdef DEBUG
-		std::cout << "WORD: " << word << std::endl;
-#endif
-		if (word == "{" || word == "}")
-			current = createBrace(word, head, current, braceCount, inLocation, inErrorBlk, inServer);
-		else if (!inServer)
-			throw ParserServerConfig::ParsingError("Unexpected data outside server block");
-		else if (word == "location")
-			current = createLocation(iss, head, current, braceCount, inLocation);
-		else if (word == "error_page")
-			current = createErrorPage(iss, word, head, current, braceCount, inErrorBlk);
-		else if (word == ";")
-			current = createSemicolon(word, head, current, inHTTP);
-		else if (isDirectiveKey(word))
-			current = createDirective(iss, word, head, current);
-		else
-			throw ParserServerConfig::ParsingError("Unknown directive: " + word);
+		while (iss >> word)
+		{
+			if (word == "{" || word == "}")
+				current = createBrace(word, head, current, braceCount, inLocation, inErrorBlk, inServer);
+			else if (word == "server")
+			{
+				Token*		serverTok = new Token(Token::SERVER, word);
+				
+				attachToken(head, current, serverTok);
+				inServer = true;
+			}
+			else if (!inServer && word != "server" && word != "}")
+				throw ParserServerConfig::ParsingError("Unexpected data outside server block");
+			else if (word == "location")
+				current = createLocation(iss, head, current, braceCount, inLocation);
+			else if (word == "error_page")
+				current = createErrorPage(iss, word, head, current, braceCount, inErrorBlk);
+			else if (word == ";")
+				current = createSemicolon(word, head, current, inHTTP);
+			else if (isDirectiveKey(word))
+				current = createDirective(iss, word, head, current);
+			else
+				throw ParserServerConfig::ParsingError("Unknown directive: " + word);
+		}
+
+		if (braceCount != 0)
+			throw ParserServerConfig::ParsingError("Mismatched braces: some '{' or '}' are not closed properly");
+		if (inLocation || inErrorBlk || inHTTP || inServer)
+			throw ParserServerConfig::ParsingError("Unclosed block.");
 	}
-
-	if (braceCount != 0)
-		throw ParserServerConfig::ParsingError("Mismatched braces: some '{' or '}' are not closed properly");
-	if (inLocation || inErrorBlk || inHTTP || inServer)
-		throw ParserServerConfig::ParsingError("Unclosed block.");
-
-#ifdef DEBUG
-	std::cout << "NB BRACE FINAL: " << braceCount << std::endl;
-#endif
+	catch ( const std::exception& e )
+	{
+		deleteChain(head);
+		throw ;
+	}
 	return (head);
 }
+
+#ifdef TEST
+
+int main( void )
+{
+	try
+	{
+		std::string		config = "{ listen 8080 ; server_name localhost ; \
+									root ./www/html ; index index.html ; \
+									max_connection_client 10 ; client_max_body_size 5M ; \
+									error_page { 403 ./errors/403.html ; \
+									404 ./errors/404.html ; 405 ./errors/405.html ; \
+									409 ./errors/409.html ; 413 ./errors/413.html ; \
+									418 ./errors/418.html ; 500 ./errors/500.html ; } \
+									location / { autoindex off ; allow GET POST DELETE HEAD ; } } ";
+		
+		Token*			tokens = Token::tokenize(config);
+		
+		std::cout << "Pointeur de HEAD: " << tokens << std::endl;
+		tokens->printToken();
+		
+		delete tokens;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+		return (1);
+	}
+	return (0);
+}
+
+#endif

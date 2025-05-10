@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_parser.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:19:33 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/09 07:10:52 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/10 17:03:23 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ int		main( int argc, char **argv)
 	try
 	{
 		ParserServerConfig		pc(argv[1]);
-
-		pc.printServers();
 	}
 	catch(const std::exception& e)
 	{
