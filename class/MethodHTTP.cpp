@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 09:58:09 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/11 16:47:14 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,10 @@ std::set<std::string>	MethodHTTP::initValidMethods( void )
 /*
  *	Check if the method is a valid methode
  */
-bool	MethodHTTP::isMethod( const std::string &method ) const
+bool	MethodHTTP::isMethod( const std::string &method )
 {
 	LOG_DEB("Checking if " + method + " is a valid method");
-	return (this->_validMethods.find(method) != this->_validMethods.end());
+	return (MethodHTTP::_validMethods.find(method) != MethodHTTP::_validMethods.end());
 }
 
 /*

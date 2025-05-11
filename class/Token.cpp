@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/10 17:58:14 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/11 17:42:20 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,31 +69,31 @@ std::string		Token::getTypeName( void ) const
 	switch (this->_type)
 	{
 		case SERVER:
-			tokenName = "SERVER";
+			tokenName = BLUE "SERVER" RESET;
 			break;
-		case BLK_S:
-			tokenName = "BLK_S";
+		case SER_BLK_S:
+			tokenName = BLUE "SER_BLK_S" RESET;
 			break;
-		case DIR_K:
-			tokenName = "DIR_K";
+		case SER_BLK_E:
+			tokenName = BLUE "SER_BLK_E" RESET;
 			break;
-		case DIR_V:
-			tokenName = "DIR_V";
-			break;
-		case ERR_K:
-			tokenName = "ERR_K";
+		case ERROR:
+			tokenName = RED "ERROR" RESET;
 			break;
 		case ERR_BLK_S:
-			tokenName = "ERR_BLK_S";
+			tokenName = RED "ERR_BLK_S" RESET;
 			break;
 		case ERR_BLK_E:
-			tokenName = "ERR_BLK_E";
+			tokenName = RED "ERR_BLK_E" RESET;
 			break;
-		case LOC_K:
-			tokenName = "LOC_K";
+		case LOCATION:
+			tokenName = YELLOW "LOCATION" RESET;
 			break;
 		case LOC_BLK_S:
-			tokenName = "LOC_BLK_S";
+			tokenName = YELLOW "LOC_BLK_S" RESET;
+			break;
+		case LOC_BLK_E:
+			tokenName = YELLOW "LOC_BLK_E" RESET;
 			break;
 		case HTTP_K:
 			tokenName = "HTTP_K";
@@ -101,17 +101,11 @@ std::string		Token::getTypeName( void ) const
 		case HTTP_V:
 			tokenName = "HTTP_V";
 			break;
-		case LOC_BLK_E:
-			tokenName = "LOC_BLK_E";
+		case DIR_K:
+			tokenName = "DIR_K";
 			break;
-		case BLK_E:
-			tokenName = "BLK_E";
-			break;
-		case BRACE_S:
-			tokenName = "BRACE_S";
-			break;
-		case BRACE_E:
-			tokenName = "BRACE_E";
+		case DIR_V:
+			tokenName = "DIR_V";
 			break;
 		case SEMICOLON:
 			tokenName = "SEMICOLON";
@@ -124,13 +118,15 @@ std::string		Token::getTypeName( void ) const
 
 Token*		Token::getNext( void ) const { return (this->_next); }
 
-void		Token::printToken( void ) const
+void		Token::printToken( bool isNext ) const
 {
+	if (!isNext)
+		std::cout << "\t";
 	std::cout << "Token [" << getTypeName() << "] - Value: " << this->_value << std::endl;
 	if (this->_next)
 	{
 		std::cout << "Next -> ";
-		this->_next->printToken();
+		this->_next->printToken(true);
 	}
 	return ;
 }
@@ -211,7 +207,7 @@ Token*		Token::createLocation(	std::istringstream& iss, Token*& head,
 	if (!(iss >> path))
 		throw ParserServerConfig::ParsingError("Expected path after 'location'");
 
-	Token*		locKey = new Token(Token::LOC_K, "location " + path);
+	Token*		locKey = new Token(Token::LOCATION, "location " + path);
 
 	attachToken(head, current, locKey);
 	if (!(iss >> brace) || brace != "{")
@@ -272,7 +268,7 @@ Token*		Token::createErrorPage(	std::istringstream& iss,
 		throw ParserServerConfig::ParsingError("Expected '{' after error_page");
 	braceCount++;
 
-	Token*			errBraceStart = new Token(Token::BRACE_S, "{");
+	Token*			errBraceStart = new Token(Token::ERR_BLK_S, "{");
 
 	attachToken(head, current, errBraceStart);
 	inErrorBlk = true;
@@ -282,7 +278,7 @@ Token*		Token::createErrorPage(	std::istringstream& iss,
 			throw ParserServerConfig::ParsingError("Missing path after error code '" + code + "'");
 		if (!(iss >> semi) || semi != ";")
 			throw ParserServerConfig::ParsingError("Missing ';' after error_page value");
-		attachToken(head, current, new Token(Token::ERR_K, code));
+		attachToken(head, current, new Token(Token::DIR_K, code));
 		attachToken(head, current, new Token(Token::DIR_V, path));
 		attachToken(head, current, new Token(Token::SEMICOLON, ";"));
 	}
@@ -305,7 +301,7 @@ Token*		Token::createBrace(	const std::string& word, Token*& head, Token*& curre
 								int& braceCount, bool& inLocation, bool& inErrorBlk,
 								bool& inServer)
 {
-	Token*		blk = new Token(word == "{" ? Token::BRACE_S : Token::BRACE_E, word);
+	Token*		blk = new Token(word == "{" ? Token::SER_BLK_S : Token::SER_BLK_E, word);
 
 	attachToken(head, current, blk);
 	if (word == "{")

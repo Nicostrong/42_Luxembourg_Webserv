@@ -6,7 +6,7 @@
 #    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/10 17:45:02 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/05/11 16:51:53 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,6 +85,7 @@ PAR_SRC			=	../class/Nico.cpp \
 					../class/Token.cpp \
 					../class/Ressource.cpp \
 					../class/CheckerTokens.cpp \
+					../class/MethodHTTP.cpp \
 					main_parser.cpp
 
 PAR_OBJ			=	$(PAR_SRC:.cpp=.o)

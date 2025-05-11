@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/10 17:56:47 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/11 17:39:05 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,19 @@ class 	Token
 
 		enum	Type
 		{
-			SERVER,			//	server block
-			BLK_S,			//	block start
-			DIR_K,			//	key directive
-			DIR_V,			//	value directive
-			ERR_K,			//	key error
+			SERVER,			//	server key
+			SER_BLK_S,		//	block server start
+			SER_BLK_E,		//	block server end
+			ERROR,			//	key error_page
 			ERR_BLK_S,		//	block error start
 			ERR_BLK_E,		//	block error end
-			LOC_K,			//	location key
+			LOCATION,		//	location key
 			LOC_BLK_S,		//	location block start
+			LOC_BLK_E,		//	location block end
 			HTTP_K,			//	HTTP key
 			HTTP_V,			//	method HTTP value
-			LOC_BLK_E,		//	location block end
-			BLK_E,			//	block end
-			BRACE_S,		//	brace open
-			BRACE_E,		//	brace close
+			DIR_K,			//	key directive
+			DIR_V,			//	value directive
 			SEMICOLON		//	end of directive
 		};
 
@@ -56,7 +54,7 @@ class 	Token
 		Token*						getNext( void ) const;
 
 		/*	METHOD	*/
-		void						printToken( void ) const;
+		void						printToken( bool isNext = false ) const;
 
 		static Token*				tokenize( const std::string& serverConfig );
 

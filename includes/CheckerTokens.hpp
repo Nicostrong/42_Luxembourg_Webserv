@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/10 17:50:42 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/11 16:54:37 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "./lib.hpp"
 # include "./Token.hpp"
+# include "./MethodHTTP.hpp"
 
 class	CheckerTokens
 {
@@ -31,7 +32,9 @@ class	CheckerTokens
 
 		CheckerTokens	&operator=(  const CheckerTokens& src_obj );
 
-		void			checkBracesAndBlocks( void );
+		void			checkValue( void ) ;
+		void			checkMethodHTTP( void );
+;		void			checkBracesAndBlocks( void );
 		void			assertFinalState( void ) const;
 		void			checkDuplicatedKeysInScope( void );
 		void			checkDirectiveKeyValuePairs( void );
@@ -45,6 +48,18 @@ class	CheckerTokens
 	
 		void			validate( void );
 
+		/*	checkererror Exception	*/
+		class	CheckerError: public std::exception
+		{
+			private:
+				std::string				_msg;
+			public:
+				CheckerError( const std::string& data ) throw();
+				virtual ~CheckerError( void ) throw();
+				virtual const char	*what() const throw();
+		
+		};
+		
 };
 
 

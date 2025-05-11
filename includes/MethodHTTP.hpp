@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:43:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/11 16:41:00 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ class	MethodHTTP
 		static std::set<std::string>	_validMethods;
 
 		void							initDefault( void );
-		bool							isMethod( const std::string &method ) const;
 
 # ifndef TEST
 		static std::set<std::string>	initValidMethods( void );
@@ -57,8 +56,9 @@ class	MethodHTTP
 
 		/*	METHODE	*/
 		void							clear( void );
-		bool							isAllowed( const std::string &method ) const;
+		static bool						isMethod( const std::string &method );
 		bool							isDenied( const std::string &method ) const;
+		bool							isAllowed( const std::string &method ) const;
 
 		/*	Unknow method exception	*/
 		class	MethodUnknow: public std::exception
