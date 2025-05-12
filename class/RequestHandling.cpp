@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/09 11:09:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/12 11:04:34 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const HttpResponse& res)
 {
     std::ostringstream response;
-	response << req.getHTTP() << " " << req.getStatusCode() << " " << getReasonPhrase(req.getStatusCode()) << "\r\n";
-    response << res.getHeaders_raw() << "\r\n";
-    response << "Content-Length: " << req.getBody().size() << "\r\n";
+	response << req.getHTTP() << " " << req.getStatusCode() << " " << getReasonPhrase(req.getStatusCode()) << CRLF;
+    response << res.getHeaders_raw() << CRLF;
+    response << "Content-Length: " << req.getBody().size() << CRLF;
     response << "Connection: close\r\n";
-    response << "\r\n"; // Blank line to separate headers from body
+    response << CRLF; // Blank line to separate headers from body
     response << req.getBody();
 	//std::cout << "[debug response]:\n" << response << "\n";
     return response.str();
