@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nico.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/10 17:44:32 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/12 13:06:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
  *	il split les token en plusieurs token de server
  *	il cree les server avec les tokens
  */
-ParserServerConfig::ParserServerConfig( const std::string& filename )
+ParserServerConfig::ParserServerConfig( const std::string& filename ) : _allTokens(NULL)
 {
 	try
 	{
@@ -46,12 +46,10 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 		this->_allTokens = head;
 		if (!this->_allTokens)	
 			throw EmptyConfigError();
-
-		CheckerTokens		checker(this->_allTokens);
-
-		checker.validate();
-		this->_serverToken.clear();
-		LOG_DEB("ParserServerConfig constructor called.");
+		CheckerTokens::check(this->_allTokens);
+		splitServerToken(this->_allTokens);
+		if (this->_serverToken.empty())
+			throw ParsingError("Server list empty");
 	}
 	catch(const std::exception& e)
 	{
@@ -65,8 +63,10 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
  */
 ParserServerConfig::~ParserServerConfig( void )
 {
-	delete this->_allTokens;
-	LOG_DEB("Destructor of ParserServerConfig called.");
+	std::list<Token*>::iterator		it;
+
+	for (it = this->_serverToken.begin(); it != this->_serverToken.end(); it++)
+		delete (*it);
 	return ;
 }
 
@@ -102,6 +102,7 @@ void		ParserServerConfig::formatString( const std::string& content )
 	block = removeWhitespace(block);
 	insertChar(block, ';', ' ');
 	insertChar(block, '{', ' ');
+	insertChar(block, '}', ' ');
 	this->_formatedString = block;
 	return ;
 }
@@ -219,6 +220,43 @@ int				ParserServerConfig::parsePort( const std::string &value )
 		throw PortValueException();
 	return (port);
 }
+
+/*
+ *	Split the Tokens list to separate each server config
+ */
+void			ParserServerConfig::splitServerToken( Token *head )
+{
+	while (head)
+	{
+		if (head->getType() == Token::SERVER)
+		{
+			Token*		server = head;
+			Token*		tmp = head;
+
+			while (tmp && tmp->getType() != Token::SER_BLK_E)
+				tmp = tmp->getNext();
+			if (tmp)
+			{
+				head = tmp->getNext();
+				tmp->setNextToNull();
+				this->_serverToken.push_back(server);
+			}
+			else
+				break;
+		}
+		else
+			head = head->getNext();
+	}
+	std::list<Token*>::iterator		it;
+
+	for (it = this->_serverToken.begin(); it != this->_serverToken.end(); it++)
+	{
+		std::cout << "PRINT TOKEN LIST" << std::endl;
+		(*it)->printToken();
+	}
+	return ;
+}
+
 
 /*******************************************************************************
  *								EXCEPTION 									   *

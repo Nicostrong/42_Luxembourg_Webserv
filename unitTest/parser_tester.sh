@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/02 08:33:32 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/05 09:34:39 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/12 13:25:11 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ bad_conf=(
 	./bad_config/brace_1.conf
 	./bad_config/brace_2.conf
 	./bad_config/brace_3.conf
+	./bad_config/brace_4.conf
+	./bad_config/brace_5.conf
 	./bad_config/empty.conf
 	./bad_config/no_readable.conf
 	./bad_config/semi_colon_0.conf
@@ -89,7 +91,7 @@ do
 	TEMPFILE=$(mktemp)
 	echo -e "\033[1;94mTEST $((i + 1)): ${name} ${bad_conf[i]}\033[1;93m"
 	${name} ${bad_conf[i]} &> $TEMPFILE
-	if grep -Eiq "error" $TEMPFILE; then
+	if grep -Eiq "[error]" $TEMPFILE; then
 		echo -e "\033[1;92m\t✅\tOK => Error config file catching.\033[0m"
 	else
 		echo -e "\033[1;91m\t❌\tKO => Error config file not cathing.\033[0m"
@@ -114,7 +116,7 @@ do
 	TEMPFILE=$(mktemp)
 	echo -e "\033[1;94mTEST $((i + 1)): ${name} ${good_conf[i]}\033[1;93m"
 	${name} ${good_conf[i]} &> $TEMPFILE
-	if grep -iq "error" $TEMPFILE; then
+	if grep -iE "\b[error]\b" $TEMPFILE; then
 		echo -e "\033[1;91m\t❌\tKO => Error detected.\033[0m"
 		((error_count++))
 	else

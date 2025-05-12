@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/11 17:42:20 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/12 13:13:25 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,61 +59,34 @@ void		Token::deleteChain( Token* head )
 	return ;
 }
 
+void			Token::setNextToNull( void )
+{
+	this->_next = NULL;
+	return ;
+}
+
 int				Token::getType( void ) const { return (this->_type); }
 
 std::string		Token::getValue( void ) const { return (this->_value); }
 
 std::string		Token::getTypeName( void ) const
 {
-	std::string		tokenName;
-	switch (this->_type)
-	{
-		case SERVER:
-			tokenName = BLUE "SERVER" RESET;
-			break;
-		case SER_BLK_S:
-			tokenName = BLUE "SER_BLK_S" RESET;
-			break;
-		case SER_BLK_E:
-			tokenName = BLUE "SER_BLK_E" RESET;
-			break;
-		case ERROR:
-			tokenName = RED "ERROR" RESET;
-			break;
-		case ERR_BLK_S:
-			tokenName = RED "ERR_BLK_S" RESET;
-			break;
-		case ERR_BLK_E:
-			tokenName = RED "ERR_BLK_E" RESET;
-			break;
-		case LOCATION:
-			tokenName = YELLOW "LOCATION" RESET;
-			break;
-		case LOC_BLK_S:
-			tokenName = YELLOW "LOC_BLK_S" RESET;
-			break;
-		case LOC_BLK_E:
-			tokenName = YELLOW "LOC_BLK_E" RESET;
-			break;
-		case HTTP_K:
-			tokenName = "HTTP_K";
-			break;
-		case HTTP_V:
-			tokenName = "HTTP_V";
-			break;
-		case DIR_K:
-			tokenName = "DIR_K";
-			break;
-		case DIR_V:
-			tokenName = "DIR_V";
-			break;
-		case SEMICOLON:
-			tokenName = "SEMICOLON";
-			break;
-		default:
-			tokenName = "UNKNOWN_TYPE";
-	}
-	return (tokenName);
+	static const char*	typeNames[] = {
+			BLUE "SERVER" RESET,
+			BLUE "SER_BLK_S" RESET,
+			BLUE "SER_BLK_E" RESET,
+			RED "ERROR_PAGE" RESET,
+			RED "ERR_BLK_S" RESET,
+			RED "ERR_BLK_E" RESET,
+			YELLOW "LOCATION" RESET,
+			YELLOW "LOC_BLK_S" RESET,
+			YELLOW "LOC_BLK_E" RESET,
+			"HTTP_K", "HTTP_V", "DIR_K", "DIR_V", "SEMICOLON"
+	};
+	
+	if (this->_type >= SERVER && this->_type <= SEMICOLON)
+		return (typeNames[this->_type - SERVER]);
+	return ("UNKNOWN_TYPE");
 }
 
 Token*		Token::getNext( void ) const { return (this->_next); }
@@ -257,7 +230,7 @@ Token*		Token::createErrorPage(	std::istringstream& iss,
 									int& braceCount,
 									bool& inErrorBlk )
 {
-	Token*			errorStart = new Token(Token::ERR_BLK_S, word);
+	Token*			errorStart = new Token(Token::ERROR_PAGE, word);
 	std::string		next;
     std::string		code;
 	std::string		path;

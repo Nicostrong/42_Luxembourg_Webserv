@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/11 16:54:37 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/12 10:05:17 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include "./Token.hpp"
 # include "./MethodHTTP.hpp"
 
+/*
+ *	CheckerTokens class check the sementic off all token of the config file
+ *	If the sementic isn't correct it throw an exception
+ */
 class	CheckerTokens
 {
 
@@ -32,22 +36,24 @@ class	CheckerTokens
 
 		CheckerTokens	&operator=(  const CheckerTokens& src_obj );
 
+		void			validate( void );
 		void			checkValue( void ) ;
 		void			checkMethodHTTP( void );
-;		void			checkBracesAndBlocks( void );
+		void			checkBracesAndBlocks( void );
 		void			assertFinalState( void ) const;
 		void			checkDuplicatedKeysInScope( void );
 		void			checkDirectiveKeyValuePairs( void );
 		void			checkSemicolonBeforeBlockEnd( void );
+		void			checkSemicolonAfterHTTPValue( void );
 		void			checkSemicolonAfterDirectiveValue( void );
 	
 	public:
 
 		CheckerTokens( Token* head );
 		~CheckerTokens( void );
-	
-		void			validate( void );
 
+		static void		check( Token* head );
+	
 		/*	checkererror Exception	*/
 		class	CheckerError: public std::exception
 		{
@@ -61,6 +67,5 @@ class	CheckerTokens
 		};
 		
 };
-
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 08:47:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/12 16:06:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "IEventHandler.hpp"
 # include "Socket.hpp"
 # include "Ressource.hpp"
+# include "Token.hpp"
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -64,9 +65,10 @@ class	Server : public IEventHandler
 		
 	public:
 
-		Server( EventMonitoring &eventMonitoring );
-		Server( const std::map< std::string, std::string> &data,
-				EventMonitoring &eventMonitoring );
+		Server( EventMonitoring& eventMonitoring );
+		Server( const std::map< std::string, std::string>& data,
+				EventMonitoring& eventMonitoring );
+		Server( Token* serverTokensConfig, EventMonitoring& eventMonitoring );
 		~Server( void );
 
 		/*  GETTER	*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/11 17:39:05 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/12 13:12:27 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class 	Token
 			SERVER,			//	server key
 			SER_BLK_S,		//	block server start
 			SER_BLK_E,		//	block server end
-			ERROR,			//	key error_page
+			ERROR_PAGE,		//	key error_page
 			ERR_BLK_S,		//	block error start
 			ERR_BLK_E,		//	block error end
 			LOCATION,		//	location key
@@ -52,6 +52,9 @@ class 	Token
 		std::string					getValue( void ) const;
 
 		Token*						getNext( void ) const;
+
+		/*	SETTER	*/
+		void						setNextToNull( void  );
 
 		/*	METHOD	*/
 		void						printToken( bool isNext = false ) const;

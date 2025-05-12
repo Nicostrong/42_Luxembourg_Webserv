@@ -3,14 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/11 17:29:09 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/12 13:13:42 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/CheckerTokens.hpp"
+
+/*******************************************************************************
+ *							CANONICAL FORM									   *
+ ******************************************************************************/
 
 CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
 											_inServer(false), _inLocation(false),
@@ -26,11 +30,24 @@ CheckerTokens::~CheckerTokens( void )
 	return ;
 }
 
+/*******************************************************************************
+ *								Method										   *
+ ******************************************************************************/
+
+void		CheckerTokens::check( Token* head )
+{
+	CheckerTokens	checker(head);
+	
+	checker.validate();
+	return ;
+}
+
 void		CheckerTokens::validate( void )
 {
 	checkBracesAndBlocks();
 	checkDirectiveKeyValuePairs();
 	checkSemicolonAfterDirectiveValue();
+	checkSemicolonAfterHTTPValue();
 	checkSemicolonBeforeBlockEnd();
 	checkDuplicatedKeysInScope();
 	checkValue();
@@ -39,6 +56,13 @@ void		CheckerTokens::validate( void )
 	return ;
 }
 
+/*******************************************************************************
+ *							Private Method									   *
+ ******************************************************************************/
+
+/*
+ *	Check the number of brace and the localisation of block
+ */
 void		CheckerTokens::checkBracesAndBlocks( void )
 {
 	Token*		current = this->_head;
@@ -51,14 +75,15 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 				if (this->_inServer)
 					throw CheckerError("Nested server block not allowed");
 				break;
+
 			case Token::SER_BLK_S:
 				this->_inServer = true;
 				this->_braceCount++;
 				break;
 			case Token::SER_BLK_E:
 				this->_braceCount--;
-				if (this->_braceCount < 0)
-					throw CheckerError("Too many closing braces");
+				if (this->_braceCount != 0)
+					throw CheckerError("Number of braces error");
 				if (this->_inLocation || this->_inErrorBlk)
 					throw CheckerError("Unexpected closing brace");
 				else if (this->_inServer)
@@ -71,7 +96,9 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 				if (this->_inLocation)
 					throw CheckerError("Nested location block not allowed");
 				break;
+
 			case Token::LOC_BLK_S:
+				this->_braceCount++;
 				if (!this->_inServer)
 					throw CheckerError("Location block outside server");
 				if (this->_inLocation)
@@ -81,7 +108,7 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 			case Token::LOC_BLK_E:
 				this->_braceCount--;
 				if (this->_braceCount < 0)
-					throw CheckerError("Too many closing braces");
+					throw CheckerError("Too many closing braces LOCATION " + current->getValue());
 				if (this->_inErrorBlk)
 					throw CheckerError("Unexpected closing brace");
 				else if (this->_inLocation)
@@ -90,11 +117,13 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 					throw CheckerError("Unexpected closing brace");
 				break;
 			
-			case Token::ERROR:
+			case Token::ERROR_PAGE:
 				if (this->_inErrorBlk)
 					throw CheckerError("Nested error block not allowed");
 				break;
+
 			case Token::ERR_BLK_S:
+			this->_braceCount++;
 				if (!this->_inServer)
 					throw CheckerError("Error_page block outside server");
 				if (this->_inErrorBlk || this->_inLocation)
@@ -104,13 +133,13 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 			case Token::ERR_BLK_E:
 				this->_braceCount--;
 				if (this->_braceCount < 0)
-					throw CheckerError("Too many closing braces");
+					throw CheckerError("Too many closing braces ERROR " + current->getValue());
 				if (this->_inLocation)
-					throw CheckerError("Unexpected closing brace");
+					throw CheckerError("Unexpected closing brace.");
 				else if (this->_inErrorBlk)
 					this->_inErrorBlk = false;
 				else
-					throw CheckerError("Unexpected closing brace");
+					throw CheckerError("Unexpected closing brace.");
 				break;
 
 			default:
@@ -121,11 +150,14 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 	return ;
 }
 
+/*
+ *	Check if a directive key is next by a directive value
+ */
 void		CheckerTokens::checkDirectiveKeyValuePairs( void )
 {
 	Token*		current = _head;
 
-	while (current && current->getNext())
+	while (current && current->getNext() && current->getNext()->getNext())
 	{
 		if (current->getType() == Token::DIR_K || 
 			current->getType() == Token::HTTP_K)
@@ -133,28 +165,43 @@ void		CheckerTokens::checkDirectiveKeyValuePairs( void )
 			Token*		next = current->getNext();
 
 			if (next->getType() != Token::DIR_V && next->getType() != Token::HTTP_V)
-				throw CheckerError("Expected directive or HTTP value after key");
+				throw CheckerError("Expected directive or HTTP value after key " + current->getValue());
 		}
 		current = current->getNext();
 	}
 	return ;
 }
 
+/*
+ *	Check semicolon after directive value
+ */
 void		CheckerTokens::checkSemicolonAfterDirectiveValue( void )
 {
 	Token*		current = this->_head;
 
 	while (current && current->getNext())
 	{
-		if (current->getType() == Token::DIR_V || current->getType() == Token::HTTP_V)
-		{
-			Token*		next = current->getNext();
-
-			if (next->getType() != Token::SEMICOLON)
-				throw CheckerError("Expected ';' after directive or method value");
-		}
+		if (current->getType() == Token::DIR_V)
+			if (current->getNext()->getType() != Token::SEMICOLON)
+				throw CheckerError("Expected ';' after " + current->getValue());
 		current = current->getNext();
 	}
+	return ;
+}
+
+/*
+ *	Check semicolon after HTTP value
+ */
+void		CheckerTokens::checkSemicolonAfterHTTPValue( void )
+{
+	Token*		current = this->_head;
+
+	while (current && current->getType() != Token::HTTP_V)
+		current = current->getNext();
+	while (current && current->getType() == Token::HTTP_V)
+		current = current->getNext();
+	if (current && current->getType() != Token::SEMICOLON)
+			throw CheckerError("Expected ';' after " + current->getValue());
 	return ;
 }
 
@@ -164,15 +211,16 @@ void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 
 	while (current && current->getNext())
 	{
-		if ((current->getType() == Token::LOC_BLK_E || current->getType() == Token::ERR_BLK_E) &&
+		if ((current->getType() == Token::LOC_BLK_E || 
+			current->getType() == Token::ERR_BLK_E) &&
 			current != this->_head)
 		{
 			Token*		prev = this->_head;
 
-			while (prev->getNext() != current)
+			while (prev->getNext()->getType() != current->getType())
 				prev = prev->getNext();
 			if (prev->getType() != Token::SEMICOLON)
-				throw CheckerError("Expected ';' before closing location or error block");
+				throw CheckerError("Expected ';' after value: " + current->getValue());
 		}
 		current = current->getNext();
 	}

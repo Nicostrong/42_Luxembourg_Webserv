@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 12:55:52 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/12 16:18:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ void			Server::setValue(T &target, std::string &data)
  *	Parsing of the map<string, string> who contain all value of the config file
  *	to create an object Server
  */
-Server::Server( std::map< std::string, std::string> const &data, 
-	EventMonitoring &eventMonitoring) : _port(0), _maxConnectionClient(0), 
-	_maxSizeBody(0), _path("./www/html"), _index("index.html"), _em(eventMonitoring), _serverSocket(0)
+Server::Server( const std::map< std::string, std::string>& data, 
+	EventMonitoring& eventMonitoring) : _port(0), _maxConnectionClient(0), 
+	_maxSizeBody(0), _path("./www/html"), _index("index.html"), 
+	_em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Server constructor called");
 	try
@@ -64,13 +65,69 @@ Server::Server( std::map< std::string, std::string> const &data,
 }
 
 // Simple Constructor
-
-Server::Server(EventMonitoring &eventMonitoring) : 
+Server::Server( EventMonitoring &eventMonitoring ) : 
 	_em(eventMonitoring), _serverSocket(0)
 {
 	LOG_DEB("Simple Server Constructor called");
 }
 
+// Constructor via tokens
+Server::Server( Token* serverTokensConfig, EventMonitoring &eventMonitoring) 
+	: _port(0), _maxConnectionClient(0), _maxSizeBody(0), _path("./www/html"), 
+	_index("index.html"), _em(eventMonitoring), _serverSocket(0)
+{
+	LOG_DEB("Server with tokens Constructor called");
+	if (!serverTokensConfig || serverTokensConfig->getType() != Token::SERVER)
+		throw ParsingError("Expected SERVER token at beginning of Server config block");
+
+	Token*		current = serverTokensConfig->getNext();
+	if (!current || current->getType() != Token::SER_BLK_S)
+		throw ParsingError("Expected '{' after SERVER");
+	current = current->getNext();
+	while (current && current->getType != Token::SER_BLK_E)
+	{
+		switch (current->getType())
+		{
+			case Token::DIR_K:
+			{
+				std::string		key = current->getValue();
+
+				current = current->getNext();
+				if (!current || current->getType() != Token::DIR_V)
+					throw ParsingError("Expected value after directive key: " + key);
+				
+				std::string		value = current->getValue();
+				parseData(std::map<std::string, std::string>{{key, value}});
+				break;
+			}
+			case ERROR_PAGE: {
+				current = current->next;
+				if (!current || current->type != DIR_V)
+					throw ParsingError("Missing error code after ERROR_PAGE");
+				int code = std::atoi(current->value.c_str());
+				current = current->next;
+				if (!current || current->type != DIR_V)
+					throw ParsingError("Missing path after error code");
+				_mError[code] = current->value;
+				break;
+			}
+			case LOCATION: {
+				std::string locPath = current->value;
+				current = current->next;
+				if (!current || current->type != LOC_BLK_S)
+					throw ParsingError("Missing '{' after LOCATION");
+				std::string blockContent; // hypothetical, you will tokenize or keep a sub-token list here
+				// for simplicity assuming content is extracted
+				setLocation(locPath, blockContent);
+				break;
+			}
+			default:
+				break;
+		}
+		current = current->next;
+	}
+	checkServer();
+}
 /*
  *	Destructor
  */
