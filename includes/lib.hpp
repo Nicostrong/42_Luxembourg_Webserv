@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/08 14:58:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:25:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@
 # define MAGENTA	"\033[95m"		//	Method log
 # define CYAN		"\033[96m"		//	Debug log
 
+#define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
+
 # if DEBUG
-#  define LOG_DEB(msg)	std::cout << CYAN << "[DEBUG] " << msg << RESET << std::endl
+#  define LOG_DEB(msg)	std::cout << CYAN << "[DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
 # else
 #  define LOG_DEB(msg)
 # endif
 
-# define LOG_ERROR(msg)	std::cerr << RED << "[ERROR] " << msg << RESET << std::endl
+# define LOG_ERROR(msg)	std::cerr << RED << "[ERROR] " << msg << " in " << PRINT_INFOS() << RESET << std::endl
 
 #endif
