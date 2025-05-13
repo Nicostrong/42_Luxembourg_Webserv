@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 09:45:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:09:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,43 @@ std::string Uri::trimSlashEnd(const std::string& uri)
     if (uri.size() > 0 && *uri.rbegin() == '/')
         return (uri.substr(0, uri.size() - 1));
     return (uri);
+}
+
+std::string Uri::buildUri(std::string p1, std::string p2)
+{
+    p1 = trimSlashEnd(p1);
+    p2 = trimSlashBegin(p1);
+    return (p1 + '/' + p2);
+}
+
+std::string Uri::buildRealAbsolute(const Server& serv, const Location* loc, 
+    std::string uri)
+{
+    const Directive* rootDirective = loc->findDirective("root");
+	std::string location = loc->getName();
+	std::string	rootPath = serv.getPath();
+	
+	if (rootDirective)
+		rootPath = rootDirective->getValue(0);
+	location = trimSlashEnd(location);
+	rootPath = trimSlashEnd(rootPath);
+	
+	uri = uri.replace(0, location.size(), rootPath);
+	LOG_DEB("Path constructed: " + uri);
+	return (uri);
+}
+
+std::string Uri::buildRealRelative(const Server& serv, const Location* loc, 
+    std::string uri)
+{
+    const Directive* rootDirective = loc->findDirective("root");
+	std::string	rootPath = serv.getPath();
+	
+	if (rootDirective)
+		rootPath = rootDirective->getValue(0);
+	rootPath = trimSlashEnd(rootPath);
+	LOG_DEB("Path constructed from relative: " + uri);
+	return (rootPath + uri);
 }
 
 std::string Uri::getCgiPath(const std::list<Directive*>& cgiDirectives, 

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 09:25:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:02:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void RequestHandling::getResponse(Server& server,
 		return ;
 	}
 	std::cout << "hey" << std::endl;
-	realPath = server.getRealPath(loc, req.getUri());
+	realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
 	req.setPathTranslated(realPath);
 	cgiDirectives = loc->findDirectives("cgi");
 	

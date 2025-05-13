@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:28 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 09:43:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:09:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "lib.hpp"
 #include "Directive.hpp"
 #include "Location.hpp"
+#include "Server.hpp"
 
 class Uri
 {
@@ -28,6 +29,11 @@ class Uri
             const std::string& uri);
         static std::string trimSlashBegin(const std::string& uri);
         static std::string trimSlashEnd(const std::string& uri);
+        static std::string buildUri(std::string p1, std::string p2);
+        static std::string buildRealAbsolute(const Server& serv, 
+            const Location* loc, std::string uri);
+        static std::string buildRealRelative(const Server& serv, 
+            const Location* loc, std::string uri);
     private:
         Uri();
         static bool    isCgiExtValid(const std::list<Directive*>& cgiDirectives,
