@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/06 20:52:05 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/13 09:29:16 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,8 @@ SERVER_SRC		=	../class/Server.cpp \
 					../class/Nico.cpp \
 					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
+					../class/CGI.cpp \
+					../class/Uri.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -71,6 +73,8 @@ NET_SRC			=	../class/Server.cpp \
 					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
 					../class/Nico.cpp \
+					../class/CGI.cpp \
+					../class/Uri.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)

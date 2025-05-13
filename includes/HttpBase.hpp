@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/06 21:25:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/12 18:27:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,13 @@ class HttpBase
 		static std::string  getDefaultErrorPage(HttpCode statusCode);
 	protected:
 		HttpBase();
-		static bool canBeValidMethod(std::string& method);
-		static bool canBeValidPath(std::string& path);
-		static bool canBeValidHttpProtocol(std::string& httpVersion);
-		static bool isHeaderNameValid(std::string& name);
-		static bool isHeaderValueValid(std::string& value);
-		static std::string normalizeHeaderName(std::string& name);
+		static bool canBeValidMethod(const std::string& method);
+		static bool canBeValidPath(const std::string& path);
+		static bool canBeValidHttpProtocol(const std::string& httpVersion);
+		static bool isHeaderNameValid(const std::string& name);
+		static bool isHeaderValueValid(const std::string& value);
+		static std::string normalizeHeaderName(const std::string& name);
+		static std::string normalizeUri(const std::string& uri);
 		std::string _raw;
 		std::string _method;
 		std::string _uri;

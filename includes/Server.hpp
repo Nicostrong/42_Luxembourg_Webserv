@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/08 22:32:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/12 21:59:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "IEventHandler.hpp"
 # include "Socket.hpp"
 # include "Ressource.hpp"
+# include "Uri.hpp"
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -88,7 +89,7 @@ class	Server : public IEventHandler
 		
 		/*	Checker GIGI	*/
 		bool									checkUri( std::string uri );
-		const Location*							getUri( const std::string& uri );
+		const Location*							getMatchingLoc( const std::string& uri );
 		const std::string						getRealPath( 
 			const Location* loc, std::string uri ) const;
 		bool									checkMethod( std::string uri,

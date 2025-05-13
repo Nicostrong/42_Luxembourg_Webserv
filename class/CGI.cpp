@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/09 09:27:10 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/12 21:59:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ CGI& CGI::operator=(const CGI& obj)
 
 void    launchCGI(const HttpRequest& req, const Server& serv)
 {
-    
+    (void)req;
+    (void)serv;
 }
 
-std::vector<std::string> getCGIEnv(const HttpRequest& req, const Server& serv, 
+std::vector<std::string> CGI::getCGIEnv(const HttpRequest& req, const Server& serv, 
     const std::string& remoteIp)
 {
     std::vector<std::string> env;
@@ -64,10 +65,11 @@ std::vector<std::string> getCGIEnv(const HttpRequest& req, const Server& serv,
     
     for (it = req.getHeaders().begin(); it != req.getHeaders().end(); it++)
         env.push_back(getRawEnv("HTTP_" + it->first, it->second));
+    return (env);
 }
 
 template <typename T>
-std::string getRawEnv(const std::string& key, const T& value)
+std::string CGI::getRawEnv(const std::string& key, const T& value)
 {
     std::ostringstream oss;
 

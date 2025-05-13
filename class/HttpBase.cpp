@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 09:35:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/12 18:29:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
 	return (oss.str());
 }
 
-bool HttpBase::canBeValidMethod(std::string& method)
+bool HttpBase::canBeValidMethod(const std::string& method)
 {
 	std::string::const_iterator it;
 	for (it = method.begin(); it != method.end(); ++it) 
@@ -159,12 +159,14 @@ bool HttpBase::canBeValidMethod(std::string& method)
 	return (true);
 }
 
-bool HttpBase::canBeValidPath(std::string& path)
+bool HttpBase::canBeValidPath(const std::string& path)
 {
 	
 	if (*path.begin() != '/')
 		return (false);
 	std::string::const_iterator it;
+	bool flag = false;
+
 	for (it = path.begin(); it != path.end(); ++it) 
 	{
 		bool isCharValid = std::isalnum(*it);
@@ -176,18 +178,27 @@ bool HttpBase::canBeValidPath(std::string& path)
 		}
 		if (!isCharValid)
 			return (false);
+		if (*it == '/')
+		{
+			if (flag)
+				return (false);
+			else
+				flag = true;
+		}
+		else
+			flag = false;
 	}
 	return (true);
 }
 
-bool HttpBase::canBeValidHttpProtocol(std::string& httpVersion)
+bool HttpBase::canBeValidHttpProtocol(const std::string& httpVersion)
 {
 	if (httpVersion.rfind("HTTP/", 0) == std::string::npos)
 		return (false);
 	return (true);
 }
 
-bool HttpBase::isHeaderNameValid(std::string& name)
+bool HttpBase::isHeaderNameValid(const std::string& name)
 {
 	std::string::const_iterator it;
 	for (it = name.begin(); it != name.end(); ++it) 
@@ -198,7 +209,7 @@ bool HttpBase::isHeaderNameValid(std::string& name)
 	return (true);
 }
 
-bool HttpBase::isHeaderValueValid(std::string& value)
+bool HttpBase::isHeaderValueValid(const std::string& value)
 {
 	std::string::const_iterator it;
 	for (it = value.begin(); it != value.end(); ++it) 
@@ -216,12 +227,25 @@ bool HttpBase::isHeaderValueValid(std::string& value)
 	return (true);
 }
 
-std::string HttpBase::normalizeHeaderName(std::string& name)
+std::string HttpBase::normalizeHeaderName(const std::string& name)
 {
-	std::string normalized = "";
+	std::string normalized;
 
 	std::string::const_iterator it;
 	for (it = name.begin(); it != name.end(); ++it) 
 		normalized.push_back(std::toupper(*it));
 	return (normalized);
+}
+
+std::string HttpBase::normalizeUri(const std::string& uri)
+{
+	std::string normalized;
+	
+	std::string::const_iterator it;
+	for (it = uri.begin(); it != uri.end(); ++it) 
+		normalized.push_back(std::tolower(*it));
+
+	//Should treat % things
+	return (normalized);
+
 }

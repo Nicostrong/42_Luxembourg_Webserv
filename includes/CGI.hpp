@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:56:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 09:24:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ class CGI
         CGI&    operator=(const CGI& obj);
         void    launchCGI(const HttpRequest& req, const Server& serv, 
             const std::string& remoteIp);
-        
+        static std::vector<std::string> getCGIEnv(const HttpRequest& req, const Server& serv, 
+            const std::string& remoteIp);
         template <typename T>
         static std::string getRawEnv(const std::string& key, 
             const T& value);
+        /*static std::string getCgiScript(const std::list<Directive*>& cgiDirectives, 
+            const Location* loc, const std::string& uri);*/
     private:
         EventMonitoring& _em;
 };
