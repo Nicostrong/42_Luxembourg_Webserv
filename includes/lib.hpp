@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 17:25:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:47:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,15 @@
 # include <unistd.h>
 # include <algorithm>
 # include <exception>
+# include <poll.h>
 # include <sys/socket.h>
+# include <sys/stat.h>
+# include <sys/epoll.h>
 # include <netinet/in.h>
-#include <netdb.h>
+# include <netdb.h>
+
+#include <unistd.h>
+#include <iostream>
 
 # include <map>
 # include <set>

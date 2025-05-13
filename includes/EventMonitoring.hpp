@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 09:22:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:46:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 # define EVENTMONITORING_HPP
 
 #include "EventData.hpp"
-#include <vector>
-#include <list>
-#include <utility>
-#include <algorithm>
-#include <poll.h>
-#include <sys/epoll.h>
-#include <unistd.h>
-#include <iostream>
+#include "lib.hpp"
 #include "IEventHandler.hpp"
 
 #define MAX_CONNECTIONS 20

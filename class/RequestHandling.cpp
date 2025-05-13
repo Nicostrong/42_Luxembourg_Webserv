@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 10:02:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:37:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void RequestHandling::getResponse(Server& server,
 		getErrorResponse(NOT_FOUND, server, req, resp);
 		return ;
 	}
-	std::cout << "hey" << std::endl;
 	realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
 	req.setPathTranslated(realPath);
 	cgiDirectives = loc->findDirectives("cgi");
@@ -71,18 +70,17 @@ void RequestHandling::getResponse(Server& server,
 void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives, 
 	Server& server, const HttpRequest& req, HttpResponse& resp)
 {
-	std::cout << "CGI script: " << Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri()) << std::endl;
-	std::list<Directive*>::const_iterator it;
-
-	/*for (it = cgiDirectives.begin(); it != cgiDirectives.end(); it++)
+	std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
+	if (cgiPath.empty())
 	{
-		std::cout << (*it)->getValue(0) << std::endl;
-		//if (req.getPathTranslated().find((*it)->getValue(0)) !)
-			// Try to exec
-	}*/
-		(void)req;
-		(void)server;
-		(void)resp;
+		getErrorResponse(NOT_FOUND, server, req, resp);
+		return ;
+	}
+	std::string realCgiPath = Uri::buildRealRelative(server, req.getLocation(), cgiPath);
+	std::cout << "CGI script: " << realCgiPath << std::endl;
+	(void)req;
+	(void)server;
+	(void)resp;
 }
 
 // See GZ/example_response.txt for example of response
