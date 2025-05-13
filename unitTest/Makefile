@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/11 16:51:53 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/05/13 16:22:43 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,20 +33,23 @@ RM				=	rm -f
 #	Test class Server full													   #
 ################################################################################
 
-SERVER_SRC		=	../class/Server.cpp \
-					../class/Location.cpp \
-					../class/Directive.cpp \
-					../class/MethodHTTP.cpp \
-					../class/HandleConfig.cpp \
+SERVER_SRC		=	../class/HandleConfig.cpp \
 					../class/HttpBase.cpp \
 					../class/HttpRequest.cpp \
 					../class/EventMonitoring.cpp \
 					../class/EventData.cpp \
 					../class/HttpResponse.cpp \
-					../class/Socket.cpp \
-					../class/Nico.cpp \
-					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
+					../class/Socket.cpp \
+					../class/Ressource.cpp \
+					../class/ParserServerConfig.cpp \
+					../class/Token.cpp \
+					../class/CheckerTokens.cpp \
+					../class/ServerManager.cpp \
+					../class/Server.cpp \
+					../class/Location.cpp \
+					../class/Directive.cpp \
+					../class/MethodHTTP.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -70,7 +73,7 @@ NET_SRC			=	../class/Server.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
-					../class/Nico.cpp \
+					../class/ParserServerConfig.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)
@@ -81,7 +84,7 @@ NET_NAME		=	test_networking
 #	Test parseur															   #
 ################################################################################
 
-PAR_SRC			=	../class/Nico.cpp \
+PAR_SRC			=	../class/ParserServerConfig.cpp \
 					../class/Token.cpp \
 					../class/Ressource.cpp \
 					../class/CheckerTokens.cpp \

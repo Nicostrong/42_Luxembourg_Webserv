@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Nico.cpp                                           :+:      :+:    :+:   */
+/*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/12 13:06:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 16:13:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Nico.hpp"
+#include "../includes/ParserServerConfig.hpp"
 #include "../includes/Token.hpp"
-#include "../includes/CheckerTokens.hpp"
 
 /*******************************************************************************
  *							CANONICAL FORM									   *
@@ -257,6 +256,14 @@ void			ParserServerConfig::splitServerToken( Token *head )
 	return ;
 }
 
+/*******************************************************************************
+ *								GETTER										   *
+ ******************************************************************************/
+
+/*
+ *	Get the tokens list of the config file
+ */
+const std::list<Token*>&	ParserServerConfig::getListTokens( void ) const { return (this->_serverToken); }
 
 /*******************************************************************************
  *								EXCEPTION 									   *

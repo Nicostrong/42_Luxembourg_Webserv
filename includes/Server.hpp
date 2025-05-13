@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/12 16:06:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:17:47 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 # define SERVER_HPP
 
 # include "lib.hpp"
-# include "Location.hpp"
-# include "EventMonitoring.hpp"
-# include "IEventHandler.hpp"
-# include "Socket.hpp"
-# include "Ressource.hpp"
 # include "Token.hpp"
+# include "Socket.hpp"
+# include "Location.hpp"
+# include "Directive.hpp"
+# include "Ressource.hpp"
+# include "IEventHandler.hpp"
+# include "EventMonitoring.hpp"
 
 /*
  *	Server object contain all parameters from the server.conf file
@@ -31,37 +32,37 @@ class	Server : public IEventHandler
 	
 	private:
 
-		size_t							_port;
-		int								_maxConnectionClient;
-		size_t							_maxSizeBody;
-		std::string						_name;
-		std::string						_path;
-		std::string						_index;
-		std::map<size_t, std::string>	_mError;
-		std::list<Location *>			_location;
-		EventMonitoring&				_em;
-		int								_serverSocket;
-		std::list<Socket>				_sockets;
+		int										_maxClient;
+		int										_serverSocket;
+		size_t									_port;
+		size_t									_maxSizeBody;
+		std::string								_name;
+		std::string								_path;
+		std::string								_index;
+		std::map<size_t, std::string>			_mError;
+		std::map<std::string, Location *>		_mLocations;
+		std::list<Directive *>					_lDirectives;
+		std::list<Socket>						_lSockets;
+		EventMonitoring&						_em;
 
 		Server( const Server &src_obj );
-		Server							&operator=( const Server &src_obj );
+		Server									&operator=( const Server &src_obj );
 
 		/*	SETTER	*/
-		void							setPort( std::string &data );
-		void							setMaxSizeBody( std::string &data );
-		void							setMapError( std::string &data );
-		void							setLocation( std::string &name,
-													std::string &block );
+		void									setPort( std::string data );
+		void									setMaxSizeBody( std::string data );
+		void									setMaxClient( std::string data );
 		
-		/*	PARSER	*/
-		void							parseData( const std::map< std::string,
-														std::string> &data );
-
-		/*	CHECKER	*/
-		void							checkServer( void );
+		/*	Token	*/
+		void									setAttributs( void );
+		void									createError( Token* tokens );
+		void									createServer( Token* tokens );
+		void									createDirective( Token* tokens );
 
 		/* Cleanup func to close all sockets(server included)*/
-		void							cleanup( void );
+		void									cleanup( void );
+		/*	Check the value of port and */
+		void									checkServer( void );
 		
 	public:
 
@@ -72,7 +73,7 @@ class	Server : public IEventHandler
 		~Server( void );
 
 		/*  GETTER	*/
-		const int&								getMaxConnectionClient( void ) const;
+		const int&								getMaxClient( void ) const;
 
 		const size_t&							getPort( void ) const;
 		const size_t&							getMaxSizeBody( void ) const;
@@ -83,27 +84,24 @@ class	Server : public IEventHandler
 		const std::string						getPathError( size_t error_code ) const;
 
 		const std::map<size_t, std::string>&	getMapError( void ) const;
-		const std::list<Location *>&			getLocations( void ) const;
-		
+		const std::map<std::string, Location *>	getAllLocation( void ) const;
+		const Location&							getLocations( std::string path ) const;
+
 		/*	Checker GIGI	*/
 		bool									checkUri( std::string uri );
 		const Location*							getUri( const std::string& uri );
 		bool									checkMethod( std::string uri,
-																std::string method );
-
-		/*	Template function for Server setting	*/
-		template <typename T>
-		void							setValue(T &target, std::string &data);
+															std::string method );
 
 		/*	Server exec related	*/
-		void 							start( void );
-		void 							onReadEvent( int fd, int type, 
-														EventMonitoring& em );
-		void 							onWriteEvent( int fd, int type, 
-														EventMonitoring& em );
-		void 							onCloseEvent( int fd, int type, 
-														EventMonitoring& em );
-		void 							onSocketClosedEvent( const Socket &s );
+		void 									start( void );
+		void 									onReadEvent( int fd, int type, 
+															EventMonitoring& em );
+		void 									onWriteEvent( int fd, int type, 
+															EventMonitoring& em );
+		void 									onCloseEvent( int fd, int type, 
+															EventMonitoring& em );
+		void 									onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/
 		/*	server error Exception	*/

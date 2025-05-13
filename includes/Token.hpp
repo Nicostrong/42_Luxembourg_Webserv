@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/12 13:12:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 14:51:47 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define TOKEN_HPP
 
 # include "./lib.hpp"
-# include "./Nico.hpp"
+# include "./ParserServerConfig.hpp"
 
 class 	Token
 {

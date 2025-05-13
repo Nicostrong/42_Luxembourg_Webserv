@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/07 09:25:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/13 15:19:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "Directive.hpp"
 # include "MethodHTTP.hpp"
 
+class	Token;
+
 /*
  *  LocationConfig object for
  */
@@ -24,22 +26,23 @@ class	Location
 {
 	private:
 
-		std::string							_name;
+		std::string							_path;
 		MethodHTTP*							_method;
-		std::list<Directive *>				_directives;
+		std::list<Directive *>				_lDirectives;
 
 		Location							&operator=( const Location &src_obj );
 
 		void								parseData( std::string &data );
+		void								createLocation( Token* tokens );
 	
 	public:
 
-		Location( std::pair< const std::string, std::string> &data );
+		Location( Token* tokens );
 		Location( const Location &scr_obj );
 		~Location( void );
 
 		/*	GETTER	*/
-		std::string							getName( void ) const;
+		std::string							getPath( void ) const;
 		MethodHTTP							*getMethod( void ) const;
 		const std::list<Directive *>&		getDirectives( void ) const;
 		/*std::string							buildUriOnServer(std::string uri) 

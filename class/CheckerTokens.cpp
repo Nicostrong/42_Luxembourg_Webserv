@@ -6,11 +6,12 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/12 13:13:42 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:20:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/CheckerTokens.hpp"
+#include "../includes/Token.hpp"
 
 /*******************************************************************************
  *							CANONICAL FORM									   *
@@ -270,12 +271,12 @@ void		CheckerTokens::checkValue( void )
 void		CheckerTokens::checkMethodHTTP( void )
 {
 	Token*		current = this->_head;
-
+	
 	while (current)
 	{
 		if (current->getType() == Token::HTTP_V)
-			if (!MethodHTTP::isMethod(current->getValue()))
-				throw CheckerError("Method HTTP not valide.");
+			if (!MethodHTTP::isMethod(current->getValue()) && current->getValue() != "all")
+				throw CheckerError("Method HTTP not valide: " + current->getValue());
 		current = current->getNext();
 	}
 	return ;	

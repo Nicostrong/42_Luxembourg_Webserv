@@ -3,16 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/11 16:47:14 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:23:08 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/MethodHTTP.hpp"
+#include "../includes/Token.hpp"
 
-std::set<std::string>	MethodHTTP::_validMethods = MethodHTTP::initValidMethods();
+std::set<std::string>		MethodHTTP::_validMethods = MethodHTTP::initMethods();
+
+std::set<std::string>		MethodHTTP::initMethods( void )
+{
+	std::set<std::string>		methods;
+
+	methods.insert("GET");
+	methods.insert("POST");
+	methods.insert("PUT");
+	methods.insert("DELETE");
+	methods.insert("PATCH");
+	methods.insert("OPTIONS");
+	methods.insert("HEAD");
+	return (methods);
+}
 
 /*******************************************************************************
  *							CANONICAL FORM									   *
@@ -23,19 +38,28 @@ std::set<std::string>	MethodHTTP::_validMethods = MethodHTTP::initValidMethods()
  */
 MethodHTTP::MethodHTTP( void )
 {
-	LOG_DEB("MethodHTTP constructor witout argument called");
 	initDefault();
 	return ;
 }
 
 /*
- *	Default constructor with argument
+ *	Constructor with tokens
  */
-MethodHTTP::MethodHTTP( const std::string &data )
+MethodHTTP::MethodHTTP( Token* tokens )
 {
-	LOG_DEB("MethodHTTP constructor with argument called");
+	LOG_DEB("MethodHTTP constructor with tokens called");
 	initDefault();
-	parse(data);
+	while (tokens && tokens->getType() != Token::SEMICOLON)
+	{
+		if (tokens->getType() == Token::HTTP_V)
+		{
+			if (tokens->getValue() == "all")
+				allowAll();
+			else
+				allow(tokens->getValue());
+		}
+		tokens = tokens->getNext();
+	}
 	return ;
 }
 
@@ -45,6 +69,7 @@ MethodHTTP::MethodHTTP( const std::string &data )
 MethodHTTP::~MethodHTTP( void )
 {
 	LOG_DEB("MethodHTTP destructor called");
+	this->_allowed.clear();
 	return ;
 }
 
@@ -63,88 +88,8 @@ MethodHTTP::MethodHTTP( const MethodHTTP &src_object )
 MethodHTTP		&MethodHTTP::operator=( const MethodHTTP &src_object )
 {
 	if (this != &src_object)
-	{
 		this->_allowed = src_object._allowed;
-		this->_denied = src_object._denied;
-	}
 	return (*this);
-}
-
-/*
- *	Parser of data
- */
-void	MethodHTTP::parse( const std::string &data )
-{
-	bool				isDenyBlock = false;
-	std::string			word;
-	std::istringstream	stream(data);
-
-	this->_allowed.clear();
-	this->_denied.clear();
-	while (stream >> word && word != "}")
-	{
-		if (!word.empty() && word[word.size() - 1] == ';')
-			word.erase(word.size() - 1);
-		if (word == "limit_except" || word == "allow" || word == "{")
-			continue ;
-		if (word == "deny")
-		{
-			isDenyBlock = true;
-			continue ;
-		}
-		if(word == "all")
-		{
-			if (isDenyBlock)
-			{
-				std::set<std::string>::const_iterator	it;
-
-				this->_denied.insert(this->_validMethods.begin(), this->_validMethods.end());
-				for (it = this->_allowed.begin(); it != this->_allowed.end(); ++it)
-					this->_denied.erase(*it);
-			}
-			else
-			{
-				std::set<std::string>::const_iterator	it;
-
-				this->_allowed.insert(this->_validMethods.begin(), this->_validMethods.end());
-				for (it = this->_denied.begin(); it != this->_denied.end(); ++it)
-					this->_allowed.erase(*it);
-			}
-			continue;
-		}
-		if (!isMethod(word))
-			throw MethodUnknow(word);
-		if (isDenyBlock)
-		{
-			this->_denied.insert(word);
-			this->_allowed.erase(word);
-		}
-		else
-		{
-			this->_allowed.insert(word);
-			this->_denied.erase(word);
-		}
-	}
-	LOG_DEB("MethodHTTP parse called");
-	return ;
-}
-
-/*
- *	Initialisation of all methods value valide
- */
-std::set<std::string>	MethodHTTP::initValidMethods( void )
-{
-	std::set<std::string>	m;
-
-	m.insert("GET");
-	m.insert("POST");
-	m.insert("PUT");
-	m.insert("DELETE");
-	m.insert("PATCH");
-	m.insert("OPTIONS");
-	m.insert("HEAD");
-
-	return (m);
 }
 
 /*
@@ -161,7 +106,7 @@ bool	MethodHTTP::isMethod( const std::string &method )
  */
 void	MethodHTTP::initDefault( void )
 {
-	this->_allowed.insert(this->_validMethods.begin(), this->_validMethods.end());
+	this->_allowed.insert(MethodHTTP::_validMethods.begin(), MethodHTTP::_validMethods.end());
 	LOG_DEB("All HTTP methods added to _allowed by default");
 	return ;
 }
@@ -169,6 +114,16 @@ void	MethodHTTP::initDefault( void )
 /*******************************************************************************
  *								SETTER										   *
  ******************************************************************************/
+
+/*
+ *	Allow all method
+ */
+void	MethodHTTP::allowAll( void )
+{
+	this->_allowed.insert(MethodHTTP::_validMethods.begin(), MethodHTTP::_validMethods.end());
+	LOG_DEB("All method are allowed methods");
+	return ;
+}
 
 /*
  *	Add a method on the array allowed methods
@@ -179,18 +134,6 @@ void	MethodHTTP::allow( const std::string &method )
 		throw MethodUnknow(method);
 	this->_allowed.insert(method);
 	LOG_DEB("new method add on allowed methods");
-	return ;
-}
-
-/*
- *	Add a method on the array denied methods
- */
-void	MethodHTTP::deny( const std::string &method )
-{
-	if (!isMethod(method))
-		throw MethodUnknow(method);
-	this->_denied.insert(method);
-	LOG_DEB("new method add on  denied methods");
 	return ;
 }
 
@@ -215,23 +158,6 @@ std::string		MethodHTTP::getAllowed( void ) const
 	return (ret);
 }
 
-/*
- *	get all Methods denied
- */
-std::string		MethodHTTP::getDenied( void ) const
-{
-	std::string								ret;
-	std::set<std::string>::const_iterator	it;
-
-	for ( it = this->_denied.begin(); it != this->_denied.end(); ++it)
-	{
-		ret += *it;
-		if (it != this->_denied.end())
-			ret += ", ";
-	}
-	return (ret);
-}
-
 /*******************************************************************************
  *								METHOD 										   *
  ******************************************************************************/
@@ -242,25 +168,6 @@ std::string		MethodHTTP::getDenied( void ) const
 bool	MethodHTTP::isAllowed( const std::string &method ) const
 {
 	return (this->_allowed.find(method) != this->_allowed.end());
-}
-
-/*
- *	Check if the method is denied
- */
-bool	MethodHTTP::isDenied( const std::string &method ) const
-{
-	return (this->_denied.find(method) != this->_denied.end());
-}
-
-/*
- *	Clear the both array on the object
- */
-void	MethodHTTP::clear( void )
-{
-	this->_allowed.clear();
-	this->_denied.clear();
-	LOG_DEB("The both array are cleared");
-	return ;
 }
 
 /*******************************************************************************
@@ -303,7 +210,6 @@ std::ostream	&operator<<( std::ostream &out, MethodHTTP const &src_object )
 {
 	out	<< MAGENTA << "------------- METHOD BLOCK -------------" << std::endl
 		<< "Methods Allow: [" << src_object.getAllowed() << "]" << std::endl
-		<< "Methods Denied: [" << src_object.getDenied() << "]" << std::endl
 		<< "------------------------------------------" <<RESET;
 	return (out);
 }
@@ -323,26 +229,8 @@ void test_empty_block( void )
 		MethodHTTP	method(config);
 
 		assert(method.getAllowed().empty());
-		assert(method.getDenied().empty());
 		std::cout << method << std::endl;
 		std::cout << "✅  [OK] Empty MethodHTTP parsed correctly" << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return ;
-}
-
-void test_deny_all( void )
-{
-	try
-	{
-		std::string								config = "{\n\tdeny\t\t\tall;\n}";
-		MethodHTTP								method(config);
-
-		std::cout << method << std::endl;
-		std::cout << "✅  [OK] Deny all parsed correctly" << std::endl;
 	}
 	catch(const std::exception& e)
 	{
@@ -368,42 +256,6 @@ void test_allow_all( void )
 	return ;
 }
 
-void test_get_deny_all( void )
-{
-	try
-	{
-		std::string								config = "GET\t{\n\tdeny\t\t\tall;\n}";
-		MethodHTTP								method(config);
-
-		std::cout << method << std::endl;
-		assert(!method.isDenied("GET"));
-		std::cout << "✅  [OK] GET OK and Deny all parsed correctly" << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return ;
-}
-
-void test_allow_all_deny_get( void )
-{
-	try
-	{
-		std::string								config = "all\t{\n\tdeny\t\tGET;\n};";
-		MethodHTTP								method(config);
-
-		std::cout << method << std::endl;
-		assert(!method.isAllowed("GET"));
-		std::cout << "✅  [OK] Allow all deny GET parsed correctly" << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return ;
-}
-
 void test_manual_allow_deny( void )
 {
 	try
@@ -412,13 +264,9 @@ void test_manual_allow_deny( void )
 
 		method.allow("GET");
 		method.allow("POST");
-		method.deny("DELETE");
 
 		assert(method.isAllowed("GET"));
 		assert(method.isAllowed("POST"));
-		assert(method.isDenied("DELETE"));
-		assert(!method.isAllowed("DELETE"));
-		assert(!method.isDenied("PUT"));
 		std::cout << method << std::endl;
 		std::cout << "✅  [OK] Manual allow/deny works" << std::endl;
 	}
@@ -449,8 +297,6 @@ int main( void )
 {
 	std::cout << BLUE << "EMPTY BLOCK TEST" << RESET << std::endl;
 	test_empty_block();
-	std::cout << BLUE << "DENY ALL TEST" << RESET << std::endl;
-	test_deny_all();
 	std::cout << BLUE << "ALLOW ALL TEST" << RESET << std::endl;
 	test_allow_all();
 	std::cout << BLUE << "GET OK AND DENY ALL TEST" << RESET << std::endl;

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 14:52:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:23:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,20 @@ class	Directive
 
 	private:
 
-		std::string					_name;
-		std::vector<std::string>	_values;
+		std::string					_key;
+		std::string					_value;
+
+		Directive( const Directive &src_obj );
+		Directive					&operator=( const Directive &src_obj );
 
 	public:
 
-		Directive( void );
 		Directive( std::string &key, std::string &value );
-		Directive( const Directive &src_obj );
 		~Directive( void );
-		
-		Directive					&operator=( const Directive &src_obj );
-
-		/*	SETTER	*/
-		void						setName( std::string &name);
-		void						setValue( size_t index, std::string &value );
-		void						addValue( std::string &value );
 
 		/*  GETTER  */
-		std::string					getName( void ) const;
-		std::string					getValue( int index ) const;
-		std::string					getAllValue( void ) const;
+		std::string					getKey( void ) const;
+		std::string					getValue( void ) const;
 
 		/*	class Exception	*/
 		class	DirectiveException : public std::exception

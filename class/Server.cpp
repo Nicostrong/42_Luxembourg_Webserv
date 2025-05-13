@@ -6,56 +6,28 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/12 16:18:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 13:43:36 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 
 /*******************************************************************************
- *								TEMPLATE									   *
- ******************************************************************************/
-
-/*
- *	template to extract a single value from a string
- */
-template <typename T>
-void			Server::setValue(T &target, std::string &data)
-{
-	std::string			end;
-
-	if (data.empty())
-		throw ParsingError("Data empty or not catched");
-	if (!data.empty() && data[data.size() - 1] == ';')
-		data.erase(data.size() - 1);
-	
-	std::istringstream	stream(data);
-
-	if (!(stream >> target))
-		throw ParsingError(data);
-	if (stream >> end)
-		throw ParsingError(data);
-	return ;
-}
-
-/*******************************************************************************
  *							CANONICAL FORM									   *
  ******************************************************************************/
 
 /*
- *	Parsing of the map<string, string> who contain all value of the config file
- *	to create an object Server
+ *	Server constructor with tokens in argument
  */
-Server::Server( const std::map< std::string, std::string>& data, 
-	EventMonitoring& eventMonitoring) : _port(0), _maxConnectionClient(0), 
-	_maxSizeBody(0), _path("./www/html"), _index("index.html"), 
-	_em(eventMonitoring), _serverSocket(0)
+Server::Server( Token* serverTokensConfig, EventMonitoring &eventMonitoring) 
+	: _maxClient(0), _serverSocket(0), _port(0), _maxSizeBody(0), 
+	_path("./www/html"), _index("index.html"), _em(eventMonitoring)
 {
-	LOG_DEB("Server constructor called");
+	LOG_DEB("Server with tokens Constructor called");
 	try
 	{
-		parseData(data);
-		checkServer();
+		createServer(serverTokensConfig);
+		setAttributs();
 	}
 	catch(const std::exception& e)
 	{
@@ -64,82 +36,22 @@ Server::Server( const std::map< std::string, std::string>& data,
 	return ;
 }
 
-// Simple Constructor
-Server::Server( EventMonitoring &eventMonitoring ) : 
-	_em(eventMonitoring), _serverSocket(0)
-{
-	LOG_DEB("Simple Server Constructor called");
-}
-
-// Constructor via tokens
-Server::Server( Token* serverTokensConfig, EventMonitoring &eventMonitoring) 
-	: _port(0), _maxConnectionClient(0), _maxSizeBody(0), _path("./www/html"), 
-	_index("index.html"), _em(eventMonitoring), _serverSocket(0)
-{
-	LOG_DEB("Server with tokens Constructor called");
-	if (!serverTokensConfig || serverTokensConfig->getType() != Token::SERVER)
-		throw ParsingError("Expected SERVER token at beginning of Server config block");
-
-	Token*		current = serverTokensConfig->getNext();
-	if (!current || current->getType() != Token::SER_BLK_S)
-		throw ParsingError("Expected '{' after SERVER");
-	current = current->getNext();
-	while (current && current->getType != Token::SER_BLK_E)
-	{
-		switch (current->getType())
-		{
-			case Token::DIR_K:
-			{
-				std::string		key = current->getValue();
-
-				current = current->getNext();
-				if (!current || current->getType() != Token::DIR_V)
-					throw ParsingError("Expected value after directive key: " + key);
-				
-				std::string		value = current->getValue();
-				parseData(std::map<std::string, std::string>{{key, value}});
-				break;
-			}
-			case ERROR_PAGE: {
-				current = current->next;
-				if (!current || current->type != DIR_V)
-					throw ParsingError("Missing error code after ERROR_PAGE");
-				int code = std::atoi(current->value.c_str());
-				current = current->next;
-				if (!current || current->type != DIR_V)
-					throw ParsingError("Missing path after error code");
-				_mError[code] = current->value;
-				break;
-			}
-			case LOCATION: {
-				std::string locPath = current->value;
-				current = current->next;
-				if (!current || current->type != LOC_BLK_S)
-					throw ParsingError("Missing '{' after LOCATION");
-				std::string blockContent; // hypothetical, you will tokenize or keep a sub-token list here
-				// for simplicity assuming content is extracted
-				setLocation(locPath, blockContent);
-				break;
-			}
-			default:
-				break;
-		}
-		current = current->next;
-	}
-	checkServer();
-}
 /*
- *	Destructor
+ *	Destructor Server delete all pointer of Location and Directive object
  */
 Server::~Server( void )
 {
-	std::list<Location *>::iterator		it;
+	std::list<Directive *>::iterator				itDir;
+	std::map<std::string, Location *>::iterator		itLoc;
 
 	LOG_DEB("Server destructor called");
 	cleanup();
-	for ( it = this->_location.begin(); it != this->_location.end(); ++it)
-		delete *it;
-	this->_location.clear();
+	for ( itDir = this->_lDirectives.begin(); itDir != this->_lDirectives.end(); ++itDir)
+		delete *itDir;
+	this->_lDirectives.clear();
+	for ( itLoc = this->_mLocations.begin(); itLoc != this->_mLocations.end(); ++itLoc)
+		delete itLoc->second;
+	this->_mLocations.clear();
 	return ;
 }
 
@@ -148,76 +60,114 @@ Server::~Server( void )
  ******************************************************************************/
 
 /*
- *	Parsing of the map data
+ *	read all token and create the object Server with all configuration
  */
-void		Server::parseData( const std::map< std::string, std::string> &data )
+void		Server::createServer( Token* tokens )
 {
-	std::map< std::string, std::string>::const_iterator		it;
-
-	for (it = data.begin(); it != data.end(); ++it)
+	while (tokens && tokens->getType() != Token::SER_BLK_E)
 	{
-		std::string		value = it->second;
-
-		if (it->first == "listen")
-			setPort(value);
-		else if (it->first == "root")
-			setValue(this->_path, value);
-		else if (it->first == "server_name")
-			setValue(this->_name, value);
-		else if (it->first == "max_connection_client")
-			setValue(this->_maxConnectionClient, value);
-		else if (it->first == "client_max_body_size")
-			setMaxSizeBody(value);
-		else if (it->first == "index")
-			setValue(this->_index, value);
-		else if (it->first == "error_page")
-			setMapError(value);
-		else if (it->first.find("location") == 0)
+		if (tokens->getType() == Token::DIR_K)
+			createDirective(tokens);
+		else if (tokens->getType() == Token::ERROR_PAGE)
+			createError(tokens);
+		else if (tokens->getType() == Token::LOCATION)
 		{
-			std::string	name;
-
-			name = it->first.substr(9);
-			setLocation(name, value);
+			Location*		loc = new Location(tokens);
+			
+			this->_mLocations.insert(std::make_pair(loc->getPath(), loc));
 		}
-		else
-			throw ParsingError(it->first);
+		tokens = tokens->getNext();
 	}
 	return ;
 }
 
 /*
- *	Check if the Server contain correct value
+ *	create a directive of the server
  */
-void		Server::checkServer( void )
+void		Server::createDirective( Token* tokens )
 {
-	if (this->_port == 0)
-		throw ParsingError("port = 0");
-	if (this->_maxConnectionClient < 0)
-		throw ParsingError("max connection client < 0");
-	/*	Not necessary using on config server
-	if (this->_maxSizeBody == 0)
-		throw ParsingError("max size body = 0");
-	if (this->_name.empty())
-		throw ParsingError("name is empty");
-	if (this->_path.empty())
-		throw ParsingError("path is empty");
-	if (this->_index.empty())
-		throw ParsingError("index is empty");
-	*/
+	std::string		key;
+	std::string		value;
+
+	while (tokens->getType() != Token::DIR_K)
+		tokens = tokens->getNext();
+	key = tokens->getValue();
+	tokens = tokens->getNext();
+	value = tokens->getValue();
+	this->_lDirectives.push_back(new Directive(key, value));
 	return ;
 }
 
+/*
+ *	Create a map of code error with the path of the error page
+ */
+void		Server::createError( Token* tokens )
+{
+	while (tokens && tokens->getType() != Token::ERR_BLK_E)
+	{
+		size_t			numError;
+		std::string		pathError;
+
+		if (tokens->getType() == Token::SEMICOLON)
+			tokens = tokens->getNext();
+		while (tokens->getType() != Token::DIR_K)
+			tokens = tokens->getNext();
+	
+		std::stringstream ss(tokens->getValue());
+	
+		if (!(ss >> numError))
+			throw ParsingError(tokens->getValue());
+		tokens = tokens->getNext();
+		pathError = tokens->getValue();
+		this->_mError.insert( std::pair<size_t, std::string>(numError, pathError));
+	}
+	return ;
+}
+
+/*
+ *	Read all directive and set somes attributes
+ */
+void		Server::setAttributs( void )
+{
+	std::list<Directive *>::iterator		it;
+
+	for (it = this->_lDirectives.begin(); it != this->_lDirectives.end(); ++it)
+	{
+		std::string		key = (*it)->getKey();
+		std::string		value = (*it)->getValue();
+
+		if (key == "listen")
+			setPort(value);
+		else if (key == "root")
+			this->_path = value;
+		else if (key == "server_name")
+			this->_name = value;
+		else if (key == "max_connection_client")
+			setMaxClient(value);
+		else if (key == "client_max_body_size")
+			setMaxSizeBody(value);
+		else if (key == "index")
+			this->_index = value;
+		else
+			throw ParsingError(key);
+	}
+	return ;
+}
+
+/*
+ *	When a client close the connection, it close the socket and remove its from the list
+ */
 void Server::cleanup()
 {
-	std::list<Socket>::const_iterator it = this->_sockets.begin();;
-	while (it != this->_sockets.end())
+	std::list<Socket>::const_iterator it = this->_lSockets.begin();;
+	while (it != this->_lSockets.end())
 	{
 		this->_em.unmonitor(it->getSocket());
 		if (this->_serverSocket > 2)
 			close(it->getSocket());
 		++it;
 	}
-	this->_sockets.clear();
+	this->_lSockets.clear();
 	this->_em.unmonitor(this->_serverSocket);
 	if (this->_serverSocket > 2)
 		close(this->_serverSocket);
@@ -229,26 +179,31 @@ void Server::cleanup()
  ******************************************************************************/
 
 /*
- *	extract the port from the string
+ *	Transform the string in size_t type for the port and check the value
  */
-void			Server::setPort( std::string &data )
+void			Server::setPort( std::string data )
 {
-	this->_port = static_cast<size_t>(std::atoi(data.c_str()));
-	if (this->_port <= 0 || this->_port > 65535)
+	size_t					port;
+	std::stringstream		ss(data);
+	
+	if (!(ss >> port))
+			throw ParsingError(data);
+	if (port <= 0 || port > 65535)
 		throw PortValueException();
+	this->_port = port;
 	return ;
 }
 
 /*
- *	save the max size of body
+ *	Transform the string in size_t and apply a factor for the final value
  */
-void			Server::setMaxSizeBody( std::string &data )
+void			Server::setMaxSizeBody( std::string data )
 {
-	int					value;
-	size_t				factor = 1;
-	char				unit = 0;
-	std::string			numberPart;
-	std::istringstream	stream(data);
+	size_t					value;
+	size_t					factor = 1;
+	char					unit = 0;
+	std::string				numberPart;
+	std::istringstream		stream(data);
 
 	if (data.empty())
 		throw ParsingError(data);
@@ -260,40 +215,24 @@ void			Server::setMaxSizeBody( std::string &data )
 			factor = 1024 * 1024;
 		else if (unit == 'K' || unit == 'k')
 			factor = 1024;
-		else
+	}
+	this->_maxSizeBody = value * factor;
+	return ;
+}
+
+/*
+ *	Transform the string in int type for the number of client can connect
+ */
+void			Server::setMaxClient( std::string data )
+{
+	int						clients;
+	std::stringstream		ss(data);
+	
+	if (!(ss >> clients))
 			throw ParsingError(data);
-	}
-	this->_maxSizeBody = static_cast<size_t>(value) * factor;
-	return ;
-}
-
-/*
- *	save the map of error page
- */
-void			Server::setMapError( std::string &data )
-{
-	std::istringstream	stream(data);
-	int					code;
-	std::string			path;
-
-	while (stream >> code >> path)
-	{
-		if (!path.empty() && path[path.size() - 1] == ';')
-			path.erase(path.size() - 1);
-		this->_mError[code] = path;
-	}
-	return ;
-}
-
-/*
- *	save the location value
- */
-void			Server::setLocation( std::string &name, std::string &block )
-{
-	std::pair< const std::string, std::string>	locationData(name, block);
-
-	this->_location.push_back(new Location(locationData));
-	LOG_DEB("Location added");
+	if (clients <= 0)
+		clients = 10;
+	this->_maxClient = clients;
 	return ;
 }
 
@@ -304,86 +243,70 @@ void			Server::setLocation( std::string &name, std::string &block )
 /*
  *	get _maxConnectionClient value
  */
-const int&						Server::getMaxConnectionClient( void ) const
-{
-	return (this->_maxConnectionClient);
-}
+const int&			Server::getMaxClient( void ) const { return (this->_maxClient); }
 
 /*
  *	get _port value
  */
-const size_t&							Server::getPort( void ) const
-{
-	return (this->_port);
-}
+const size_t&		Server::getPort( void ) const { return (this->_port); }
 
 /*
  *	get _maxSizeBody value
  */
-const size_t&							Server::getMaxSizeBody( void ) const
-{
-	return (this->_maxSizeBody);
-}
+const size_t&		Server::getMaxSizeBody( void ) const{ return (this->_maxSizeBody); }
 
 /*
  *	get _name value
  */
-const std::string&						Server::getName( void ) const
-{
-	return (this->_name);
-}
+const std::string&	Server::getName( void ) const { return (this->_name); }
 
 /*
  *	get _path value
  */
-const std::string&						Server::getPath( void ) const
-{
-	return (this->_path);
-}
+const std::string&	Server::getPath( void ) const { return (this->_path); }
 
 /*
  *	get _index value
  */
-const std::string&						Server::getIndex( void ) const
-{
-	return (this->_index);
-}
+const std::string&	Server::getIndex( void ) const { return (this->_index); }
 
 /*
  *	get _mError value
  */
-const std::map<size_t, std::string>&	Server::getMapError( void ) const
-{
-	return (this->_mError);
-}
+const std::map<size_t, std::string>&	Server::getMapError( void ) const { return (this->_mError); }
+
+
+/*
+ *	get all Location object of the server
+ */
+const std::map<std::string, Location *>	Server::getAllLocation( void ) const { return (this->_mLocations); }
 
 /*
  *	get all value of Location
  */
 
-const std::list<Location *>&			Server::getLocations( void ) const
+const Location&			Server::getLocations( std::string path ) const
 {
-	return (this->_location);
+	std::map<std::string, Location*>::const_iterator		it;
+	
+	it = _mLocations.find(path);
+	if (it != _mLocations.end())
+		return (*(it->second));
+	throw std::runtime_error("Location not found");
 }
 
 /*
  *	return the path of the code error in argument
  */
-const std::string						Server::getPathError( size_t error_code ) const
+const std::string		Server::getPathError( size_t error_code ) const
 {
 	std::map<size_t, std::string>::const_iterator		it;
-	std::string											ret;
-	std::ostringstream									oss;
 	
-	oss << error_code;
-	ret = "[ERROR] Webserv code error: " + oss.str();
-
-	for (it = this->_mError.begin(); it != this->_mError.end(); it++)
-		if (it->first == error_code)
-			return (it->second);
-	return (ret);
+	it = _mError.find(error_code);
+	if (it != _mError.end())
+		return (it->second);
+	throw std::runtime_error("Error code not fund");
 }
-
 
 /*******************************************************************************
  *							SERVER EVENTS									   *
@@ -394,7 +317,7 @@ void Server::start()
 	sockaddr_in addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(8080);
+	addr.sin_port = htons(this->getPort());
 	addr.sin_addr.s_addr = INADDR_ANY;
 
 	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -440,9 +363,9 @@ void Server::onReadEvent(int fd, int type, EventMonitoring& em)
 		//Failed accepting the client socket
 	}
 	Socket s(clientSocket, em, *this);
-	this->_sockets.push_front(s);
+	this->_lSockets.push_front(s);
 	em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
-		 EventData::CLIENT, *_sockets.begin());
+		 EventData::CLIENT, *_lSockets.begin());
 	if (type == EventData::SERVER)
 		std::cout << "Incoming socket request" << std::endl;
 }
@@ -465,7 +388,7 @@ void Server::onSocketClosedEvent(const Socket& s)
 {
 	this->_em.unmonitor(s.getSocket());
 	close(s.getSocket());
-	this->_sockets.remove(s);
+	this->_lSockets.remove(s);
 	std::cout << "A client has disconnected" << std::endl;
 }
 
@@ -478,34 +401,30 @@ void Server::onSocketClosedEvent(const Socket& s)
  */
 bool							Server::checkUri( std::string uri )
 {
-	std::list<Location *>::iterator		it;
+	std::map<std::string, Location *>::iterator		it;
 
-	for (it = this->_location.begin(); it != this->_location.end(); it++)
-	{
-		std::string loc = (*it)->getName();
-		if (uri.length() >= loc.length() && 
-			std::equal(loc.begin(), loc.end(), uri.begin()))
-			return (true);
-	}
+	it = _mLocations.find(uri);
+	if (it != _mLocations.end())
+		return (true);
 	return (false);
 }
 
 const Location*						Server::getUri( const std::string& uri )
 {
-	std::list<Location *>::const_iterator	it;
-	Location* 								bestMatch = NULL;
+	std::map<std::string, Location *>::iterator		it;
+	Location* 										bestMatch = NULL;
 	
-	for (it = this->_location.begin(); it != this->_location.end(); it++)
+	for (it = this->_mLocations.begin(); it != this->_mLocations.end(); it++)
 	{
-		if((*it)->isMatching(uri))
+		if(it->second->isMatching(uri))
 		{
 			if (!bestMatch || 
-					bestMatch->getName().size() < (*it)->getName().size())
-				bestMatch = *it;
+					bestMatch->getPath().size() < it->second->getPath().size())
+				bestMatch = it->second;
 		}
 	}
 	if (bestMatch)
-		LOG_DEB("Best match found for " + uri + " is " + bestMatch->getName());
+		LOG_DEB("Best match found for " + uri + " is " + bestMatch->getPath());
 	else
 		LOG_DEB("No match found for " + uri);
 	return (bestMatch);
@@ -516,16 +435,16 @@ const Location*						Server::getUri( const std::string& uri )
  */
 bool	Server::checkMethod( std::string uri, std::string method )
 {
-	std::list<Location *>::iterator	it;
-	Location						*locDef = NULL;
-	Location						*locExist = NULL;
+	std::map<std::string, Location *>::iterator		it;
+	Location*										locDef = NULL;
+	Location*										locExist = NULL;
 
-	for (it = this->_location.begin(); it != this->_location.end(); ++it)
+	for (it = this->_mLocations.begin(); it != this->_mLocations.end(); ++it)
 	{
-		if ((*it)->getName() == "/")
-			locDef = *it;
-		if ((*it)->getName() == uri)
-			locExist = *it;
+		if (it->second->getPath() == "/")
+			locDef = it->second;
+		if (it->second->getPath() == uri)
+			locExist = it->second;
 	}
 	return (locExist ? locExist->getMethod()->isAllowed(method) :
            locDef ? locDef->getMethod()->isAllowed(method) : false);
@@ -585,9 +504,9 @@ const char		*Server::PortValueException::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 {
-	std::map<size_t, std::string>::const_iterator	it;
-	std::map<size_t, std::string>					mError;
-	const std::list<Location *>						loc = src_object.getLocations();
+	std::map<size_t, std::string>::const_iterator		it;
+	std::map<size_t, std::string>						mError;
+	const std::map<std::string, Location *>				loc = src_object.getAllLocation();
 	
 	mError = src_object.getMapError();
 	
@@ -597,7 +516,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
 		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl
 		<< GREEN << "Index file:\t\t" << src_object.getIndex() << RESET << std::endl
-		<< GREEN << "Max connection client:\t" << src_object.getMaxConnectionClient() << RESET << std::endl
+		<< GREEN << "Max connection client:\t" << src_object.getMaxClient() << RESET << std::endl
 		<< GREEN << "Max size of body:\t" << src_object.getMaxSizeBody() << " bytes." << RESET << std::endl
 		<< GREEN << "Error pages:" << RESET << std::endl;
 	
@@ -605,8 +524,8 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 		out << GREEN << "\t" << it->first << " => " << it->second << RESET << std::endl;
 	
 	out << GREEN << "Locations:" << RESET << std::endl;	
-	for (std::list<Location *>::const_iterator it = loc.begin(); it != loc.end(); ++it)
-		out << **it << RESET << std::endl;
+	for (std::map<std::string, Location *>::const_iterator it = loc.begin(); it != loc.end(); ++it)
+		out << it->second << RESET << std::endl;
 	return (out);
 }
 

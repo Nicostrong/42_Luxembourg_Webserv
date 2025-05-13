@@ -6,21 +6,24 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/12 16:00:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:58:34 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerManager.hpp"
 
-ServerManager::ServerManager(	const std::list<Token*>& serverListToken )
+ServerManager::ServerManager(	const std::list<Token*>& serverListToken,
+								EventMonitoring& eventMonitoring  )
+	: _nbServer(0)
 {
 	std::list<Token*>::const_iterator		it;
 
-	for (it = serverListToken.begin(); it != serverListToken.end(); it++)
+	for (it = serverListToken.begin(); it != serverListToken.end(); ++it)
 	{
-		Server*		server = new Server(it);
+		Server*		server = new Server(*it, eventMonitoring);
 
-		addServer(server->getPort(), server);
+		this->_mServers[server->getPort()] = server;
+		this->_nbServer++;
 	}
 	return ;
 }
@@ -35,10 +38,9 @@ ServerManager::~ServerManager( void )
 	return ;
 }
 
-void		ServerManager::addServer(int port, Server* server)
+const std::map<int, Server*>& ServerManager::getServers() const
 {
-	this->_mServers[port] = server;
-	return ;
+	return (this->_mServers);
 }
 
 Server*		ServerManager::getServer(int port) const 
@@ -47,4 +49,9 @@ Server*		ServerManager::getServer(int port) const
 	
 	it = this->_mServers.find(port);
 	return ((it != this->_mServers.end()) ? it->second : NULL);
+}
+
+int			ServerManager::getNbServer( void )
+{
+	return (this->_nbServer);
 }

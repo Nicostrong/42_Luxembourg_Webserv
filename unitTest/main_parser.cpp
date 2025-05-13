@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_parser.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:19:33 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/10 17:03:23 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:24:34 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Nico.hpp"
+#include "../includes/ParserServerConfig.hpp"
 
 int		main( int argc, char **argv)
 {

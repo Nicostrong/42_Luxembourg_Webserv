@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/12 10:05:17 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/13 15:19:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define CHECKER
 
 # include "./lib.hpp"
-# include "./Token.hpp"
 # include "./MethodHTTP.hpp"
+
+class	Token;
 
 /*
  *	CheckerTokens class check the sementic off all token of the config file
