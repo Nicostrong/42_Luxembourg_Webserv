@@ -1,4 +1,16 @@
-# include "../includes/Nico.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_parser.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/06 09:19:33 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/05/13 15:24:34 by nfordoxc         ###   Luxembourg.lu     */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/ParserServerConfig.hpp"
 
 int		main( int argc, char **argv)
 {
@@ -10,8 +22,6 @@ int		main( int argc, char **argv)
 	try
 	{
 		ParserServerConfig		pc(argv[1]);
-
-		pc.printServers();
 	}
 	catch(const std::exception& e)
 	{

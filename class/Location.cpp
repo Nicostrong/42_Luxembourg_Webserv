@@ -3,32 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/09 10:53:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 13:10:56 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Location.hpp"
+#include "../includes/Token.hpp"
 
 /*******************************************************************************
- *							CANONICAL FORM									   *
+ *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
-
 /*
- *	Default constructor
+ *	Default constructor with token
  */
-Location::Location( std::pair< const std::string, std::string> &data )
-	: _name(data.first), _method(NULL)
+Location::Location( Token*& tokens ): _method(NULL)
 {
-	LOG_DEB("Location constructor called");
 	try
 	{
-		std::string		raw;
-
-		raw = data.second;
-		parseData(raw);
+		createLocation(tokens);
+		if (this->_method == NULL)
+			this->_method = new MethodHTTP();
 	}
 	catch(const std::exception& e)
 	{
@@ -38,26 +35,17 @@ Location::Location( std::pair< const std::string, std::string> &data )
 }
 
 /*
- *	Copy constructor
- */
-Location::Location( const Location &src_obj )
-	:_name(src_obj._name), _method(src_obj._method), _directives(src_obj._directives)
-{
-	return ;
-}
-
-/*
- *	Destructor
+ *	Destructor of Location object, delete all pointer on list of Directive and 
+ *	the methodHTTP pointer
  */
 Location::~Location( void )
 {
 	std::list<Directive *>::iterator		it;
 
-	LOG_DEB("Location destructor called");
 	delete this->_method;
-	for ( it = this->_directives.begin(); it != this->_directives.end(); ++it)
+	for ( it = this->_lDirectives.begin(); it != this->_lDirectives.end(); ++it)
 		delete *it;
-	this->_directives.clear();
+	this->_lDirectives.clear();
 	return ;
 }
 
@@ -66,46 +54,26 @@ Location::~Location( void )
  ******************************************************************************/
 
 /*
- *	Parsinf of data for Location object
+ *	Read all Location tokens and create the Location object
  */
-void						Location::parseData( std::string &data )
+void						Location::createLocation( Token*& tokens )
 {
-	std::string				directive;
-	size_t					pos = data.find_last_of("}");
-	
-	if (pos != std::string::npos)
-		data.erase(pos, 1);
-	
-	std::istringstream		stream(data);
-
-	while (stream >> directive)
+	this->_path = tokens->getValue();
+	while (tokens && tokens->getType() != Token::LOC_BLK_E)
 	{
-		std::cout << "Directive evaluated: " << directive << std::endl;
-		if (directive == "limit_except" && this->_method == NULL)
+		if (tokens->getType() == Token::DIR_K)
 		{
-			std::string data;
-			std::string value = directive + " ";
+			std::string		key;
+			std::string		value;
 
-			while (stream >> data && data.find('}') == std::string::npos)
-				value += data + " ";
-			this->_method = new MethodHTTP(value);
+			key = tokens->getValue();
+			tokens = tokens->getNext();
+			value = tokens->getValue();
+			this->_lDirectives.push_back(new Directive(key, value));
 		}
-		else
-		{
-			std::string 	value;
-			std::string		temp;
-			
-			while (stream >> temp && temp.find(';') == std::string::npos)
-				value += temp + " ";
-			value += temp;
-			if (!value.empty() && value[value.size() - 1] == ';')
-				value.erase(value.size() - 1);
-			if (!directive.empty() && !value.empty())
-			{
-				std::cout << "value for Directive: " << value << std::endl;
-				this->_directives.push_back(new Directive(directive, value));
-			}
-		}
+		else if (tokens->getType() == Token::HTTP_K && !this->_method)
+			this->_method = new MethodHTTP(tokens);
+		tokens = tokens->getNext();
 	}
 	return ;
 }
@@ -117,25 +85,19 @@ void						Location::parseData( std::string &data )
 /*
  *	get _name value
  */
-std::string					Location::getName( void ) const
-{
-	return (this->_name);
-}
+const std::string&		Location::getPath( void ) const { return (this->_path); }
 
 /*
- *	get _method value
+ *	getMethod return the pointer of MethodHTTP for this Location
  */
-MethodHTTP					*Location::getMethod( void ) const
-{
-	return (this->_method);
-}
+const MethodHTTP*		Location::getMethod( void ) const { return (this->_method); }
 
 /*
- *	get _directives value
+ *	getDirectives return the list of directives
  */
-const std::list<Directive *>&	Location::getDirectives( void ) const
+const std::list<Directive *>&  Location::getDirectives( void ) const
 {
-	return (this->_directives);
+	return (this->_lDirectives);
 }
 
 /*
@@ -143,16 +105,18 @@ const std::list<Directive *>&	Location::getDirectives( void ) const
  */
 bool	Location::isMatching(const std::string& uri) const
 {
-	if (this->_name.empty() || uri.empty())
+	if (this->_path.empty() || uri.empty())
 		return (false);
 		
-	if (uri.size() < this->_name.size() || 
-		!std::equal(this->_name.begin(), this->_name.end(), uri.begin()))
+	if (uri.length() < this->_path.size() || 
+		!std::equal(this->_path.begin(), this->_path.end(), uri.begin()))
 		return (false);
 
-	if (uri.size() > this->_name.size() && 
-		this->_name.at(this->_name.size() - 1) != '/' && 
-			uri.at(this->_name.size()) != '/')
+	if (this->_path.at(this->_path.size() - 1) != '/')
+	{
+		size_t s = uri.find('/', this->_path.size());
+		if (s == this->_path.size() || s == std::string::npos)
+			return (true);
 		return (false);
 	return (true);
 }
@@ -213,7 +177,7 @@ std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 	std::list<Directive *>::const_iterator	it;
 
 	out	<< YELLOW << "------------- LOCATION BLOCK -------------" << RESET << std::endl
-		<< YELLOW << "Name: " << src_object.getName() << RESET << std::endl;
+		<< YELLOW << "Name: " << src_object.getPath() << RESET << std::endl;
 	if (src_object.getMethod() != NULL)
 		out << YELLOW << *src_object.getMethod() << RESET << std::endl;
 	if (!src_object.getDirectives().empty())

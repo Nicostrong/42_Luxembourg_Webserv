@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/01 14:52:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 10:36:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,45 +16,32 @@
 # include "lib.hpp"
 
 /*
- *  Directive object for 
+ *  The Directive object represents a directive of the server [key]:value.
+ *  With this object, you can get the key and the value of the directive.
+ *  The key is the name of the directive and the value is the value of the
+ *  directive.
  */
 class	Directive
 {
 
 	private:
 
-		std::string					_name;
-		std::vector<std::string>	_values;
+		std::string					_key;
+		std::string					_value;
+
+		Directive( const Directive &src_obj );
+		Directive					&operator=( const Directive &src_obj );
 
 	public:
 
-		Directive( void );
 		Directive( std::string &key, std::string &value );
-		Directive( const Directive &src_obj );
 		~Directive( void );
-		
-		Directive					&operator=( const Directive &src_obj );
-
-		/*	SETTER	*/
-		void						setName( std::string &name);
-		void						setValue( size_t index, std::string &value );
-		void						addValue( std::string &value );
 
 		/*  GETTER  */
-		std::string					getName( void ) const;
-		std::string					getValue( int index ) const;
-		std::string					getAllValue( void ) const;
+		const std::string&			getKey( void ) const;
+		const std::string&			getValue( void ) const;
 
 		/*	class Exception	*/
-		class	DirectiveException : public std::exception
-		{
-
-			public:
-
-				const char	*what() const throw();
-		
-		};
-
 		/*	fields empty	*/
 		class	FieldsEmpty : public std::exception
 		{

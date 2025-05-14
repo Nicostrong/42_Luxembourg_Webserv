@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/13 09:29:16 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/14 13:17:45 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ DEB_OPT			=	--tool=memcheck \
 					--show-leak-kinds=all \
 					--track-fds=yes
 
-ARG0			=	"../config/bad.conf"
+ARG0			=	"./good_config/good_2.conf"
 
 RM				=	rm -f
 
@@ -33,22 +33,25 @@ RM				=	rm -f
 #	Test class Server full													   #
 ################################################################################
 
-SERVER_SRC		=	../class/Server.cpp \
-					../class/Location.cpp \
-					../class/Directive.cpp \
-					../class/MethodHTTP.cpp \
-					../class/HandleConfig.cpp \
+SERVER_SRC		=	../class/HandleConfig.cpp \
 					../class/HttpBase.cpp \
 					../class/HttpRequest.cpp \
 					../class/EventMonitoring.cpp \
 					../class/EventData.cpp \
 					../class/HttpResponse.cpp \
-					../class/Socket.cpp \
-					../class/Nico.cpp \
-					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
+					../class/Socket.cpp \
+					../class/Ressource.cpp \
+					../class/ParserServerConfig.cpp \
 					../class/CGI.cpp \
 					../class/Uri.cpp \
+					../class/Token.cpp \
+					../class/CheckerTokens.cpp \
+					../class/ServerManager.cpp \
+					../class/Server.cpp \
+					../class/Location.cpp \
+					../class/Directive.cpp \
+					../class/MethodHTTP.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -72,7 +75,7 @@ NET_SRC			=	../class/Server.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
-					../class/Nico.cpp \
+					../class/ParserServerConfig.cpp \
 					../class/CGI.cpp \
 					../class/Uri.cpp \
 					main_networking.cpp
@@ -85,7 +88,11 @@ NET_NAME		=	test_networking
 #	Test parseur															   #
 ################################################################################
 
-PAR_SRC			=	../class/Nico.cpp \
+PAR_SRC			=	../class/ParserServerConfig.cpp \
+					../class/Token.cpp \
+					../class/Ressource.cpp \
+					../class/CheckerTokens.cpp \
+					../class/MethodHTTP.cpp \
 					main_parser.cpp
 
 PAR_OBJ			=	$(PAR_SRC:.cpp=.o)

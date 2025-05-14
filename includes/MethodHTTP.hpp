@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/28 13:43:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:12:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,40 @@
 
 # include "lib.hpp"
 
+class	Token;
+
 class	MethodHTTP
 {
 
 	private:
 
 		std::set<std::string>			_allowed;
-		std::set<std::string>			_denied;
-
 		static std::set<std::string>	_validMethods;
 
+		MethodHTTP( const MethodHTTP& src_obj );
+
+		MethodHTTP						&operator=( const MethodHTTP& src_obj );
+
 		void							initDefault( void );
-		bool							isMethod( const std::string &method ) const;
-
-# ifndef TEST
-		static std::set<std::string>	initValidMethods( void );
-# endif
-
-		void							parse( const std::string &data );
-
-	public:
-
-		MethodHTTP( void );
-		MethodHTTP( const std::string &data );
-		MethodHTTP( const MethodHTTP &src_obj );
-		~MethodHTTP( void );
-
-		MethodHTTP						&operator=( const MethodHTTP &src_obj );
-
-# ifdef TEST
-		static std::set<std::string>	initValidMethods( void );
-# endif
 
 		/*	SETTER	*/
-		void							allow( const std::string &method );
-		void							deny( const std::string &method );
+		void							allowAll( void );
+		void							allow( const std::string& method );
 
+	public:
+	
+		MethodHTTP( void );
+		MethodHTTP( Token*& tokens );
+		~MethodHTTP( void );
+
+		static std::set<std::string>	initMethods( void );
+		
 		/*	GETTER	*/
-		std::string						getAllowed( void ) const;
-		std::string						getDenied( void ) const;
+		const std::string				getAllowed( void ) const;
 
 		/*	METHODE	*/
-		void							clear( void );
-		bool							isAllowed( const std::string &method ) const;
-		bool							isDenied( const std::string &method ) const;
+		static bool						isMethod( const std::string& method );
+		bool							isAllowed( const std::string& method ) const;
 
 		/*	Unknow method exception	*/
 		class	MethodUnknow: public std::exception

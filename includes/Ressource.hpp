@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ressource.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:45:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/06 20:41:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/09 07:09:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include "lib.hpp"
 #include "IEventHandler.hpp"
-#include "EventMonitoring.hpp"
 
 #define RESSOURCE_BUFFER_SIZE 1024
 
