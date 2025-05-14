@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:07:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:54:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "lib.hpp"
 # include "Directive.hpp"
 # include "MethodHTTP.hpp"
+# include "CGIDirective.hpp"
 
 class	Token;
 
@@ -33,6 +34,7 @@ class	Location
 		std::string						_path;
 		MethodHTTP*						_method;
 		std::list<Directive *>			_lDirectives;
+		std::list<CGIDirective *>		_lCGIDirectives;
 
 		Location( const Location &scr_obj );
 

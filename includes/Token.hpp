@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 12:57:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:57:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ class 	Token
 			HTTP_V,			//	method HTTP value
 			DIR_K,			//	key directive
 			DIR_V,			//	value directive
+			CGI,			//	CGI directive
+			CGI_BLK_S,		//	CGI block start
+			CGI_BLK_E,		//	CGI block end
+			CGI_K,			//	CGI extension
+			CGI_V,			//	CGI path
 			SEMICOLON		//	end of directive
 		};
 

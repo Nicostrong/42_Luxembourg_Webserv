@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:00:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 15:00:47 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ std::string		Token::getTypeName( void ) const
 			YELLOW "LOCATION" RESET,
 			YELLOW "LOC_BLK_S" RESET,
 			YELLOW "LOC_BLK_E" RESET,
+			GREEN "CGI" RESET,
+			GREEN "CGI_BLK_S" RESET,
+			GREEN "CGI_BLK_E" RESET,
 			"HTTP_K", "HTTP_V", "DIR_K", "DIR_V", "SEMICOLON"
 	};
 	
@@ -166,6 +169,35 @@ Token*		Token::createDirective(	std::istringstream& iss, const std::string& word
 
 	attachToken(head, current, semi);
 	return (current);
+}
+
+/*
+ *	Gestion des CGIdirectives
+ */
+Token*		Token::createCGIDirective(	std::istringstream& iss, 
+										const std::string& word,
+										Token*& head, Token*& current)
+{
+Token*		dirKey = new Token(Token::DIR_K, word);
+
+attachToken(head, current, dirKey);
+
+std::string		valueWord;
+std::string		semiCheck;
+
+if (!(iss >> valueWord))
+throw ParserServerConfig::ParsingError("Missing value after directive '" + word + "'");
+
+Token*		dirVal = new Token(Token::DIR_V, valueWord);
+
+attachToken(head, current, dirVal);
+if (!(iss >> semiCheck) || semiCheck != ";")
+throw ParserServerConfig::ParsingError("Expected ';' after directive value for '" + word + "'");
+
+Token*		semi = new Token(Token::SEMICOLON, ";");
+
+attachToken(head, current, semi);
+return (current);
 }
 
 /*
