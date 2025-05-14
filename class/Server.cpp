@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:13:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 13:23:47 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,6 @@ Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring)
 		std::cerr << e.what() << std::endl;
 	}
 	return ;
-}
-
-// Simple Constructor
-
-Server::Server(EventMonitoring &eventMonitoring) : 
-	_em(eventMonitoring), _serverSocket(0)
-{
-	LOG_DEB("Simple Server Constructor called");
 }
 
 /*
@@ -373,9 +365,9 @@ void		Server::onReadEvent( int fd, int type, EventMonitoring& em )
 	
 	
 	Socket s(clientSocket, em, *this, clientAddr);
-	this->_sockets.push_front(s);
+	this->_lSockets.push_front(s);
 	em.monitor(clientSocket, POLLIN | POLLHUP | POLLRDHUP,
-		 EventData::CLIENT, *_sockets.begin());
+		 EventData::CLIENT, *_lSockets.begin());
 }
 
 void		Server::onWriteEvent( int fd, int type, EventMonitoring& em )
@@ -426,7 +418,7 @@ bool							Server::checkUri( std::string uri )
  *	Check if the uri exist in the map of Location and return a const pointer of
  *	the Location object
  */
-const Location*					Server::getUri( const std::string& uri )
+const Location*					Server::getMatchingLoc( const std::string& uri )
 {
 	std::map<std::string, Location *>::iterator		it;
 	Location* 										bestMatch = NULL;
@@ -448,7 +440,7 @@ const Location*					Server::getUri( const std::string& uri )
  */
 bool	Server::checkMethod( std::string uri, std::string method )
 {
-	const Location*		location = getUri(uri);
+	const Location*		location = getMatchingLoc(uri);
 
 	if (location && location->getMethod())
 		return (location->getMethod()->isAllowed(method));

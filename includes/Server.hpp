@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:16:52 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 13:21:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define SERVER_HPP
 
 # include "lib.hpp"
+# include "Uri.hpp"
 # include "Token.hpp"
 # include "Socket.hpp"
 # include "Location.hpp"
@@ -32,13 +33,6 @@
  *	client, the error pages and the locations.
  *	You can also check if a requested uri is valid and if the method is allowed
  *	for this uri.
-# include "IEventHandler.hpp"
-# include "Socket.hpp"
-# include "Ressource.hpp"
-# include "Uri.hpp"
-
-/*
- *	Server object contain all parameters from the server.conf file
  */
 class	Server : public IEventHandler
 {
@@ -56,7 +50,7 @@ class	Server : public IEventHandler
 		std::map<std::string, Location *>		_mLocations;
 		std::list<Directive *>					_lDirectives;
 		std::list<Socket>						_lSockets;
-		std::string						_serverIp;
+		std::string								_serverIp;
 
 		EventMonitoring&						_em;
 
