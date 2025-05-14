@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 13:34:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:58:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ void RequestHandling::getResponse(Server& server,
 		}
 		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
 		req.setPathTranslated(realPath);
-		const Directive*		directive = loc->findDirective("cgi");
-		if (directive)
-			cgiDirectives.push_back(const_cast<Directive*>(directive));
-		//cgiDirectives = loc->findDirective("cgi");
+		cgiDirectives = loc->findDirectives("cgi");
 		
 		if (cgiDirectives.size() > 0)
 		{
@@ -156,21 +153,33 @@ std::string RequestHandling::getReasonPhrase(HttpCode code)
 void RequestHandling::getErrorResponse(int statusCode, Server& server, 
 	const HttpRequest& req, HttpResponse& resp)
 {
-	(void)req;
 	resp.setStatusCode((HttpBase::HttpCode)statusCode);
-	Ressource err(server.getPathError(statusCode));
 	
-	if (err.isFail())
-		LOG_ERROR("Failed to load custom error response");
-	else
+	try
 	{
-		resp.setBody(err.getRaw());
-		resp.setAsComplete();
-		return ;
+		std::string customErrorPath = server.getPathError(statusCode);
+		Ressource 	errorRessource(customErrorPath);
+		
+		if (errorRessource.isFail())
+		{
+			LOG_ERROR("Failed to load custom error response");
+			throw std::runtime_error("Failed to load custom error response");
+		}
+		else
+		{
+			resp.setBody(errorRessource.getRaw());
+			resp.setAsComplete();
+		}
+		
 	}
-	resp.setBody(
-		HttpBase::getDefaultErrorPage((HttpBase::HttpCode)statusCode));
-	resp.setAsComplete();
+	catch(const std::exception& e)
+	{
+		resp.setBody(
+			HttpBase::getDefaultErrorPage((HttpBase::HttpCode)statusCode));
+		resp.setAsComplete();
+	}
+	
+	(void)req;
 }
 
 // ########################################

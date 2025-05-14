@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/14 13:17:45 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/14 14:30:15 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SERVER_NAME		=	test_classServer
 ################################################################################
 
 NET_SRC			=	../class/Server.cpp \
+					../class/CheckerTokens.cpp \
 					../class/Location.cpp \
 					../class/Directive.cpp \
 					../class/MethodHTTP.cpp \
@@ -72,12 +73,14 @@ NET_SRC			=	../class/Server.cpp \
 					../class/EventMonitoring.cpp \
 					../class/EventData.cpp \
 					../class/HttpResponse.cpp \
+					../class/ServerManager.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
 					../class/ParserServerConfig.cpp \
 					../class/CGI.cpp \
 					../class/Uri.cpp \
+					../class/Token.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)
