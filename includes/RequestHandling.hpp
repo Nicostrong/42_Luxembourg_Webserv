@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 16:41:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 18:01:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class RequestHandling: public HttpBase
 		static void handleCGI(const std::list<Directive*>& cgiDirectives, 
 			Server& server, const HttpRequest& req, HttpResponse& resp);
 		static void handleRedirect(const Directive* redirectDirective, 
-			const HttpRequest& req, HttpResponse& resp);
+			HttpResponse& resp);
 		static bool isFileReadable(Server& server, const HttpRequest& req, 
 			HttpResponse& resp, const std::string& path);
 		bool _checkMethod(Server server);
