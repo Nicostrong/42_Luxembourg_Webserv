@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 17:34:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:20:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void HttpResponse::encodeResponse()
 	std::stringstream ss;
 	ss << "HTTP/1.1 " << this->_statusCode << " " 
 	   << getStrStatusCode(this->_statusCode) << CRLF
+	   << getHeaders_raw()
 	   << "Content-Type: text/html" << CRLF
 	   << "Content-Length: "<< this->_body.size() << CRLF
 	   << CRLF

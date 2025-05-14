@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:46:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:10:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,21 @@ void HttpBase::setRaw(const std::string raw)
 	this->_raw = raw;
 }
 
+void HttpBase::addHeader(const std::string &name, const std::string& value)
+{
+	this->_headers[name] = value;
+}
+
 std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
 	switch (statusCode)
 	{
 		case 200: return ("OK");
+		case 302: return ("Found");
 		case 400: return ("Bad Request");
 		case 403: return ("Forbidden");
 		case 404: return ("Not Found");
+		case 405: return ("Method Not Allowed");
 		case 500: return ("Internal Server Error");
 	default:
 		return ("Internal Server Error");
@@ -119,6 +126,7 @@ std::string 	HttpBase::getHeaders_raw() const
 	while(it != _headers.end())
 	{
 		result += it->first;
+		result += ": ";
 		result += it->second;
 		result += "\n\r";
 		++it;

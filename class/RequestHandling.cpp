@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 14:58:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:06:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void RequestHandling::getResponse(Server& server,
 	const Location* 		loc;
 	std::string 			realPath;
 	std::list<Directive*>	cgiDirectives;
+	const Directive*		redirectDirective;
 
 	try
 	{
@@ -49,13 +50,27 @@ void RequestHandling::getResponse(Server& server,
 
 		loc = server.getMatchingLoc(req.getUri());
 		req.setLocation(loc);
+
 		if (!req.getLocation())
 		{
 			getErrorResponse(NOT_FOUND, server, req, resp);
 			return ;
 		}
-		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
-		req.setPathTranslated(realPath);
+
+		if (!loc->getMethod()->isAllowed(req.getMethod()))
+		{
+			getErrorResponse(METHOD_NOT_ALLOWED, server, req, resp);
+			return ;
+		}
+		
+		redirectDirective = loc->findDirective("return");
+
+		if (redirectDirective)
+		{
+			handleRedirect(redirectDirective, req, resp);
+			return ;
+		}
+		
 		cgiDirectives = loc->findDirectives("cgi");
 		
 		if (cgiDirectives.size() > 0)
@@ -63,6 +78,13 @@ void RequestHandling::getResponse(Server& server,
 			handleCGI(cgiDirectives, server, req, resp);
 			return ;
 		}
+
+		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
+		req.setPathTranslated(realPath);
+		//Should handle normally not cgi
+
+
+
 		getErrorResponse(OK, server, req, resp);
 	}
 	catch(const std::exception& e)
@@ -88,6 +110,17 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 		return ;
 	
 	getErrorResponse(OK, server, req, resp);
+}
+
+void RequestHandling::handleRedirect(const Directive* redirectDirective, 
+	const HttpRequest& req, HttpResponse& resp)
+{
+	std::string redirectUri = Uri::buildByReplacingLoc(req.getLocation(), 
+		req.getUri(), redirectDirective->getValue());
+
+	resp.setStatusCode(FOUND);
+	resp.addHeader("Location", redirectUri);
+	resp.setAsComplete();
 }
 
 bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 
@@ -170,7 +203,6 @@ void RequestHandling::getErrorResponse(int statusCode, Server& server,
 			resp.setBody(errorRessource.getRaw());
 			resp.setAsComplete();
 		}
-		
 	}
 	catch(const std::exception& e)
 	{

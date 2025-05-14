@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:46:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:55:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ class HttpBase
 		enum HttpCode
 		{
 			OK = 200,
+			FOUND = 302,
 			BAD_REQUEST = 400,
 			FORBIDDEN = 403,
 			NOT_FOUND = 404,
+			METHOD_NOT_ALLOWED = 405,
 			INTERNAL_SERVER_ERROR = 500,
 		};
 		
@@ -46,7 +48,9 @@ class HttpBase
 		void 				setHTTP(const std::string html);
 		const std::string& 	getRaw() const;
 		void 				setRaw(const std::string raw);
-		std::string 	getHeaders_raw() const;
+		std::string			getHeaders_raw() const;
+		void				addHeader(const std::string &name, 
+			const std::string& value);
 		const std::map<std::string, std::string>&	getHeaders() const;
 		static std::string	getStrStatusCode(HttpCode statusCode);
 		static std::string  getDefaultErrorPage(HttpCode statusCode);
