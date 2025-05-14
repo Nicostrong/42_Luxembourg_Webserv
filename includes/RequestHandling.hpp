@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:41:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:08:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "HttpRequest.hpp"
 #include "HttpResponse.hpp"
 #include "Server.hpp"
+#include "Uri.hpp"
 #include "HttpBase.hpp"
 #include "CGI.hpp"
 #include <string>

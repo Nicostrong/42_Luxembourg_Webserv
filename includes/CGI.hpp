@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 10:10:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:17:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ class CGI : public IEventHandler
         void	initCGI();
         
     private:
-        std::vector<const std::string> getEnv() const;
+        const std::vector<std::string> getEnv() const;
         
         template <typename T>
         std::string  getRawEnv(const std::string& key, 
             const T& value) const;
         
-        std::vector<const char*> getCArray(std::vector<const std::string>& in) 
+        const std::vector<const char*> getCArray(const std::vector<std::string>& in) 
             const;
             
         EventMonitoring&    _em;

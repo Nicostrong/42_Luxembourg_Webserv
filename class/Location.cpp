@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:46:46 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:06:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ bool	Location::isMatching(const std::string& uri) const
 		if (s == this->_path.size() || s == std::string::npos)
 			return (true);
 		return (false);
+	}
+	
 	return (true);
 }
 
@@ -128,7 +130,7 @@ const Directive*		Location::findDirective( const std::string& name ) const
 {
 	std::list<Directive*>::const_iterator it;
 
-	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
+	for (it = this->_lDirectives.begin(); it != this->_lDirectives.end(); it++)
 	{
 		if ((*it)->getKey() == name)
 			return (*it);
@@ -139,13 +141,13 @@ const Directive*		Location::findDirective( const std::string& name ) const
 /*
  * Find all directives in the directive list
  */
-const std::list<Directive*> Location::getDirectives( const std::string& name ) 
+const std::list<Directive*> Location::findDirectives( const std::string& name ) 
 	const
 {
 	std::list<Directive*>::const_iterator it;
 	std::list<Directive*> directives;
 
-	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
+	for (it = this->_lDirectives.begin(); it != this->_lDirectives.end(); it++)
 	{
 		if ((*it)->getKey() == name)
 			directives.push_back(*it);

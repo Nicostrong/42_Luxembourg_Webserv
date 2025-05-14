@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 10:12:35 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:17:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ CGI& CGI::operator=(const CGI& obj)
 
 void	initCGI()
 {
-	std::vector<std::string> env;
+	const std::vector<std::string> env;
 	//execve("", env.data(), env);
 }
 
-std::vector<const std::string> CGI::getEnv() const
+const std::vector<std::string> CGI::getEnv() const
 {
-    std::vector<const std::string> env;
+    std::vector<std::string> env;
 
     // Server specific
 
@@ -70,13 +70,13 @@ std::vector<const std::string> CGI::getEnv() const
     return (env);
 }
 
-std::vector<const char*> CGI::getCArray(std::vector<const std::string>& in) 
+const std::vector<const char*> CGI::getCArray(const std::vector<std::string>& in) 
 	const
 {
 	std::vector<const char*> out;
-	std::vector<const std::string>::const_iterator it;
+	std::vector<std::string>::const_iterator it;
 	
-	for (it = in.cbegin(); it != in.cend(); ++it)
+	for (it = in.begin(); it != in.end(); ++it)
 		out.push_back(it->c_str());
 	return (out);
 }

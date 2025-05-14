@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:23:47 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:01:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
  */
 Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
 	: _maxClient(0), _serverSocket(0), _port(0), _maxSizeBody(0), 
-	_path("./www/html"), _index("index.html"), _em(eventMonitoring), 
-	_serverIp(SERVER_IP)
+	_path("./www/html"), _index("index.html"), _serverIp(SERVER_IP), 
+	_em(eventMonitoring)
 {
 	try
 	{

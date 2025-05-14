@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 13:15:30 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:23:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/ServerManager.hpp"
 #include "../includes/Server.hpp"
 #include "../includes/EventMonitoring.hpp"
 #include "../includes/ParserServerConfig.hpp"
@@ -18,7 +19,11 @@ int main()
 {
 	ParserServerConfig	pc("../config/webserver.conf");
 	EventMonitoring em;
-	Server s(pc.getServer(1), em);
+	ServerManager	sm(pc.getListTokens(), em);
+	/*for (int i = 0; i < sm.getNbServer(); ++i)
+	{
+		sm.getServer()
+	}*/
 	s.start();
 	return (0);
 }

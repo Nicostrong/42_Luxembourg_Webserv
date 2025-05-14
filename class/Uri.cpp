@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Uri.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 10:09:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:19:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ std::string Uri::buildRealAbsolute(const Server& serv, const Location* loc,
     std::string uri)
 {
     const Directive* rootDirective = loc->findDirective("root");
-	std::string location = loc->getName();
+	std::string location = loc->getPath();
 	std::string	rootPath = serv.getPath();
 	
 	if (rootDirective)
-		rootPath = rootDirective->getValue(0);
+		rootPath = rootDirective->getValue();
 	location = trimSlashEnd(location);
 	rootPath = trimSlashEnd(rootPath);
 	
@@ -72,7 +72,7 @@ std::string Uri::buildRealRelative(const Server& serv, const Location* loc,
 	std::string	rootPath = serv.getPath();
 	
 	if (rootDirective)
-		rootPath = rootDirective->getValue(0);
+		rootPath = rootDirective->getValue();
 	rootPath = trimSlashEnd(rootPath);
 	LOG_DEB("Path constructed from relative: " + uri);
 	return (rootPath + uri);
@@ -86,7 +86,7 @@ std::string Uri::getCgiPath(const std::list<Directive*>& cgiDirectives,
     if (uri.size() == 0)
         return ("");
     
-    std::string location = trimSlashEnd(loc->getName());
+    std::string location = trimSlashEnd(loc->getPath());
     std::string relativePath = uri.substr(location.size());
     
     if (relativePath == "/")
@@ -94,7 +94,7 @@ std::string Uri::getCgiPath(const std::list<Directive*>& cgiDirectives,
         const Directive* index = loc->findDirective("index");
         if (index)
         {
-            token = index->getValue(0);
+            token = index->getValue();
             if (isCgiExtValid(cgiDirectives, token))
                 return ('/' + token);
         }
@@ -132,7 +132,7 @@ bool Uri::isCgiExtValid(const std::list<Directive*>& cgiDirectives,
 
     for (it = cgiDirectives.begin(); it != cgiDirectives.end(); it++)
     {
-        ext = (*it)->getValue(0);
+        ext = (*it)->getValue();
         if (filename.size() >= ext.size() && 
                 filename.substr(filename.size() - ext.size()) == ext)
             return (true);

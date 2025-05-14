@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:28:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:07:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ class	Location
 		const std::list<Directive *>&	getDirectives( void ) const;
 
 		const Directive*				findDirective( const std::string& name ) const;
+
+		const std::list<Directive*>		findDirectives( const std::string& name ) const;
 		
 		/*	CHECKER	*/
 		bool							isMatching( const std::string& uri ) const;
