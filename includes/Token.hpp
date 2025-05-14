@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 14:51:47 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 12:57:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 # include "./lib.hpp"
 # include "./ParserServerConfig.hpp"
 
+/*
+ *	Token class is to tokenize the server configuration file.
+ *	Each token is a part of the configuration file, like a key, a value, a brace
+ *	or a semicolon.
+ */
 class 	Token
 {
 
@@ -40,10 +45,7 @@ class 	Token
 		};
 
 		Token( Type type, const std::string& value );
-		Token( const Token& src_obj );
 		~Token( void );
-
-		Token&						operator=( const Token& src_obj );
 
 		/*	GETTER	*/
 		int							getType( void ) const;
@@ -67,6 +69,10 @@ class 	Token
 		std::string					_value;
 		Token*						_next;
 
+		Token( const Token& src_obj );
+
+		Token&						operator=( const Token& src_obj );
+		
 		/*	PRIVATE METHODS	*/
 		static void					attachToken(	Token*& head,
 													Token*& current,

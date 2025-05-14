@@ -6,46 +6,49 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 08:35:38 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 13:00:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Token.hpp"
 
-Token::Token( Type type, const std::string& value ) : _type(type), _value(value), _next(NULL)
+/*******************************************************************************
+ *						CONSTRUCTOR / DESTRUCTOR							   *
+ ******************************************************************************/
+
+/*
+ *	Constructor Token
+ */
+Token::Token( Type type, const std::string& value )
+							: _type(type), _value(value), _next(NULL)
 {
 	return ;
 }
 
-Token::Token( const Token& src_obj ) : _type(src_obj._type), _value(src_obj._value), _next(NULL)
-{
-	if (src_obj._next)
-		this->_next = new Token(*src_obj._next);
-	return ;
-}
-
+/*
+ *	Destructor Token
+ */
 Token::~Token( void )
 {
 	delete this->_next;
 	return ;
 }
 
-Token&		Token::operator=( const Token& src_obj )
-{
-	if (this != &src_obj)
-	{
-		this->_type = src_obj._type;
-		this->_value = src_obj._value;
-		
-		Token*		next = NULL;
-		if (src_obj._next)
-			next = new Token(*src_obj._next);
-		delete this->_next;
-		this->_next = next;
-	}
-	return (*this);
-}
+/*
+ *	List of valid key
+ */
+static const std::string	directiveKeys[] = {
+	"listen", "server_name", "root", "index", "max_connection_client",
+	"client_max_body_size", "return", "autoindex"
+};
 
+/*******************************************************************************
+ *							PRIVATE METHOD									   *
+ ******************************************************************************/
+
+/*
+ *	Delete the chain of tokens
+ */
 void		Token::deleteChain( Token* head )
 {
 	while (head)
@@ -59,16 +62,32 @@ void		Token::deleteChain( Token* head )
 	return ;
 }
 
+/*
+ *	Set the next token to NULL
+ */
 void			Token::setNextToNull( void )
 {
 	this->_next = NULL;
 	return ;
 }
 
+/*******************************************************************************
+ *								GETTER										   *
+ ******************************************************************************/
+
+/*
+ *	Get the type of the token
+ */
 int				Token::getType( void ) const { return (this->_type); }
 
+/*
+ *	Get the value of the token
+ */
 std::string		Token::getValue( void ) const { return (this->_value); }
 
+/*
+ *	Get the name of the type of the token
+ */
 std::string		Token::getTypeName( void ) const
 {
 	static const char*	typeNames[] = {
@@ -89,8 +108,14 @@ std::string		Token::getTypeName( void ) const
 	return ("UNKNOWN_TYPE");
 }
 
+/*
+ *	Get the next token
+ */
 Token*		Token::getNext( void ) const { return (this->_next); }
 
+/*
+ *	Print the token list
+ */
 void		Token::printToken( bool isNext ) const
 {
 	if (!isNext)
@@ -103,14 +128,6 @@ void		Token::printToken( bool isNext ) const
 	}
 	return ;
 }
-
-/*
- *	List of valid key
- */
-static const std::string	directiveKeys[] = {
-	"listen", "server_name", "root", "index", "max_connection_client",
-	"client_max_body_size", "return", "autoindex"
-};
 
 /*
  *	Check if the key is a valid key
@@ -310,6 +327,9 @@ Token*		Token::createSemicolon(	const std::string& word, Token*& head,
     return (current);
 }
 
+/*
+ *	Parse a string and transform each wodr into a Token
+ */
 Token*		Token::tokenize( const std::string& input )
 {
 	std::istringstream		iss(input);

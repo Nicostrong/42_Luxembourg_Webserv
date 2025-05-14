@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/14 11:51:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 12:51:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,9 @@ void		CheckerTokens::checkSemicolonAfterHTTPValue( void )
 	return ;
 }
 
+/*
+ *	Check semicolon before block end
+ */
 void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 {
 	Token*		current = this->_head;
@@ -236,6 +239,9 @@ void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 	return ;
 }
 
+/*
+ *	Check duplicated keys in the same scope
+ */
 void		CheckerTokens::checkDuplicatedKeysInScope( void )
 {
 	std::set<std::string>		seenKeys;
@@ -258,6 +264,9 @@ void		CheckerTokens::checkDuplicatedKeysInScope( void )
 	return ;
 }
 
+/*
+ *	Check the value of the directive
+ */
 void		CheckerTokens::checkValue( void )
 {
 	Token*		current = this->_head;
@@ -276,6 +285,9 @@ void		CheckerTokens::checkValue( void )
 	return ;
 }
 
+/*
+ *	Check the method HTTP
+ */
 void		CheckerTokens::checkMethodHTTP( void )
 {
 	Token*		current = this->_head;
@@ -290,6 +302,9 @@ void		CheckerTokens::checkMethodHTTP( void )
 	return ;	
 }
 
+/*
+ *	Check the final state of the tokens
+ */
 void		CheckerTokens::assertFinalState( void ) const
 {
 	if (_braceCount != 0)
