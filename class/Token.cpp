@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:15:34 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 08:35:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ Token*		Token::createLocation(	std::istringstream& iss, Token*& head,
 	if (!(iss >> path))
 		throw ParserServerConfig::ParsingError("Expected path after 'location'");
 	std::transform(path.begin(), path.end(), path.begin(), static_cast<int(*)(int)>(std::tolower));
-	Token*		locKey = new Token(Token::LOCATION, "location " + path);
+	Token*		locKey = new Token(Token::LOCATION, path);
 
 	attachToken(head, current, locKey);
 	if (!(iss >> brace) || brace != "{")

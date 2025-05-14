@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:57:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:31:17 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,22 @@
 
 class	Token;
 
+/*
+ *	The ServerManager object is a container for all the server objects.
+ *	It is used to manage the server objects and to get the server object
+ *	by its port.
+ */
 class	ServerManager
 {
 
 	private:
 
-		std::map<int, Server*>			_mServers;
-		int								_nbServer;
+		std::map<int, Server*>				_mServers;
+		int									_nbServer;
 
 		ServerManager( const ServerManager& src_obj );
 
-		ServerManager&	operator=( const ServerManager& src_obj );
+		ServerManager&		operator=( const ServerManager& src_obj );
 
 	public:
 
@@ -36,11 +41,11 @@ class	ServerManager
 		~ServerManager( void );
 
 		/*	GETTER	*/
-		const std::map<int, Server*>&	getServers( void ) const;
+		const std::map<int, Server*>&		getServers( void ) const;
 		
-		Server*							getServer( int port ) const;
+		Server*								getServer( int port ) const;
 
-		int								getNbServer( void );
+		int									getNbServer( void ) const;
 				
 };
 

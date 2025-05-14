@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:23:40 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 10:36:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 # include "lib.hpp"
 
 /*
- *  Directive object for 
+ *  The Directive object represents a directive of the server [key]:value.
+ *  With this object, you can get the key and the value of the directive.
+ *  The key is the name of the directive and the value is the value of the
+ *  directive.
  */
 class	Directive
 {
@@ -35,19 +38,10 @@ class	Directive
 		~Directive( void );
 
 		/*  GETTER  */
-		std::string					getKey( void ) const;
-		std::string					getValue( void ) const;
+		const std::string&			getKey( void ) const;
+		const std::string&			getValue( void ) const;
 
 		/*	class Exception	*/
-		class	DirectiveException : public std::exception
-		{
-
-			public:
-
-				const char	*what() const throw();
-		
-		};
-
 		/*	fields empty	*/
 		class	FieldsEmpty : public std::exception
 		{

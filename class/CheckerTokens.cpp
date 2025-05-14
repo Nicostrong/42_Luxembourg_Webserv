@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/13 15:20:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:51:27 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,24 @@
 #include "../includes/Token.hpp"
 
 /*******************************************************************************
- *							CANONICAL FORM									   *
+ *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
 
+/*
+ *	Constructor CheckerTokens
+ */
 CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
 											_inServer(false), _inLocation(false),
 											_inErrorBlk(false)
 {
-	LOG_DEB("Constructor CheckerTokens");
 	return ;
 }
 
+/*
+ *	Destructor CheckerTokens
+ */
 CheckerTokens::~CheckerTokens( void )
 {
-	LOG_DEB("Destructor CheckerTokens");
 	return ;
 }
 
@@ -35,6 +39,9 @@ CheckerTokens::~CheckerTokens( void )
  *								Method										   *
  ******************************************************************************/
 
+/*
+ *	Check the tokens of the config file
+ */
 void		CheckerTokens::check( Token* head )
 {
 	CheckerTokens	checker(head);
@@ -43,6 +50,13 @@ void		CheckerTokens::check( Token* head )
 	return ;
 }
 
+/*******************************************************************************
+ *							Private Method									   *
+ ******************************************************************************/
+
+/*
+ *	Call all the check function
+ */
 void		CheckerTokens::validate( void )
 {
 	checkBracesAndBlocks();
@@ -57,10 +71,6 @@ void		CheckerTokens::validate( void )
 	return ;
 }
 
-/*******************************************************************************
- *							Private Method									   *
- ******************************************************************************/
-
 /*
  *	Check the number of brace and the localisation of block
  */
@@ -70,81 +80,79 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 
 	while (current)
 	{
-		switch (current->getType())
+		if (current->getType() == Token::SERVER)
 		{
-			case Token::SERVER:
-				if (this->_inServer)
+			if (this->_inServer)
 					throw CheckerError("Nested server block not allowed");
-				break;
-
-			case Token::SER_BLK_S:
-				this->_inServer = true;
-				this->_braceCount++;
-				break;
-			case Token::SER_BLK_E:
-				this->_braceCount--;
-				if (this->_braceCount != 0)
-					throw CheckerError("Number of braces error");
-				if (this->_inLocation || this->_inErrorBlk)
-					throw CheckerError("Unexpected closing brace");
-				else if (this->_inServer)
-					this->_inServer = false;
-				else
-					throw CheckerError("Unexpected closing brace");
-				break;
-
-			case Token::LOCATION:
-				if (this->_inLocation)
-					throw CheckerError("Nested location block not allowed");
-				break;
-
-			case Token::LOC_BLK_S:
-				this->_braceCount++;
-				if (!this->_inServer)
-					throw CheckerError("Location block outside server");
-				if (this->_inLocation)
-					throw CheckerError("Nested location not allowed");
-				this->_inLocation = true;
-				break;
-			case Token::LOC_BLK_E:
-				this->_braceCount--;
-				if (this->_braceCount < 0)
-					throw CheckerError("Too many closing braces LOCATION " + current->getValue());
-				if (this->_inErrorBlk)
-					throw CheckerError("Unexpected closing brace");
-				else if (this->_inLocation)
-					this->_inLocation = false;
-				else
-					throw CheckerError("Unexpected closing brace");
-				break;
-			
-			case Token::ERROR_PAGE:
-				if (this->_inErrorBlk)
-					throw CheckerError("Nested error block not allowed");
-				break;
-
-			case Token::ERR_BLK_S:
+		}
+		else if (current->getType() == Token::SER_BLK_S)
+		{
+			this->_inServer = true;
 			this->_braceCount++;
-				if (!this->_inServer)
-					throw CheckerError("Error_page block outside server");
-				if (this->_inErrorBlk || this->_inLocation)
-					throw CheckerError("Nested error_page not allowed");
-				this->_inErrorBlk = true;
-				break;
-			case Token::ERR_BLK_E:
-				this->_braceCount--;
-				if (this->_braceCount < 0)
-					throw CheckerError("Too many closing braces ERROR " + current->getValue());
-				if (this->_inLocation)
-					throw CheckerError("Unexpected closing brace.");
-				else if (this->_inErrorBlk)
-					this->_inErrorBlk = false;
-				else
-					throw CheckerError("Unexpected closing brace.");
-				break;
-
-			default:
-				break;
+		}
+		else if (current->getType() == Token::SER_BLK_E)
+		{
+			this->_braceCount--;
+			if (this->_braceCount != 0)
+				throw CheckerError("Number of braces error");
+			if (this->_inLocation || this->_inErrorBlk)
+				throw CheckerError("Unexpected closing brace");
+			else if (this->_inServer)
+				this->_inServer = false;
+			else
+				throw CheckerError("Unexpected closing brace");
+		}
+		else if (current->getType() == Token::LOCATION)
+		{
+			if (this->_inLocation)
+				throw CheckerError("Nested location block not allowed");
+		}
+		else if (current->getType() == Token::LOC_BLK_S)
+		{
+			this->_braceCount++;
+			if (!this->_inServer)
+				throw CheckerError("Location block outside server");
+			if (this->_inLocation)
+				throw CheckerError("Nested location not allowed");
+			this->_inLocation = true;
+		}
+		else if (current->getType() == Token::LOC_BLK_E)
+		{
+			this->_braceCount--;
+			if (this->_braceCount < 0)
+				throw CheckerError("Too many closing braces LOCATION " + current->getValue());
+			if (this->_inErrorBlk)
+				throw CheckerError("Unexpected closing brace");
+			else if (this->_inLocation)
+				this->_inLocation = false;
+			else
+				throw CheckerError("Unexpected closing brace");
+		}
+		else if (current->getType() == Token::ERROR_PAGE)
+		{
+			if (this->_inErrorBlk)
+				throw CheckerError("Nested error block not allowed");
+		}
+		else if (current->getType() == Token::ERR_BLK_S)
+		{
+			this->_braceCount++;
+			if (!this->_inServer)
+				throw CheckerError("Error_page block outside server");
+			if (this->_inErrorBlk || this->_inLocation)
+				throw CheckerError("Nested error_page not allowed");
+			this->_inErrorBlk = true;
+		}
+		else if (current->getType() == Token::ERR_BLK_E)
+		{
+			this->_braceCount--;
+			if (this->_braceCount < 0)
+				throw CheckerError("Too many closing braces ERROR " + current->getValue());
+			if (this->_inLocation)
+				throw CheckerError("Unexpected closing brace.");
+			else if (this->_inErrorBlk)
+				this->_inErrorBlk = false;
+			else
+				throw CheckerError("Unexpected closing brace.");
 		}
 		current = current->getNext();
 	}

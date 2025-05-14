@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:23:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:02:56 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,23 @@
 #include "../includes/Token.hpp"
 
 /*******************************************************************************
- *							CANONICAL FORM									   *
+ *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
-
 /*
  *	Default constructor with token
  */
-Location::Location( Token* tokens ): _method(NULL)
+Location::Location( Token*& tokens ): _method(NULL)
 {
-	LOG_DEB("Location constructor called");
 	try
 	{
 		createLocation(tokens);
+		if (this->_method == NULL)
+			this->_method = new MethodHTTP();
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	return ;
-}
-
-/*
- *	Copy constructor
- */
-Location::Location( const Location &src_obj )
-	:_path(src_obj._path), _method(src_obj._method), _lDirectives(src_obj._lDirectives)
-{
 	return ;
 }
 
@@ -51,7 +42,6 @@ Location::~Location( void )
 {
 	std::list<Directive *>::iterator		it;
 
-	LOG_DEB("Location destructor called");
 	delete this->_method;
 	for ( it = this->_lDirectives.begin(); it != this->_lDirectives.end(); ++it)
 		delete *it;
@@ -63,8 +53,12 @@ Location::~Location( void )
  *							PRIVATE METHOD									   *
  ******************************************************************************/
 
-void						Location::createLocation( Token* tokens )
+/*
+ *	Read all Location tokens and create the Location object
+ */
+void						Location::createLocation( Token*& tokens )
 {
+	this->_path = tokens->getValue();
 	while (tokens && tokens->getType() != Token::LOC_BLK_E)
 	{
 		if (tokens->getType() == Token::DIR_K)
@@ -91,31 +85,20 @@ void						Location::createLocation( Token* tokens )
 /*
  *	get _name value
  */
-std::string					Location::getPath( void ) const
-{
-	return (this->_path);
-}
+const std::string&		Location::getPath( void ) const { return (this->_path); }
 
 /*
- *	get _method value
+ *	getMethod return the pointer of MethodHTTP for this Location
  */
-MethodHTTP					*Location::getMethod( void ) const
-{
-	return (this->_method);
-}
+const MethodHTTP*		Location::getMethod( void ) const { return (this->_method); }
 
 /*
- *	get _directives value
+ *	getDirectives return the list of directives
  */
-const std::list<Directive *>&	Location::getDirectives( void ) const
+const std::list<Directive *>&  Location::getDirectives( void ) const
 {
 	return (this->_lDirectives);
 }
-
-/*std::string	Location::buildUriOnServer(std::string uri) const
-{
-	uri.replace(0, this->_name.size(), this->_name);
-}*/
 
 /*
  *	Check if the location can match to a requested uri

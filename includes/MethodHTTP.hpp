@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:22:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:12:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ class	MethodHTTP
 		std::set<std::string>			_allowed;
 		static std::set<std::string>	_validMethods;
 
+		MethodHTTP( const MethodHTTP& src_obj );
+
+		MethodHTTP						&operator=( const MethodHTTP& src_obj );
+
 		void							initDefault( void );
-		void							parse( const std::string& data );
 
 		/*	SETTER	*/
 		void							allowAll( void );
@@ -35,16 +38,13 @@ class	MethodHTTP
 	public:
 	
 		MethodHTTP( void );
-		MethodHTTP( Token* tokens );
-		MethodHTTP( const MethodHTTP& src_obj );
+		MethodHTTP( Token*& tokens );
 		~MethodHTTP( void );
-
-		MethodHTTP						&operator=( const MethodHTTP& src_obj );
 
 		static std::set<std::string>	initMethods( void );
 		
 		/*	GETTER	*/
-		std::string						getAllowed( void ) const;
+		const std::string				getAllowed( void ) const;
 
 		/*	METHODE	*/
 		static bool						isMethod( const std::string& method );

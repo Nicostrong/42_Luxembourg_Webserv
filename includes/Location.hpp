@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:19:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 10:53:41 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,35 +20,40 @@
 class	Token;
 
 /*
- *  LocationConfig object for
+ *	The Location object represents a location block in the server configuration.
+ *	It contains the path of the location, the method allowed for this location
+ *	and a list of directives that are specific to this location.
+ *	We can check if a requested uri is valid for this location.
+ *	We can get the path, the method and the directives of this location.
  */
 class	Location
 {
 	private:
 
-		std::string							_path;
-		MethodHTTP*							_method;
-		std::list<Directive *>				_lDirectives;
+		std::string						_path;
+		MethodHTTP*						_method;
+		std::list<Directive *>			_lDirectives;
 
-		Location							&operator=( const Location &src_obj );
+		Location( const Location &scr_obj );
 
-		void								parseData( std::string &data );
-		void								createLocation( Token* tokens );
+		Location						&operator=( const Location &src_obj );
+
+		void							createLocation( Token*& tokens );
 	
 	public:
 
-		Location( Token* tokens );
-		Location( const Location &scr_obj );
+		Location( Token*& tokens );
 		~Location( void );
 
 		/*	GETTER	*/
-		std::string							getPath( void ) const;
-		MethodHTTP							*getMethod( void ) const;
-		const std::list<Directive *>&		getDirectives( void ) const;
-		/*std::string							buildUriOnServer(std::string uri) 
-			const;*/
-		bool								isMatching(const std::string& uri) 
-			const;
+		const std::string&				getPath( void ) const;
+		
+		const MethodHTTP*				getMethod( void ) const;
+		
+		const std::list<Directive *>&	getDirectives( void ) const;
+		
+		/*	CHECKER	*/
+		bool							isMatching(const std::string& uri) const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception

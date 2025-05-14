@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:17:47 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 10:31:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,13 @@
 # include "EventMonitoring.hpp"
 
 /*
- *	Server object contain all parameters from the server.conf file
+ *	The Server object represents the configuration of a server that listens on 
+ *	a specific port.
+ *	With this object, you can get some information about the server, like the
+ *	name, the path, the index file, the max size of body, the max number of
+ *	client, the error pages and the locations.
+ *	You can also check if a requested uri is valid and if the method is allowed
+ *	for this uri.
  */
 class	Server : public IEventHandler
 {
@@ -55,21 +61,16 @@ class	Server : public IEventHandler
 		
 		/*	Token	*/
 		void									setAttributs( void );
-		void									createError( Token* tokens );
-		void									createServer( Token* tokens );
-		void									createDirective( Token* tokens );
+		void									createError( Token*& tokens );
+		void									createServer( Token*& tokens );
+		void									createDirective( Token*& tokens );
 
 		/* Cleanup func to close all sockets(server included)*/
 		void									cleanup( void );
-		/*	Check the value of port and */
-		void									checkServer( void );
 		
 	public:
 
-		Server( EventMonitoring& eventMonitoring );
-		Server( const std::map< std::string, std::string>& data,
-				EventMonitoring& eventMonitoring );
-		Server( Token* serverTokensConfig, EventMonitoring& eventMonitoring );
+		Server( Token*& serverTokensConfig, EventMonitoring& eventMonitoring );
 		~Server( void );
 
 		/*  GETTER	*/
@@ -81,13 +82,13 @@ class	Server : public IEventHandler
 		const std::string&						getName( void ) const;
 		const std::string&						getPath( void ) const;
 		const std::string&						getIndex( void ) const;
-		const std::string						getPathError( size_t error_code ) const;
+		const std::string&						getPathError( size_t error_code ) const;
 
 		const std::map<size_t, std::string>&	getMapError( void ) const;
 		const std::map<std::string, Location *>	getAllLocation( void ) const;
 		const Location&							getLocations( std::string path ) const;
 
-		/*	Checker GIGI	*/
+		/*	CHECKER	*/
 		bool									checkUri( std::string uri );
 		const Location*							getUri( const std::string& uri );
 		bool									checkMethod( std::string uri,
@@ -104,16 +105,6 @@ class	Server : public IEventHandler
 		void 									onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/
-		/*	server error Exception	*/
-		class	ServerException : public std::exception
-		{
-
-			public:
-
-				const char	*what() const throw();
-		
-		};
-
 		/*	parsing error Exception	*/
 		class	ParsingError: public std::exception
 		{

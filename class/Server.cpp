@@ -6,24 +6,23 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 13:43:36 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:39:21 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 
 /*******************************************************************************
- *							CANONICAL FORM									   *
+ *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
 
 /*
  *	Server constructor with tokens in argument
  */
-Server::Server( Token* serverTokensConfig, EventMonitoring &eventMonitoring) 
+Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
 	: _maxClient(0), _serverSocket(0), _port(0), _maxSizeBody(0), 
 	_path("./www/html"), _index("index.html"), _em(eventMonitoring)
 {
-	LOG_DEB("Server with tokens Constructor called");
 	try
 	{
 		createServer(serverTokensConfig);
@@ -44,7 +43,6 @@ Server::~Server( void )
 	std::list<Directive *>::iterator				itDir;
 	std::map<std::string, Location *>::iterator		itLoc;
 
-	LOG_DEB("Server destructor called");
 	cleanup();
 	for ( itDir = this->_lDirectives.begin(); itDir != this->_lDirectives.end(); ++itDir)
 		delete *itDir;
@@ -62,7 +60,7 @@ Server::~Server( void )
 /*
  *	read all token and create the object Server with all configuration
  */
-void		Server::createServer( Token* tokens )
+void		Server::createServer( Token*& tokens )
 {
 	while (tokens && tokens->getType() != Token::SER_BLK_E)
 	{
@@ -84,7 +82,7 @@ void		Server::createServer( Token* tokens )
 /*
  *	create a directive of the server
  */
-void		Server::createDirective( Token* tokens )
+void		Server::createDirective( Token*& tokens )
 {
 	std::string		key;
 	std::string		value;
@@ -101,25 +99,21 @@ void		Server::createDirective( Token* tokens )
 /*
  *	Create a map of code error with the path of the error page
  */
-void		Server::createError( Token* tokens )
+void		Server::createError( Token*& tokens )
 {
+	tokens = tokens->getNext()->getNext();
 	while (tokens && tokens->getType() != Token::ERR_BLK_E)
 	{
-		size_t			numError;
-		std::string		pathError;
-
-		if (tokens->getType() == Token::SEMICOLON)
-			tokens = tokens->getNext();
-		while (tokens->getType() != Token::DIR_K)
-			tokens = tokens->getNext();
-	
-		std::stringstream ss(tokens->getValue());
-	
+		size_t				numError;
+		std::string			pathError;
+		std::stringstream	ss(tokens->getValue());
+		
 		if (!(ss >> numError))
-			throw ParsingError(tokens->getValue());
+			throw ParsingError("conversion error " + tokens->getValue());
 		tokens = tokens->getNext();
 		pathError = tokens->getValue();
 		this->_mError.insert( std::pair<size_t, std::string>(numError, pathError));
+		tokens = tokens->getNext()->getNext();
 	}
 	return ;
 }
@@ -148,8 +142,6 @@ void		Server::setAttributs( void )
 			setMaxSizeBody(value);
 		else if (key == "index")
 			this->_index = value;
-		else
-			throw ParsingError(key);
 	}
 	return ;
 }
@@ -172,10 +164,11 @@ void Server::cleanup()
 	if (this->_serverSocket > 2)
 		close(this->_serverSocket);
 	std::cout << "Server closed" << std::endl;
+	return ;
 }
 
 /*******************************************************************************
- *								SETTER										   *
+ *							SETTER PRIVATE									   *
  ******************************************************************************/
 
 /*
@@ -298,21 +291,21 @@ const Location&			Server::getLocations( std::string path ) const
 /*
  *	return the path of the code error in argument
  */
-const std::string		Server::getPathError( size_t error_code ) const
+const std::string&		Server::getPathError( size_t error_code ) const
 {
 	std::map<size_t, std::string>::const_iterator		it;
 	
 	it = _mError.find(error_code);
 	if (it != _mError.end())
 		return (it->second);
-	throw std::runtime_error("Error code not fund");
+	throw std::runtime_error("Error code not found");
 }
 
 /*******************************************************************************
  *							SERVER EVENTS									   *
  ******************************************************************************/
 
-void Server::start()
+void		Server::start( void )
 {
 	sockaddr_in addr;
 
@@ -351,9 +344,10 @@ void Server::start()
 		*this);
 	while (1)
 		this->_em.updateEvents();
+	return ;
 }
 
-void Server::onReadEvent(int fd, int type, EventMonitoring& em)
+void		Server::onReadEvent( int fd, int type, EventMonitoring& em )
 {
 	(void)fd;
 	int clientSocket = accept(this->_serverSocket, NULL, NULL);
@@ -368,28 +362,32 @@ void Server::onReadEvent(int fd, int type, EventMonitoring& em)
 		 EventData::CLIENT, *_lSockets.begin());
 	if (type == EventData::SERVER)
 		std::cout << "Incoming socket request" << std::endl;
+	return ;
 }
 
-void Server::onWriteEvent(int fd, int type, EventMonitoring& em)
+void		Server::onWriteEvent( int fd, int type, EventMonitoring& em )
 {
 	(void)em;
 	(void)fd;
 	(void)type;
+	return ;
 }
 
-void Server::onCloseEvent(int fd, int type, EventMonitoring& em)
+void		Server::onCloseEvent( int fd, int type, EventMonitoring& em )
 {
 	(void)em;
 	(void)fd;
 	(void)type;
+	return ;
 }
 
-void Server::onSocketClosedEvent(const Socket& s)
+void		Server::onSocketClosedEvent( const Socket& s )
 {
 	this->_em.unmonitor(s.getSocket());
 	close(s.getSocket());
 	this->_lSockets.remove(s);
 	std::cout << "A client has disconnected" << std::endl;
+	return ;
 }
 
 /*******************************************************************************
@@ -397,19 +395,25 @@ void Server::onSocketClosedEvent(const Socket& s)
  ******************************************************************************/
 
 /*
- *	Check if the uri is in Location object or not
+ *	Check if the uri exist in the map of Location
  */
 bool							Server::checkUri( std::string uri )
 {
-	std::map<std::string, Location *>::iterator		it;
+	std::map<std::string, Location*>::iterator		it;
 
-	it = _mLocations.find(uri);
-	if (it != _mLocations.end())
-		return (true);
+	for ( it = this->_mLocations.begin(); it != this->_mLocations.end(); ++it)
+	{
+		if (it->second->isMatching(uri))
+			return true;
+	}
 	return (false);
 }
 
-const Location*						Server::getUri( const std::string& uri )
+/*
+ *	Check if the uri exist in the map of Location and return a const pointer of
+ *	the Location object
+ */
+const Location*					Server::getUri( const std::string& uri )
 {
 	std::map<std::string, Location *>::iterator		it;
 	Location* 										bestMatch = NULL;
@@ -423,10 +427,6 @@ const Location*						Server::getUri( const std::string& uri )
 				bestMatch = it->second;
 		}
 	}
-	if (bestMatch)
-		LOG_DEB("Best match found for " + uri + " is " + bestMatch->getPath());
-	else
-		LOG_DEB("No match found for " + uri);
 	return (bestMatch);
 }
 
@@ -435,19 +435,11 @@ const Location*						Server::getUri( const std::string& uri )
  */
 bool	Server::checkMethod( std::string uri, std::string method )
 {
-	std::map<std::string, Location *>::iterator		it;
-	Location*										locDef = NULL;
-	Location*										locExist = NULL;
+	const Location*		location = getUri(uri);
 
-	for (it = this->_mLocations.begin(); it != this->_mLocations.end(); ++it)
-	{
-		if (it->second->getPath() == "/")
-			locDef = it->second;
-		if (it->second->getPath() == uri)
-			locExist = it->second;
-	}
-	return (locExist ? locExist->getMethod()->isAllowed(method) :
-           locDef ? locDef->getMethod()->isAllowed(method) : false);
+	if (location && location->getMethod())
+		return (location->getMethod()->isAllowed(method));
+	return (false);
 }
 
 /*******************************************************************************
@@ -477,14 +469,6 @@ Server::ParsingError::~ParsingError( void ) throw()
 const char		*Server::ParsingError::what() const throw()
 {
 	return (this->_msg.c_str());
-}
-
-/*
- *	Error creating server
- */
-const char		*Server::ServerException::what() const throw()
-{
-	return  (RED "[ERROR] Creating Server !" RESET);
 }
 
 /*
@@ -525,7 +509,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	
 	out << GREEN << "Locations:" << RESET << std::endl;	
 	for (std::map<std::string, Location *>::const_iterator it = loc.begin(); it != loc.end(); ++it)
-		out << it->second << RESET << std::endl;
+		out << *it->second << RESET << std::endl;
 	return (out);
 }
 

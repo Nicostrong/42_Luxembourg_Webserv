@@ -6,15 +6,22 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:23:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 11:15:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/MethodHTTP.hpp"
 #include "../includes/Token.hpp"
 
+/*******************************************************************************
+ *							INITIALISATION CLASS							   *
+ ******************************************************************************/
+
 std::set<std::string>		MethodHTTP::_validMethods = MethodHTTP::initMethods();
 
+/*
+ *	Initialise the set of valid methods
+ */
 std::set<std::string>		MethodHTTP::initMethods( void )
 {
 	std::set<std::string>		methods;
@@ -30,25 +37,19 @@ std::set<std::string>		MethodHTTP::initMethods( void )
 }
 
 /*******************************************************************************
- *							CANONICAL FORM									   *
+ *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
 
 /*
- *	Default constructor
+ *	Default constructor when no info on Location block for the allow methods
  */
-MethodHTTP::MethodHTTP( void )
-{
-	initDefault();
-	return ;
-}
+MethodHTTP::MethodHTTP( void ) { initDefault(); }
 
 /*
- *	Constructor with tokens
+ *	Constructor with tokens of allow methods
  */
-MethodHTTP::MethodHTTP( Token* tokens )
+MethodHTTP::MethodHTTP( Token*& tokens )
 {
-	LOG_DEB("MethodHTTP constructor with tokens called");
-	initDefault();
 	while (tokens && tokens->getType() != Token::SEMICOLON)
 	{
 		if (tokens->getType() == Token::HTTP_V)
@@ -68,38 +69,13 @@ MethodHTTP::MethodHTTP( Token* tokens )
 */
 MethodHTTP::~MethodHTTP( void )
 {
-	LOG_DEB("MethodHTTP destructor called");
 	this->_allowed.clear();
 	return ;
 }
 
-/*
- *	Copy constructor
- */
-MethodHTTP::MethodHTTP( const MethodHTTP &src_object )
-{
-	*this = src_object;
-	return ;
-}
-
-/*
- *	Copy assignment operator
- */
-MethodHTTP		&MethodHTTP::operator=( const MethodHTTP &src_object )
-{
-	if (this != &src_object)
-		this->_allowed = src_object._allowed;
-	return (*this);
-}
-
-/*
- *	Check if the method is a valid methode
- */
-bool	MethodHTTP::isMethod( const std::string &method )
-{
-	LOG_DEB("Checking if " + method + " is a valid method");
-	return (MethodHTTP::_validMethods.find(method) != MethodHTTP::_validMethods.end());
-}
+/*******************************************************************************
+ *							PRIVATE METHOD									   *
+ ******************************************************************************/
 
 /*
  *	By default all method are allowed
@@ -107,12 +83,11 @@ bool	MethodHTTP::isMethod( const std::string &method )
 void	MethodHTTP::initDefault( void )
 {
 	this->_allowed.insert(MethodHTTP::_validMethods.begin(), MethodHTTP::_validMethods.end());
-	LOG_DEB("All HTTP methods added to _allowed by default");
 	return ;
 }
 
 /*******************************************************************************
- *								SETTER										   *
+ *							PRIVATE SETTER									   *
  ******************************************************************************/
 
 /*
@@ -121,7 +96,6 @@ void	MethodHTTP::initDefault( void )
 void	MethodHTTP::allowAll( void )
 {
 	this->_allowed.insert(MethodHTTP::_validMethods.begin(), MethodHTTP::_validMethods.end());
-	LOG_DEB("All method are allowed methods");
 	return ;
 }
 
@@ -133,7 +107,6 @@ void	MethodHTTP::allow( const std::string &method )
 	if (!isMethod(method))
 		throw MethodUnknow(method);
 	this->_allowed.insert(method);
-	LOG_DEB("new method add on allowed methods");
 	return ;
 }
 
@@ -142,18 +115,18 @@ void	MethodHTTP::allow( const std::string &method )
  ******************************************************************************/
 
 /*
- *	get all Methods allowed
+ *	Return the string of allowed methods
  */
-std::string		MethodHTTP::getAllowed( void ) const
+const std::string		MethodHTTP::getAllowed( void ) const
 {
 	std::string								ret;
 	std::set<std::string>::const_iterator	it;
 
 	for ( it = this->_allowed.begin(); it != this->_allowed.end(); ++it)
 	{
-		ret += *it;
-		if (it != this->_allowed.end())
+		if (!ret.empty())
 			ret += ", ";
+		ret += *it;
 	}
 	return (ret);
 }
@@ -163,11 +136,19 @@ std::string		MethodHTTP::getAllowed( void ) const
  ******************************************************************************/
 
 /*
- *	Check if the methode is allowed
+ *	Check if the method is allowed
  */
 bool	MethodHTTP::isAllowed( const std::string &method ) const
 {
 	return (this->_allowed.find(method) != this->_allowed.end());
+}
+
+/*
+ *	Check if the method is a valid method
+ */
+bool	MethodHTTP::isMethod( const std::string &method )
+{
+	return (MethodHTTP::_validMethods.find(method) != MethodHTTP::_validMethods.end());
 }
 
 /*******************************************************************************

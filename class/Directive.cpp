@@ -6,56 +6,29 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:23:36 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 10:36:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Directive.hpp"
 
 /*******************************************************************************
- *							CANONICAL FORM									   *
+ *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
 
 /*
  *	Default constructor
  */
-Directive::Directive( std::string &key, std::string &value )
+Directive::Directive( std::string &key, std::string &value ) 
 	: _key(key), _value(value)
 {
-	LOG_DEB("Directive constructor called");
 	return ;
 }
 
 /*
  *	Default destructor
  */
-Directive::~Directive( void )
-{
-	LOG_DEB("Directive destructor called");
-	return ;
-}
-
-/*
- *	Copy constructor
- */
-/*Directive::Directive( const Directive &src_object )
-	: _key(src_object._key), _value(src_object._value)
-{
-	return ;
-}*/
-
-/*
- *	Copy assignment operator
- */
-/*Directive		&Directive::operator=( const Directive &src_object )
-{
-	if (this != &src_object)
-	{
-		this->_Key = src_object._Key;
-		this->_value = src_object._value;
-	}
-	return (*this);
-}*/
+Directive::~Directive( void ) { return ; }
 
 /*******************************************************************************
  *								GETTER										   *
@@ -64,7 +37,7 @@ Directive::~Directive( void )
 /*
  *	get _name value
  */
-std::string		Directive::getKey( void ) const
+const std::string&		Directive::getKey( void ) const
 {
 	if (this->_key.empty())
 		throw FieldsEmpty();
@@ -74,7 +47,7 @@ std::string		Directive::getKey( void ) const
 /*
  *	get _value value
  */
-std::string		Directive::getValue( void ) const
+const std::string&		Directive::getValue( void ) const
 {
 	if (this->_value.empty())
 		throw FieldsEmpty();
@@ -84,14 +57,6 @@ std::string		Directive::getValue( void ) const
 /*******************************************************************************
  *								EXCEPTION 									   *
  ******************************************************************************/
-
-/*
- *	Error creating server
- */
-const char		*Directive::DirectiveException::what() const throw()
-{
-	return  (RED "[ERROR] Creating Directive !" RESET);
-}
 
 /*
  *	Error fields empty
