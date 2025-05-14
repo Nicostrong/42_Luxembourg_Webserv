@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 17:51:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:00:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ void EventMonitoring::monitor(int fd, uint32_t events, int type,
 
 	event.events = events;
 	event.data.ptr = new EventData(fd, type, ctx, *this);
-	this->_openFds.push_front(event);
+	this->_openFds.push_back(event);
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }
 
 void EventMonitoring::unmonitor(int fd)
 {
-	this->_closeFds.push_front(fd);
+	this->_closeFds.push_back(fd);
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
 }
 
@@ -124,6 +124,7 @@ void EventMonitoring::remove()
 			{
 				delete data;
 				it = this->_openFds.erase(it);
+				this->_closeFds.erase(itc);
 				break;
 			}
 			++itc;

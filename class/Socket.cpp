@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/09 10:51:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:01:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,13 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	(void)type;
 	(void)em;
 	_req.readReceived(fd);
-	RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
+	if (_req.isReceived())
+	{
+		em.unmonitor(fd);
+		em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
+			EventData::CLIENT, *this);
+		RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
+	}
 }
 
 void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
@@ -67,6 +73,9 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 		this->_req = HttpRequest(this->_remoteIp);
 		this->_resp = HttpResponse();
 		//this->_ctx.onSocketClosedEvent(*this);
+		em.unmonitor(fd);
+		em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
+			EventData::CLIENT, *this);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 10:01:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 08:50:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,7 +392,7 @@ void Server::onReadEvent(int fd, int type, EventMonitoring& em)
 	
 	Socket s(clientSocket, em, *this, clientAddr);
 	this->_sockets.push_front(s);
-	em.monitor(clientSocket, POLLIN | POLLOUT| POLLHUP | POLLRDHUP,
+	em.monitor(clientSocket, POLLIN | POLLHUP | POLLRDHUP,
 		 EventData::CLIENT, *_sockets.begin());
 }
 

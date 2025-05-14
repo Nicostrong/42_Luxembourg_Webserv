@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:46:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 08:51:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ void RequestHandling::getResponse(Server& server,
 	const Location* 		loc;
 	std::string 			realPath;
 	std::list<Directive*>	cgiDirectives;
-	
-	if (!req.isReceived())
-		return ;
 
 	try
 	{
