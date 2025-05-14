@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 11:31:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 14:24:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ ServerManager::ServerManager(	const std::list<Token*>& serverListToken,
 
 			this->_mServers[server->getPort()] = server;
 			this->_nbServer++;
+			server->start();
 		}
 	}
 	catch(const std::exception& e)
