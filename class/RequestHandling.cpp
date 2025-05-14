@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 17:06:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:30:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,12 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 void RequestHandling::handleRedirect(const Directive* redirectDirective, 
 	const HttpRequest& req, HttpResponse& resp)
 {
-	std::string redirectUri = Uri::buildByReplacingLoc(req.getLocation(), 
-		req.getUri(), redirectDirective->getValue());
+	(void)req;
+	//std::string redirectUri = Uri::buildByReplacingLoc(req.getLocation(), 
+	//	req.getUri(), );
 
 	resp.setStatusCode(FOUND);
-	resp.addHeader("Location", redirectUri);
+	resp.addHeader("Location", redirectDirective->getValue());
 	resp.setAsComplete();
 }
 
