@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 15:00:47 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 15:26:26 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,30 +174,52 @@ Token*		Token::createDirective(	std::istringstream& iss, const std::string& word
 /*
  *	Gestion des CGIdirectives
  */
-Token*		Token::createCGIDirective(	std::istringstream& iss, 
-										const std::string& word,
-										Token*& head, Token*& current)
+Token*		Token::createCGIDirective(	std::istringstream& iss, Token*& head, 
+	Token*& current, int& braceCount, bool& inCGI )
 {
-Token*		dirKey = new Token(Token::DIR_K, word);
+	std::string		path;
+	std::string		brace;
+	std::string		token;
 
-attachToken(head, current, dirKey);
+	Token*		CGIBlk = new Token(Token::CGI, "CGI");
 
-std::string		valueWord;
-std::string		semiCheck;
+	attachToken(head, current, CGIBlk);
+	if (!(iss >> brace) || brace != "{")
+		throw ParserServerConfig::ParsingError("Expected '{' after cgi keyword");
+	braceCount++;
 
-if (!(iss >> valueWord))
-throw ParserServerConfig::ParsingError("Missing value after directive '" + word + "'");
+	Token*		CGIStart = new Token(Token::CGI_BLK_S, "{");
 
-Token*		dirVal = new Token(Token::DIR_V, valueWord);
+	attachToken(head, current, locStart);
+	inCGI = true;
+	while (iss >> token && token != "}")
+	{
+		std::string		extension;
+		std::string		path;
 
-attachToken(head, current, dirVal);
-if (!(iss >> semiCheck) || semiCheck != ";")
-throw ParserServerConfig::ParsingError("Expected ';' after directive value for '" + word + "'");
+		if (!(iss >> extension >> path >> brace))
+		{
+			attachToken(head, current, new Token(Token::HTTP_K, token));
+			while (iss >> method && method != ";")
+			attachToken(head, current, new Token(Token::HTTP_V, method));
+			if (method != ";")
+			throw ParserServerConfig::ParsingError("Missing ';' after allow");
+			attachToken(head, current, new Token(Token::SEMICOLON, ";"));
+		}
+		else if (isDirectiveKey(token))
+			createDirective(iss, token, head, current);
+		else
+			throw ParserServerConfig::ParsingError("Unknown directive inside location block: " + token);
+	}
+	if (token != "}")
+		throw ParserServerConfig::ParsingError("Missing closing '}' after location block");
 
-Token*		semi = new Token(Token::SEMICOLON, ";");
+	Token*		locEnd = new Token(Token::LOC_BLK_E, "}");
 
-attachToken(head, current, semi);
-return (current);
+	attachToken(head, current, locEnd);
+	inCGI = false;
+	braceCount--;
+	return (current);
 }
 
 /*
@@ -373,6 +395,7 @@ Token*		Token::tokenize( const std::string& input )
 	bool					inLocation = false;
 	bool					inErrorBlk = false;
 	bool					inHTTP = false;
+	bool					inCGI = false;
 
 	try
 	{
@@ -395,6 +418,8 @@ Token*		Token::tokenize( const std::string& input )
 				current = createErrorPage(iss, word, head, current, braceCount, inErrorBlk);
 			else if (word == ";")
 				current = createSemicolon(word, head, current, inHTTP);
+			else if (word == "cgi")
+				current = createCGIDirective(iss, head, current, braceCount, inCGI);
 			else if (isDirectiveKey(word))
 				current = createDirective(iss, word, head, current);
 			else

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:45:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 15:26:26 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class	Directive
 	private:
 
 		std::string					_key;
-		std::string					_value;
+		std::list<std::string>		_lValue;
 
 		Directive( const Directive& src_obj );
 		Directive&					operator=( const Directive& src_obj );

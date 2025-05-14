@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:57:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 15:13:28 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ class 	Token
 			LOCATION,		//	location key
 			LOC_BLK_S,		//	location block start
 			LOC_BLK_E,		//	location block end
-			HTTP_K,			//	HTTP key
-			HTTP_V,			//	method HTTP value
-			DIR_K,			//	key directive
-			DIR_V,			//	value directive
 			CGI,			//	CGI directive
 			CGI_BLK_S,		//	CGI block start
 			CGI_BLK_E,		//	CGI block end
 			CGI_K,			//	CGI extension
+			HTTP_K,			//	HTTP key
+			HTTP_V,			//	method HTTP value
+			DIR_K,			//	key directive
+			DIR_V,			//	value directive
 			CGI_V,			//	CGI path
 			SEMICOLON		//	end of directive
 		};
@@ -112,6 +112,11 @@ class 	Token
 													Token*& current,
 													int& braceCount,
 													bool& inLocation );
+		static Token*				createCGIDirective(	std::istringstream& iss,
+														Token*& head, 
+														Token*& current,
+														int& braceCount,
+														bool& inCGI );
 
 };
 

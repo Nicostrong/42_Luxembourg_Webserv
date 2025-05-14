@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/14 15:03:43 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/14 15:12:12 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,9 @@ DEB_OPT			=	--tool=memcheck \
 					--show-leak-kinds=all \
 					--track-fds=yes
 
-ARG0			=	"../config/webserver.conf"
+ARG0			=	"../good_config/good_1.conf"
+
+ARG1			=	"../config/webserver.conf"
 
 RM				=	rm -f
 
