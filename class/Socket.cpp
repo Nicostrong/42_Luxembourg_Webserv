@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 09:01:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:20:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,11 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	_req.readReceived(fd);
 	if (_req.isReceived())
 	{
+		RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
 		em.unmonitor(fd);
 		em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 			EventData::CLIENT, *this);
-		RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
+		
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:28:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 10:10:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,33 @@
 #include "HttpRequest.hpp"
 #include "EventMonitoring.hpp"
 #include "Server.hpp"
+#include "IEventHandler.hpp"
 
-class CGI
+class CGI : public IEventHandler
 {
     public:
-        CGI(EventMonitoring& em);
+        CGI(EventMonitoring& em, const HttpRequest& req, HttpResponse& resp, 
+			const Server& ctx, const std::string& remoteIp);
         CGI(const CGI& obj);
         ~CGI();
         CGI&    operator=(const CGI& obj);
-        void    launchCGI(const HttpRequest& req, const Server& serv, 
-            const std::string& remoteIp);
-        static std::vector<std::string> getCGIEnv(const HttpRequest& req, const Server& serv, 
-            const std::string& remoteIp);
-        template <typename T>
-        static std::string getRawEnv(const std::string& key, 
-            const T& value);
-        static bool isCgiValid(const std::string& cgiPath);
+        void	initCGI();
+        
     private:
-        EventMonitoring& _em;
+        std::vector<const std::string> getEnv() const;
+        
+        template <typename T>
+        std::string  getRawEnv(const std::string& key, 
+            const T& value) const;
+        
+        std::vector<const char*> getCArray(std::vector<const std::string>& in) 
+            const;
+            
+        EventMonitoring&    _em;
+        const HttpRequest&  _req;
+        HttpResponse&       _resp;
+        const Server&       _ctx;
+        std::string         _remoteIp;
 };
 
 #endif

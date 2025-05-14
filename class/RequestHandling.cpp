@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:51:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 10:11:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,12 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 		return ;
 	}
 	std::string realCgiPath = Uri::buildRealRelative(server, req.getLocation(), cgiPath);
-	std::cout << "CGI script: " << realCgiPath << std::endl;
+	LOG_DEB("CGI script: " + realCgiPath);
 
 	if (!isFileReadable(server, req, resp, realCgiPath))
 		return ;
 	
+	getErrorResponse(OK, server, req, resp);
 }
 
 bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 
@@ -109,7 +110,7 @@ bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req,
 		getErrorResponse(NOT_FOUND, server, req, resp);
 		return (false);
 	}
-	
+
 	if (access(path.c_str(), R_OK) == -1)
 	{
 		getErrorResponse(FORBIDDEN, server, req, resp);
