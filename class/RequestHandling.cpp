@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 10:11:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 13:34:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ void RequestHandling::getResponse(Server& server,
 		}
 		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
 		req.setPathTranslated(realPath);
-		cgiDirectives = loc->findDirectives("cgi");
+		const Directive*		directive = loc->findDirective("cgi");
+		if (directive)
+			cgiDirectives.push_back(const_cast<Directive*>(directive));
+		//cgiDirectives = loc->findDirective("cgi");
 		
 		if (cgiDirectives.size() > 0)
 		{

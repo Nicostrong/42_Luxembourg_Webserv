@@ -6,11 +6,9 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:21:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 13:49:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef SERVER_HPP
 # define SERVER_HPP

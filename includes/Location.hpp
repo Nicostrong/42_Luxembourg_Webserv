@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:15:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 13:28:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,11 @@ class	Location
 		const MethodHTTP*				getMethod( void ) const;
 		
 		const std::list<Directive *>&	getDirectives( void ) const;
+
+		const Directive*				findDirective( const std::string& name ) const;
 		
 		/*	CHECKER	*/
-		bool							isMatching(const std::string& uri) const;
+		bool							isMatching( const std::string& uri ) const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception

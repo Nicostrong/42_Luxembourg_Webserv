@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 13:10:56 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 13:46:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,13 +124,13 @@ bool	Location::isMatching(const std::string& uri) const
 /*
  * Find a directive in the directive list
  */
-const	Directive* Location::findDirective(const std::string& name) const
+const Directive*		Location::findDirective( const std::string& name ) const
 {
 	std::list<Directive*>::const_iterator it;
 
 	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
 	{
-		if ((*it)->getName() == name)
+		if ((*it)->getKey() == name)
 			return (*it);
 	}
 	return (NULL);
@@ -139,7 +139,7 @@ const	Directive* Location::findDirective(const std::string& name) const
 /*
  * Find all directives in the directive list
  */
-const std::list<Directive*> Location::findDirectives(const std::string& name) 
+const std::list<Directive*> Location::getDirectives( const std::string& name ) 
 	const
 {
 	std::list<Directive*>::const_iterator it;
@@ -147,7 +147,7 @@ const std::list<Directive*> Location::findDirectives(const std::string& name)
 
 	for (it = this->_directives.begin(); it != this->_directives.end(); it++)
 	{
-		if ((*it)->getName() == name)
+		if ((*it)->getKey() == name)
 			directives.push_back(*it);
 	}
 	return (directives);
