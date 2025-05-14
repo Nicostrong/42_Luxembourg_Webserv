@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 18:42:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 08:27:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,4 @@ std::string CGI::getRawEnv(const std::string& key, const T& value)
 
     oss << key << "=" << value;
     return (oss.str());
-}
-
-bool CGI::isCgiValid(const std::string& cgiPath)
-{
-    struct stat s;
-    if (stat(cgiPath.c_str(), &s) == -1)
-        return (false);
-    //std::cout << s.st_mode &
-    return (true);
 }

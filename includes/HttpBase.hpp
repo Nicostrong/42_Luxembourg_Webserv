@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/12 18:27:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 08:46:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class HttpBase
 		{
 			OK = 200,
 			BAD_REQUEST = 400,
+			FORBIDDEN = 403,
 			NOT_FOUND = 404,
 			INTERNAL_SERVER_ERROR = 500,
 		};

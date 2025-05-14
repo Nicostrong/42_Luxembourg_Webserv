@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 17:37:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/14 08:46:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,30 +42,38 @@ void RequestHandling::getResponse(Server& server,
 	if (!req.isReceived())
 		return ;
 
-	if (req.getStatusCode() == BAD_REQUEST)
+	try
 	{
-		getErrorResponse(BAD_REQUEST, server, req, resp);
-		return ;
-	}
+		if (req.getStatusCode() == BAD_REQUEST)
+		{
+			getErrorResponse(BAD_REQUEST, server, req, resp);
+			return ;
+		}
 
-	loc = server.getMatchingLoc(req.getUri());
-	req.setLocation(loc);
-	if (!req.getLocation())
-	{
-		getErrorResponse(NOT_FOUND, server, req, resp);
-		return ;
+		loc = server.getMatchingLoc(req.getUri());
+		req.setLocation(loc);
+		if (!req.getLocation())
+		{
+			getErrorResponse(NOT_FOUND, server, req, resp);
+			return ;
+		}
+		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
+		req.setPathTranslated(realPath);
+		cgiDirectives = loc->findDirectives("cgi");
+		
+		if (cgiDirectives.size() > 0)
+		{
+			handleCGI(cgiDirectives, server, req, resp);
+			return ;
+		}
+		getErrorResponse(OK, server, req, resp);
 	}
-	realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
-	req.setPathTranslated(realPath);
-	cgiDirectives = loc->findDirectives("cgi");
-	
-	if (cgiDirectives.size() > 0)
+	catch(const std::exception& e)
 	{
-		handleCGI(cgiDirectives, server, req, resp);
-		return ;
+		getErrorResponse(INTERNAL_SERVER_ERROR, server, req, resp);
 	}
-	getErrorResponse(OK, server, req, resp);
 }
+
 
 void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives, 
 	Server& server, const HttpRequest& req, HttpResponse& resp)
@@ -78,9 +86,40 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 	}
 	std::string realCgiPath = Uri::buildRealRelative(server, req.getLocation(), cgiPath);
 	std::cout << "CGI script: " << realCgiPath << std::endl;
-	(void)req;
-	(void)server;
-	(void)resp;
+
+	if (!isFileReadable(server, req, resp, realCgiPath))
+		return ;
+	
+}
+
+bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 
+	HttpResponse& resp, const std::string& path)
+{
+	struct stat infos;
+
+	if (stat(path.c_str(), &infos) == -1)
+	{
+		if (errno == ENOENT)
+		{
+			getErrorResponse(NOT_FOUND, server, req, resp);
+			return (false);
+		}
+		throw std::runtime_error("Stat failed");
+	}
+
+	if (!S_ISREG(infos.st_mode))
+	{
+		getErrorResponse(NOT_FOUND, server, req, resp);
+		return (false);
+	}
+	
+	if (access(path.c_str(), R_OK) == -1)
+	{
+		getErrorResponse(FORBIDDEN, server, req, resp);
+		return (false);
+	}
+		
+	return (true);
 }
 
 // See GZ/example_response.txt for example of response
