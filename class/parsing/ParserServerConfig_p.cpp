@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_p.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 18:28:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 18:36:36 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,15 @@ void	ParserServerConfig::formatHost( std::string& input )
 	{
 		size_t		pos = word.find(':');
 
-		if (pos != std::string::npos)
+		if (pos != std::string::npos && pos > 0 && std::isdigit(word[pos - 1]) && 
+			pos + 1 < word.size() && std::isdigit(word[pos + 1]))
 		{
 			std::string		left = word.substr(0, pos);
 			std::string		right = word.substr(pos + 1);
 
 			if (!isValidIPv4(left))
 				throw std::runtime_error("Invalid IP address format: " + left);
-			oss << right << " host " << left << " ";
+			oss << right << " ; host " << left << " ";
 		}
 		else
 			oss << word << " ";
@@ -122,6 +123,7 @@ void		ParserServerConfig::formatString( const std::string& content )
 	insertChar(block, '{', ' ');
 	insertChar(block, '}', ' ');
 	formatHost(block);
+	std::cout << block << std::endl;
 	this->_formatedString = block;
 	return ;
 }

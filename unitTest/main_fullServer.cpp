@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:12:27 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 15:29:40 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main( void )
 {
 	try
 	{
-		ParserServerConfig					pc("./good_config/good_1.conf");
+		ParserServerConfig					pc("../config/webserver.conf");
 		EventMonitoring						em;
 		ServerManager						sm(pc.getListTokens(), em);
 
