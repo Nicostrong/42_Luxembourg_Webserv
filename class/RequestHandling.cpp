@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 18:06:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 22:46:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void RequestHandling::getResponse(Server& server,
 		}
 		
 		cgiDirectives = loc->findDirectives("cgi");
-		
 		if (cgiDirectives.size() > 0)
 		{
 			handleCGI(cgiDirectives, server, req, resp);
@@ -88,7 +87,8 @@ void RequestHandling::getResponse(Server& server,
 		//handleDirctoryListing(req, resp);
 		//return ;
 
-		getErrorResponse(OK, server, req, resp);
+		handleFileServing(server, req, resp);
+		//getErrorResponse(OK, server, req, resp);
 	}
 	catch(const std::exception& e)
 	{
@@ -113,6 +113,21 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 		return ;
 	
 	getErrorResponse(OK, server, req, resp);
+}
+
+void RequestHandling::handleFileServing(Server& server, const HttpRequest& req, 
+	HttpResponse& resp)
+{
+	
+	if (!isFileReadable(server, req, resp, req.getPathTranslated()))
+		return ;
+	Ressource 	res(req.getPathTranslated());
+
+	if (res.isFail())
+		throw std::runtime_error("Cannot read the requested file");
+	resp.setStatusCode(OK);
+	resp.setBody(res.getRaw());
+	resp.setAsComplete();
 }
 
 void RequestHandling::handleRedirect(const Directive* redirectDirective, HttpResponse& resp)
@@ -144,7 +159,7 @@ bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req,
 		}
 		throw std::runtime_error("Stat failed");
 	}
-
+	
 	if (!S_ISREG(infos.st_mode))
 	{
 		getErrorResponse(NOT_FOUND, server, req, resp);

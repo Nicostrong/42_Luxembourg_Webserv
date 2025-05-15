@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:37:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 18:43:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 22:04:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ void		Server::start( void )
 	}
 	if (listen(serverSocket, 5) == -1)
 	{
-		std::cerr << "Socket faield to start listening" << strerror(errno) << std::endl;
+		std::cerr << "Socket failed to start listening" << strerror(errno) << std::endl;
 		return ;
 	}
 
-	std::cout << "Listening on port 8080" << std::endl;
+	std::cout << "Listening on port " << this->_port << std::endl;
 	this->_serverSocket = serverSocket;
 	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
 		*this);
