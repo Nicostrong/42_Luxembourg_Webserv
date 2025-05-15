@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:01:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:46:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,12 +339,10 @@ void		Server::start( void )
 		return ;
 	}
 
-	std::cout << "Listening on port 8080" << std::endl;
+	std::cout << "Listening on port " << this->_port << std::endl;
 	this->_serverSocket = serverSocket;
 	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
 		*this);
-	while (1)
-		this->_em.updateEvents();
 	return ;
 }
 

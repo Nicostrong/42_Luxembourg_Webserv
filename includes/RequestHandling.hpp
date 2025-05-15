@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 18:01:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:31:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ class RequestHandling: public HttpBase
 		static void handleCGI(const std::list<Directive*>& cgiDirectives, 
 			Server& server, const HttpRequest& req, HttpResponse& resp);
 		static void handleRedirect(const Directive* redirectDirective, 
+			HttpResponse& resp);
+		static void handleDirctoryListing(const HttpRequest& req, 
 			HttpResponse& resp);
 		static bool isFileReadable(Server& server, const HttpRequest& req, 
 			HttpResponse& resp, const std::string& path);

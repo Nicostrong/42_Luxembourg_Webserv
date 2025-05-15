@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 09:23:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 18:06:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void RequestHandling::getResponse(Server& server,
 {
 	const Location* 		loc;
 	std::string 			realPath;
+	std::string				pathInfos;
 	std::list<Directive*>	cgiDirectives;
 	const Directive*		redirectDirective;
 
@@ -67,7 +68,7 @@ void RequestHandling::getResponse(Server& server,
 
 		if (redirectDirective)
 		{
-			handleRedirect(redirectDirective, req, resp);
+			handleRedirect(redirectDirective, resp);
 			return ;
 		}
 		
@@ -81,9 +82,11 @@ void RequestHandling::getResponse(Server& server,
 
 		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
 		req.setPathTranslated(realPath);
+		pathInfos = Uri::getPathInfo(loc, req.getUri());
+		req.setPathInfo(pathInfos);
 		//Should handle normally not cgi
-
-
+		//handleDirctoryListing(req, resp);
+		//return ;
 
 		getErrorResponse(OK, server, req, resp);
 	}
@@ -120,7 +123,11 @@ void RequestHandling::handleRedirect(const Directive* redirectDirective, HttpRes
 }
 void RequestHandling::handleDirctoryListing(const HttpRequest& req, HttpResponse& resp)
 {
-	
+	std::string body = HttpBase::getDirectoryListing(req.getPathTranslated(), 
+		req.getPathInfo());
+	resp.setStatusCode(OK);
+	resp.setBody(body);
+	resp.setAsComplete();
 }
 
 bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 

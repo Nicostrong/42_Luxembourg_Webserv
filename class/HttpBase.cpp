@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 14:14:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 18:05:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,9 @@ std::string	HttpBase::getDirectoryListing(const std::string &dirPath,
 	const std::string &relativeDir)
 {
 	std::ostringstream oss;
+	struct dirent* dirCont;
 	std::string cFile;
 	std::string fileName;
-	struct dirent* dirCont;
-	struct stat st;
 
 	DIR* dir = opendir(dirPath.c_str());
 
@@ -180,27 +179,11 @@ std::string	HttpBase::getDirectoryListing(const std::string &dirPath,
 	dirCont = readdir(dir);
 	while (dirCont != NULL) 
 	{
-		
-		if (dirCont->d_name != "." && dirCont->d_name != "..")
-		{
-			cFile = dirPath + dirCont->d_name;
-			if (stat(cFile.c_str(), &st) == -1)
-				throw std::runtime_error("Failed to get stats about file");
-
-			if (S_ISDIR(st.st_mode) || S_ISREG(st.st_mode))
-			{
-				fileName = dirCont->d_name;
-				fileName.append((S_ISDIR(st.st_mode) ? "/" : ""));
-				oss << "<a href=\"" << fileName << "/\">" 
-					<< fileName << "</a>"
-					<< std::string(std::max(0, 51 - (int)fileName.size()), ' ') //51 characters Total 88
-					<< "21-Apr-2025 09:12"
-					<< "                   -";
-			}
-		}
+		formatIndividualFile(oss, dirPath + dirCont->d_name, dirCont->d_name);
 		dirCont = readdir(dir);
 	}
-
+	
+	closedir(dir);
 	oss	<< "</pre><hr></body>" << CRLF
 		<< "</html>" << CRLF;
 	return (oss.str());
@@ -305,5 +288,63 @@ std::string HttpBase::normalizeUri(const std::string& uri)
 
 	//Should treat % things
 	return (normalized);
+}
 
+// Internal helpers
+
+void HttpBase::formatIndividualFile(std::ostringstream& oss, 
+	const std::string& filePath, std::string fileName)
+{
+	
+	struct stat st;
+	std::string	modifiedTime;
+	std::string	truncFileName;
+	std::string	fileSize = "-";
+
+	if (*fileName.begin() == '.')
+		return ;
+	if (stat(filePath.c_str(), &st) == -1)
+		throw std::runtime_error("Failed to get stats about file");
+	
+	if (S_ISDIR(st.st_mode) || S_ISREG(st.st_mode))
+	{
+		fileName.append((S_ISDIR(st.st_mode) ? "/" : ""));
+		modifiedTime = formatTime(st.st_mtime);
+		truncFileName = truncateString(fileName, 50, 47, "..&gt;");
+		if (S_ISREG(st.st_mode))
+			fileSize = convertFileSize(st.st_size);
+		oss << "<a href=\"" 
+				<< fileName << "\">" 
+				<< truncFileName << "</a>"
+				<< std::string(std::max(1, 51 - (int)truncFileName.size()), ' ')
+				<< modifiedTime
+				<< std::string(std::max(1, 37 - (int)modifiedTime.size() - 
+					(int)fileSize.size()), ' ')
+				<< fileSize << CRLF;
+	}
+}
+
+std::string	HttpBase::formatTime(const time_t& time)
+{
+	struct tm* timeInfo = localtime(&time);
+	std::vector<char> buf(80);
+
+	std::strftime(buf.data(), buf.size(), "%d-%b-%Y %H:%M", timeInfo);
+	return (buf.data());
+}
+
+std::string	HttpBase::truncateString(std::string str, size_t n, size_t truncLen,
+	const std::string& trString)
+{
+	if (str.size() <= n)
+	 	return (str);
+	return (str.substr(0, truncLen) + trString);
+}
+
+std::string HttpBase::convertFileSize(off_t size)
+{
+	std::stringstream ss;
+	
+	ss << size;
+	return (ss.str());
 }
