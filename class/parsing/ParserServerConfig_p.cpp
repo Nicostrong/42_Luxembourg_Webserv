@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 18:36:36 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 18:37:16 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ void			ParserServerConfig::splitServerToken( Token *head )
 				tmp->setNextToNull();
 				this->_serverToken.push_back(server);
 			}
-			else
-				break;
 		}
 		else
 			head = head->getNext();
