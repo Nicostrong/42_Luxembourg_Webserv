@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 16:55:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 14:12:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ class HttpBase
 		const std::map<std::string, std::string>&	getHeaders() const;
 		static std::string	getStrStatusCode(HttpCode statusCode);
 		static std::string  getDefaultErrorPage(HttpCode statusCode);
+		static std::string	getDirectoryListing(const std::string &dirPath, 
+			const std::string &relativeDir);
 	protected:
 		HttpBase();
 		static bool canBeValidMethod(const std::string& method);

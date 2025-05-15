@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 10:26:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 14:14:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
 }
 
 std::string	HttpBase::getDirectoryListing(const std::string &dirPath, 
-	const std::string &relativeDirectory) const
+	const std::string &relativeDir)
 {
 	std::ostringstream oss;
 	std::string cFile;
@@ -172,9 +172,10 @@ std::string	HttpBase::getDirectoryListing(const std::string &dirPath,
 		throw std::runtime_error("Failed to open directory");
 
 	oss << "<html>" << CRLF
-		<< "<head><title>Index of " << "</title></head>" << CRLF
+		<< "<head><title>Index of " << relativeDir << "</title></head>" << CRLF
 		<< "<body>" << CRLF
-		<< "<h1>Index of /</h1><hr><pre><a href=\"../\">../</a>" << CRLF;
+		<< "<h1>Index of " << relativeDir 
+		<< "</h1><hr><pre><a href=\"../\">../</a>" << CRLF;
 
 	dirCont = readdir(dir);
 	while (dirCont != NULL) 
@@ -192,7 +193,7 @@ std::string	HttpBase::getDirectoryListing(const std::string &dirPath,
 				fileName.append((S_ISDIR(st.st_mode) ? "/" : ""));
 				oss << "<a href=\"" << fileName << "/\">" 
 					<< fileName << "</a>"
-					//<< std::string(std::max(0, ), ' ') //51 characters Total 88
+					<< std::string(std::max(0, 51 - (int)fileName.size()), ' ') //51 characters Total 88
 					<< "21-Apr-2025 09:12"
 					<< "                   -";
 			}
