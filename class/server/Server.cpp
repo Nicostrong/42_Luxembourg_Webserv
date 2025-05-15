@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 15:20:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 18:28:35 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	mError = src_object.getMapError();
 	
 	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
-		<< GREEN << "Name:" >> std::endl;
+		<< GREEN << "Name:" << std::endl;
 		
 	while (itHost != hosts.end())
 		out << "\t\t- " << *itHost << std::endl;

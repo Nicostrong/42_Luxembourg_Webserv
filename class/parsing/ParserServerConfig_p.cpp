@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_p.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:45:30 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 18:28:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void			ParserServerConfig::splitServerToken( Token *head )
 /*
  *	Check if the ip adress is with correct format
  */
-bool	PaserServerConfig::isValidIPv4( const std::string& ip )
+bool	ParserServerConfig::isValidIPv4( const std::string& ip )
 {
 	std::istringstream		iss(ip);
 	std::string				part;

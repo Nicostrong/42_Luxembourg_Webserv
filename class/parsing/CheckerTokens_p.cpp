@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 15:10:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 18:23:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,8 +334,8 @@ void		CheckerTokens::checkpath( void )
 		if (current->getType() == Token::DIR_K && current->getValue() == "root")
 		{
 			current = current->getNext();
-			if (current && next->getType() == Token::DIR_V)
-				if (next->getValue()[0] != '/')
+			if (current && current->getType() == Token::DIR_V)
+				if (current->getValue()[0] != '/')
 					throw CheckerError("Path of root directive must start with a /");
 		}
 		current = current->getNext();
