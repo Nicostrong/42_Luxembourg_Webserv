@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:10:13 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 21:59:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Directive::Directive( Token*& directiveTokens )
 			lValue.push_back(directiveTokens->getValue());
 		directiveTokens = directiveTokens->getNext();
 	}
-	if (!key.empty() || lValue.empty())
+	if (key.empty() || lValue.empty())
 		throw FieldsEmpty();
 	this->_key = key;
 	this->_lValue = lValue;
