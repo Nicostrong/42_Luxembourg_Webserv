@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_ev.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:37:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 10:39:48 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 18:43:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void		Server::start( void )
 	this->_serverSocket = serverSocket;
 	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
 		*this);
-	while (1)
-		this->_em.updateEvents();
 	return ;
 }
 
