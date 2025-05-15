@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 08:46:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 18:05:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,21 @@ void HttpBase::setRaw(const std::string raw)
 	this->_raw = raw;
 }
 
+void HttpBase::addHeader(const std::string &name, const std::string& value)
+{
+	this->_headers[name] = value;
+}
+
 std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
 	switch (statusCode)
 	{
 		case 200: return ("OK");
+		case 302: return ("Found");
 		case 400: return ("Bad Request");
 		case 403: return ("Forbidden");
 		case 404: return ("Not Found");
+		case 405: return ("Method Not Allowed");
 		case 500: return ("Internal Server Error");
 	default:
 		return ("Internal Server Error");
@@ -119,6 +126,7 @@ std::string 	HttpBase::getHeaders_raw() const
 	while(it != _headers.end())
 	{
 		result += it->first;
+		result += ": ";
 		result += it->second;
 		result += "\n\r";
 		++it;
@@ -145,6 +153,38 @@ std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
 		<< "<hr>" << CRLF
 		<< "<center>" << SERVER_SOFT << "</center>" << CRLF
 		<< "</body>" << CRLF
+		<< "</html>" << CRLF;
+	return (oss.str());
+}
+
+std::string	HttpBase::getDirectoryListing(const std::string &dirPath, 
+	const std::string &relativeDir)
+{
+	std::ostringstream oss;
+	struct dirent* dirCont;
+	std::string cFile;
+	std::string fileName;
+
+	DIR* dir = opendir(dirPath.c_str());
+
+	if (!dir)
+		throw std::runtime_error("Failed to open directory");
+
+	oss << "<html>" << CRLF
+		<< "<head><title>Index of " << relativeDir << "</title></head>" << CRLF
+		<< "<body>" << CRLF
+		<< "<h1>Index of " << relativeDir 
+		<< "</h1><hr><pre><a href=\"../\">../</a>" << CRLF;
+
+	dirCont = readdir(dir);
+	while (dirCont != NULL) 
+	{
+		formatIndividualFile(oss, dirPath + dirCont->d_name, dirCont->d_name);
+		dirCont = readdir(dir);
+	}
+	
+	closedir(dir);
+	oss	<< "</pre><hr></body>" << CRLF
 		<< "</html>" << CRLF;
 	return (oss.str());
 }
@@ -248,5 +288,63 @@ std::string HttpBase::normalizeUri(const std::string& uri)
 
 	//Should treat % things
 	return (normalized);
+}
 
+// Internal helpers
+
+void HttpBase::formatIndividualFile(std::ostringstream& oss, 
+	const std::string& filePath, std::string fileName)
+{
+	
+	struct stat st;
+	std::string	modifiedTime;
+	std::string	truncFileName;
+	std::string	fileSize = "-";
+
+	if (*fileName.begin() == '.')
+		return ;
+	if (stat(filePath.c_str(), &st) == -1)
+		throw std::runtime_error("Failed to get stats about file");
+	
+	if (S_ISDIR(st.st_mode) || S_ISREG(st.st_mode))
+	{
+		fileName.append((S_ISDIR(st.st_mode) ? "/" : ""));
+		modifiedTime = formatTime(st.st_mtime);
+		truncFileName = truncateString(fileName, 50, 47, "..&gt;");
+		if (S_ISREG(st.st_mode))
+			fileSize = convertFileSize(st.st_size);
+		oss << "<a href=\"" 
+				<< fileName << "\">" 
+				<< truncFileName << "</a>"
+				<< std::string(std::max(1, 51 - (int)truncFileName.size()), ' ')
+				<< modifiedTime
+				<< std::string(std::max(1, 37 - (int)modifiedTime.size() - 
+					(int)fileSize.size()), ' ')
+				<< fileSize << CRLF;
+	}
+}
+
+std::string	HttpBase::formatTime(const time_t& time)
+{
+	struct tm* timeInfo = localtime(&time);
+	std::vector<char> buf(80);
+
+	std::strftime(buf.data(), buf.size(), "%d-%b-%Y %H:%M", timeInfo);
+	return (buf.data());
+}
+
+std::string	HttpBase::truncateString(std::string str, size_t n, size_t truncLen,
+	const std::string& trString)
+{
+	if (str.size() <= n)
+	 	return (str);
+	return (str.substr(0, truncLen) + trString);
+}
+
+std::string HttpBase::convertFileSize(off_t size)
+{
+	std::stringstream ss;
+	
+	ss << size;
+	return (ss.str());
 }

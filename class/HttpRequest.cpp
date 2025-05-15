@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/09 11:08:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:31:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,8 +175,6 @@ void HttpRequest::parseStartLine(std::string &line)
 	if (queryPos != std::string::npos)
 		this->_queryParams = tokens.at(1).substr(queryPos + 1);
 	this->_httpVersion = tokens.at(2);
-
-	
 }
 
 void HttpRequest::parseHeader(std::string &line)

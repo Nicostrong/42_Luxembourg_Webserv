@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Uri.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 14:19:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:38:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,27 @@ std::string Uri::buildUri(std::string p1, std::string p2)
     p1 = trimSlashEnd(p1);
     p2 = trimSlashBegin(p1);
     return (p1 + '/' + p2);
+}
+
+std::string Uri::getPathInfo(const Location *loc, std::string uri)
+{
+    std::string locPath = loc->getPath();
+
+    locPath = trimSlashEnd(locPath);
+    uri = uri.substr(locPath.size());
+    return (uri);
+}
+
+std::string Uri::buildByReplacingLoc(const Location* loc, std::string uri, 
+    std::string replacement)
+{
+    std::string locPath = loc->getPath();
+
+    locPath = trimSlashEnd(locPath);
+    replacement = trimSlashEnd(replacement);
+
+    uri = uri.replace(0, locPath.size(), replacement);
+    return (uri);
 }
 
 std::string Uri::buildRealAbsolute(const Server& serv, const Location* loc, 
