@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 16:13:46 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 18:14:27 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void		ParserServerConfig::formatString( const std::string& content )
 	insertChar(block, ';', ' ');
 	insertChar(block, '{', ' ');
 	insertChar(block, '}', ' ');
+	formatHost(block);
 	this->_formatedString = block;
 	return ;
 }
@@ -161,6 +162,29 @@ void			ParserServerConfig::insertChar( std::string &str, char target, char toIns
 			++i;
 		}
 	}
+	return ;
+}
+
+void	ParserServerConfig::formatHost( std::string& input )
+{
+	std::istringstream		iss(input);
+	std::ostringstream		oss;
+	std::string				word;
+
+	while (iss >> word)
+	{
+		size_t		pos = word.find(':');
+
+		if (pos != std::string::npos)
+		{
+			std::string		left = word.substr(0, pos);
+			std::string		right = word.substr(pos + 1);
+			oss << right << " host " << left << " ";
+		}
+		else
+			oss << word << " ";
+	}
+	input = oss.str();
 	return ;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 15:39:24 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/14 18:15:26 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class ParserServerConfig
 		int							parsePort( const std::string& value );
 
 		void						splitServerToken( Token *head );
+		void						formatHost( std::string& input );
 		void						formatString( const std::string& content );
 		void						checkHiddenFile( const std::string& filename );
 		void						insertChar( std::string &str, char target, char toInsert );
