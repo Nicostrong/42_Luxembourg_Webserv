@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token_p.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:35:46 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 09:24:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:28:25 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,12 +162,13 @@ Token*		Token::createDirective(	std::istringstream& iss,
 	if (!(iss >> value) || value == ";")
 		throw Token::TokenError("Missing value after directive '" + word + "'");
 
-	while (value != ";")
+	while (!value.empty() && value != ";")
 	{
 		Token*		dirVal = new Token(Token::DIR_V, value);
 
 		attachToken(head, current, dirVal);
-		iss >> value;
+		if (!(iss >> value))
+			throw Token::TokenError("Unexpected end of input while parsing directive '" + word + "'");
 	}
 	if (value != ";")
 		throw Token::TokenError("Expected ';' after directive value for '" + word + "'");
@@ -223,7 +224,7 @@ Token*		Token::createLocation(	std::istringstream& iss, Token*& head,
 		else if (token == "cgi")
 			createCGIDirective(iss, token, head, current);
 		else
-			throw Token::Token("Unknown directive inside location block: " + token);
+			throw Token::TokenError("Unknown directive inside location block: " + token);
 	}
 	if (token != "}")
 		throw Token::TokenError("Missing closing '}' after location block");
@@ -248,7 +249,7 @@ Token*		Token::createCGIDirective(	std::istringstream& iss,
 	Token*			cgi = new Token(Token::CGI, word);
 
 	attachToken(head, current, cgi);
-	if (!(iss >> value) || value == "{")
+	if (!(iss >> value) || value != "{")
 		throw Token::TokenError("Expected '{' for cgi block");
 
 	Token*		brace = new Token(Token::CGI_BLK_S, value);

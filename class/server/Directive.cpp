@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:06:16 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:10:13 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Directive::Directive( Token*& directiveTokens )
 			lValue.push_back(directiveTokens->getValue());
 		directiveTokens = directiveTokens->getNext();
 	}
-	if (key || lValue.empty())
+	if (!key.empty() || lValue.empty())
 		throw FieldsEmpty();
 	this->_key = key;
 	this->_lValue = lValue;
@@ -50,9 +50,9 @@ Directive::~Directive( void )
  ******************************************************************************/
 
 /*
- *	get _name value
+ *	get _key value
  */
-const std::string&		Directive::getKey( void ) const
+const std::string&					Directive::getKey( void ) const
 {
 	if (this->_key.empty())
 		throw FieldsEmpty();
@@ -60,13 +60,22 @@ const std::string&		Directive::getKey( void ) const
 }
 
 /*
+ *	get the first value of _lValue
+ */
+const std::string&					Directive::getValue( void ) const
+{
+	if (this->_lValue.empty())
+		throw FieldsEmpty();
+	return (*this->_lValue.begin());
+}
+/*
  *	get _value value
  */
-const std::string&		Directive::getValue( void ) const
+const std::list<std::string>&		Directive::getValues( void ) const
 {
-	if (this->_value.empty())
+	if (this->_lValue.empty())
 		throw FieldsEmpty();
-	return (this->_value);
+	return (this->_lValue);
 }
 
 /*******************************************************************************
@@ -90,9 +99,22 @@ const char		*Directive::FieldsEmpty::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, const Directive &src_object )
 {
+	const std::list<std::string>&				values = src_object.getValues();
+	std::list<std::string>::const_iterator		it;
+	bool										first = true;
+
 	out	<< BLUE << "------------- DIRECTIVE BLOCK -------------" << std::endl
 		<< "name: " << src_object.getKey()
-		<< " => [" << src_object.getValue() << "]" << std::endl
+		<< " => [";
+	
+	for (it = values.begin(); it != values.end(); ++it)
+	{
+		if (!first)
+			out << ", ";
+		out << *it;
+		first = false;
+	}
+	out << "]" << std::endl
 		<< "------------------------------------------"	<< RESET << std::endl;
 	return (out);
 }

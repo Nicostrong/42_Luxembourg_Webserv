@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_p.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:04:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:58:48 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,20 +70,20 @@ void		Server::setAttributs( void )
 	for (it = this->_lDirectives.begin(); it != this->_lDirectives.end(); ++it)
 	{
 		std::string						key = (*it)->getKey();
-		std::vector<std::string>		value = (*it)->getValue();
+		std::list<std::string>		values = (*it)->getValues();
 
 		if (key == "listen")
-			setPort(value);
+			setPort(*values.begin());
 		else if (key == "root")
-			this->_path = value;
+			this->_path = *values.begin();
 		else if (key == "server_name")
 			this->_lHost.insert(_lHost.end(), values.begin(), values.end());
 		else if (key == "max_connection_client")
-			setMaxClient(value);
+			setMaxClient(*values.begin());
 		else if (key == "client_max_body_size")
-			setMaxSizeBody(value);
+			setMaxSizeBody(*values.begin());
 		else if (key == "index")
-			this->_index = value;
+			this->_index = *values.begin();
 	}
 	return ;
 }

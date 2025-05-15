@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_gs.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:03:16 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:53:27 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ const size_t&								Server::getMaxSizeBody( void ) const
  *	get _lHost value
  */
 
- const std::list<std::string&>				Server::getHost( void ) const;
+const std::list<std::string>&				Server::getHost( void ) const
 {
 	return (this->_lHost);
 }

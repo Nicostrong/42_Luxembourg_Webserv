@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 08:46:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:15:19 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ Token::~Token( void )
 /*
  *	List of valid key for directives
  */
-const std::string		directiveKeys[] = {
-											"listen",
-											"server_name",
-											"root",
-											"index",
-											"max_connection_client",
-											"client_max_body_size",
-											"return",
-											"autoindex"
-										};
+const std::string		Token::directiveKeys[8] = {
+													"listen",
+													"server_name",
+													"root",
+													"index",
+													"max_connection_client",
+													"client_max_body_size",
+													"return",
+													"autoindex"
+												};
 
 /*******************************************************************************
  *								METHOD										   *
@@ -90,8 +90,8 @@ Token*		Token::tokenize( const std::string& input )
 				current = createDirective(iss, word, head, current);
 			if (!inServer && word != "server" && word != "}")
 				throw Token::TokenError("Unexpected data outside server block");
-			if (!isDirectiveKey(word))
-				throw Token::TokenError("Unknown directive: " + word);
+			//if (!isDirectiveKey(word))
+			//	throw Token::TokenError("Unknown directive: " + word);
 		}
 
 		if (braceCount != 0)

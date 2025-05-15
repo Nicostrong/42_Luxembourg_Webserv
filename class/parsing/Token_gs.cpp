@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token_gs.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:47:16 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 07:49:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:30:52 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ std::string		Token::getTypeName( void ) const
 			GREEN "CGI" RESET,
 			GREEN "CGI_BLK_S" RESET,
 			GREEN "CGI_BLK_E" RESET,
-			"HTTP_K", "HTTP_V", "DIR_K", "DIR_V", "SEMICOLON"
+			"CGI_K", "CGI_V", "HTTP_K", "HTTP_V",
+			"DIR_K", "DIR_V", "SEMICOLON"
 	};
 	
 	if (this->_type >= SERVER && this->_type <= SEMICOLON)

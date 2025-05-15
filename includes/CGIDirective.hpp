@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIDirective.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:40:43 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 10:34:02 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:33:40 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,3 +48,5 @@ class	CGIDirective
 };
 
 std::ostream	&operator<<( std::ostream& out, const CGIDirective& src_object );
+
+#endif

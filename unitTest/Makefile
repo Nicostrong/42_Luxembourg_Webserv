@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/15 11:17:40 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/15 14:19:08 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,9 @@ DEB_OPT			=	--tool=memcheck \
 					--show-leak-kinds=all \
 					--track-fds=yes
 
-ARG0			=	"../good_config/good_1.conf"
+ARG0			=	"../config/webserver.conf"
 
-ARG1			=	"../config/webserver.conf"
+ARG1			=	"../good_config/good_1.conf"
 
 RM				=	rm -f
 
@@ -65,7 +65,6 @@ SERVER_SRC		=	../class/parsing/CheckerTokens_e.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
 					../class/Uri.cpp \
-				
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -102,11 +101,9 @@ NET_SRC			=	../class/parsing/CheckerTokens_e.cpp \
 					../class/EventMonitoring.cpp \
 					../class/EventData.cpp \
 					../class/HttpResponse.cpp \
-					../class/ServerManager.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
 					../class/RequestHandling.cpp \
-					../class/ParserServerConfig.cpp \
 					../class/CGI.cpp \
 					../class/Uri.cpp \
 					main_networking.cpp
@@ -273,6 +270,8 @@ deb_par:		parser
 clean:
 	$(call delete_progress, *.o)
 	$(call delete_progress, ../class/*.o)
+	$(call delete_progress, ../class/parsing/*.o)
+	$(call delete_progress, ../class/server/*.o)
 
 fclean: 	clean
 	$(call delete_file, $(SERVER_NAME))

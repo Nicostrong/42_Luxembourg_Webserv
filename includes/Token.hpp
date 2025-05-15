@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 09:24:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:04:19 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ class 	Token
 
 		Token&						operator=( const Token& src_obj );
 
-		static const std::string	directiveKeys[];
+		static const std::string	directiveKeys[8];
 		
 		/*	PRIVATE METHODS	*/
 		static void					attachToken(		Token*& head,

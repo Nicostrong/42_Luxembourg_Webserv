@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 10:41:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:05:43 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,20 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	std::map<size_t, std::string>::const_iterator		it;
 	std::map<size_t, std::string>						mError;
 	const std::map<std::string, Location *>				loc = src_object.getAllLocation();
+	const std::list<std::string>&						hosts = src_object.getHost();
+	std::list<std::string>::const_iterator				itHost = hosts.begin();
 	
 	mError = src_object.getMapError();
 	
 	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
-		<< GREEN << "Name:\t\t\t" << src_object.getName() << RESET <<std::endl
+		<< GREEN << "Name:\t\t\t";
+	while (itHost != hosts.end())
+	{
+		out << *itHost;
+		if (++itHost != hosts.end())
+			out << ", ";
+	}
+	out << RESET <<std::endl
 		<< GREEN << "Listen adress:\t\t127.0.0.1" << RESET << std::endl
 		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
 		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl

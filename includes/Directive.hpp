@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 10:48:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:07:45 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define DIRECTIVE_HPP
 
 # include "lib.hpp"
+# include "Token.hpp"
 
 /*
  *  The Directive object represents a directive of the server [key]:value.
@@ -26,11 +27,11 @@ class	Directive
 
 	private:
 
-		std::string					_key;
-		std::list<std::string>		_lValue;
+		std::string							_key;
+		std::list<std::string>				_lValue;
 
 		Directive( const Directive& src_obj );
-		Directive&					operator=( const Directive& src_obj );
+		Directive&							operator=( const Directive& src_obj );
 
 	public:
 
@@ -38,8 +39,9 @@ class	Directive
 		~Directive( void );
 
 		/*  GETTER  */
-		const std::string&			getKey( void ) const;
-		const std::string&			getValue( void ) const;
+		const std::string&					getKey( void ) const;
+		const std::string&					getValue( void ) const;
+		const std::list<std::string>&		getValues( void ) const;
 
 		/*	class Exception	*/
 		/*	fields empty	*/

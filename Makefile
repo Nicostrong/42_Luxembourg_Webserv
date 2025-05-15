@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/04/30 08:30:05 by gzenner          ###   ########.fr        #
+#    Updated: 2025/05/15 13:06:40 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -253,6 +253,8 @@ endif
 clean:
 	$(call delete_progress, ./src/*.o)
 	$(call delete_progress, ./class/*.o)
+	$(call delete_progress, ./class/parsing/*.o)
+	$(call delete_progress, ./class/server/*.o)
 
 fclean: 	clean
 	$(call delete_file, $(NAME))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 10:31:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:32:16 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void		CheckerTokens::checkLocationTokens( Token* current )
 {
 	if (current->getType() == Token::LOCATION)
 	{
-		if (!this->inServer || this->_inErrorBlk || this->_inLocation || this->_inCGI)
+		if (!this->_inServer || this->_inErrorBlk || this->_inLocation || this->_inCGI)
 			throw CheckerError("Location block not allowed in this scope");
 	}
 	else if (current->getType() == Token::LOC_BLK_S)
@@ -241,8 +241,8 @@ void		CheckerTokens::checkSemicolonAfterDirectiveValue( void )
 
 	while (current && current->getNext())
 	{
-		if (current->getType() == Token::DIR_V && current->getNext() != Token::DIR_V)
-			if (current->getNext() != Token::SEMICOLON)
+		if (current->getType() == Token::DIR_V && current->getNext()->getType() != Token::DIR_V)
+			if (current->getNext()->getType() != Token::SEMICOLON)
 				throw CheckerError("Expected ';' after " + current->getValue());
 		current = current->getNext();
 	}
@@ -258,8 +258,9 @@ void		CheckerTokens::checkSemicolonAfterHTTPValue( void )
 
 	while (current && current->getNext())
 	{
-		if (current->getType() == Token::HTTP_V && current->getNext() != Token::SEMICOLON)
-			throw CheckerError("Expected ';' after " + current->getValue());
+		if (current->getType() == Token::HTTP_V && current->getNext()->getType() != Token::HTTP_V)
+			if (current->getNext()->getType() != Token::SEMICOLON)
+				throw CheckerError("Expected ';' after " + current->getValue());
 		current = current->getNext();
 	}
 	return ;

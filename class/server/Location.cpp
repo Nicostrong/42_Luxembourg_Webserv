@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:09:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 13:47:58 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,7 @@ void						Location::createLocation( Token*& tokens )
 	while (tokens && tokens->getType() != Token::LOC_BLK_E)
 	{
 		if (tokens->getType() == Token::DIR_K)
-		{
-			std::string		key;
-			std::string		value;
-
-			key = tokens->getValue();
-			tokens = tokens->getNext();
-			value = tokens->getValue();
-			this->_lDirectives.push_back(new Directive(key, value));
-		}
+			this->_lDirectives.push_back(new Directive(tokens));
 		else if (tokens->getType() == Token::HTTP_K && !this->_method)
 			this->_method = new MethodHTTP(tokens);
 		tokens = tokens->getNext();

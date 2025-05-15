@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_p.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 08:26:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 11:26:56 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,6 @@ void		ParserServerConfig::formatString( const std::string& content )
  */
 void		ParserServerConfig::checkExtension( const std::string& filename )
 {
-	size_t		posSlash = filename.find("/.");
-
-	if (posSlash != std::string::npos)
-		throw HiddenFile();
 	if (filename.size() < 5 || filename.substr(filename.size() - 5) != ".conf")
 		throw BadExtensionFile();
 	return ;
@@ -163,15 +159,15 @@ std::string		ParserServerConfig::extractBlock(	const std::string& content,
 	std::string	block;
 
 	if (!pos || *pos >= content.size())
-		throw ParsingError("Bad position cursor");
+		throw FileError();
 	*pos = content.find(keyword, *pos);
 	if (*pos == std::string::npos)
-		throw ParsingError("Start keyword not found.");
+		throw FileError();
 	*pos += keyword.length();
 	while (*pos < content.size() && content[*pos] != (end_char - 2))
 		++(*pos);
 	if (*pos == content.size())
-		throw BraceError();
+		throw FileError();
 	blockStart = *pos;
 	openBraces = 1;
 	++(*pos);
@@ -184,7 +180,7 @@ std::string		ParserServerConfig::extractBlock(	const std::string& content,
 		++(*pos);
 	}
 	if (openBraces != 0)
-		throw BraceError();
+		throw FileError();
 	block = content.substr(blockStart, *pos - blockStart);
 	return (block);
 }
