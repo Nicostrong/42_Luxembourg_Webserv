@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:32:16 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 15:10:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void		CheckerTokens::validate( void )
 	checkSemicolonAfterHTTPValue();
 	checkSemicolonBeforeBlockEnd();
 	checkDuplicatedKeysInScope();
+	checkpath();
+	checkBlockError();
 	checkValue();
+	checkCGI();
 	checkMethodHTTP();
 	assertFinalState();
 	return ;
@@ -317,6 +320,52 @@ void		CheckerTokens::checkDuplicatedKeysInScope( void )
 }
 
 /*
+ *	Check if the value of path start with a /
+ */
+void		CheckerTokens::checkpath( void )
+{
+	Token*		current = this->_head;
+
+	while (current)
+	{
+		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
+			if (current->getValue()[0] != '/')
+				throw CheckerError("Path must start with a /");
+		if (current->getType() == Token::DIR_K && current->getValue() == "root")
+		{
+			current = current->getNext();
+			if (current && next->getType() == Token::DIR_V)
+				if (next->getValue()[0] != '/')
+					throw CheckerError("Path of root directive must start with a /");
+		}
+		current = current->getNext();
+	}
+	return ;
+}
+
+/*
+ *	Check the key and the value of the block error
+ */
+void		CheckerTokens::checkBlockError( void )
+{
+	Token*		current = this->_head;
+
+	while (current)
+	{
+		if (current->getType() == Token::ERR_BLK_S)
+			while (current && current->getType() != Token::ERR_BLK_E)
+			{
+				if (current->getType() == Token::DIR_V)
+					if (current->getValue()[0] != '/')
+						throw CheckerError("Path error must start with a /");
+				current = current->getNext();
+			}
+		current = current->getNext();
+	}
+	return ;
+}
+
+/*
  *	Check the value of the directive
  */
 void		CheckerTokens::checkValue( void )
@@ -332,6 +381,25 @@ void		CheckerTokens::checkValue( void )
 			if (val != "on" && val != "off")
 				throw CheckerError("value of \"autoindex\" not correct.");
 		}
+		current = current->getNext();
+	}
+	return ;
+}
+
+/*
+ *	Check all key of CGI start with a '.'
+ */
+void		CheckerTokens::checkCGI( void )
+{
+	Token*		current = this->_head;
+
+	while (current->getType() != Token::CGI_BLK_S)
+		current = current->getNext();
+	while (current->getType() != Token::CGI_BLK_E)
+	{
+		if (current->getType() == Token::CGI_K)
+			if (current->getValue()[0] != '.')
+				throw CheckerError("CGI key must start with '.'");
 		current = current->getNext();
 	}
 	return ;

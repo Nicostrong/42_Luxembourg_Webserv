@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:53:50 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:39:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class	Server : public IEventHandler
 		int										_serverSocket;
 		size_t									_port;
 		size_t									_maxSizeBody;
+		std::string								_host;
 		std::string								_path;
 		std::string								_index;
 		std::list<std::string>					_lHost;

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 08:30:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:46:11 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ class ParserServerConfig
 		void						formatString( const std::string& content );
 		void						checkExtension( const std::string& filename );
 		void						insertChar( std::string &str, char target, char toInsert );
+		
+		bool						isValidIPv4( const std::string& ip );
 		
 		std::string					stripComments( const std::string& line );
 		std::string					extractBlock(	const std::string& content,

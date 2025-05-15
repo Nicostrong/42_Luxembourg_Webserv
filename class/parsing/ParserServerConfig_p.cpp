@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_p.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:26:56 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:45:30 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,29 @@ void			ParserServerConfig::splitServerToken( Token *head )
 }
 
 /*
+ *	Check if the ip adress is with correct format
+ */
+bool	PaserServerConfig::isValidIPv4( const std::string& ip )
+{
+	std::istringstream		iss(ip);
+	std::string				part;
+	int						count = 0;
+
+	while (std::getline(iss, part, '.'))
+	{
+		if (++count > 4 || part.empty() || part.size() > 3)
+			return (false);
+		for (size_t i = 0; i < part.size(); ++i)
+			if (!std::isdigit(part[i]))
+				return (false);
+		int num = std::atoi(part.c_str());
+		if (num < 0 || num > 255)
+			return (false);
+	}
+	return (count == 4);
+}
+
+/*
  *	Transform the listen with ip and port in two different directives
  */
 void	ParserServerConfig::formatHost( std::string& input )
@@ -71,6 +94,9 @@ void	ParserServerConfig::formatHost( std::string& input )
 		{
 			std::string		left = word.substr(0, pos);
 			std::string		right = word.substr(pos + 1);
+
+			if (!isValidIPv4(left))
+				throw std::runtime_error("Invalid IP address format: " + left);
 			oss << right << " host " << left << " ";
 		}
 		else

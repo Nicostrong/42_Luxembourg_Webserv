@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:15:19 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 14:39:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ Token::~Token( void )
 /*
  *	List of valid key for directives
  */
-const std::string		Token::directiveKeys[8] = {
+const std::string		Token::directiveKeys[9] = {
 													"listen",
+													"host",
 													"server_name",
 													"root",
 													"index",
@@ -90,8 +91,6 @@ Token*		Token::tokenize( const std::string& input )
 				current = createDirective(iss, word, head, current);
 			if (!inServer && word != "server" && word != "}")
 				throw Token::TokenError("Unexpected data outside server block");
-			//if (!isDirectiveKey(word))
-			//	throw Token::TokenError("Unknown directive: " + word);
 		}
 
 		if (braceCount != 0)
