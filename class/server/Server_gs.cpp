@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_gs.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:53:27 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 15:18:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,14 @@ const int&									Server::getMaxClient( void ) const
 const size_t&								Server::getPort( void ) const
 {
 	return (this->_port);
+}
+
+/*
+ *	get _serverIp value
+ */
+const std::string&							Server::getServerIp( void ) const
+{
+	return (this->_serverIp);
 }
 
 /*

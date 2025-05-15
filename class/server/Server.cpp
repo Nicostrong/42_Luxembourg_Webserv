@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:05:43 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 15:20:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
  *	Server constructor with tokens in argument
  */
 Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
-	: _maxClient(0), _serverSocket(0), _port(0), _maxSizeBody(0), 
-	_path("./www/html"), _index("index.html"), _serverIp(SERVER_IP), 
+	: _maxClient(0), _serverSocket(0), _port(0), _maxSizeBody(0),
+	_path("/www/html"), _index("index.html"), _serverIp(SERVER_IP), 
 	_em(eventMonitoring)
 {
 	try
@@ -162,15 +162,13 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	mError = src_object.getMapError();
 	
 	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
-		<< GREEN << "Name:\t\t\t";
+		<< GREEN << "Name:" >> std::endl;
+		
 	while (itHost != hosts.end())
-	{
-		out << *itHost;
-		if (++itHost != hosts.end())
-			out << ", ";
-	}
+		out << "\t\t- " << *itHost << std::endl;
+
 	out << RESET <<std::endl
-		<< GREEN << "Listen adress:\t\t127.0.0.1" << RESET << std::endl
+		<< GREEN << "Listen adress:\t\t" << src_object.getServerIp() << RESET << std::endl
 		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
 		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl
 		<< GREEN << "Index file:\t\t" << src_object.getIndex() << RESET << std::endl
