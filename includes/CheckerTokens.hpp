@@ -6,15 +6,16 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/14 11:46:56 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 10:29:29 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHECKER
 # define CHECKER
 
-# include "./lib.hpp"
-# include "./MethodHTTP.hpp"
+# include "lib.hpp"
+# include "Token.hpp"
+# include "MethodHTTP.hpp"
 
 class	Token;
 
@@ -32,6 +33,7 @@ class	CheckerTokens
 		bool			_inServer;
 		bool			_inLocation;
 		bool			_inErrorBlk;
+		bool			_inCGI;
 
 		CheckerTokens( const CheckerTokens& src_obj );
 
@@ -41,11 +43,16 @@ class	CheckerTokens
 		void			checkValue( void ) ;
 		void			checkMethodHTTP( void );
 		void			checkBracesAndBlocks( void );
+		void			checkHTTPKeyValuePairs( void );
 		void			assertFinalState( void ) const;
+		void 			checkCGITokens( Token* current );
 		void			checkDuplicatedKeysInScope( void );
 		void			checkDirectiveKeyValuePairs( void );
+		void			checkServerTokens( Token* current );
 		void			checkSemicolonBeforeBlockEnd( void );
 		void			checkSemicolonAfterHTTPValue( void );
+		void			checkLocationTokens( Token* current );
+		void			checkErrorPageTokens( Token* current );
 		void			checkSemicolonAfterDirectiveValue( void );
 	
 	public:
@@ -55,6 +62,8 @@ class	CheckerTokens
 
 		static void		check( Token* head );
 	
+		/*	EXCEPTION	*/
+
 		/*	checkererror Exception	*/
 		class	CheckerError: public std::exception
 		{
@@ -63,7 +72,7 @@ class	CheckerTokens
 			public:
 				CheckerError( const std::string& data ) throw();
 				virtual ~CheckerError( void ) throw();
-				virtual const char	*what() const throw();
+				virtual const char*		what() const throw();
 		
 		};
 		

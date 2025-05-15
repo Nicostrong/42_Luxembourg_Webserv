@@ -6,15 +6,14 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 15:13:28 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 09:24:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_HPP
 # define TOKEN_HPP
 
-# include "./lib.hpp"
-# include "./ParserServerConfig.hpp"
+# include "lib.hpp"
 
 /*
  *	Token class is to tokenize the server configuration file.
@@ -41,11 +40,11 @@ class 	Token
 			CGI_BLK_S,		//	CGI block start
 			CGI_BLK_E,		//	CGI block end
 			CGI_K,			//	CGI extension
+			CGI_V,			//	CGI path
 			HTTP_K,			//	HTTP key
 			HTTP_V,			//	method HTTP value
 			DIR_K,			//	key directive
 			DIR_V,			//	value directive
-			CGI_V,			//	CGI path
 			SEMICOLON		//	end of directive
 		};
 
@@ -68,6 +67,25 @@ class 	Token
 
 		static Token*				tokenize( const std::string& serverConfig );
 
+		/*	EXCEPTION	*/
+		class	TokenError: public std::exception
+		{
+			private:
+				std::string			_msg;
+			public:
+				TokenError( const std::string& data ) throw();
+				virtual ~TokenError( void ) throw();
+				virtual const char	*what() const throw();
+		
+		};
+		
+		/*	port value error Exception	*/
+		class	PortValueException : public std::exception
+		{
+			public:
+				const char*		what() const throw();
+		};
+
 	private:
 
 		Type						_type;
@@ -77,11 +95,13 @@ class 	Token
 		Token( const Token& src_obj );
 
 		Token&						operator=( const Token& src_obj );
+
+		static const std::string	directiveKeys[];
 		
 		/*	PRIVATE METHODS	*/
-		static void					attachToken(	Token*& head,
-													Token*& current,
-													Token* newToken );
+		static void					attachToken(		Token*& head,
+														Token*& current,
+														Token* newToken );
 		static void					deleteChain( Token* head );
 
 		static bool					isDirectiveKey( const std::string& word );
@@ -92,31 +112,30 @@ class 	Token
 														Token*& current,
 														int& braceCount,
 														bool& inErrorBlk );
-		static Token*				createBrace(	const std::string& word,
-													Token*& head,
-													Token*& current,
-													int& braceCount,
-													bool& inLocation,
-													bool& inErrorBlk,
-													bool& inServer);
+		static Token*				createBrace(		const std::string& word,
+														Token*& head,
+														Token*& current,
+														int& braceCount,
+														bool& inLocation,
+														bool& inErrorBlk,
+														bool& inServer );
 		static Token*				createSemicolon(	const std::string& word,
 														Token*& head,
 														Token*& current,
-														bool& inHTTP);
+														bool& inHTTP );
 		static Token*				createDirective(	std::istringstream& iss,
 														const std::string& word,
 														Token*& head,
-														Token*& current);
-		static Token*				createLocation( std::istringstream& iss,
-													Token*& head,
-													Token*& current,
-													int& braceCount,
-													bool& inLocation );
-		static Token*				createCGIDirective(	std::istringstream& iss,
-														Token*& head, 
+														Token*& current );
+		static Token*				createLocation( 	std::istringstream& iss,
+														Token*& head,
 														Token*& current,
 														int& braceCount,
-														bool& inCGI );
+														bool& inLocation );
+		static Token*				createCGIDirective(	std::istringstream& iss,
+														const std::string& word,
+														Token*& head, 
+														Token*& current );
 
 };
 

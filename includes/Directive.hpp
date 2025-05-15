@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 15:26:26 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 10:48:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class	Directive
 
 	public:
 
-		Directive( std::string &key, std::string &value );
+		Directive( Token*& directiveTokens );
 		~Directive( void );
 
 		/*  GETTER  */

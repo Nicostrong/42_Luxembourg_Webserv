@@ -6,12 +6,12 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 11:15:46 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 11:06:37 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/MethodHTTP.hpp"
-#include "../includes/Token.hpp"
+#include "../../includes/MethodHTTP.hpp"
+#include "../../includes/Token.hpp"
 
 /*******************************************************************************
  *							INITIALISATION CLASS							   *

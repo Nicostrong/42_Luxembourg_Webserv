@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/14 15:12:12 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/15 11:17:40 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,27 @@ RM				=	rm -f
 #	Test class Server full													   #
 ################################################################################
 
-SERVER_SRC		=	../class/HandleConfig.cpp \
+SERVER_SRC		=	../class/parsing/CheckerTokens_e.cpp \
+					../class/parsing/CheckerTokens_p.cpp \
+					../class/parsing/CheckerTokens.cpp \
+					../class/parsing/ParserServerConfig_e.cpp \
+					../class/parsing/ParserServerConfig_p.cpp \
+					../class/parsing/ParserServerConfig.cpp \
+					../class/parsing/Token_e.cpp \
+					../class/parsing/Token_gs.cpp \
+					../class/parsing/Token_p.cpp \
+					../class/parsing/Token.cpp \
+					../class/server/CGIDirective.cpp \
+					../class/server/Directive.cpp \
+					../class/server/Location_gs.cpp \
+					../class/server/Location.cpp \
+					../class/server/MethodHTTP.cpp \
+					../class/server/Server_ev.cpp \
+					../class/server/Server_gs.cpp \
+					../class/server/Server_p.cpp \
+					../class/server/Server.cpp \
+					../class/server/ServerManager.cpp \
+					../class/HandleConfig.cpp \
 					../class/HttpBase.cpp \
 					../class/HttpRequest.cpp \
 					../class/EventMonitoring.cpp \
@@ -44,16 +64,8 @@ SERVER_SRC		=	../class/HandleConfig.cpp \
 					../class/RequestHandling.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
-					../class/ParserServerConfig.cpp \
-					../class/CGI.cpp \
 					../class/Uri.cpp \
-					../class/Token.cpp \
-					../class/CheckerTokens.cpp \
-					../class/ServerManager.cpp \
-					../class/Server.cpp \
-					../class/Location.cpp \
-					../class/Directive.cpp \
-					../class/MethodHTTP.cpp \
+				
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -64,11 +76,26 @@ SERVER_NAME		=	test_classServer
 #	Test networking															   #
 ################################################################################
 
-NET_SRC			=	../class/Server.cpp \
-					../class/CheckerTokens.cpp \
-					../class/Location.cpp \
-					../class/Directive.cpp \
-					../class/MethodHTTP.cpp \
+NET_SRC			=	../class/parsing/CheckerTokens_e.cpp \
+					../class/parsing/CheckerTokens_p.cpp \
+					../class/parsing/CheckerTokens.cpp \
+					../class/parsing/ParserServerConfig_e.cpp \
+					../class/parsing/ParserServerConfig_p.cpp \
+					../class/parsing/ParserServerConfig.cpp \
+					../class/parsing/Token_e.cpp \
+					../class/parsing/Token_gs.cpp \
+					../class/parsing/Token_p.cpp \
+					../class/parsing/Token.cpp \
+					../class/server/CGIDirective.cpp \
+					../class/server/Directive.cpp \
+					../class/server/Location_gs.cpp \
+					../class/server/Location.cpp \
+					../class/server/MethodHTTP.cpp \
+					../class/server/Server_ev.cpp \
+					../class/server/Server_gs.cpp \
+					../class/server/Server_p.cpp \
+					../class/server/Server.cpp \
+					../class/server/ServerManager.cpp \
 					../class/HandleConfig.cpp \
 					../class/HttpBase.cpp \
 					../class/HttpRequest.cpp \
@@ -82,7 +109,6 @@ NET_SRC			=	../class/Server.cpp \
 					../class/ParserServerConfig.cpp \
 					../class/CGI.cpp \
 					../class/Uri.cpp \
-					../class/Token.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)
@@ -93,11 +119,18 @@ NET_NAME		=	test_networking
 #	Test parseur															   #
 ################################################################################
 
-PAR_SRC			=	../class/ParserServerConfig.cpp \
-					../class/Token.cpp \
+PAR_SRC			=	../class/parsing/CheckerTokens_e.cpp \
+					../class/parsing/CheckerTokens_p.cpp \
+					../class/parsing/CheckerTokens.cpp \
+					../class/parsing/ParserServerConfig_e.cpp \
+					../class/parsing/ParserServerConfig_p.cpp \
+					../class/parsing/ParserServerConfig.cpp \
+					../class/parsing/Token_e.cpp \
+					../class/parsing/Token_gs.cpp \
+					../class/parsing/Token_p.cpp \
+					../class/parsing/Token.cpp \
+					../class/server/MethodHTTP.cpp \
 					../class/Ressource.cpp \
-					../class/CheckerTokens.cpp \
-					../class/MethodHTTP.cpp \
 					main_parser.cpp
 
 PAR_OBJ			=	$(PAR_SRC:.cpp=.o)

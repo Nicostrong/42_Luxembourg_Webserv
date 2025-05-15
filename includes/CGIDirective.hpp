@@ -6,14 +6,14 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:40:43 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:53:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 10:34:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGIDIRECTIVE_HPP
 # define CGIDIRECTIVE_HPP
 
-# include "./lib.hpp"
+# include "lib.hpp"
 
 class	CGIDirective
 {

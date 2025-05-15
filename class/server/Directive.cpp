@@ -6,11 +6,11 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 10:36:33 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 11:06:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Directive.hpp"
+#include "../../includes/Directive.hpp"
 
 /*******************************************************************************
  *						CONSTRUCTOR / DESTRUCTOR							   *
@@ -19,16 +19,31 @@
 /*
  *	Default constructor
  */
-Directive::Directive( std::string &key, std::string &value ) 
-	: _key(key), _value(value)
+Directive::Directive( Token*& directiveTokens )
 {
+	std::string					key = directiveTokens->getValue();
+	std::list<std::string>		lValue;
+
+	while (directiveTokens && directiveTokens->getType() != Token::SEMICOLON)
+	{
+		if (directiveTokens->getType() == Token::DIR_V)
+			lValue.push_back(directiveTokens->getValue());
+		directiveTokens = directiveTokens->getNext();
+	}
+	if (key || lValue.empty())
+		throw FieldsEmpty();
+	this->_key = key;
+	this->_lValue = lValue;
 	return ;
 }
 
 /*
  *	Default destructor
  */
-Directive::~Directive( void ) { return ; }
+Directive::~Directive( void )
+{
+	return ;
+}
 
 /*******************************************************************************
  *								GETTER										   *

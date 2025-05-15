@@ -6,11 +6,11 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:39:47 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:53:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 11:06:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/CGIDirective.hpp"
+#include "../../includes/CGIDirective.hpp"
 
 /*******************************************************************************
  *						CONSTRUCTOR / DESTRUCTOR							   *
@@ -28,7 +28,10 @@ CGIDirective::CGIDirective( std::string &extension, std::string &path )
 /*
  *	Default destructor
  */
-CGIDirective::~CGIDirective( void ) { return ; }
+CGIDirective::~CGIDirective( void )
+{
+	return ;
+}
 
 /*******************************************************************************
  *								GETTER										   *

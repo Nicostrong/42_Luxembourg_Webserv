@@ -6,11 +6,11 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:26:52 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 10:32:13 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ServerManager.hpp"
+#include "../../includes/ServerManager.hpp"
 
 /*******************************************************************************
  *						CONSTRUCTOR / DESTRUCTOR							   *

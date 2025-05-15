@@ -6,14 +6,14 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:26:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/15 10:34:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVERMANAGER_HPP
 # define SERVERMANAGER_HPP
 
-# include "./Server.hpp"
+# include "Server.hpp"
 
 class	Token;
 

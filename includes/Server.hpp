@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:03:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:03:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ class	Server : public IEventHandler
 		int										_serverSocket;
 		size_t									_port;
 		size_t									_maxSizeBody;
-		std::string								_name;
 		std::string								_path;
 		std::string								_index;
-		std::map<size_t, std::string>			_mError;
-		std::map<std::string, Location *>		_mLocations;
+		std::list<std::string>					_lHost;
 		std::list<Directive *>					_lDirectives;
 		std::list<Socket>						_lSockets;
+		std::map<size_t, std::string>			_mError;
+		std::map<std::string, Location *>		_mLocations;
 		std::string								_serverIp;
 
 		EventMonitoring&						_em;
@@ -63,7 +63,6 @@ class	Server : public IEventHandler
 		void									setAttributs( void );
 		void									createError( Token*& tokens );
 		void									createServer( Token*& tokens );
-		void									createDirective( Token*& tokens );
 
 		/* Cleanup func to close all sockets(server included)*/
 		void									cleanup( void );
@@ -79,13 +78,15 @@ class	Server : public IEventHandler
 		const size_t&							getPort( void ) const;
 		const size_t&							getMaxSizeBody( void ) const;
 
-		const std::string&						getName( void ) const;
 		const std::string&						getPath( void ) const;
 		const std::string&						getIndex( void ) const;
 		const std::string&						getPathError( size_t error_code ) const;
 
+		const std::list<std::string&>			getHost( void ) const;
+
 		const std::map<size_t, std::string>&	getMapError( void ) const;
 		const std::map<std::string, Location *>	getAllLocation( void ) const;
+
 		const Location&							getLocations( std::string path ) const;
 
 		/*	CHECKER	*/
