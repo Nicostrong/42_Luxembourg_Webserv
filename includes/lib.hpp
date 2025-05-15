@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/13 17:47:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 10:20:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@
 # include <sys/epoll.h>
 # include <netinet/in.h>
 # include <netdb.h>
+# include <dirent.h>
 
 #include <unistd.h>
 #include <iostream>
+#include <iomanip>
 
 # include <map>
 # include <set>

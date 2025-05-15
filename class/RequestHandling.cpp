@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 19:25:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/15 09:23:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,10 @@ void RequestHandling::handleRedirect(const Directive* redirectDirective, HttpRes
 	resp.addHeader("Location", redirectDirective->getValue());
 	resp.setAsComplete();
 }
-void RequestHandling
+void RequestHandling::handleDirctoryListing(const HttpRequest& req, HttpResponse& resp)
+{
+	
+}
 
 bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 
 	HttpResponse& resp, const std::string& path)
