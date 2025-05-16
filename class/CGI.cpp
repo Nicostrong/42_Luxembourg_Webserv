@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 14:17:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 15:02:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ const std::vector<std::string> CGI::getEnv() const
     // Request specific
 
     env.push_back(getRawEnv("SERVER_PROTOCOL", this->_req.getHTTP()));
-    env.push_back(getRawEnv("SERVER_PORT", this->_ctx.getPort()));
+    env.push_back(getRawEnv("SERVER_PORT", /*this->_ctx.getPort()*/8000));
     env.push_back(getRawEnv("REQUEST_METHOD", this->_req.getMethod()));
     env.push_back(getRawEnv("PATH_INFO", "")); //Should take it from handled
     env.push_back(getRawEnv("PATH_TRANSLATED", "")); //Should take it from handled
