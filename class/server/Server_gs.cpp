@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 15:18:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 10:28:35 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,23 @@
 /*
  *	Transform the string in size_t type for the port and check the value
  */
-void			Server::setPort( std::string data )
+void			Server::setPort( std::list<std::string> datalist )
 {
-	size_t					port;
-	std::stringstream		ss(data);
+	std::list<size_t>						lPorts;
+	std::list<std::string>::iterator		it;
 	
-	if (!(ss >> port))
-			throw ParsingError(data);
-	if (port <= 0 || port > 65535)
-		throw PortValueException();
-	this->_port = port;
+	for (it = datalist.begin(); it != datalist.end(); ++it)
+	{
+		size_t					port;
+		std::stringstream		ss(*it);
+
+		if (!(ss >> port))
+			throw ParsingError(*it);
+		if (port <= 0 || port > 65535)
+			throw PortValueException();
+		lPorts.push_back(port);
+	}
+	this->_lPorts = lPorts;
 	return ;
 }
 
@@ -89,9 +96,9 @@ const int&									Server::getMaxClient( void ) const
 /*
  *	get _port value
  */
-const size_t&								Server::getPort( void ) const
+const std::list<size_t>&					Server::getPortList( void ) const
 {
-	return (this->_port);
+	return (this->_lPorts);
 }
 
 /*

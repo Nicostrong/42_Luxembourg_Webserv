@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:39:47 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:06:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 11:38:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@
 /*
  *	Default constructor
  */
-CGIDirective::CGIDirective( std::string &extension, std::string &path ) 
-	: _extension(extension), _path(path)
+CGIDirective::CGIDirective( Token*& tokens) 
 {
+	if (tokens->getType() != Token::CGI_K)
+		throw BadTokenType();
+	this->_extension = tokens->getValue();
+	tokens = tokens->getNext();
+	if (!tokens || tokens->getType() != Token::CGI_V)
+		throw BadTokenType();
+	this->_path = tokens->getValue();
 	return ;
 }
 
@@ -66,7 +72,15 @@ const std::string&		CGIDirective::getPath( ) const
  */
 const char*     CGIDirective::FieldsEmpty::what() const throw()
 {
-	return  (RED "[ERROR] Fields of CGIDirective object empty !" RESET);
+	return  (RED "[ERROR CGI] Fields of CGIDirective object empty !" RESET);
+}
+
+/*
+ *	Bad token type
+ */
+const char*     CGIDirective::BadTokenType::what() const throw()
+{
+	return  (RED "[ERROR CGI] Bad token type for creating CGIDirective !" RESET);
 }
 
 /*******************************************************************************

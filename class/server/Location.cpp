@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:47:58 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 11:37:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void						Location::createLocation( Token*& tokens )
 			this->_lDirectives.push_back(new Directive(tokens));
 		else if (tokens->getType() == Token::HTTP_K && !this->_method)
 			this->_method = new MethodHTTP(tokens);
+		else if (tokens->getType() == Token::CGI_K)
+			this->_lCGIDirectives.push_back(new CGIDirective(tokens));
 		tokens = tokens->getNext();
 	}
 	return ;

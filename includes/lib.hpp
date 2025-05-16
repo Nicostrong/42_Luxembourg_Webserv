@@ -3,34 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 09:02:35 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:43:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIB_HPP
 # define LIB_HPP
 
+# include <ctime>
+# include <poll.h>
+# include <netdb.h>
 # include <fstream>
 # include <sstream>
 # include <ostream>
 # include <cstdlib>
 # include <fcntl.h>
 # include <cstring>
+# include <utility>
+# include <dirent.h>
 # include <iostream>
 # include <unistd.h>
 # include <algorithm>
 # include <exception>
-# include <poll.h>
-# include <sys/socket.h>
 # include <sys/stat.h>
 # include <sys/epoll.h>
 # include <netinet/in.h>
-# include <netdb.h>
-# include <dirent.h>
-# include <ctime>
+# include <sys/socket.h>
 
 #include <unistd.h>
 #include <iostream>

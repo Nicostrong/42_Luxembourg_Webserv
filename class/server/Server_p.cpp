@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 15:15:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 10:23:10 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void		Server::setAttributs( void )
 		std::list<std::string>		values = (*it)->getValues();
 
 		if (key == "listen")
-			setPort(*values.begin());
+			setPort(values);
 		if (key == "host")
 			this->_serverIp = *values.begin();
 		else if (key == "root")

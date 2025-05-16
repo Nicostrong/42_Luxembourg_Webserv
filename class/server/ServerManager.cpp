@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:15:11 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 11:01:06 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,17 @@ ServerManager::ServerManager(	const std::list<Token*>& serverListToken,
 
 		for (it = serverListToken.begin(); it != serverListToken.end(); ++it)
 		{
-			Token*		tokens = *it;
-			Server*		server = new Server(tokens, eventMonitoring);
+			Token*									tokens;
+			Server*									server;
+			std::list<size_t>						ports;
+			std::list<size_t>::const_iterator		pit;
 
-			this->_mServers[server->getPort()] = server;
+			tokens = *it;
+			server = new Server(tokens, eventMonitoring);
+			ports = server->getPorts();
+			for (pit = ports.begin(); pit != ports.end(); ++pit)
+				this->_mServers[*pit] = server;
+			this->_servers.insert(server);
 			this->_nbServer++;
 		}
 	}
@@ -48,11 +55,12 @@ ServerManager::ServerManager(	const std::list<Token*>& serverListToken,
  */
 ServerManager::~ServerManager( void )
 {
-	std::map<int, Server*>::iterator		it;
+	std::set<Server*>::iterator		it;
 
-	for (it = this->_mServers.begin(); it != this->_mServers.end(); ++it)
-		delete it->second;
+	for (it = this->_servers.begin(); it != this->_servers.end(); ++it)
+		delete *it;
 	this->_mServers.clear();
+	this->_servers.clear();
 	return ;
 }
 
@@ -60,29 +68,37 @@ ServerManager::~ServerManager( void )
  *								GETTER										   *
  ******************************************************************************/
 
-const std::map<int, Server*>&		ServerManager::getServers( void ) const
+const std::map<size_t, Server*>&		ServerManager::getServers( void ) const
 {
 	return (this->_mServers);
 }
 
-Server*								ServerManager::getServer(int port) const 
+Server*		ServerManager::getServer( size_t port) const 
 { 
-	std::map<int, Server*>::const_iterator		it;
-	
-	it = this->_mServers.find(port);
-	return ((it != this->_mServers.end()) ? it->second : NULL);
+	if (isValidPort(port))
+		return (this->_mServers.find(port)->second);
+	return (this->_mServers.begin()->second);
 }
 
-int									ServerManager::getNbServer( void ) const
+int			ServerManager::getNbServer( void ) const
 {
 	return (this->_nbServer);
 }
 
-void								ServerManager::startAll( void )
-{
-	std::map<int, Server*>::iterator		it;
+/*******************************************************************************
+ *								METHOD										   *
+ ******************************************************************************/
 
-	for (it = this->_mServers.begin(); it != this->_mServers.end(); ++it)
-		it->second->start();
+void		ServerManager::startAll( void )
+{
+	std::set<Server*>::iterator		it;
+
+	for (it = this->_servers.begin(); it != this->_servers.end(); ++it)
+		(*it)->start();
 	return ;
+}
+
+bool		ServerManager::isValidPort( size_t port ) const
+{
+	return (this->_mServers.find(port) != this->_mServers.end());
 }

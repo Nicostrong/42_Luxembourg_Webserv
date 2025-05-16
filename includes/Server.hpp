@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 15:17:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 10:26:18 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ class	Server : public IEventHandler
 
 		int										_maxClient;
 		int										_serverSocket;
-		size_t									_port;
 		size_t									_maxSizeBody;
 		std::string								_path;
 		std::string								_index;
+		std::list<size_t>						_lPorts;
 		std::list<std::string>					_lHost;
 		std::list<Directive *>					_lDirectives;
 		std::list<Socket>						_lSockets;
@@ -55,7 +55,7 @@ class	Server : public IEventHandler
 		Server									&operator=( const Server &src_obj );
 
 		/*	SETTER	*/
-		void									setPort( std::string data );
+		void									setPort( std::list<std::string> datalist );
 		void									setMaxSizeBody( std::string data );
 		void									setMaxClient( std::string data );
 		
@@ -75,13 +75,14 @@ class	Server : public IEventHandler
 		/*  GETTER	*/
 		const int&								getMaxClient( void ) const;
 
-		const size_t&							getPort( void ) const;
 		const size_t&							getMaxSizeBody( void ) const;
 
 		const std::string&						getPath( void ) const;
 		const std::string&						getIndex( void ) const;
 		const std::string&						getServerIp( void ) const;
 		const std::string&						getPathError( size_t error_code ) const;
+
+		const std::list<size_t>&				getPortList( void ) const;
 
 		const std::list<std::string>&			getHost( void ) const;
 

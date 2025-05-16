@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIDirective.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:40:43 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:33:40 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 11:33:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CGIDIRECTIVE_HPP
 
 # include "lib.hpp"
+
+# include "Token.hpp"
 
 class	CGIDirective
 {
@@ -28,7 +30,7 @@ class	CGIDirective
 
 	public:
 
-		CGIDirective( std::string &extension, std::string &path );
+		CGIDirective( Token*& tokens );
 		~CGIDirective( void );
 		/*  GETTER  */
 		const std::string&		getPath( void ) const;
@@ -37,6 +39,16 @@ class	CGIDirective
 		/*	class Exception	*/
 		/*	fields empty	*/
 		class	FieldsEmpty : public std::exception
+		{
+
+			public:
+
+				const char*	what() const throw();
+
+		};
+
+		/*	bad token type	*/
+		class	BadTokenType : public std::exception
 		{
 
 			public:

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 10:34:40 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 10:59:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ class	ServerManager
 
 	private:
 
-		std::map<int, Server*>				_mServers;
-		int									_nbServer;
+		std::map<size_t, Server*>				_mServers;
+		std::set<Server*>						_servers;
+		int										_nbServer;
 
 		ServerManager( const ServerManager& src_obj );
 
@@ -41,14 +42,16 @@ class	ServerManager
 		~ServerManager( void );
 
 		/*	GETTER	*/
-		const std::map<int, Server*>&		getServers( void ) const;
+		const std::map<size_t, Server*>&		getServers( void ) const;
 		
-		Server*								getServer( int port ) const;
+		Server*									getServer( size_t port ) const;
 
-		int									getNbServer( void ) const;
+		int										getNbServer( void ) const;
 
 		/*	Method	*/
-		void								startAll( void );
+		void									startAll( void );
+
+		bool									isValidPort( size_t port ) const;
 				
 };
 
