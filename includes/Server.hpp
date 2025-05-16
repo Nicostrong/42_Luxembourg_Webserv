@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 10:26:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 15:23:13 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,34 @@ class	Server : public IEventHandler
 		size_t									_maxSizeBody;
 		std::string								_path;
 		std::string								_index;
+		std::string								_serverIp;
 		std::list<size_t>						_lPorts;
 		std::list<std::string>					_lHost;
 		std::list<Directive *>					_lDirectives;
 		std::list<Socket>						_lSockets;
 		std::map<size_t, std::string>			_mError;
 		std::map<std::string, Location *>		_mLocations;
-		std::string								_serverIp;
-
 		EventMonitoring&						_em;
 
 		Server( const Server &src_obj );
-		Server									&operator=( const Server &src_obj );
+		Server		&operator=( const Server &src_obj );
 
 		/*	SETTER	*/
-		void									setPort( std::list<std::string> datalist );
-		void									setMaxSizeBody( std::string data );
-		void									setMaxClient( std::string data );
+		void		setPort( std::list<std::string> datalist );
+		void		setMaxSizeBody( std::string data );
+		void		setMaxClient( std::string data );
 		
 		/*	Token	*/
-		void									setAttributs( void );
-		void									createError( Token*& tokens );
-		void									createServer( Token*& tokens );
+		void		setAttributs( void );
+		void		createError( Token*& tokens );
+		void		createServer( Token*& tokens );
+
+		/*	CHECKER	*/
+		bool		matchServerName( const std::string& host ) const;
+		bool		matchServerNameWildcard( const std::string& host ) const;
 
 		/* Cleanup func to close all sockets(server included)*/
-		void									cleanup( void );
+		void		cleanup( void );
 		
 	public:
 
@@ -73,39 +76,37 @@ class	Server : public IEventHandler
 		~Server( void );
 
 		/*  GETTER	*/
-		const int&								getMaxClient( void ) const;
+		const int&				getMaxClient( void ) const;
 
-		const size_t&							getMaxSizeBody( void ) const;
+		const size_t&			getMaxSizeBody( void ) const;
 
-		const std::string&						getPath( void ) const;
-		const std::string&						getIndex( void ) const;
-		const std::string&						getServerIp( void ) const;
-		const std::string&						getPathError( size_t error_code ) const;
+		const std::string&		getPath( void ) const;
+		const std::string&		getIndex( void ) const;
+		const std::string&		getServerIp( void ) const;
+		const std::string&		getPathError( size_t error_code ) const;
 
-		const std::list<size_t>&				getPortList( void ) const;
+		const std::list<size_t>&		getPortList( void ) const;
 
-		const std::list<std::string>&			getHost( void ) const;
+		const std::list<std::string>&		getHost( void ) const;
 
-		const std::map<size_t, std::string>&	getMapError( void ) const;
-		const std::map<std::string, Location *>	getAllLocation( void ) const;
+		const std::map<size_t, std::string>&		getMapError( void ) const;
+		const std::map<std::string, Location *>		getAllLocation( void ) const;
 
-		const Location&							getLocations( std::string path ) const;
+		const Location&		getLocations( std::string path ) const;
+		const Location*		getMatchingLoc( const std::string& uri );
 
 		/*	CHECKER	*/
-		bool									checkUri( std::string uri );
-		const Location*							getMatchingLoc( const std::string& uri );
-		bool									checkMethod( std::string uri,
-															std::string method );
+		bool		checkUri( std::string uri );
+		bool		matchHost( const std::string& host ) const;
+		bool		checkMethod( std::string uri, std::string method );
+
 
 		/*	Server exec related	*/
-		void 									start( void );
-		void 									onReadEvent( int fd, int type, 
-															EventMonitoring& em );
-		void 									onWriteEvent( int fd, int type, 
-															EventMonitoring& em );
-		void 									onCloseEvent( int fd, int type, 
-															EventMonitoring& em );
-		void 									onSocketClosedEvent( const Socket &s );
+		void		start( void );
+		void 		onReadEvent( int fd, int type, EventMonitoring& em );
+		void 		onWriteEvent( int fd, int type, EventMonitoring& em );
+		void 		onCloseEvent( int fd, int type, EventMonitoring& em );
+		void 		onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/
 		/*	parsing error Exception	*/
@@ -114,13 +115,13 @@ class	Server : public IEventHandler
 
 			private:
 
-				std::string				_msg;
+				std::string		_msg;
 
 			public:
 
 				ParsingError( const std::string &data ) throw();
 				virtual ~ParsingError( void ) throw();
-				virtual const char	*what() const throw();
+				virtual const char*		what() const throw();
 		
 		};
 
@@ -130,7 +131,7 @@ class	Server : public IEventHandler
 
 			public:
 
-				const char	*what() const throw();
+				const char*		what() const throw();
 		
 		};
 		

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 14:31:48 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 15:51:43 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,128 +71,6 @@ MethodHTTP::~MethodHTTP( void )
 {
 	this->_allowed.clear();
 	return ;
-}
-
-/*******************************************************************************
- *							PRIVATE METHOD									   *
- ******************************************************************************/
-
-/*
- *	By default all method are allowed
- */
-void	MethodHTTP::initDefault( void )
-{
-	this->_allowed.insert(MethodHTTP::_validMethods.begin(), MethodHTTP::_validMethods.end());
-	return ;
-}
-
-/*******************************************************************************
- *							PRIVATE SETTER									   *
- ******************************************************************************/
-
-/*
- *	Allow all method
- */
-void	MethodHTTP::allowAll( void )
-{
-	this->_allowed.insert(MethodHTTP::_validMethods.begin(), MethodHTTP::_validMethods.end());
-	return ;
-}
-
-/*
- *	Add a method on the array allowed methods
- */
-void	MethodHTTP::allow( const std::string &method )
-{
-	if (!isMethod(method))
-		throw MethodUnknow(method);
-	this->_allowed.insert(method);
-	return ;
-}
-
-/*******************************************************************************
- *								GETTER										   *
- ******************************************************************************/
-
-/*
- *	Return the string of allowed methods
- */
-const std::string		MethodHTTP::getAllowed( void ) const
-{
-	std::string								ret;
-	std::set<std::string>::const_iterator	it;
-
-	for ( it = this->_allowed.begin(); it != this->_allowed.end(); ++it)
-	{
-		if (!ret.empty())
-			ret += ", ";
-		ret += *it;
-	}
-	return (ret);
-}
-
-/*******************************************************************************
- *								METHOD 										   *
- ******************************************************************************/
-
-/*
- *	Check if the method is allowed
- */
-bool	MethodHTTP::isAllowed( const std::string &method ) const
-{
-	return (this->_allowed.find(method) != this->_allowed.end());
-}
-
-/*
- *	Check if the method is a valid method
- */
-bool	MethodHTTP::isMethod( const std::string &method )
-{
-	return (MethodHTTP::_validMethods.find(method) != MethodHTTP::_validMethods.end());
-}
-
-/*******************************************************************************
- *								EXCEPTION 									   *
- ******************************************************************************/
-
-/*
- *	Creation class Exception for parsong error with data
- */
-MethodHTTP::MethodUnknow::MethodUnknow( const std::string &method ) throw()
-{
-	this->_msg = RED"[ERROR] Method unknow: " + method + RESET;
-	return ;
-}
-
-/*
- *	Destructor for ParsingError
- */
-MethodHTTP::MethodUnknow::~MethodUnknow( void ) throw()
-{
-	return ;
-}
-
-/*
- *	Error parsing file.conf
- */
-const char		*MethodHTTP::MethodUnknow::what() const throw()
-{
-	return (this->_msg.c_str());
-}
-
-/*******************************************************************************
- *								OUTSTREAM									   *
- ******************************************************************************/
-
-/*
- *	output stream operator
- */
-std::ostream	&operator<<( std::ostream &out, MethodHTTP const &src_object )
-{
-	out	<< MAGENTA << "------------- METHOD BLOCK -------------" << std::endl
-		<< "Methods Allow:\n\t[" << src_object.getAllowed() << "]" << std::endl
-		<< "------------------------------------------" <<RESET;
-	return (out);
 }
 
 /*******************************************************************************

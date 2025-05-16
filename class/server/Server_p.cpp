@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 10:23:10 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 15:21:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,48 @@ void		Server::cleanup( void )
 		close(this->_serverSocket);
 	std::cout << "Server closed" << std::endl;
 	return ;
+}
+
+/*
+ *	Check if the host exist in the list of host of the server
+ */
+bool		Server::matchServerName( const std::string& host ) const
+{
+	std::list<std::string>::const_iterator		it;
+
+	for (it = this->_lHost.begin(); it != this->_lHost.end(); ++it)
+		if (*it == host)
+			return (true);
+	return (false);
+}
+
+/*
+ *	Check if the host exist in the list of host of the server with wildcard
+ */
+bool		Server::matchServerNameWildcard( const std::string& host ) const
+{
+	std::list<std::string>::const_iterator		it;
+
+	for (it = this->_lHost.begin(); it != this->_lHost.end(); ++it)
+	{
+		const std::string&		pattern = *it;
+
+		if (pattern.find('*') == std::string::npos)
+		{
+			if (pattern == host)
+				return true;
+			continue;
+		}
+
+		size_t			star = pattern.find('*');
+		std::string		prefix = pattern.substr(0, star);
+		std::string		suffix = pattern.substr(star + 1);
+
+		if (host.size() < prefix.size() + suffix.size())
+			continue;
+		if (host.compare(0, prefix.size(), prefix) == 0 &&
+			host.compare(host.size() - suffix.size(), suffix.size(), suffix) == 0)
+			return (true);
+	}
+	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:46:11 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:12:30 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,12 @@ class ParserServerConfig
 
 		std::string					_formatedString;
 		Token*						_allTokens;
-		std::list<Token*>			_serverToken;
 
 		ParserServerConfig( void );
 		ParserServerConfig( const ParserServerConfig& src );
 		ParserServerConfig&			operator=( const ParserServerConfig& src );
 
-		void						splitServerToken( Token *head );
+		
 		void						formatHost( std::string& input );
 		void						formatString( const std::string& content );
 		void						checkExtension( const std::string& filename );

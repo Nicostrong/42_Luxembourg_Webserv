@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 14:34:51 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 15:30:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,142 +51,6 @@ Server::~Server( void )
 		delete itLoc->second;
 	this->_mLocations.clear();
 	return ;
-}
-
-
-/*******************************************************************************
- *								CHECKER										   *
- ******************************************************************************/
-
-/*
- *	Check if the uri exist in the map of Location
- */
-bool							Server::checkUri( std::string uri )
-{
-	std::map<std::string, Location*>::iterator		it;
-
-	for ( it = this->_mLocations.begin(); it != this->_mLocations.end(); ++it)
-	{
-		if (it->second->isMatching(uri))
-			return true;
-	}
-	return (false);
-}
-
-/*
- *	Check if the uri exist in the map of Location and return a const pointer of
- *	the Location object
- */
-const Location*					Server::getMatchingLoc( const std::string& uri )
-{
-	std::map<std::string, Location *>::iterator		it;
-	Location* 										bestMatch = NULL;
-	
-	for (it = this->_mLocations.begin(); it != this->_mLocations.end(); it++)
-	{
-		if(it->second->isMatching(uri))
-		{
-			if (!bestMatch || 
-					bestMatch->getPath().size() < it->second->getPath().size())
-				bestMatch = it->second;
-		}
-	}
-	return (bestMatch);
-}
-
-/*
- *	Check if a method is allowed in a Location scope
- */
-bool	Server::checkMethod( std::string uri, std::string method )
-{
-	const Location*		location = getMatchingLoc(uri);
-
-	if (location && location->getMethod())
-		return (location->getMethod()->isAllowed(method));
-	return (false);
-}
-
-/*******************************************************************************
- *								EXCEPTION 									   *
- ******************************************************************************/
-
-/*
- *	Creation class Exception for parsing error with data
- */
-Server::ParsingError::ParsingError( const std::string &data ) throw()
-{
-	this->_msg = RED"[ERROR] Parsing data: " + data + RESET;
-	return ;
-}
-
-/*
- *	Destructor for ParsingError
- */
-Server::ParsingError::~ParsingError( void ) throw()
-{
-	return ;
-}
-
-/*
- *	Error parsing file.conf
- */
-const char		*Server::ParsingError::what() const throw()
-{
-	return (this->_msg.c_str());
-}
-
-/*
- *	Port value exception
- */
-const char		*Server::PortValueException::what() const throw()
-{
-	return (RED "[ERROR] Value of port not correct !" RESET);
-}
-
-/*******************************************************************************
- *								OUTSTREAM									   *
- ******************************************************************************/
-
-/*
- *	output stream operator
- */
-std::ostream	&operator<<( std::ostream &out, Server const &src_object )
-{
-	std::map<size_t, std::string>::const_iterator		it;
-	std::map<size_t, std::string>						mError;
-	const std::map<std::string, Location *>				loc = src_object.getAllLocation();
-	const std::list<std::string>&						hosts = src_object.getHost();
-	std::list<std::string>::const_iterator				itHost;
-	const std::list<size_t>&							ports = src_object.getPortList();
-	std::list<size_t>::const_iterator					itPort;
-	
-	mError = src_object.getMapError();
-	
-	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
-		<< GREEN << "Name:" << std::endl;
-		
-	for (itHost = hosts.begin(); itHost != hosts.end(); ++itHost)
-		out << "\t- " << *itHost << std::endl;
-
-	out << RESET <<std::endl
-		<< GREEN << "Listen adress:\n\t" << src_object.getServerIp() << RESET << std::endl
-		<< GREEN << "Listen port:" << RESET << std::endl;
-	for ( itPort = ports.begin(); itPort != ports.end(); ++itPort)
-   		out << GREEN << "\t- " << *itPort << RESET << std::endl;
-	out << GREEN << "Root path:\n\t" << src_object.getPath() << RESET << std::endl
-		<< GREEN << "Index file:\n\t" << src_object.getIndex() << RESET << std::endl
-		<< GREEN << "Max connection client:\n\t" << src_object.getMaxClient() << RESET << std::endl
-		<< GREEN << "Max size of body:\n\t" << src_object.getMaxSizeBody() << " bytes." << RESET << std::endl
-		<< GREEN << "Error pages:" << RESET << std::endl;
-	
-	for (it = mError.begin(); it != mError.end(); ++it)
-		out << GREEN << "\t" << it->first << " => " << it->second << RESET << std::endl;
-	
-	out << GREEN << "Locations:" << RESET << std::endl;	
-	for (std::map<std::string, Location *>::const_iterator it = loc.begin(); it != loc.end(); ++it)
-		out << *it->second << RESET << std::endl;
-	out	<< GREEN << "=================== END SERVER ==================" << RESET << std::endl;
-	return (out);
 }
 
 /*******************************************************************************

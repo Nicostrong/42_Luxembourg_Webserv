@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_p.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 18:37:16 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:13:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,41 +16,6 @@
 /*******************************************************************************
  *							PRIVATE METHOD									   *
  ******************************************************************************/
-
-/*
- *	Split the Tokens list to separate each server config
- */
-void			ParserServerConfig::splitServerToken( Token *head )
-{
-	while (head)
-	{
-		if (head->getType() == Token::SERVER)
-		{
-			Token*		server = head;
-			Token*		tmp = head;
-
-			while (tmp && tmp->getType() != Token::SER_BLK_E)
-				tmp = tmp->getNext();
-			if (tmp)
-			{
-				head = tmp->getNext();
-				tmp->setNextToNull();
-				this->_serverToken.push_back(server);
-			}
-		}
-		else
-			head = head->getNext();
-	}
-	std::list<Token*>::iterator		it;
-#ifdef DEBUG
-	for (it = this->_serverToken.begin(); it != this->_serverToken.end(); it++)
-	{
-		std::cout << "PRINT TOKEN LIST" << std::endl;
-		(*it)->printToken();
-	}
-#endif
-	return ;
-}
 
 /*
  *	Check if the ip adress is with correct format

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 18:19:56 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:15:26 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 		if (!this->_allTokens)	
 			throw EmptyConfigError();
 		CheckerTokens::check(this->_allTokens);
-		splitServerToken(this->_allTokens);
-		if (this->_serverToken.empty())
-			throw EmptyConfigError();
 	}
 	catch(const std::exception& e)
 	{
@@ -62,18 +59,6 @@ ParserServerConfig::~ParserServerConfig( void )
 	for (it = this->_serverToken.begin(); it != this->_serverToken.end(); it++)
 		delete (*it);
 	return ;
-}
-
-/*******************************************************************************
- *								GETTER										   *
- ******************************************************************************/
-
-/*
- *	Get the tokens list of the config file
- */
-const std::list<Token*>&	ParserServerConfig::getListTokens( void ) const
-{
-	return (this->_serverToken);
 }
 
 /*******************************************************************************

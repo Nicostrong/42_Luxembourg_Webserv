@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 10:59:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:27:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,33 @@ class	ServerManager
 
 	private:
 
-		std::map<size_t, Server*>				_mServers;
-		std::set<Server*>						_servers;
-		int										_nbServer;
+		std::map<size_t, std::vector<Server*> >		_mServers;
+		std::set<Server*>							_servers;
+		std::list<Token*>							_serverToken;
+		int											_nbServer;
 
 		ServerManager( const ServerManager& src_obj );
 
 		ServerManager&		operator=( const ServerManager& src_obj );
 
+		void		splitServerToken( Token *head );
+
 	public:
 
-		ServerManager( const std::list<Token*>& serverListToken,
-						EventMonitoring& eventMonitoring );
+		ServerManager( const Token*& allTokens, EventMonitoring& eventMonitoring );
 		~ServerManager( void );
 
 		/*	GETTER	*/
-		const std::map<size_t, Server*>&		getServers( void ) const;
-		
-		Server*									getServer( size_t port ) const;
+		Server*			getServer( size_t port, std::string host ) const;
 
-		int										getNbServer( void ) const;
+		std::vector<Server*>		getAllServersForPort( size_t port ) const;
+
+		int				getNbServer( void ) const;
 
 		/*	Method	*/
-		void									startAll( void );
+		void		startAll( void );
 
-		bool									isValidPort( size_t port ) const;
+		bool		isValidPort( size_t port ) const;
 				
 };
 

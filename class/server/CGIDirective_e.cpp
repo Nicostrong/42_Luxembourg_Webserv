@@ -1,39 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CheckerTokens.cpp                                  :+:      :+:    :+:   */
+/*   CGIDirective_e.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/16 16:35:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Created: 2025/05/16 15:57:56 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/05/16 15:58:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CheckerTokens.hpp"
+#include "../../includes/CGIDirective.hpp"
 
 /*******************************************************************************
- *						CONSTRUCTOR / DESTRUCTOR							   *
+ *								EXCEPTION 									   *
  ******************************************************************************/
 
 /*
- *	Constructor CheckerTokens
+ *	Error fields empty
  */
-CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
-											_inServer(false), _inLocation(false),
-											_inErrorBlk(false), _inCGI(false)
+const char*     CGIDirective::FieldsEmpty::what() const throw()
 {
-	return ;
+	return  (RED "[ERROR CGI] Fields of CGIDirective object empty !" RESET);
 }
 
 /*
- *	Destructor CheckerTokens
+ *	Bad token type
  */
-CheckerTokens::~CheckerTokens( void )
+const char*     CGIDirective::BadTokenType::what() const throw()
 {
-	return ;
+	return  (RED "[ERROR CGI] Bad token type for creating CGIDirective !" RESET);
 }
-
-/*******************************************************************************
- *							TESTER CLASS									   *
- ******************************************************************************/

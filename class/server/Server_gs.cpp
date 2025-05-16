@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 10:28:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 15:27:26 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,48 +88,23 @@ void			Server::setMaxClient( std::string data )
 /*
  *	get _maxConnectionClient value
  */
-const int&									Server::getMaxClient( void ) const
+const int&		Server::getMaxClient( void ) const
 {
 	return (this->_maxClient);
 }
 
 /*
- *	get _port value
- */
-const std::list<size_t>&					Server::getPortList( void ) const
-{
-	return (this->_lPorts);
-}
-
-/*
- *	get _serverIp value
- */
-const std::string&							Server::getServerIp( void ) const
-{
-	return (this->_serverIp);
-}
-
-/*
  *	get _maxSizeBody value
  */
-const size_t&								Server::getMaxSizeBody( void ) const
+const size_t&		Server::getMaxSizeBody( void ) const
 {
 	return (this->_maxSizeBody);
 }
 
 /*
- *	get _lHost value
- */
-
-const std::list<std::string>&				Server::getHost( void ) const
-{
-	return (this->_lHost);
-}
-
-/*
  *	get _path value
  */
-const std::string&							Server::getPath( void ) const
+const std::string&		Server::getPath( void ) const
 {
 	return (this->_path);
 }
@@ -137,9 +112,47 @@ const std::string&							Server::getPath( void ) const
 /*
  *	get _index value
  */
-const std::string&							Server::getIndex( void ) const
+const std::string&		Server::getIndex( void ) const
 {
 	return (this->_index);
+}
+
+/*
+ *	get _serverIp value
+ */
+const std::string&		Server::getServerIp( void ) const
+{
+	return (this->_serverIp);
+}
+
+/*
+ *	return the path of the code error in argument
+ */
+const std::string&		Server::getPathError( size_t error_code ) const
+{
+	std::map<size_t, std::string>::const_iterator		it;
+	
+	it = _mError.find(error_code);
+	if (it != _mError.end())
+		return (it->second);
+	throw std::runtime_error("Error code not found");
+}
+
+/*
+ *	get _port value
+ */
+const std::list<size_t>&		Server::getPortList( void ) const
+{
+	return (this->_lPorts);
+}
+
+/*
+ *	get _lHost value
+ */
+
+const std::list<std::string>&		Server::getHost( void ) const
+{
+	return (this->_lHost);
 }
 
 /*
@@ -149,7 +162,6 @@ const std::map<size_t, std::string>&		Server::getMapError( void ) const
 {
 	return (this->_mError);
 }
-
 
 /*
  *	get all Location object of the server
@@ -174,14 +186,22 @@ const Location&			Server::getLocations( std::string path ) const
 }
 
 /*
- *	return the path of the code error in argument
+ *	Check if the uri exist in the map of Location and return a const pointer of
+ *	the Location object
  */
-const std::string&		Server::getPathError( size_t error_code ) const
+const Location*					Server::getMatchingLoc( const std::string& uri )
 {
-	std::map<size_t, std::string>::const_iterator		it;
+	std::map<std::string, Location *>::iterator		it;
+	Location* 										bestMatch = NULL;
 	
-	it = _mError.find(error_code);
-	if (it != _mError.end())
-		return (it->second);
-	throw std::runtime_error("Error code not found");
+	for (it = this->_mLocations.begin(); it != this->_mLocations.end(); it++)
+	{
+		if(it->second->isMatching(uri))
+		{
+			if (!bestMatch || 
+					bestMatch->getPath().size() < it->second->getPath().size())
+				bestMatch = it->second;
+		}
+	}
+	return (bestMatch);
 }

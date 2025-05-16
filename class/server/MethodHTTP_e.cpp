@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CheckerTokens.cpp                                  :+:      :+:    :+:   */
+/*   MethodHTTP_e.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/16 16:35:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Created: 2025/05/16 15:48:20 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/05/16 15:53:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CheckerTokens.hpp"
+#include "../../includes/MethodHTTP.hpp"
 
 /*******************************************************************************
- *						CONSTRUCTOR / DESTRUCTOR							   *
+ *								EXCEPTION 									   *
  ******************************************************************************/
 
 /*
- *	Constructor CheckerTokens
+ *	Creation class Exception for parsong error with data
  */
-CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
-											_inServer(false), _inLocation(false),
-											_inErrorBlk(false), _inCGI(false)
+MethodHTTP::MethodUnknow::MethodUnknow( const std::string &method ) throw()
+{
+	this->_msg = RED"[ERROR] Method unknow: " + method + RESET;
+	return ;
+}
+
+/*
+ *	Destructor for ParsingError
+ */
+MethodHTTP::MethodUnknow::~MethodUnknow( void ) throw()
 {
 	return ;
 }
 
 /*
- *	Destructor CheckerTokens
+ *	Error parsing file.conf
  */
-CheckerTokens::~CheckerTokens( void )
+const char*		MethodHTTP::MethodUnknow::what() const throw()
 {
-	return ;
+	return (this->_msg.c_str());
 }
-
-/*******************************************************************************
- *							TESTER CLASS									   *
- ******************************************************************************/

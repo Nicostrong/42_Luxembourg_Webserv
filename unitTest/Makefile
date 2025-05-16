@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/15 14:19:08 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/05/16 16:36:50 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,24 +36,43 @@ RM				=	rm -f
 ################################################################################
 
 SERVER_SRC		=	../class/parsing/CheckerTokens_e.cpp \
+					../class/parsing/CheckerTokens_m.cpp \
 					../class/parsing/CheckerTokens_p.cpp \
 					../class/parsing/CheckerTokens.cpp \
 					../class/parsing/ParserServerConfig_e.cpp \
+					../class/parsing/ParserServerConfig_gs.cpp \
 					../class/parsing/ParserServerConfig_p.cpp \
 					../class/parsing/ParserServerConfig.cpp \
 					../class/parsing/Token_e.cpp \
 					../class/parsing/Token_gs.cpp \
+					../class/parsing/Token_m.cpp \
 					../class/parsing/Token_p.cpp \
 					../class/parsing/Token.cpp \
+					../class/server/CGIDirective_e.cpp \
+					../class/server/CGIDirective_gs.cpp \
+					../class/server/CGIDirective_m.cpp \
 					../class/server/CGIDirective.cpp \
+					../class/server/Directive_e.cpp \
+					../class/server/Directive_gs.cpp \
+					../class/server/Directive_m.cpp \
 					../class/server/Directive.cpp \
+					../class/server/Location_e.cpp \
 					../class/server/Location_gs.cpp \
+					../class/server/Location_m.cpp \
 					../class/server/Location.cpp \
+					../class/server/MethodHTTP_e.cpp \
+					../class/server/MethodHTTP_gs.cpp \
+					../class/server/MethodHTTP_m.cpp \
 					../class/server/MethodHTTP.cpp \
+					../class/server/Server_e.cpp \
 					../class/server/Server_ev.cpp \
 					../class/server/Server_gs.cpp \
 					../class/server/Server_p.cpp \
+					../class/server/Server_m.cpp \
 					../class/server/Server.cpp \
+					../class/server/ServerManager_gs.cpp \
+					../class/server/ServerManager_m.cpp \
+					../class/server/ServerManager_p.cpp \
 					../class/server/ServerManager.cpp \
 					../class/HandleConfig.cpp \
 					../class/HttpBase.cpp \
@@ -76,24 +95,43 @@ SERVER_NAME		=	test_classServer
 ################################################################################
 
 NET_SRC			=	../class/parsing/CheckerTokens_e.cpp \
+					../class/parsing/CheckerTokens_m.cpp \
 					../class/parsing/CheckerTokens_p.cpp \
 					../class/parsing/CheckerTokens.cpp \
 					../class/parsing/ParserServerConfig_e.cpp \
+					../class/parsing/ParserServerConfig_gs.cpp \
 					../class/parsing/ParserServerConfig_p.cpp \
 					../class/parsing/ParserServerConfig.cpp \
 					../class/parsing/Token_e.cpp \
 					../class/parsing/Token_gs.cpp \
+					../class/parsing/Token_m.cpp \
 					../class/parsing/Token_p.cpp \
 					../class/parsing/Token.cpp \
+					../class/server/CGIDirective_e.cpp \
+					../class/server/CGIDirective_gs.cpp \
+					../class/server/CGIDirective_m.cpp \
 					../class/server/CGIDirective.cpp \
+					../class/server/Directive_e.cpp \
+					../class/server/Directive_gs.cpp \
+					../class/server/Directive_m.cpp \
 					../class/server/Directive.cpp \
+					../class/server/Location_e.cpp \
 					../class/server/Location_gs.cpp \
+					../class/server/Location_m.cpp \
 					../class/server/Location.cpp \
+					../class/server/MethodHTTP_e.cpp \
+					../class/server/MethodHTTP_gs.cpp \
+					../class/server/MethodHTTP_m.cpp \
 					../class/server/MethodHTTP.cpp \
+					../class/server/Server_e.cpp \
 					../class/server/Server_ev.cpp \
 					../class/server/Server_gs.cpp \
 					../class/server/Server_p.cpp \
+					../class/server/Server_m.cpp \
 					../class/server/Server.cpp \
+					../class/server/ServerManager_gs.cpp \
+					../class/server/ServerManager_m.cpp \
+					../class/server/ServerManager_p.cpp \
 					../class/server/ServerManager.cpp \
 					../class/HandleConfig.cpp \
 					../class/HttpBase.cpp \
@@ -117,15 +155,21 @@ NET_NAME		=	test_networking
 ################################################################################
 
 PAR_SRC			=	../class/parsing/CheckerTokens_e.cpp \
+					../class/parsing/CheckerTokens_m.cpp \
 					../class/parsing/CheckerTokens_p.cpp \
 					../class/parsing/CheckerTokens.cpp \
 					../class/parsing/ParserServerConfig_e.cpp \
+					../class/parsing/ParserServerConfig_gs.cpp \
 					../class/parsing/ParserServerConfig_p.cpp \
 					../class/parsing/ParserServerConfig.cpp \
 					../class/parsing/Token_e.cpp \
 					../class/parsing/Token_gs.cpp \
+					../class/parsing/Token_m.cpp \
 					../class/parsing/Token_p.cpp \
 					../class/parsing/Token.cpp \
+					../class/server/MethodHTTP_e.cpp \
+					../class/server/MethodHTTP_gs.cpp \
+					../class/server/MethodHTTP_m.cpp \
 					../class/server/MethodHTTP.cpp \
 					../class/Ressource.cpp \
 					main_parser.cpp

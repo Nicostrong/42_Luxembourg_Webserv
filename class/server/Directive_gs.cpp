@@ -1,39 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CheckerTokens.cpp                                  :+:      :+:    :+:   */
+/*   Directive_gs.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/16 16:35:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Created: 2025/05/16 15:55:22 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/05/16 15:55:41 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CheckerTokens.hpp"
+#include "../../includes/Directive.hpp"
 
 /*******************************************************************************
- *						CONSTRUCTOR / DESTRUCTOR							   *
+ *								GETTER										   *
  ******************************************************************************/
 
 /*
- *	Constructor CheckerTokens
+ *	get _key value
  */
-CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
-											_inServer(false), _inLocation(false),
-											_inErrorBlk(false), _inCGI(false)
+const std::string&					Directive::getKey( void ) const
 {
-	return ;
+	if (this->_key.empty())
+		throw FieldsEmpty();
+	return (this->_key);
 }
 
 /*
- *	Destructor CheckerTokens
+ *	get the first value of _lValue
  */
-CheckerTokens::~CheckerTokens( void )
+const std::string&					Directive::getValue( void ) const
 {
-	return ;
+	if (this->_lValue.empty())
+		throw FieldsEmpty();
+	return (*this->_lValue.begin());
 }
-
-/*******************************************************************************
- *							TESTER CLASS									   *
- ******************************************************************************/
+/*
+ *	get _value value
+ */
+const std::list<std::string>&		Directive::getValues( void ) const
+{
+	if (this->_lValue.empty())
+		throw FieldsEmpty();
+	return (this->_lValue);
+}

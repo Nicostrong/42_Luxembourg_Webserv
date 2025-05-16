@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CheckerTokens.cpp                                  :+:      :+:    :+:   */
+/*   CGIDirective_gs.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/16 16:35:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Created: 2025/05/16 15:57:29 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/05/16 15:57:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CheckerTokens.hpp"
+#include "../../includes/CGIDirective.hpp"
 
 /*******************************************************************************
- *						CONSTRUCTOR / DESTRUCTOR							   *
+ *								GETTER										   *
  ******************************************************************************/
 
 /*
- *	Constructor CheckerTokens
+ *	get _extension value
  */
-CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
-											_inServer(false), _inLocation(false),
-											_inErrorBlk(false), _inCGI(false)
+const std::string&		CGIDirective::getExtension( void ) const
 {
-	return ;
+	if (this->_extension.empty())
+		throw FieldsEmpty();
+	return (this->_extension);
 }
 
 /*
- *	Destructor CheckerTokens
+ *	get _path value
  */
-CheckerTokens::~CheckerTokens( void )
+const std::string&		CGIDirective::getPath( ) const
 {
-	return ;
+	if (this->_path.empty())
+		throw FieldsEmpty();
+	return (this->_path);
 }
-
-/*******************************************************************************
- *							TESTER CLASS									   *
- ******************************************************************************/
