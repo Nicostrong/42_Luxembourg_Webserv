@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:27:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 21:59:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 14:32:12 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ std::ostream	&operator<<( std::ostream &out, const Directive &src_object )
 	bool										first = true;
 
 	out	<< BLUE << "------------- DIRECTIVE BLOCK -------------" << std::endl
-		<< "name: " << src_object.getKey()
+		<< "name:\n\t" << src_object.getKey()
 		<< " => [";
 	
 	for (it = values.begin(); it != values.end(); ++it)

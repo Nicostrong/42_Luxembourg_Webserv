@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIDirective.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:39:47 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 11:38:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 14:32:03 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ const char*     CGIDirective::BadTokenType::what() const throw()
 std::ostream	&operator<<( std::ostream& out, const CGIDirective& src_object )
 {
 	out	<< BLUE << "------------- CGIDIRECTIVE BLOCK -------------" << std::endl
-		<< "name: " << src_object.getExtension()
+		<< "name:\n\t" << src_object.getExtension()
 		<< " => [" << src_object.getPath() << "]" << std::endl
 		<< "------------------------------------------"	<< RESET << std::endl;
 	return (out);

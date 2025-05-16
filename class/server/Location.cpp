@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 11:37:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 14:32:31 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,21 +93,19 @@ const char		*Location::LocationException::what() const throw()
  */
 std::ostream	&operator<<( std::ostream &out, Location const &src_object )
 {
-	std::list<Directive *>::const_iterator	it;
+	std::list<Directive*>::const_iterator			itDir;
+	std::list<CGIDirective*>::const_iterator		itCGI;
 
 	out	<< YELLOW << "------------- LOCATION BLOCK -------------" << RESET << std::endl
-		<< YELLOW << "Name: " << src_object.getPath() << RESET << std::endl;
+		<< YELLOW << "Name:\n\t" << src_object.getPath() << RESET << std::endl;
 	if (src_object.getMethod() != NULL)
 		out << YELLOW << *src_object.getMethod() << RESET << std::endl;
 	if (!src_object.getDirectives().empty())
-		for (it = src_object.getDirectives().begin(); it != src_object.getDirectives().end(); ++it)
-		{
-			if (*it)
-				out << **it;
-			else
-				out << "[ERROR] Directive invalide détectée !" << std::endl;
-		}
-	
+		for (itDir = src_object.getDirectives().begin(); itDir != src_object.getDirectives().end(); ++itDir)
+			out << **itDir;
+	if (!src_object.getCGIDirectives().empty())
+		for (itCGI = src_object.getCGIDirectives().begin(); itCGI != src_object.getCGIDirectives().end(); ++itCGI)
+			out << **itCGI;
 	out << YELLOW << "------------------------------------------" << RESET << std::endl;
 	return (out);
 }

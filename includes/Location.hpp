@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 14:54:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 14:04:54 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ class	Location
 {
 	private:
 
-		std::string						_path;
-		MethodHTTP*						_method;
-		std::list<Directive *>			_lDirectives;
-		std::list<CGIDirective *>		_lCGIDirectives;
+		std::string							_path;
+		MethodHTTP*							_method;
+		std::list<Directive*>				_lDirectives;
+		std::list<CGIDirective*>			_lCGIDirectives;
 
 		Location( const Location &scr_obj );
 
-		Location						&operator=( const Location &src_obj );
+		Location							&operator=( const Location &src_obj );
 
-		void							createLocation( Token*& tokens );
+		void								createLocation( Token*& tokens );
 	
 	public:
 
@@ -48,18 +48,20 @@ class	Location
 		~Location( void );
 
 		/*	GETTER	*/
-		const std::string&				getPath( void ) const;
+		const std::string&					getPath( void ) const;
 		
-		const MethodHTTP*				getMethod( void ) const;
+		const MethodHTTP*					getMethod( void ) const;
 		
-		const std::list<Directive *>&	getDirectives( void ) const;
+		const std::list<Directive*>&		getDirectives( void ) const;
 
-		const Directive*				findDirective( const std::string& name ) const;
+		const std::list<CGIDirective*>&		getCGIDirectives( void ) const;
 
-		const std::list<Directive*>		findDirectives( const std::string& name ) const;
+		const Directive*					findDirective( const std::string& name ) const;
+
+		const std::list<Directive*>			findDirectives( const std::string& name ) const;
 		
 		/*	CHECKER	*/
-		bool							isMatching( const std::string& uri ) const;
+		bool								isMatching( const std::string& uri ) const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception

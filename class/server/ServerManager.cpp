@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 11:01:06 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 13:42:25 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ ServerManager::ServerManager(	const std::list<Token*>& serverListToken,
 
 			tokens = *it;
 			server = new Server(tokens, eventMonitoring);
-			ports = server->getPorts();
+			ports = server->getPortList();
 			for (pit = ports.begin(); pit != ports.end(); ++pit)
 				this->_mServers[*pit] = server;
 			this->_servers.insert(server);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_ev.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:37:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 22:04:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 13:41:36 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		Server::start( void )
 	sockaddr_in		addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(this->getPort());
+	addr.sin_port = htons(8080);		//	NEED TO CREATE GETTER FOR PORT BUT WITCH
 	addr.sin_addr.s_addr = INADDR_ANY;
 
 	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -49,7 +49,7 @@ void		Server::start( void )
 		return ;
 	}
 
-	std::cout << "Listening on port " << this->_port << std::endl;
+	std::cout << "Listening on port 8080" << std::endl;		//	NEED TO CALL GETTER FOR PORT
 	this->_serverSocket = serverSocket;
 	this->_em.monitor(serverSocket, POLLIN, EventData::SERVER, 
 		*this);

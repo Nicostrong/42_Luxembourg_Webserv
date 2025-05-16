@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 10:20:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 14:34:51 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  *	Server constructor with tokens in argument
  */
 Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
-	: _maxClient(0), _serverSocket(0), _maxSizeBody(0), _path("/www/html"),
+	: _maxClient(1), _serverSocket(0), _maxSizeBody(1024), _path("/www/html"),
 	_index("index.html"), _serverIp(SERVER_IP), _em(eventMonitoring)
 {
 	try
@@ -156,23 +156,27 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	std::map<size_t, std::string>						mError;
 	const std::map<std::string, Location *>				loc = src_object.getAllLocation();
 	const std::list<std::string>&						hosts = src_object.getHost();
-	std::list<std::string>::const_iterator				itHost = hosts.begin();
+	std::list<std::string>::const_iterator				itHost;
+	const std::list<size_t>&							ports = src_object.getPortList();
+	std::list<size_t>::const_iterator					itPort;
 	
 	mError = src_object.getMapError();
 	
 	out	<< GREEN << "================= SERVER CONFIG =================" << RESET << std::endl
 		<< GREEN << "Name:" << std::endl;
 		
-	while (itHost != hosts.end())
-		out << "\t\t- " << *itHost << std::endl;
+	for (itHost = hosts.begin(); itHost != hosts.end(); ++itHost)
+		out << "\t- " << *itHost << std::endl;
 
 	out << RESET <<std::endl
-		<< GREEN << "Listen adress:\t\t" << src_object.getServerIp() << RESET << std::endl
-		<< GREEN << "Listen port:\t\t" << src_object.getPort() << RESET << std::endl
-		<< GREEN << "Root path:\t\t" << src_object.getPath() << RESET << std::endl
-		<< GREEN << "Index file:\t\t" << src_object.getIndex() << RESET << std::endl
-		<< GREEN << "Max connection client:\t" << src_object.getMaxClient() << RESET << std::endl
-		<< GREEN << "Max size of body:\t" << src_object.getMaxSizeBody() << " bytes." << RESET << std::endl
+		<< GREEN << "Listen adress:\n\t" << src_object.getServerIp() << RESET << std::endl
+		<< GREEN << "Listen port:" << RESET << std::endl;
+	for ( itPort = ports.begin(); itPort != ports.end(); ++itPort)
+   		out << GREEN << "\t- " << *itPort << RESET << std::endl;
+	out << GREEN << "Root path:\n\t" << src_object.getPath() << RESET << std::endl
+		<< GREEN << "Index file:\n\t" << src_object.getIndex() << RESET << std::endl
+		<< GREEN << "Max connection client:\n\t" << src_object.getMaxClient() << RESET << std::endl
+		<< GREEN << "Max size of body:\n\t" << src_object.getMaxSizeBody() << " bytes." << RESET << std::endl
 		<< GREEN << "Error pages:" << RESET << std::endl;
 	
 	for (it = mError.begin(); it != mError.end(); ++it)
@@ -181,6 +185,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 	out << GREEN << "Locations:" << RESET << std::endl;	
 	for (std::map<std::string, Location *>::const_iterator it = loc.begin(); it != loc.end(); ++it)
 		out << *it->second << RESET << std::endl;
+	out	<< GREEN << "=================== END SERVER ==================" << RESET << std::endl;
 	return (out);
 }
 

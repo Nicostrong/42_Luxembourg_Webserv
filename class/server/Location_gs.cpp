@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location_gs.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:09:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 14:05:48 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 /*
  *	get _name value
  */
-const std::string&				Location::getPath( void ) const
+const std::string&					Location::getPath( void ) const
 {
 	return (this->_path);
 }
@@ -28,7 +28,7 @@ const std::string&				Location::getPath( void ) const
 /*
  *	getMethod return the pointer of MethodHTTP for this Location
  */
-const MethodHTTP*				Location::getMethod( void ) const
+const MethodHTTP*					Location::getMethod( void ) const
 {
 	return (this->_method);
 }
@@ -36,11 +36,18 @@ const MethodHTTP*				Location::getMethod( void ) const
 /*
  *	getDirectives return the list of directives
  */
-const std::list<Directive *>&	Location::getDirectives( void ) const
+const std::list<Directive*>&		Location::getDirectives( void ) const
 {
 	return (this->_lDirectives);
 }
 
+/*
+ *	getCGIDirectives return the list of CGIDirectives
+ */
+const std::list<CGIDirective*>&		Location::getCGIDirectives( void ) const
+{
+	return (this->_lCGIDirectives);
+}
 /*
  *	Check if the location can match to a requested uri
  */

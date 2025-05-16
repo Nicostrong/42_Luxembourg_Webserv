@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 11:06:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 14:31:48 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ const char		*MethodHTTP::MethodUnknow::what() const throw()
 std::ostream	&operator<<( std::ostream &out, MethodHTTP const &src_object )
 {
 	out	<< MAGENTA << "------------- METHOD BLOCK -------------" << std::endl
-		<< "Methods Allow: [" << src_object.getAllowed() << "]" << std::endl
+		<< "Methods Allow:\n\t[" << src_object.getAllowed() << "]" << std::endl
 		<< "------------------------------------------" <<RESET;
 	return (out);
 }
