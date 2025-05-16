@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 08:49:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 09:54:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:11:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,12 @@
 # define ENCODING_HPP
 
 #include "lib.hpp"
+#include "Chunk.hpp"
 
 class Encoding
 {
     public:
-        enum States
-        {
-            CHUNK_LEN = 0,
-            CHUNK_EXT = 1,
-            CHUNK_DATA = 2,
-            CHUNK_END = 3,
-            CHUNK_ERROR = 4,
-        };
+        
         
         Encoding();
         Encoding(const Encoding& obj);
@@ -37,10 +31,9 @@ class Encoding
             size_t bytes);
         
     private:
-        static size_t convertHexa(const std::string& str);
         std::string _encodedChunk;
-        States      _state;
-        size_t      _chunkLen;
+        
+
 };
 
 #endif
