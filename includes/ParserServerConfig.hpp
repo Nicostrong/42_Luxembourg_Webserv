@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:12:30 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:39:36 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class ParserServerConfig
 		ParserServerConfig( const std::string& filename );
 		~ParserServerConfig( void );
 
-		const std::list<Token*>&	getListTokens( void ) const;
+		const Token*&		getAllTokens( void ) const;
 		
 		/*	EXCEPTION	*/
 

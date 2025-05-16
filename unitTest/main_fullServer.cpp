@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_fullServer.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 14:25:30 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:40:21 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main( void )
 	{
 		ParserServerConfig								pc("../config/webserver.conf");
 		EventMonitoring									em;
-		ServerManager									sm(pc.getListTokens(), em);
+		ServerManager									sm(pc.getAllTokens(), em);
 		const std::map<size_t, Server*>					mapServ = sm.getServers();
 		std::map<size_t, Server*>::const_iterator		itServ;
 
