@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_fullServer.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:40:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 17:22:28 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	main( void )
 		ParserServerConfig								pc("../config/webserver.conf");
 		EventMonitoring									em;
 		ServerManager									sm(pc.getAllTokens(), em);
-		const std::map<size_t, Server*>					mapServ = sm.getServers();
-		std::map<size_t, Server*>::const_iterator		itServ;
+		const std::set<Server*>							setServ = sm.getAllServers();
+		std::set<Server*>::const_iterator				itServ = setServ.begin();
 
 		assert(sm.getNbServer() == 3);
 		std::cout << "✅ [OK] Number of servers parsed correctly" << std::endl;
-		for (itServ = mapServ.begin(); itServ != mapServ.end(); ++itServ)
-			std::cout << (*itServ->second) << std::endl;
+		for ( ; itServ != setServ.end(); ++itServ)
+			std::cout << **itServ << std::endl;
 		std::cout << "✅✅✅✅✅✅✅ [OK] ALL IS ALLRIGHT ✅✅✅✅✅✅✅" << std::endl;
 	}
 	catch(const std::exception& e)

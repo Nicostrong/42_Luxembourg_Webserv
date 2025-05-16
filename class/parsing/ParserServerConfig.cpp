@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:15:26 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:49:29 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,6 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
  */
 ParserServerConfig::~ParserServerConfig( void )
 {
-	std::list<Token*>::iterator		it;
-
-	for (it = this->_serverToken.begin(); it != this->_serverToken.end(); it++)
-		delete (*it);
 	return ;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:39:36 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:48:34 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class ParserServerConfig
 		ParserServerConfig( const std::string& filename );
 		~ParserServerConfig( void );
 
-		const Token*&		getAllTokens( void ) const;
+		Token*		getAllTokens( void ) const;
 		
 		/*	EXCEPTION	*/
 

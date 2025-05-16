@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:33:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 17:14:54 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@
 /*
  *	ServerManager constructor with a list of Token in argument
  */
-ServerManager::ServerManager( const Token*& allTokens, EventMonitoring& eventMonitoring )
+ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring )
 	: _nbServer(0)
 {
 	try
 	{
 		std::list<Token*>::const_iterator		it;
 
-		splitServerToken(serverListToken);
-		for (it = this->_serverToken.begin(); it != this->_serverToken.end(); ++it)
+		splitServerToken(allTokens);
+		for (it = this->_lServerToken.begin(); it != this->_lServerToken.end(); ++it)
 		{
 			Token*									tokens;
 			Server*									server;
@@ -39,7 +39,7 @@ ServerManager::ServerManager( const Token*& allTokens, EventMonitoring& eventMon
 			ports = server->getPortList();
 			for (pit = ports.begin(); pit != ports.end(); ++pit)
 				this->_mServers[*pit].push_back(server);
-			this->_servers.insert(server);
+			this->_sServers.insert(server);
 			this->_nbServer++;
 		}
 	}
@@ -55,12 +55,16 @@ ServerManager::ServerManager( const Token*& allTokens, EventMonitoring& eventMon
  */
 ServerManager::~ServerManager( void )
 {
-	std::set<Server*>::iterator		it;
+	std::set<Server*>::iterator		itSer;
+	std::list<Token*>::iterator		itTok;
 
-	for (it = this->_servers.begin(); it != this->_servers.end(); ++it)
-		delete *it;
+	for (itSer = this->_sServers.begin(); itSer != this->_sServers.end(); ++itSer)
+		delete *itSer;
 	this->_mServers.clear();
-	this->_servers.clear();
+	this->_sServers.clear();
+
+	for (itTok = this->_lServerToken.begin(); itTok != this->_lServerToken.end(); ++itTok)
+		delete (*itTok);
 	return ;
 }
 

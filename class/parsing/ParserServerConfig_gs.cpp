@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_gs.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:02:36 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:40:02 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 16:48:40 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /*
  *	Get the tokens list of the config file
  */
-const Token*&		ParserServerConfig::getAllTokens( void ) const
+Token*		ParserServerConfig::getAllTokens( void ) const
 {
 	return (this->_allTokens);
 }

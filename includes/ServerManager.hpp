@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:27:22 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 17:16:17 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ class	ServerManager
 	private:
 
 		std::map<size_t, std::vector<Server*> >		_mServers;
-		std::set<Server*>							_servers;
-		std::list<Token*>							_serverToken;
+		std::set<Server*>							_sServers;
+		std::list<Token*>							_lServerToken;
 		int											_nbServer;
 
 		ServerManager( const ServerManager& src_obj );
@@ -40,11 +40,13 @@ class	ServerManager
 
 	public:
 
-		ServerManager( const Token*& allTokens, EventMonitoring& eventMonitoring );
+		ServerManager( Token* allTokens, EventMonitoring& eventMonitoring );
 		~ServerManager( void );
 
 		/*	GETTER	*/
 		Server*			getServer( size_t port, std::string host ) const;
+
+		const std::set<Server*>&		getAllServers( void ) const;
 
 		std::vector<Server*>		getAllServersForPort( size_t port ) const;
 

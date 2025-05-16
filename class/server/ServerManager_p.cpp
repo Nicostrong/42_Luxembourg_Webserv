@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:13:20 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:14:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 17:21:13 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void			ServerManager::splitServerToken( Token *head )
 			{
 				head = tmp->getNext();
 				tmp->setNextToNull();
-				this->_serverToken.push_back(server);
+				this->_lServerToken.push_back(server);
 			}
 		}
 		else
@@ -42,7 +42,7 @@ void			ServerManager::splitServerToken( Token *head )
 	}
 	std::list<Token*>::iterator		it;
 #ifdef DEBUG
-	for (it = this->_serverToken.begin(); it != this->_serverToken.end(); it++)
+	for (it = this->_lServerToken.begin(); it != this->_lServerToken.end(); it++)
 	{
 		std::cout << "PRINT TOKEN LIST" << std::endl;
 		(*it)->printToken();
