@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/09 10:33:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:46:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ public:
 	HttpRequest&			operator=(const HttpRequest &obj);
 	void					readReceived(int clientSocket);
 	HttpCode 				getStatusCode() const;
-	bool					isReceived() const;
 	void					setLocation(const Location* const loc);
 	void					setPathTranslated(const std::string& pathTranslated)
 		;
@@ -62,7 +61,6 @@ private:
 
 	// Reading variables
 	size_t			_charParsed;
-	bool 			_isReceived;
 	
 	// Handling variables
 	std::string		_remoteIp;

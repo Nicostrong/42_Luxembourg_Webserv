@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 16:31:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:47:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 HttpRequest::HttpRequest() {}
 
 HttpRequest::HttpRequest(const std::string& remoteIp) : HttpBase(), 
-	_charParsed(0), _isReceived(false), _remoteIp(remoteIp), _loc(NULL) {}
+	_charParsed(0), _remoteIp(remoteIp), _loc(NULL) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -30,7 +30,6 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 	{
 		HttpBase::operator=(obj);
 		this->_charParsed = obj._charParsed;
-		this->_isReceived = obj._isReceived;
 		this->_pathTranslated = obj._pathTranslated;
 		this->_remoteIp = obj._remoteIp;
 		this->_loc = obj._loc;
@@ -45,7 +44,7 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 void HttpRequest::readReceived(int clientSocket)
 {
 	std::vector<char> buffer(BUFFER_SIZE);
-	if (this->_isReceived)
+	if (this->_isComplete)
 		return ;
 	ssize_t bytes = recv(clientSocket, buffer.data(), BUFFER_SIZE, 0);
 	
@@ -53,7 +52,7 @@ void HttpRequest::readReceived(int clientSocket)
 		throw SocketReadException();
 	this->_raw.append(buffer.data(), bytes);
 	parseRaw();
-	if (this->_isReceived)
+	if (this->_isComplete)
 	{
 		std::map<std::string, std::string>::const_iterator it;
 		if (this->_statusCode != BAD_REQUEST)
@@ -64,11 +63,6 @@ void HttpRequest::readReceived(int clientSocket)
 HttpBase::HttpCode HttpRequest::getStatusCode() const
 {
 	return (this->_statusCode);
-}
-
-bool HttpRequest::isReceived() const
-{
-	return (this->_isReceived);
 }
 
 void HttpRequest::setLocation(const Location* const loc)
@@ -139,12 +133,12 @@ void HttpRequest::parseRaw()
 		{
 			this->_body = _raw.substr(pos + 2);
 			this->_statusCode = OK;
-			this->_isReceived = true;
+			this->_isComplete = true;
 			return ;
 		}
 		else
 			parseHeader(line);
-		if (this->_isReceived)
+		if (this->_isComplete)
 				return ;
 		this->_charParsed = pos + 2;
 	}
@@ -163,7 +157,7 @@ void HttpRequest::parseStartLine(std::string &line)
 	if (tokens.size() != 3 || !canBeValidMethod(tokens.at(0)) || 
 		!canBeValidPath(tokens.at(1)) || !canBeValidHttpProtocol(tokens.at(2)))
 	{
-		this->_isReceived = true;
+		this->_isComplete = true;
 		return ;
 	}
 
@@ -183,7 +177,7 @@ void HttpRequest::parseHeader(std::string &line)
 	
 	if (sep == std::string::npos || sep == 0)
 	{
-		this->_isReceived = true;
+		this->_isComplete = true;
 		return ;
 	}
 
@@ -194,14 +188,14 @@ void HttpRequest::parseHeader(std::string &line)
 
 	if (!isHeaderNameValid(name))
 	{
-		this->_isReceived = true;
+		this->_isComplete = true;
 		return ;
 	}
 	name = normalizeHeaderName(name);
 
 	if (name == "HOST" && this->_headers.find(name) != this->_headers.end())
 	{
-		this->_isReceived = true;
+		this->_isComplete = true;
 		return;
 	}
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 13:14:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/16 08:48:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	(void)type;
 	(void)em;
 	_req.readReceived(fd);
-	if (_req.isReceived())
+	if (_req.isComplete())
 	{
 		RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
 		em.unmonitor(fd);

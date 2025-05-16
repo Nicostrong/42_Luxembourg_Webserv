@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 18:00:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 09:02:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
 #define ALLOWED_HEADER_VAL "_ :;.,\\/\"'?!(){}[]@<>=-+*#$&`|~^%"
-#define CRLF "\r\n"
+
 
 #include "lib.hpp"
 
@@ -49,6 +49,8 @@ class HttpBase
 		const std::string& 	getRaw() const;
 		void 				setRaw(const std::string raw);
 		std::string			getHeaders_raw() const;
+		bool				isComplete() const;
+		void				setAsComplete();
 		void				addHeader(const std::string &name, 
 			const std::string& value);
 		const std::map<std::string, std::string>&	getHeaders() const;
@@ -72,6 +74,8 @@ class HttpBase
 		std::string _body;
 		HttpCode	_statusCode;
 		std::map<std::string, std::string> _headers;
+		bool		_transferEncoding;
+		bool 		_isComplete;
 	private:
 		static void 		formatIndividualFile(std::ostringstream& oss, 
 			const std::string& filePath, std::string fileName);

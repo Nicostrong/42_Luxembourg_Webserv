@@ -6,14 +6,15 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 18:05:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/16 08:46:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpBase.hpp"
 
 HttpBase::HttpBase() : _raw(""), _method(""), _uri(""), _httpVersion(""), 
-	_body(""), 	_statusCode(BAD_REQUEST), _headers() {}
+	_body(""), 	_statusCode(BAD_REQUEST), _headers(), _transferEncoding(false) 
+	{}
 
 HttpBase::HttpBase(const HttpBase& obj) 
 {
@@ -33,6 +34,7 @@ HttpBase& HttpBase::operator=(const HttpBase& obj)
 		this->_body = obj._body;
 		this->_statusCode = obj._statusCode;
 		this->_headers = obj._headers;
+		this->_transferEncoding = obj._transferEncoding;
 	}
 	return (*this);
 }
@@ -96,6 +98,15 @@ const std::string& HttpBase::getRaw() const
 void HttpBase::setRaw(const std::string raw)
 {
 	this->_raw = raw;
+}
+
+bool HttpBase::isComplete() const
+{
+	return (this->_isComplete);
+}
+void HttpBase::setAsComplete()
+{
+	this->_isComplete = true;
 }
 
 void HttpBase::addHeader(const std::string &name, const std::string& value)
