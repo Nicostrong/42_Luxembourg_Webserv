@@ -6,7 +6,7 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 18:36:22 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:20:00 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,7 +320,7 @@ void		CheckerTokens::checkDuplicatedKeysInScope( void )
 }
 
 /*
- *	Check if the value of path start with a /
+ *	Check if the value of path start with a '/' or '.'
  */
 void		CheckerTokens::checkpath( void )
 {
@@ -330,14 +330,20 @@ void		CheckerTokens::checkpath( void )
 	{
 		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
 			if (current->getValue()[0] != '/')
-				throw CheckerError("Path must start with a /");
-		if (current->getType() == Token::DIR_K && 
-			(current->getValue() == "root" || current->getValue() == "index"))
+				throw CheckerError("Path must start with a '/'");
+		if (current->getType() == Token::DIR_K && current->getValue() == "index")
 		{
 			current = current->getNext();
 			if (current && current->getType() == Token::DIR_V)
 				if (current->getValue()[0] != '/')
-					throw CheckerError("Path of root or index directive must start with a /");
+					throw CheckerError("Path of index directive must start with a '/'");
+		}
+		if (current->getType() == Token::DIR_K && current->getValue() == "root")
+		{
+			current = current->getNext();
+			if (current && current->getType() == Token::DIR_V)
+				if (current->getValue()[0] != '/' && current->getValue()[0] != '.')
+					throw CheckerError("Path of root directive must start with a '/' or '.'");
 		}
 		current = current->getNext();
 	}
