@@ -6,11 +6,11 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:20:00 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:47:11 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CheckerTokens.hpp"
+#include "../../includes/parser/CheckerTokens.hpp"
 
 /*******************************************************************************
  *							Private Method									   *

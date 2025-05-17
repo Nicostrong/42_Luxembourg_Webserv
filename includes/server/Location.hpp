@@ -6,17 +6,17 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 14:04:54 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:36:48 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-# include "lib.hpp"
-# include "Directive.hpp"
-# include "MethodHTTP.hpp"
-# include "CGIDirective.hpp"
+# include "../lib.hpp"
+# include "../server/Directive.hpp"
+# include "../server/MethodHTTP.hpp"
+# include "../server/CGIDirective.hpp"
 
 class	Token;
 

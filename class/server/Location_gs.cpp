@@ -6,12 +6,12 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 14:05:48 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:52:39 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Location.hpp"
-#include "../../includes/Token.hpp"
+#include "../../includes/parser/Token.hpp"
+#include "../../includes/server/Location.hpp"
 
 /*******************************************************************************
  *								GETTER										   *

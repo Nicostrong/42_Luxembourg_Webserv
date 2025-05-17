@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 08:46:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:43:13 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTP_REQUEST
 #define HTTP_REQUEST
 
-#include "lib.hpp"
-#include "HttpBase.hpp"
-#include "Location.hpp"
+#include "./lib.hpp"
+#include "./HttpBase.hpp"
+#include "./server/Location.hpp"
 
 #define BUFFER_SIZE 1024
 

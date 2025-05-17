@@ -3,24 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 22:39:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:45:12 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HANDLING_HPP
-#define REQUEST_HANDLING_HPP
+# define REQUEST_HANDLING_HPP
 
-#include "HttpRequest.hpp"
-#include "HttpResponse.hpp"
-#include "Server.hpp"
-#include "Uri.hpp"
-#include "HttpBase.hpp"
-#include "CGI.hpp"
-#include <string>
-#include <sstream>
+# include "./lib.hpp"
+# include "./Uri.hpp"
+# include "./CGI.hpp"
+# include "./HttpBase.hpp"
+# include "./HttpRequest.hpp"
+# include "./HttpResponse.hpp"
+# include "./server/Server.hpp"
 
 class RequestHandling: public HttpBase
 {

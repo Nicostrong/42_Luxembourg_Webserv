@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/16 16:36:50 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/17 11:55:28 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,19 +35,19 @@ RM				=	rm -f
 #	Test class Server full													   #
 ################################################################################
 
-SERVER_SRC		=	../class/parsing/CheckerTokens_e.cpp \
-					../class/parsing/CheckerTokens_m.cpp \
-					../class/parsing/CheckerTokens_p.cpp \
-					../class/parsing/CheckerTokens.cpp \
-					../class/parsing/ParserServerConfig_e.cpp \
-					../class/parsing/ParserServerConfig_gs.cpp \
-					../class/parsing/ParserServerConfig_p.cpp \
-					../class/parsing/ParserServerConfig.cpp \
-					../class/parsing/Token_e.cpp \
-					../class/parsing/Token_gs.cpp \
-					../class/parsing/Token_m.cpp \
-					../class/parsing/Token_p.cpp \
-					../class/parsing/Token.cpp \
+SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
+					../class/parser/CheckerTokens_m.cpp \
+					../class/parser/CheckerTokens_p.cpp \
+					../class/parser/CheckerTokens.cpp \
+					../class/parser/ParserServerConfig_e.cpp \
+					../class/parser/ParserServerConfig_gs.cpp \
+					../class/parser/ParserServerConfig_p.cpp \
+					../class/parser/ParserServerConfig.cpp \
+					../class/parser/Token_e.cpp \
+					../class/parser/Token_gs.cpp \
+					../class/parser/Token_m.cpp \
+					../class/parser/Token_p.cpp \
+					../class/parser/Token.cpp \
 					../class/server/CGIDirective_e.cpp \
 					../class/server/CGIDirective_gs.cpp \
 					../class/server/CGIDirective_m.cpp \
@@ -94,19 +94,19 @@ SERVER_NAME		=	test_classServer
 #	Test networking															   #
 ################################################################################
 
-NET_SRC			=	../class/parsing/CheckerTokens_e.cpp \
-					../class/parsing/CheckerTokens_m.cpp \
-					../class/parsing/CheckerTokens_p.cpp \
-					../class/parsing/CheckerTokens.cpp \
-					../class/parsing/ParserServerConfig_e.cpp \
-					../class/parsing/ParserServerConfig_gs.cpp \
-					../class/parsing/ParserServerConfig_p.cpp \
-					../class/parsing/ParserServerConfig.cpp \
-					../class/parsing/Token_e.cpp \
-					../class/parsing/Token_gs.cpp \
-					../class/parsing/Token_m.cpp \
-					../class/parsing/Token_p.cpp \
-					../class/parsing/Token.cpp \
+NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
+					../class/parser/CheckerTokens_m.cpp \
+					../class/parser/CheckerTokens_p.cpp \
+					../class/parser/CheckerTokens.cpp \
+					../class/parser/ParserServerConfig_e.cpp \
+					../class/parser/ParserServerConfig_gs.cpp \
+					../class/parser/ParserServerConfig_p.cpp \
+					../class/parser/ParserServerConfig.cpp \
+					../class/parser/Token_e.cpp \
+					../class/parser/Token_gs.cpp \
+					../class/parser/Token_m.cpp \
+					../class/parser/Token_p.cpp \
+					../class/parser/Token.cpp \
 					../class/server/CGIDirective_e.cpp \
 					../class/server/CGIDirective_gs.cpp \
 					../class/server/CGIDirective_m.cpp \
@@ -154,19 +154,19 @@ NET_NAME		=	test_networking
 #	Test parseur															   #
 ################################################################################
 
-PAR_SRC			=	../class/parsing/CheckerTokens_e.cpp \
-					../class/parsing/CheckerTokens_m.cpp \
-					../class/parsing/CheckerTokens_p.cpp \
-					../class/parsing/CheckerTokens.cpp \
-					../class/parsing/ParserServerConfig_e.cpp \
-					../class/parsing/ParserServerConfig_gs.cpp \
-					../class/parsing/ParserServerConfig_p.cpp \
-					../class/parsing/ParserServerConfig.cpp \
-					../class/parsing/Token_e.cpp \
-					../class/parsing/Token_gs.cpp \
-					../class/parsing/Token_m.cpp \
-					../class/parsing/Token_p.cpp \
-					../class/parsing/Token.cpp \
+PAR_SRC			=	../class/parser/CheckerTokens_e.cpp \
+					../class/parser/CheckerTokens_m.cpp \
+					../class/parser/CheckerTokens_p.cpp \
+					../class/parser/CheckerTokens.cpp \
+					../class/parser/ParserServerConfig_e.cpp \
+					../class/parser/ParserServerConfig_gs.cpp \
+					../class/parser/ParserServerConfig_p.cpp \
+					../class/parser/ParserServerConfig.cpp \
+					../class/parser/Token_e.cpp \
+					../class/parser/Token_gs.cpp \
+					../class/parser/Token_m.cpp \
+					../class/parser/Token_p.cpp \
+					../class/parser/Token.cpp \
 					../class/server/MethodHTTP_e.cpp \
 					../class/server/MethodHTTP_gs.cpp \
 					../class/server/MethodHTTP_m.cpp \

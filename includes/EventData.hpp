@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   EventData.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/01 10:00:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:39:55 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENT_DATA_HPP
 # define EVENT_DATA_HPP
 
-#include "IEventHandler.hpp"
-#include "EventMonitoring.hpp"
+#include "./IEventHandler.hpp"
+#include "./EventMonitoring.hpp"
 
 class EventData
 {

@@ -3,22 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:23 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/29 15:33:55 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/05/17 11:42:32 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HANDLECONFIG_HPP
 #define HANDLECONFIG_HPP
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <map>
-#include <vector>
-#include <string>
+#include "./lib.hpp"
 
 class HandleConfig
 {

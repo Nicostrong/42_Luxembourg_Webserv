@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/14 11:12:05 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:36:56 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef METHODHTTP_HPP
 # define METHODHTTP_HPP
 
-# include "lib.hpp"
+# include "../lib.hpp"
 
 class	Token;
 

@@ -6,11 +6,11 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:37:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 13:41:36 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:51:47 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Server.hpp"
+#include "../../includes/server/Server.hpp"
 
 /*******************************************************************************
  *							SERVER EVENTS									   *

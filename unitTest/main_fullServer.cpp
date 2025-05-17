@@ -6,14 +6,14 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 17:22:28 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:56:51 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cassert>
 #include "../includes/HandleConfig.hpp"
-#include "../includes/ParserServerConfig.hpp"
-#include "../includes/ServerManager.hpp"
+#include "../includes/server/ServerManager.hpp"
+#include "../includes/parser/ParserServerConfig.hpp"
 
 int	main( void )
 {

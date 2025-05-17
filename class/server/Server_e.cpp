@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server_e.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:29:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:54:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:51:40 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Server.hpp"
+#include "../../includes/server/Server.hpp"
 
 /*******************************************************************************
  *								EXCEPTION 									   *

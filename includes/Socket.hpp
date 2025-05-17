@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/08 22:50:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:46:07 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SOCKET_HPP
 # define SOCKET_HPP
 
-#include "HttpRequest.hpp"
-#include "HttpResponse.hpp"
+# include "./HttpRequest.hpp"
+# include "./HttpResponse.hpp"
 
-#include "IEventHandler.hpp"
-#include "EventMonitoring.hpp"
+# include "./IEventHandler.hpp"
+# include "./EventMonitoring.hpp"
 
 class Server;
 

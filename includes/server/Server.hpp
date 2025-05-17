@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:23:13 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:37:49 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include "lib.hpp"
-# include "Token.hpp"
-# include "Socket.hpp"
-# include "Location.hpp"
-# include "Directive.hpp"
-# include "Ressource.hpp"
-# include "IEventHandler.hpp"
-# include "EventMonitoring.hpp"
+# include "../lib.hpp"
+# include "../Socket.hpp"
+# include "../Ressource.hpp"
+# include "../parser/Token.hpp"
+# include "../IEventHandler.hpp"
+# include "../EventMonitoring.hpp"
+# include "../server/Location.hpp"
+# include "../server/Directive.hpp"
 
 /*
  *	The Server object represents the configuration of a server that listens on 

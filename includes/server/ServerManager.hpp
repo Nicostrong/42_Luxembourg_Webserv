@@ -6,14 +6,14 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 17:16:17 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:38:05 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVERMANAGER_HPP
 # define SERVERMANAGER_HPP
 
-# include "Server.hpp"
+# include "../server/Server.hpp"
 
 class	Token;
 

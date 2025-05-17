@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Location_m.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:52:21 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:53:05 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:50:35 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Location.hpp"
-#include "../../includes/Token.hpp"
+#include "../../includes/parser/Token.hpp"
+#include "../../includes/server/Location.hpp"
 
 /*******************************************************************************
  *							PRIVATE METHOD									   *

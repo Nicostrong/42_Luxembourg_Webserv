@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:15:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:42:16 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <ctime>
 # include <poll.h>
+# include <string>
 # include <netdb.h>
 # include <fstream>
 # include <sstream>
@@ -40,8 +41,8 @@
 # include <map>
 # include <set>
 # include <list>
-# include <vector>
 # include <queue>
+# include <vector>
 
 # define SERVER_SOFT "WebServ/1.0"
 # define CGI_REVISION "CGI/1.1"

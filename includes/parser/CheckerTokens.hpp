@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/15 15:11:17 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:36:12 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHECKER
 # define CHECKER
 
-# include "lib.hpp"
-# include "Token.hpp"
-# include "MethodHTTP.hpp"
+# include "../lib.hpp"
+# include "../parser/Token.hpp"
+# include "../server/MethodHTTP.hpp"
 
 class	Token;
 

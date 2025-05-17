@@ -6,11 +6,11 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:59 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 17:19:34 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:52:21 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/ServerManager.hpp"
+#include "../../includes/server/ServerManager.hpp"
 
 /*******************************************************************************
  *								METHOD										   *

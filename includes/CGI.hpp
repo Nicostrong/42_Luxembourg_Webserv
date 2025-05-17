@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 14:17:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:44:48 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGI_HPP
-#define CGI_HPP
+# define CGI_HPP
 
-#include "lib.hpp"
-#include "HttpRequest.hpp"
-#include "EventMonitoring.hpp"
-#include "Server.hpp"
-#include "IEventHandler.hpp"
+# include "./lib.hpp"
+# include "./HttpRequest.hpp"
+# include "./IEventHandler.hpp"
+# include "./server/Server.hpp"
+# include "./EventMonitoring.hpp"
 
 class CGI : public IEventHandler
 {

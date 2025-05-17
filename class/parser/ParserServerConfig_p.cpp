@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig_p.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 06:55:49 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:13:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:47:54 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/ParserServerConfig.hpp"
-#include "../../includes/Token.hpp"
+#include "../../includes/parser/Token.hpp"
+#include "../../includes/parser/ParserServerConfig.hpp"
 
 /*******************************************************************************
  *							PRIVATE METHOD									   *

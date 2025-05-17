@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Directive_m.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:32 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:56:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:49:54 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Directive.hpp"
+#include "../../includes/server/Directive.hpp"
 
 /*******************************************************************************
  *								OUTSTREAM									   *

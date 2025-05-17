@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 08:48:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:53:47 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Socket.hpp"
-#include "../includes/Server.hpp"
+#include "../includes/server/Server.hpp"
 #include "../includes/RequestHandling.hpp"
 
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 

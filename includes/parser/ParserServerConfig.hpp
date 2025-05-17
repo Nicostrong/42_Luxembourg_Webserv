@@ -6,17 +6,17 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:48:34 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:36:03 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSERSERVERCONFIG_HPP
 # define PARSERSERVERCONFIG_HPP
 
-# include "lib.hpp"
-# include "Token.hpp"
-# include "Ressource.hpp"
-# include "CheckerTokens.hpp"
+# include "../lib.hpp"
+# include "../Ressource.hpp"
+# include "../parser/Token.hpp"
+# include "../parser/CheckerTokens.hpp"
 
 /*
  *	Parser of configfile

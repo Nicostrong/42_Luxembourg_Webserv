@@ -6,11 +6,11 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:47:16 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:30:52 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:48:29 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Token.hpp"
+#include "../../includes/parser/Token.hpp"
 
 /*******************************************************************************
  *								GETTER										   *

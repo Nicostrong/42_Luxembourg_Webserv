@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_m.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:03:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:03:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:47:01 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CheckerTokens.hpp"
+#include "../../includes/parser/CheckerTokens.hpp"
 
 /*******************************************************************************
  *								Method										   *

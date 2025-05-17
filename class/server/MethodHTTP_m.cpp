@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP_m.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:50:42 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:51:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:51:08 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/MethodHTTP.hpp"
+#include "../../includes/server/MethodHTTP.hpp"
 
 /*******************************************************************************
  *							PRIVATE METHOD									   *

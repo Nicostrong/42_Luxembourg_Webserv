@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Token_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:01:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 16:01:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:48:36 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Token.hpp"
+#include "../../includes/parser/Token.hpp"
 
 /*******************************************************************************
  *								METHOD										   *

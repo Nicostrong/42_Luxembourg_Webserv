@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:51:43 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:51:35 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/MethodHTTP.hpp"
-#include "../../includes/Token.hpp"
+#include "../../includes/parser/Token.hpp"
+#include "../../includes/server/MethodHTTP.hpp"
 
 /*******************************************************************************
  *							INITIALISATION CLASS							   *

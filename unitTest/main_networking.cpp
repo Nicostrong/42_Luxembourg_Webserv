@@ -6,14 +6,14 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 17:24:32 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:56:42 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ServerManager.hpp"
-#include "../includes/Server.hpp"
+#include "../includes/server/Server.hpp"
 #include "../includes/EventMonitoring.hpp"
-#include "../includes/ParserServerConfig.hpp"
+#include "../includes/server/ServerManager.hpp"
+#include "../includes/parser/ParserServerConfig.hpp"
 
 int main()
 {

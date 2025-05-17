@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:38:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:34:17 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_HPP
 # define TOKEN_HPP
 
-# include "lib.hpp"
+# include "../lib.hpp"
 
 /*
  *	Token class is to tokenize the server configuration file.

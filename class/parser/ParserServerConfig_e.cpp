@@ -6,11 +6,11 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:28:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 13:14:29 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:47:29 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/ParserServerConfig.hpp"
+#include "../../includes/parser/ParserServerConfig.hpp"
 
 /*******************************************************************************
  *								EXCEPTION 									   *

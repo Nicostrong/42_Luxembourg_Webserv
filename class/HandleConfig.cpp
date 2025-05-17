@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/30 13:38:47 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/05/17 11:53:06 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HandleConfig.hpp"
-#include "../includes/lib.hpp"
 
 HandleConfig::HandleConfig()
 {

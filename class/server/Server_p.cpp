@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server_p.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:21:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:52:02 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/Server.hpp"
+#include "../../includes/server/Server.hpp"
 
 /*******************************************************************************
  *							PRIVATE METHOD									   *

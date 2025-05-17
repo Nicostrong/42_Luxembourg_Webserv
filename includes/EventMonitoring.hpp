@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/13 17:46:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/17 11:40:11 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENTMONITORING_HPP
 # define EVENTMONITORING_HPP
 
-#include "EventData.hpp"
-#include "lib.hpp"
-#include "IEventHandler.hpp"
+#include "./lib.hpp"
+#include "./EventData.hpp"
+#include "./IEventHandler.hpp"
 
 #define MAX_CONNECTIONS 20
 #define MAX_EVENTS 20

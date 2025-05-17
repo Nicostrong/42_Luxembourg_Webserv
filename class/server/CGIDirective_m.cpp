@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   CGIDirective_m.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:58:32 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/16 15:58:53 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:49:24 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/CGIDirective.hpp"
+#include "../../includes/server/CGIDirective.hpp"
 
 /*******************************************************************************
  *								OUTSTREAM									   *

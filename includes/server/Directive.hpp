@@ -6,15 +6,15 @@
 /*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/15 14:07:45 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/17 11:34:46 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DIRECTIVE_HPP
 # define DIRECTIVE_HPP
 
-# include "lib.hpp"
-# include "Token.hpp"
+# include "../lib.hpp"
+# include "../parser/Token.hpp"
 
 /*
  *  The Directive object represents a directive of the server [key]:value.
