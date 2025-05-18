@@ -6,16 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:55:18 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:02:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 20:18:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/core/chunking/Chunk.hpp"
 
-Chunk::Chunk() : _state(CHUNK_LEN), _len(0) {}
+Chunk::Chunk() : _state(CHUNK_LEN), _len(0), _dataSent(0) {}
 
 Chunk::Chunk(const std::vector<char>& buffer, size_t bytes) : 
-    _state(CHUNK_REICEIVED)
+    _state(CHUNK_REICEIVED), _dataSent(0)
 {
     this->_len = bytes;
     this->_data.append(buffer.data(), bytes);
@@ -36,6 +36,8 @@ Chunk &Chunk::operator=(const Chunk& obj)
         this->_state = obj._state;
         this->_len = obj._len;
         this->_data = obj._data;
+        this->_dataSent = obj._dataSent;
+        this->_encoded = obj._encoded;
     }
     return (*this);
 }
@@ -46,37 +48,33 @@ void Chunk::decodeChunk(std::string& data)
     
     switch (this->_state)
     {
+        // fallthrough
         case CHUNK_LEN:
             pos = data.find(CRLF);
             pos = std::min(data.find(";"), pos);
             if (!pos)
                 throw std::runtime_error("Bad Request");
-            if (pos != std::string::npos)
+            if (pos == std::string::npos)
+                return ; 
+            this->_len = convertHexa(
+                data.substr(0, pos - 1));
+            if (data.at(pos) == ';')
             {
-                this->_len = convertHexa(
-                    data.substr(0, pos - 1));
-                if (data.at(pos) == ';')
-                {
-                    this->_state = CHUNK_EXT;
-                    data = data.substr(pos + 1);
-                }
-                else
-                {
-                    this->_state = CHUNK_DATA;
-                    data = data.substr(pos + 2);
-                }
-                decodeChunk(data);
+                this->_state = CHUNK_EXT;
+                data = data.substr(pos + 1);
             }
-            break;
-        case CHUNK_EXT:
-            pos = data.find(CRLF);
-            if (pos != std::string::npos)
+            else
             {
                 this->_state = CHUNK_DATA;
-                data= data.substr(pos + 2);
-                decodeChunk(data);
+                data = data.substr(pos + 2);
             }
-            break;
+        // fallthrough
+        case CHUNK_EXT:
+            pos = data.find(CRLF);
+            if (pos == std::string::npos)
+                return ;
+            this->_state = CHUNK_DATA;
+            data= data.substr(pos + 2);
         case CHUNK_DATA:
             if (data.size() >= this->_len + 2)
             {
@@ -105,6 +103,17 @@ void Chunk::encodeChunk()
         << this->_data << CRLF;
 
     this->_encoded = oss.str();
+}
+
+void Chunk::sendChunk(int socket)
+{
+    std::string data = this->_encoded.substr(this->_dataSent);
+    int dataSent = send(socket, data.c_str(), data.size(), 0);
+
+    if (dataSent == -1)
+        throw std::runtime_error("Failed to send response");
+    
+    this->_dataSent += dataSent;
 }
 
 //Helpers

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:18:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 20:44:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Socket : public IEventHandler
 		Socket& 	operator=(const Socket& obj);
 		bool 		operator==(const Socket& obj);
 		int			getSocket() const;
+		void		sendData(const std::string& data);
 		void		onReadEvent(int fd, int type, EventMonitoring& em);
 		void		onWriteEvent(int fd, int type, EventMonitoring& em);
 		void		onCloseEvent(int fd, int type, EventMonitoring& em);
@@ -48,7 +49,8 @@ class Socket : public IEventHandler
 		EventMonitoring&	_em;
 		Server&				_ctx;
 		std::string			_remoteIp;
-	
+		std::string			_sendBuffer;
+		bool				_reset;
 };
 
 #endif

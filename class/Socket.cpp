@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:17:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 22:58:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ int Socket::getSocket() const
 	return (this->_fd);
 }
 
+void Socket::sendData(const std::string& data)
+{
+	
+}
+
 void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 {
 	(void)type;
@@ -77,20 +82,32 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 
 void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 {
-	(void)type;
-	(void)fd;
-	(void)em;
-	this->_resp.encodeResponse();
-	if (this->_resp.isEncoded())
+	try
 	{
-		send(fd, this->_resp.getRaw().c_str(), this->_resp.getRaw().size(), 0);
-		this->_req = HttpRequest(this->_remoteIp);
-		this->_resp = HttpResponse();
-		//this->_ctx.onSocketClosedEvent(*this);
-		em.unmonitor(fd);
-		em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
-			EventData::CLIENT, *this);
+		if (!this->_sendBuffer.empty())
+		{
+			int dataSent = send(fd, this->_sendBuffer.c_str(), 
+				this->_sendBuffer.size(), 0);
+			if (dataSent == -1)
+				throw std::runtime_error("send failed");
+			this->_sendBuffer = this->_sendBuffer.substr(dataSent);
+			
+		}
+		if (this->_reset)
+		{
+			this->_req = HttpRequest(this->_remoteIp);
+			this->_resp = HttpResponse();
+			em.unmonitor(fd);
+				em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
+					EventData::CLIENT, *this);
+			this->_reset = false;
+		}
 	}
+	catch(const std::exception& e)
+	{
+		this->_ctx.onSocketClosedEvent(*this);
+	}
+	(void)type;
 }
 
 void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)

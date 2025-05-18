@@ -3,62 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 17:20:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 22:58:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpResponse.hpp"
 
-HttpResponse::HttpResponse() : HttpBase(), _isEncoded(false), _isComplete(false) 
+HttpResponse::HttpResponse() : HttpParser(), _isHeadersEnc(false), _dataSent(0)
 	{}
 
-HttpResponse::HttpResponse(const HttpResponse &obj) : HttpBase(obj), 
-	_isEncoded(false), _isComplete(false) {}
+HttpResponse::HttpResponse(const HttpResponse& obj)
+{
+	*this = obj;
+}
 
 HttpResponse::~HttpResponse() {}
 
-HttpResponse &HttpResponse::operator=(const HttpResponse &obj)
+HttpResponse& HttpResponse::operator=(const HttpResponse& obj)
 {
 	if (this != &obj)
 	{
-		HttpBase::operator=(obj);
-		this->_isEncoded = obj._isEncoded;
-		this->_isComplete = obj._isComplete;
+		HttpParser::operator=(obj);
+		this->_rawHeaders = obj._rawHeaders;
+		this->_isHeadersEnc = obj._isHeadersEnc;
+		this->_dataSent = obj._dataSent;
+		this->_enc = obj._enc;
 	}
 	return (*this);
 }
 
-void HttpResponse::setAsComplete()
+
+bool HttpResponse::isHeadersEnc() const
 {
-	this->_isComplete = true;	
+	return (this->_isHeadersEnc);
 }
 
-bool HttpResponse::isComplete()
+const std::string& HttpResponse::getRawHeaders() const
 {
-	return (this->_isComplete);
+	return (this->_rawHeaders);
 }
 
-bool HttpResponse::isEncoded()
+void HttpResponse::encodeHeaders()
 {
-	return (this->_isEncoded);
-}
-
-void HttpResponse::encodeResponse()
-{
-	if (!this->_isComplete)
+	if (!this->_isHeadersEnc)
 		return ;
 	std::stringstream ss;
+	
 	ss << "HTTP/1.1 " << this->_statusCode << " " 
 	   << getStrStatusCode(this->_statusCode) << CRLF
 	   << getHeaders_raw()
 	   << "Content-Type: text/html" << CRLF
 	   << "Content-Length: "<< this->_body.size() << CRLF
-	   << CRLF
-	   << this->_body;
+	   << CRLF;
+	this->_rawHeaders = ss.str();
+	this->_isHeadersEnc = true;
+}
+
+void HttpResponse::addChunk(std::vector<char>& buf, size_t n)
+{
+	this->_enc.encodeChunk(buf, n);
+}
+
+void HttpResponse::sendHeaders()
+{
 	
-	this->_raw = ss.str();
-	this->_isEncoded = true;
 }
