@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_gs.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:45 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:16 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/18 11:20:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  /*
   *	get the server matchin with the port and host
   */
-Server*		ServerManager::getServer( size_t port, std::string host ) const
+const Server*		ServerManager::getServer( size_t port, std::string host ) const
 {
 	std::map<size_t, std::vector<Server*> >::const_iterator		it;
 	
@@ -66,4 +66,76 @@ std::vector<Server*>		ServerManager::getAllServersForPort( size_t port ) const
 int			ServerManager::getNbServer( void ) const
 {
 	return (this->_nbServer);
+}
+
+/*	ADD SOME GETTER A CHECKER	*/
+
+const Location*		ServerManager::getLocationForUri( const Server* server, const std::string& uri ) const
+{
+	const std::map<std::string, Location*>&					locations = server->getAllLocation();
+	std::map<std::string, Location*>::const_iterator		it = locations.begin();
+	const Location*											matched = NULL;
+
+	for (; it != locations.end(); ++it)
+		if (it->second->isMatching(uri))
+			if (!matched || it->first.length() > matched->getPath().length())
+				matched = it->second;
+	return (matched);
+}
+
+size_t		ServerManager::getMaxBodySize( const Server* server, const Location* location ) const
+{
+	const Directive*		directive = location->findDirective("client_max_body_size");
+	
+	if (directive && !directive->getValue().empty())
+		return (static_cast<size_t>(std::atoi(directive->getValue().c_str())));
+	return (server->getMaxSizeBody());
+}
+
+std::string		ServerManager::getRoot( const Location* location ) const
+{
+	const Directive*		directive = location->findDirective("root");
+
+	if (directive)
+		return (directive->getValue());
+	return ("");
+}
+
+std::string		ServerManager::getIndexFile( const Location* location ) const
+{
+	const Directive*		directive = location->findDirective("index");
+
+	if (directive)
+		return (directive->getValue());
+	return ("index.html"); // valeur par défaut a lire dans server directive index
+}
+
+bool		ServerManager::isMethodAllowed( const Location* location, const std::string& method ) const
+{
+	const MethodHTTP*		methods = location->getMethod();
+
+	if (!methods)
+		return (false);
+	return (methods->isAllowed(method));
+}
+
+bool		ServerManager::doesPathExist( const std::string& path ) const
+{
+	struct stat		st;
+
+	return (stat(path.c_str(), &st) == 0);
+}
+
+bool		ServerManager::isBodyTooLarge( size_t bodySize, size_t maxSize ) const
+{
+	return (bodySize > maxSize);
+}
+
+bool		ServerManager::isAutoIndexEnabled( const Location* location ) const
+{
+	const Directive*		directive = location->findDirective("autoindex");
+
+	if (directive && directive->getValue() == "on")
+		return (true);
+	return (false);
 }
