@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 22:46:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 10:58:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void RequestHandling::getResponse(Server& server,
 
 	try
 	{
-		if (req.getStatusCode() == BAD_REQUEST)
+		if (req.getState() == HttpParser::HTTP_INVALID)
 		{
 			getErrorResponse(BAD_REQUEST, server, req, resp);
 			return ;

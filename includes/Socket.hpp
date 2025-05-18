@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:46:07 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/18 11:18:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ class Server;
 class Socket : public IEventHandler
 {
 	public:
-	
+		class SocketReadException : public std::exception
+		{
+			public:
+				const char* what() const throw();
+		};
 		Socket(int fd, EventMonitoring&	em, Server& ctx, 
 			const sockaddr_in& sockAddr);
 		Socket(const Socket& obj);

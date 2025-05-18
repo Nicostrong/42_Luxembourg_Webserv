@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:53:47 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/18 11:17:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,29 @@ int Socket::getSocket() const
 void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 {
 	(void)type;
-	(void)em;
-	_req.readReceived(fd);
-	if (_req.isComplete())
+	try
 	{
-		RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
-		em.unmonitor(fd);
-		em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
-			EventData::CLIENT, *this);
+		std::vector<char> buffer(BUFFER_SIZE);
+		ssize_t bytes = recv(fd, buffer.data(), BUFFER_SIZE, 0);
 		
+		if (bytes == -1)
+			throw SocketReadException();
+		this->_req.parse(buffer, bytes);
+		if (this->_req.getState() == HttpParser::HTTP_INVALID || 
+			this->_req.getState() == HttpParser::HTTP_RECEIVED)
+		{
+			RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
+			em.unmonitor(fd);
+			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
+				EventData::CLIENT, *this);
+		}
 	}
+	catch(const std::exception& e)
+	{
+		this->_ctx.onSocketClosedEvent(*this);
+	}
+	
+	
 }
 
 void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
@@ -100,4 +113,11 @@ std::string Socket::getReadableIp(const struct sockaddr_in& addr)
     
     ss << a << "." << b << "." << c << "." << d;
     return (ss.str());
+}
+
+// Custom exceptions
+
+const char* Socket::SocketReadException::what() const throw()
+{
+	return ("Read Exception");
 }

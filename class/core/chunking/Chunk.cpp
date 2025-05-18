@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Chunk.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:55:18 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 15:33:35 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 11:02:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/core/chunking/Chunk.hpp"
+#include "../../../includes/core/chunking/Chunk.hpp"
 
 Chunk::Chunk() : _state(CHUNK_LEN), _len(0) {}
 
@@ -86,6 +86,8 @@ void Chunk::decodeChunk(std::string& data)
                 this->_data = data.substr(0, this->_len);
                 data = data.substr(this->_len + 2);
             }
+            break;
+        default:
             break;
     }
 }

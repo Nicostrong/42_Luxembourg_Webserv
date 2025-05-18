@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Chunk.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:56:59 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 15:33:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 11:00:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHUNK_HPP
 #define CHUNK_HPP
 
-#include "lib.hpp"
+#include "../../lib.hpp"
 
 class Chunk
 {

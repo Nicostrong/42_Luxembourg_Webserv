@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Encoding.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 08:49:03 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 15:41:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 11:01:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/core/chunking/Encoding.hpp"
+#include "../../../includes/core/chunking/Encoding.hpp"
 
 Encoding::Encoding() 
 {
@@ -34,7 +34,7 @@ Encoding& Encoding::operator=(const Encoding& obj)
     return (*this);    
 }
 
-std::string Encoding::decodeChunked(const std::vector<char>& buffer, size_t bytes)
+void Encoding::decodeChunked(const std::vector<char>& buffer, size_t bytes)
 {
     this->_encodedChunk.append(buffer.data(), bytes);
 

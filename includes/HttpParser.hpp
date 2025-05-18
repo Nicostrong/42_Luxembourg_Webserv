@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:42:52 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/18 11:17:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,32 @@ class HttpParser : public HttpBase
 {
 	
 	public:
-		class SocketReadException : public std::exception
+		enum State
 		{
-			public:
-				const char *what() const throw();
+			HTTP_STARTLINE = 0,
+			HTTP_HEADERS = 1,
+			HTTP_BODY = 2,
+			HTTP_RECEIVED = 3,
+			HTTP_SENT = 4,
+			HTTP_INVALID = 5,
 		};
+		
 		HttpParser(const HttpParser& obj);
-		virtual ~HttpParser();
-		HttpParser& operator=(const HttpParser& obj);
+		virtual					~HttpParser();
+		HttpParser&				operator=(const HttpParser& obj);
+		void 					parse(std::vector<char>& buff, size_t n);
+		
+		State					getState() const;
 	protected:
 		HttpParser();
-		void 					parse();
-		void					parseStartLine(std::string &line);
-		void 					parseHeader(std::string &line);
+		
+		void					parseStartLine(const std::string& line);
+		void 					parseHeader(const std::string& line);
+		void					parseHeaders(const std::string& headers);
 	private:
+		std::string				_buffer;
+		State 					_state;
 		Encoding				_enc;
-		size_t					_pos;
 		std::string				_queryParams;
 		
 };

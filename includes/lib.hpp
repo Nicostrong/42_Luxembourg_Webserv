@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 10:21:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:42:16 by nicostrong       ###   Luxembourg.lu     */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/05/18 11:18:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef LIB_HPP
 # define LIB_HPP
@@ -48,6 +49,7 @@
 # define CGI_REVISION "CGI/1.1"
 # define SERVER_IP "127.0.0.1"
 # define CRLF "\r\n"
+# define BUFFER_SIZE 1024
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"
