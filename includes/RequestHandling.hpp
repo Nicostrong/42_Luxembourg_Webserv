@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:45:12 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 13:47:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,23 @@ class RequestHandling: public HttpBase
 		~RequestHandling();
 		RequestHandling& operator=(const RequestHandling& obj);
 		static void	getResponse(Server& server, HttpRequest& req, 
-			HttpResponse& resp);
+			HttpResponse& resp, Socket& sock);
 		std::string	buildHttpResponse(const HttpRequest& req, const HttpResponse& res);
 		std::string getReasonPhrase(HttpCode code);
 	private:
 		RequestHandling();
 		static void getErrorResponse(int statusCode, Server& server, const HttpRequest& req, 
-			HttpResponse& resp);
+			HttpResponse& resp, Socket& sock);
 		static void handleCGI(const std::list<Directive*>& cgiDirectives, 
 			Server& server, const HttpRequest& req, HttpResponse& resp);
 		static void handleRedirect(const Directive* redirectDirective, 
-			HttpResponse& resp);
+			HttpResponse& resp, Socket& sock);
 		static void handleDirctoryListing(const HttpRequest& req, 
 			HttpResponse& resp);
 		static void handleFileServing(Server& server, const HttpRequest& req, 
-			HttpResponse& resp);
+			HttpResponse& resp, Socket& sock);
 		static bool isFileReadable(Server& server, const HttpRequest& req, 
-			HttpResponse& resp, const std::string& path);
+			HttpResponse& resp, const std::string& path, Socket& sock);
 		bool _checkMethod(Server server);
 		bool _checkUri(Server server);
 		bool _checkHTTP();

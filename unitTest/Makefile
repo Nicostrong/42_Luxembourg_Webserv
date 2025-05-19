@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/18 11:18:36 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/19 13:49:09 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/core/chunking/Encoding.cpp \
 					../class/core/chunking/Chunk.cpp \
 					../class/HttpParser.cpp \
+					../class/ResponseBuffer.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -150,6 +151,8 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/core/chunking/Encoding.cpp \
 					../class/core/chunking/Chunk.cpp \
 					../class/HttpParser.cpp \
+					../class/ResponseBuffer.cpp \
+					../class/File.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)

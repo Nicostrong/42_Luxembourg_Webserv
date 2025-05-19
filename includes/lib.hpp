@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/18 20:47:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 13:01:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@
 # define SERVER_IP "127.0.0.1"
 # define CRLF "\r\n"
 # define BUFFER_SIZE 1024
-# define BUFFER_DATA 262,144
+# define SEND_BUFFER_SIZE 262144
+# define RESPONSE_BUFFER_SIZE 32768
+# define READ_BUFFER_SIZE 4096
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"

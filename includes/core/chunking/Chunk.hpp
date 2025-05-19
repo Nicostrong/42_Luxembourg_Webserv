@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:56:59 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 20:05:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/18 23:03:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ class Chunk
             CHUNK_EXT = 1,
             CHUNK_DATA = 2,
             CHUNK_REICEIVED = 3,
-            CHUNK_SENT = 4,
         };
         Chunk();
         Chunk(const std::vector<char>& buffer, size_t bytes);
@@ -33,7 +32,6 @@ class Chunk
         Chunk&	operator=(const Chunk& obj);
 		void	decodeChunk(std::string& data);
         void    encodeChunk();
-        void    sendChunk(int socket);
         State   getState() const;
     private:
 		static size_t convertHexa(const std::string& str);

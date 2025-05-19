@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 22:58:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 14:50:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,30 @@
 #include "../includes/RequestHandling.hpp"
 
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
-	const sockaddr_in& sockAddr) : _fd(fd), _resp(), _em(em), _ctx(ctx) 
+	const sockaddr_in& sockAddr) : _fd(fd),
+	_resp(), _em(em), _ctx(ctx), _respBuffer(*this)
 	{
+		this->_file = NULL;
 		this->_remoteIp = getReadableIp(sockAddr);
 		this->_req 		= HttpRequest(this->_remoteIp);
 		LOG_DEB(this->_remoteIp + " opened connection");
 	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp) {}
+	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp), 
+	_txBuffer(obj._txBuffer), 
+	_respBuffer(*this)
+	{
+		this->_file = NULL;
+		//if (obj._file)
+			//this->_file = new File(*obj._file);
+	}
 
-Socket::~Socket() {}
+Socket::~Socket() 
+{
+	//if (this->_file)
+		//delete this->_file;
+}
 
 Socket& Socket::operator=(const Socket& obj)
 {
@@ -33,6 +46,10 @@ Socket& Socket::operator=(const Socket& obj)
 	{
 		this->_req = obj._req;
 		this->_resp = obj._resp;
+		this->_txBuffer = obj._txBuffer;
+		//this->_respBuffer = ResponseBuffer(obj._respBuffer, *this);
+		//if (obj._file)
+			//this->_file = new File(*obj._file);
 	}
 	return (*this);
 }
@@ -47,9 +64,27 @@ int Socket::getSocket() const
 	return (this->_fd);
 }
 
-void Socket::sendData(const std::string& data)
+ResponseBuffer&	Socket::getRespBuffer()
 {
-	
+	return (this->_respBuffer);
+}
+
+void Socket::addRessource(const std::string& path)
+{
+	(void)path;
+	//if (!this->_file)
+		//this->_file = new File(path);
+}
+
+void Socket::queueTxData(const std::vector<char>& txData, size_t n)
+{
+	this->_txBuffer.insert(this->_txBuffer.end(), txData.begin(), 
+		txData.begin() + n);
+}
+
+void Socket::reset()
+{
+	this->_reset = true;
 }
 
 void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
@@ -66,40 +101,58 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 		if (this->_req.getState() == HttpParser::HTTP_INVALID || 
 			this->_req.getState() == HttpParser::HTTP_RECEIVED)
 		{
-			RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
+			LOG_DEB("test");
+			RequestHandling::getResponse(this->_ctx, this->_req, this->_resp, *this);
+			LOG_DEB("test");
 			em.unmonitor(fd);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
 		}
+		
 	}
 	catch(const std::exception& e)
 	{
 		this->_ctx.onSocketClosedEvent(*this);
 	}
-	
-	
 }
 
 void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 {
 	try
 	{
-		if (!this->_sendBuffer.empty())
+		
+		/*if (this->_file)
 		{
-			int dataSent = send(fd, this->_sendBuffer.c_str(), 
-				this->_sendBuffer.size(), 0);
+			if (!this->_file->getEof())
+			{
+				std::vector<char> fileBuf = this->_file->read();
+				this->_respBuffer.bufferize(fileBuf, fileBuf.size());
+			}
+			else
+			{
+				this->_respBuffer.flush();
+				reset();
+			}
+		}*/
+		if (!this->_txBuffer.empty())
+		{
+			int dataSent = send(fd, this->_txBuffer.data(), 
+				this->_txBuffer.size(), 0);
 			if (dataSent == -1)
 				throw std::runtime_error("send failed");
-			this->_sendBuffer = this->_sendBuffer.substr(dataSent);
-			
+			this->_txBuffer.erase(this->_txBuffer.begin(), 
+				this->_txBuffer.begin() + dataSent);
 		}
-		if (this->_reset)
+		if (this->_reset && this->_txBuffer.empty())
 		{
 			this->_req = HttpRequest(this->_remoteIp);
 			this->_resp = HttpResponse();
+			this->_respBuffer.reset();
+			//delete this->_file;
+			//this->_file = NULL;
 			em.unmonitor(fd);
-				em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
-					EventData::CLIENT, *this);
+			em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
+				EventData::CLIENT, *this);
 			this->_reset = false;
 		}
 	}

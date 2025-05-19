@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:55:18 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 20:18:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:40:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void Chunk::decodeChunk(std::string& data)
                 return ;
             this->_state = CHUNK_DATA;
             data= data.substr(pos + 2);
+        // fallthrough
         case CHUNK_DATA:
             if (data.size() >= this->_len + 2)
             {
@@ -103,17 +104,6 @@ void Chunk::encodeChunk()
         << this->_data << CRLF;
 
     this->_encoded = oss.str();
-}
-
-void Chunk::sendChunk(int socket)
-{
-    std::string data = this->_encoded.substr(this->_dataSent);
-    int dataSent = send(socket, data.c_str(), data.size(), 0);
-
-    if (dataSent == -1)
-        throw std::runtime_error("Failed to send response");
-    
-    this->_dataSent += dataSent;
 }
 
 //Helpers

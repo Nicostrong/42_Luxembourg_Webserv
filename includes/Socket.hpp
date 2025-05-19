@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 20:44:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 14:30:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # include "./IEventHandler.hpp"
 # include "./EventMonitoring.hpp"
+# include "./ResponseBuffer.hpp"
+# include "./File.hpp"
 
 class Server;
 
@@ -33,13 +35,16 @@ class Socket : public IEventHandler
 			const sockaddr_in& sockAddr);
 		Socket(const Socket& obj);
 		~Socket();
-		Socket& 	operator=(const Socket& obj);
-		bool 		operator==(const Socket& obj);
-		int			getSocket() const;
-		void		sendData(const std::string& data);
-		void		onReadEvent(int fd, int type, EventMonitoring& em);
-		void		onWriteEvent(int fd, int type, EventMonitoring& em);
-		void		onCloseEvent(int fd, int type, EventMonitoring& em);
+		Socket& 		operator=(const Socket& obj);
+		bool 			operator==(const Socket& obj);
+		int				getSocket() const;
+		ResponseBuffer&	getRespBuffer();
+		void 			addRessource(const std::string& path);
+		void 			queueTxData(const std::vector<char>& txData, size_t n);
+		void			reset();
+		void			onReadEvent(int fd, int type, EventMonitoring& em);
+		void			onWriteEvent(int fd, int type, EventMonitoring& em);
+		void			onCloseEvent(int fd, int type, EventMonitoring& em);
 		static std::string 				getReadableIp(
 			const struct sockaddr_in& addr);
 	private:
@@ -49,8 +54,11 @@ class Socket : public IEventHandler
 		EventMonitoring&	_em;
 		Server&				_ctx;
 		std::string			_remoteIp;
-		std::string			_sendBuffer;
+		std::vector<char>	_txBuffer;
 		bool				_reset;
+		ResponseBuffer		_respBuffer;
+		File*				_file;
+		
 };
 
 #endif

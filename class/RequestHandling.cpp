@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 10:58:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 14:23:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
  * and excute cgi if the location let it run.
  */
 void RequestHandling::getResponse(Server& server, 
-	HttpRequest& req, HttpResponse& resp)
+	HttpRequest& req, HttpResponse& resp, Socket& sock)
 {
 	const Location* 		loc;
 	std::string 			realPath;
@@ -45,7 +45,7 @@ void RequestHandling::getResponse(Server& server,
 	{
 		if (req.getState() == HttpParser::HTTP_INVALID)
 		{
-			getErrorResponse(BAD_REQUEST, server, req, resp);
+			getErrorResponse(BAD_REQUEST, server, req, resp, sock);
 			return ;
 		}
 
@@ -54,13 +54,13 @@ void RequestHandling::getResponse(Server& server,
 
 		if (!req.getLocation())
 		{
-			getErrorResponse(NOT_FOUND, server, req, resp);
+			getErrorResponse(NOT_FOUND, server, req, resp, sock);
 			return ;
 		}
 
 		if (!loc->getMethod()->isAllowed(req.getMethod()))
 		{
-			getErrorResponse(METHOD_NOT_ALLOWED, server, req, resp);
+			getErrorResponse(METHOD_NOT_ALLOWED, server, req, resp, sock);
 			return ;
 		}
 		
@@ -68,16 +68,16 @@ void RequestHandling::getResponse(Server& server,
 
 		if (redirectDirective)
 		{
-			handleRedirect(redirectDirective, resp);
+			handleRedirect(redirectDirective, resp, sock);
 			return ;
 		}
 		
-		cgiDirectives = loc->findDirectives("cgi");
+		/*cgiDirectives = loc->findDirectives("cgi");
 		if (cgiDirectives.size() > 0)
 		{
 			handleCGI(cgiDirectives, server, req, resp);
 			return ;
-		}
+		}*/
 
 		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
 		req.setPathTranslated(realPath);
@@ -87,17 +87,17 @@ void RequestHandling::getResponse(Server& server,
 		//handleDirctoryListing(req, resp);
 		//return ;
 
-		handleFileServing(server, req, resp);
-		//getErrorResponse(OK, server, req, resp);
+		//handleFileServing(server, req, resp, sock);
+		getErrorResponse(OK, server, req, resp, sock);
 	}
 	catch(const std::exception& e)
 	{
-		getErrorResponse(INTERNAL_SERVER_ERROR, server, req, resp);
+		getErrorResponse(INTERNAL_SERVER_ERROR, server, req, resp, sock);
 	}
 }
 
 
-void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives, 
+/*void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives, 
 	Server& server, const HttpRequest& req, HttpResponse& resp)
 {
 	std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
@@ -113,40 +113,39 @@ void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives,
 		return ;
 	
 	getErrorResponse(OK, server, req, resp);
-}
+}*/
 
 void RequestHandling::handleFileServing(Server& server, const HttpRequest& req, 
-	HttpResponse& resp)
+	HttpResponse& resp, Socket& sock)
 {
 	
-	if (!isFileReadable(server, req, resp, req.getPathTranslated()))
+	if (!isFileReadable(server, req, resp, req.getPathTranslated(), sock))
 		return ;
-	Ressource 	res(req.getPathTranslated());
-
-	if (res.isFail())
-		throw std::runtime_error("Cannot read the requested file");
 	resp.setStatusCode(OK);
-	resp.setBody(res.getRaw());
-	resp.setAsComplete();
+	resp.sendHead(sock);
+	sock.addRessource(req.getPathTranslated());
 }
 
-void RequestHandling::handleRedirect(const Directive* redirectDirective, HttpResponse& resp)
+void RequestHandling::handleRedirect(const Directive* redirectDirective, HttpResponse& resp, Socket& sock)
 {
 	resp.setStatusCode(FOUND);
 	resp.addHeader("Location", redirectDirective->getValue());
-	resp.setAsComplete();
+	resp.addHeader("Content-Length", 0);
+	resp.sendHead(sock);
+	resp.flushData(sock);
+	sock.reset();
 }
-void RequestHandling::handleDirctoryListing(const HttpRequest& req, HttpResponse& resp)
+/*void RequestHandling::handleDirctoryListing(const HttpRequest& req, HttpResponse& resp)
 {
 	std::string body = HttpBase::getDirectoryListing(req.getPathTranslated(), 
 		req.getPathInfo());
 	resp.setStatusCode(OK);
 	resp.setBody(body);
 	resp.setAsComplete();
-}
+}*/
 
 bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 
-	HttpResponse& resp, const std::string& path)
+	HttpResponse& resp, const std::string& path, Socket& sock)
 {
 	struct stat infos;
 
@@ -154,7 +153,7 @@ bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req,
 	{
 		if (errno == ENOENT)
 		{
-			getErrorResponse(NOT_FOUND, server, req, resp);
+			getErrorResponse(NOT_FOUND, server, req, resp, sock);
 			return (false);
 		}
 		throw std::runtime_error("Stat failed");
@@ -162,16 +161,16 @@ bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req,
 	
 	if (!S_ISREG(infos.st_mode))
 	{
-		getErrorResponse(NOT_FOUND, server, req, resp);
+		getErrorResponse(NOT_FOUND, server, req, resp, sock);
 		return (false);
 	}
 
 	if (access(path.c_str(), R_OK) == -1)
 	{
-		getErrorResponse(FORBIDDEN, server, req, resp);
+		getErrorResponse(FORBIDDEN, server, req, resp, sock);
 		return (false);
 	}
-		
+	resp.addHeader("Content-Length", infos.st_size);
 	return (true);
 }
 
@@ -206,10 +205,12 @@ std::string RequestHandling::getReasonPhrase(HttpCode code)
 }
 
 void RequestHandling::getErrorResponse(int statusCode, Server& server, 
-	const HttpRequest& req, HttpResponse& resp)
+	const HttpRequest& req, HttpResponse& resp, Socket& sock)
 {
+	std::string	body;
+
 	resp.setStatusCode((HttpBase::HttpCode)statusCode);
-	
+	resp.addHeader("Content-Type", "text/html");
 	try
 	{
 		std::string customErrorPath = server.getPathError(statusCode);
@@ -222,16 +223,22 @@ void RequestHandling::getErrorResponse(int statusCode, Server& server,
 		}
 		else
 		{
-			resp.setBody(errorRessource.getRaw());
-			resp.setAsComplete();
+			body = errorRessource.getRaw();
+			resp.addHeader("Content-Length", body.size());
+			resp.sendHead(sock);
+			resp.sendData(sock, body);
+			resp.flushData(sock);
 		}
 	}
 	catch(const std::exception& e)
 	{
-		resp.setBody(
-			HttpBase::getDefaultErrorPage((HttpBase::HttpCode)statusCode));
-		resp.setAsComplete();
+		body = HttpBase::getDefaultErrorPage((HttpBase::HttpCode)statusCode);
+		resp.addHeader("Content-Length", body.size());
+		resp.sendHead(sock);
+		resp.sendData(sock, body);
+		resp.flushData(sock);
 	}
+	sock.reset();
 	
 	(void)req;
 }

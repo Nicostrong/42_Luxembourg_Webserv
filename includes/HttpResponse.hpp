@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 20:27:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:36:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@
 #include "./HttpRequest.hpp"
 #include "./core/chunking/Encoding.hpp"
 
+class Socket;
+
 class HttpResponse: public HttpParser
 {
 	public:
 		enum State
 		{
-			SENDING_HEADER = 0,
+			SNEDING_HEAD = 0,
 			SENDING_BODY = 1,
 			SENT = 2,
 		};
@@ -32,15 +34,13 @@ class HttpResponse: public HttpParser
 		HttpResponse(const HttpResponse& obj);
 		virtual ~HttpResponse();
 		HttpResponse&		operator=(const HttpResponse& obj);
-		bool				isHeadersEnc() const;
-		const std::string&	getRawHeaders() const;	
-		void				encodeHeaders();
-		void 				addChunk(std::vector<char>& buf, size_t n);
-		void				sendHeaders();
+		void				sendHead(Socket& ctx) const;	
+		void				sendData(Socket& ctx, const std::vector<char>& buff,
+			size_t n) const;
+		void				sendData(Socket& ctx, const std::string& buff) 
+			const;
+		void				flushData(Socket& ctx) const;
 	private:
-		std::string		_rawHeaders;
-		bool			_isHeadersEnc;
-		size_t			_dataSent;
 		Encoding 		_enc;
 		
 		

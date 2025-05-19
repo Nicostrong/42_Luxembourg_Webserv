@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:42:42 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 10:50:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,14 @@ class HttpBase
 		std::string			getHeaders_raw() const;
 		bool				isComplete() const;
 		void				setAsComplete();
-		void				addHeader(const std::string &name, 
-			const std::string& value);
+		template <typename T>
+		void 				addHeader(const std::string &name, const T& value)
+		{
+			std::ostringstream oss;
+
+			oss << value;
+			this->_headers[name] = oss.str();
+		}
 		const std::map<std::string, std::string>&	getHeaders() const;
 		static std::string	getStrStatusCode(HttpCode statusCode);
 		static std::string  getDefaultErrorPage(HttpCode statusCode);

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 08:46:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:19:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,6 @@ void HttpBase::setAsComplete()
 	this->_isComplete = true;
 }
 
-void HttpBase::addHeader(const std::string &name, const std::string& value)
-{
-	this->_headers[name] = value;
-}
-
 std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
 	switch (statusCode)
@@ -139,7 +134,7 @@ std::string 	HttpBase::getHeaders_raw() const
 		result += it->first;
 		result += ": ";
 		result += it->second;
-		result += "\n\r";
+		result += CRLF;
 		++it;
 	}
 	return (result);

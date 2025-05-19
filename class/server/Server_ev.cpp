@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_ev.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:37:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:51:47 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 14:19:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void		Server::onReadEvent( int fd, int type, EventMonitoring& em )
 
 	this->_lSockets.push_front(s);
 	em.monitor(clientSocket, POLLIN | POLLHUP | POLLRDHUP,
-		EventData::CLIENT, *_lSockets.begin());
+		EventData::CLIENT, this->_lSockets.front());
 	return ;
 }
 
