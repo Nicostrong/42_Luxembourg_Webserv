@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:50:46 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 08:37:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,16 @@ Location::Location( Token*& tokens ): _method(NULL)
  */
 Location::~Location( void )
 {
-	std::list<Directive *>::iterator		it;
+	std::list<Directive *>::iterator		itDir;
+	std::list<CGIDirective *>::iterator		itCGI;
 
 	delete this->_method;
-	for ( it = this->_lDirectives.begin(); it != this->_lDirectives.end(); ++it)
-		delete *it;
+	for ( itDir = this->_lDirectives.begin(); itDir != this->_lDirectives.end(); ++itDir)
+		delete *itDir;
 	this->_lDirectives.clear();
+	for ( itCGI = this->_lCGIDirectives.begin(); itCGI != this->_lCGIDirectives.end(); ++itCGI)
+		delete *itCGI;
+	this->_lCGIDirectives.clear();
 	return ;
 }
 

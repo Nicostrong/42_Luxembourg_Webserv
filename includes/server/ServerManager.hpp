@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/18 11:10:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 07:48:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class	ServerManager
 		/*	retourne le server qui correspond au hostname et port	*/
 		const Server*			getServer( size_t port, std::string host ) const;
 		/*	retourne la loction correspondant a l uri	*/
-		const Location*			getLocationForUri(cconst Server* server, const std::string& uri ) const;
+		const Location*			getLocationForUri( const Server* server, const std::string& uri ) const;
 		/*	retourne la taille maxi du body	*/
 		size_t					getMaxBodySize( const Server* server, const Location* location ) const;
 		/*	retourne la racine de fichier pour la location	*/
