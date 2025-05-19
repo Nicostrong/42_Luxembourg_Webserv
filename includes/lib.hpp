@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/19 13:01:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 16:18:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define BUFFER_SIZE 1024
 # define SEND_BUFFER_SIZE 262144
 # define RESPONSE_BUFFER_SIZE 32768
-# define READ_BUFFER_SIZE 4096
+# define READ_BUFFER_SIZE 32768
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"

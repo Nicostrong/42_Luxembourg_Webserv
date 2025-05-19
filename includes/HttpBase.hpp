@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 10:50:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 22:35:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class HttpBase
 		enum HttpCode
 		{
 			OK = 200,
+			MOVED_PERMANENTLY = 301,
 			FOUND = 302,
 			BAD_REQUEST = 400,
 			FORBIDDEN = 403,

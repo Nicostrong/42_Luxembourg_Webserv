@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 14:23:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 22:43:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,75 +32,76 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
  * and getRealPath seems working, need to check if the path is valid and exist
  * and excute cgi if the location let it run.
  */
-void RequestHandling::getResponse(Server& server, 
-	HttpRequest& req, HttpResponse& resp, Socket& sock)
+void RequestHandling::handleHeaders(Socket& sock)
 {
-	const Location* 		loc;
-	std::string 			realPath;
-	std::string				pathInfos;
-	std::list<Directive*>	cgiDirectives;
-	const Directive*		redirectDirective;
-
 	try
 	{
-		if (req.getState() == HttpParser::HTTP_INVALID)
+		if (sock.getReq().getState() == HttpParser::HTTP_INVALID)
 		{
-			getErrorResponse(BAD_REQUEST, server, req, resp, sock);
+			sock.getResp().setStatusCode(BAD_REQUEST);
+			sock.getResp().setRespType(HttpResponse::ERROR);
 			return ;
 		}
 
-		loc = server.getMatchingLoc(req.getUri());
-		req.setLocation(loc);
+		sock.getReq().setLoc(
+			sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
 
-		if (!req.getLocation())
+		if (!sock.getReq().getLoc())
 		{
-			getErrorResponse(NOT_FOUND, server, req, resp, sock);
+			sock.getResp().setStatusCode(NOT_FOUND);
+			sock.getResp().setRespType(HttpResponse::ERROR);
 			return ;
 		}
 
-		if (!loc->getMethod()->isAllowed(req.getMethod()))
+		if (!sock.getReq().getLoc()->getMethod()->isAllowed(
+			sock.getReq().getMethod()))
 		{
-			getErrorResponse(METHOD_NOT_ALLOWED, server, req, resp, sock);
+			sock.getResp().setStatusCode(METHOD_NOT_ALLOWED);
+			sock.getResp().setRespType(HttpResponse::ERROR);
 			return ;
 		}
+
+		if (isRedirect(sock))
+			return ;
 		
-		redirectDirective = loc->findDirective("return");
-
-		if (redirectDirective)
-		{
-			handleRedirect(redirectDirective, resp, sock);
+		if (isCGI(sock))
 			return ;
-		}
 		
-		/*cgiDirectives = loc->findDirectives("cgi");
-		if (cgiDirectives.size() > 0)
-		{
-			handleCGI(cgiDirectives, server, req, resp);
+		sock.getReq().setPathTranslated(
+			Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
+				sock.getReq().getUri()));
+
+		if (isIndexFile(sock))
 			return ;
-		}*/
 
-		realPath = Uri::buildRealAbsolute(server, loc, req.getUri());
-		req.setPathTranslated(realPath);
-		pathInfos = Uri::getPathInfo(loc, req.getUri());
-		req.setPathInfo(pathInfos);
-		//Should handle normally not cgi
-		//handleDirctoryListing(req, resp);
-		//return ;
-
-		//handleFileServing(server, req, resp, sock);
-		getErrorResponse(OK, server, req, resp, sock);
+		if (isDirctoryListing(sock))
+			return ;
+		
+		if (isStaticFile(sock))
+			return ;
+		throw std::runtime_error("No match found");
 	}
 	catch(const std::exception& e)
 	{
-		getErrorResponse(INTERNAL_SERVER_ERROR, server, req, resp, sock);
+		sock.getResp().setStatusCode(INTERNAL_SERVER_ERROR);
+		sock.getResp().setRespType(HttpResponse::ERROR);
 	}
 }
 
 
-/*void RequestHandling::handleCGI(const std::list<Directive*>& cgiDirectives, 
-	Server& server, const HttpRequest& req, HttpResponse& resp)
+bool RequestHandling::isCGI(Socket& sock)
 {
-	std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
+	const std::list<Directive*> cgiDirectives = 
+			sock.getReq().getLoc()->findDirectives("cgi");
+
+	if (cgiDirectives.size() < 1)
+		return (false);
+
+	// CGI METHODOLOGY NOT CORRECT
+
+	return (false);
+
+	/*std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
 	if (cgiPath.empty())
 	{
 		getErrorResponse(NOT_FOUND, server, req, resp);
@@ -112,157 +113,138 @@ void RequestHandling::getResponse(Server& server,
 	if (!isFileReadable(server, req, resp, realCgiPath))
 		return ;
 	
-	getErrorResponse(OK, server, req, resp);
-}*/
-
-void RequestHandling::handleFileServing(Server& server, const HttpRequest& req, 
-	HttpResponse& resp, Socket& sock)
-{
-	
-	if (!isFileReadable(server, req, resp, req.getPathTranslated(), sock))
-		return ;
-	resp.setStatusCode(OK);
-	resp.sendHead(sock);
-	sock.addRessource(req.getPathTranslated());
+	getErrorResponse(OK, server, req, resp);*/
 }
 
-void RequestHandling::handleRedirect(const Directive* redirectDirective, HttpResponse& resp, Socket& sock)
+bool RequestHandling::isStaticFile(Socket& sock)
 {
-	resp.setStatusCode(FOUND);
-	resp.addHeader("Location", redirectDirective->getValue());
-	resp.addHeader("Content-Length", 0);
-	resp.sendHead(sock);
-	resp.flushData(sock);
-	sock.reset();
-}
-/*void RequestHandling::handleDirctoryListing(const HttpRequest& req, HttpResponse& resp)
-{
-	std::string body = HttpBase::getDirectoryListing(req.getPathTranslated(), 
-		req.getPathInfo());
-	resp.setStatusCode(OK);
-	resp.setBody(body);
-	resp.setAsComplete();
-}*/
+	if (sock.getReq().getUri().size() && 
+		*sock.getReq().getUri().rbegin() == '/')
+		return (false);
 
-bool RequestHandling::isFileReadable(Server& server, const HttpRequest& req, 
-	HttpResponse& resp, const std::string& path, Socket& sock)
-{
 	struct stat infos;
-
-	if (stat(path.c_str(), &infos) == -1)
+	
+	if (stat(sock.getReq().getUri().c_str(), &infos) == -1)
 	{
-		if (errno == ENOENT)
-		{
-			getErrorResponse(NOT_FOUND, server, req, resp, sock);
-			return (false);
-		}
-		throw std::runtime_error("Stat failed");
+		if (errno != ENOENT)
+			throw std::runtime_error("Stat failed");
+		sock.getResp().setStatusCode(NOT_FOUND);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
+	}
+
+	if (S_ISDIR(infos.st_mode))
+	{
+		sock.getReq().setRedirect(sock.getReq().getUri() + "/");
+		sock.getResp().setStatusCode(MOVED_PERMANENTLY);
+		sock.getResp().setRespType(HttpResponse::REDIRECT);
+		return (true);
 	}
 	
 	if (!S_ISREG(infos.st_mode))
 	{
-		getErrorResponse(NOT_FOUND, server, req, resp, sock);
-		return (false);
+		sock.getResp().setStatusCode(NOT_FOUND);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
 	}
 
-	if (access(path.c_str(), R_OK) == -1)
+	if (access(sock.getReq().getUri().c_str(), R_OK) == -1)
 	{
-		getErrorResponse(FORBIDDEN, server, req, resp, sock);
-		return (false);
+		sock.getResp().setStatusCode(FORBIDDEN);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
 	}
-	resp.addHeader("Content-Length", infos.st_size);
+	sock.getReq().setFilePath(sock.getReq().getUri());
+	sock.getReq().setFileSize(infos.st_size);
+	sock.getResp().setStatusCode(OK);
+	sock.getResp().setRespType(HttpResponse::STATIC_FILE);
 	return (true);
 }
 
-// See GZ/example_response.txt for example of response
-// Explanations: This code concats a response similar to the on given in the textfile
-// I wrote the Getters (specifically getHeaders_raw()) to return the values.
-// Code is pretty self-explaining, getHeader returns a string containing all keys/values from _headers
-// Research has told me the method and uri do NOT go into the Response!
-
-std::string RequestHandling::buildHttpResponse(const HttpRequest& req, const HttpResponse& res)
+bool RequestHandling::isRedirect(Socket& sock)
 {
-    std::ostringstream response;
-	response << req.getHTTP() << " " << req.getStatusCode() << " " << getReasonPhrase(req.getStatusCode()) << CRLF;
-    response << res.getHeaders_raw() << CRLF;
-    response << "Content-Length: " << req.getBody().size() << CRLF;
-    response << "Connection: close\r\n";
-    response << CRLF; // Blank line to separate headers from body
-    response << req.getBody();
-	//std::cout << "[debug response]:\n" << response << "\n";
-    return response.str();
+	const Directive* redirectDirective = 
+		sock.getReq().getLoc()->findDirective("return");
+
+	if (!redirectDirective)
+		return (false);
+	sock.getReq().setRedirect(redirectDirective->getValue());
+	sock.getResp().setStatusCode(FOUND);
+	sock.getResp().setRespType(HttpResponse::REDIRECT);
+	return (true);
 }
 
-std::string RequestHandling::getReasonPhrase(HttpCode code)
+bool RequestHandling::isIndexFile(Socket& sock)
 {
-	switch (code)
-	{
-		case 200: return "OK";
-		case 400: return "BAD REQUEST";
-		case 500: return "INTERNAL SERVER ERROR";
-		default: return "UNKNOWN";
-	}
-}
-
-void RequestHandling::getErrorResponse(int statusCode, Server& server, 
-	const HttpRequest& req, HttpResponse& resp, Socket& sock)
-{
-	std::string	body;
-
-	resp.setStatusCode((HttpBase::HttpCode)statusCode);
-	resp.addHeader("Content-Type", "text/html");
-	try
-	{
-		std::string customErrorPath = server.getPathError(statusCode);
-		Ressource 	errorRessource(customErrorPath);
-		
-		if (errorRessource.isFail())
-		{
-			LOG_ERROR("Failed to load custom error response");
-			throw std::runtime_error("Failed to load custom error response");
-		}
-		else
-		{
-			body = errorRessource.getRaw();
-			resp.addHeader("Content-Length", body.size());
-			resp.sendHead(sock);
-			resp.sendData(sock, body);
-			resp.flushData(sock);
-		}
-	}
-	catch(const std::exception& e)
-	{
-		body = HttpBase::getDefaultErrorPage((HttpBase::HttpCode)statusCode);
-		resp.addHeader("Content-Length", body.size());
-		resp.sendHead(sock);
-		resp.sendData(sock, body);
-		resp.flushData(sock);
-	}
-	sock.reset();
+	if (sock.getReq().getUri().size() && 
+		*sock.getReq().getUri().rbegin() != '/')
+		return (false);
 	
-	(void)req;
-}
+	std::string str = sock.getCtx().getLocIndex(
+		sock.getReq().getLoc());
+	
+	struct stat infos;
+	std::string indexPath = Uri::buildUri(
+			sock.getReq().getPathTranslated(), str);
 
-// ########################################
-// GZ - ADDED FUNCTIONS FROM HANDLEREQUESTS
-// ########################################
+	if (stat(indexPath.c_str(), &infos) == -1)
+	{
+		if (errno != ENOENT)
+			throw std::runtime_error("Stat failed");
+		return (false);
+	}
 
-bool RequestHandling::_checkMethod(Server server)
-{
-	return (server.checkMethod(_uri, _method));
-}
+	if (!S_ISREG(infos.st_mode))
+		return (false);
 
-bool RequestHandling::_checkUri(Server server)
-{
-	return (server.checkUri(_uri));
-}
-
-bool RequestHandling::_checkHTTP()
-{
+	if (access(indexPath.c_str(), R_OK) == -1)
+	{
+		sock.getResp().setStatusCode(FORBIDDEN);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
+	}
+	sock.getReq().setFilePath(indexPath);
+	sock.getReq().setFileSize(infos.st_size);
+	sock.getResp().setStatusCode(OK);
+	sock.getResp().setRespType(HttpResponse::STATIC_FILE);
 	return (true);
 }
 
-bool RequestHandling::_checkBody()
+bool RequestHandling::isDirctoryListing(Socket &sock)
 {
+	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() != '/')
+		return (false);
+	
+	const Directive* directive = 
+		sock.getReq().getLoc()->findDirective("autoindex");
+	
+	
+	if (!directive || directive->getValue() != "on")
+	{
+		sock.getResp().setStatusCode(FORBIDDEN);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
+	}
+	sock.getReq().setPathTranslated(
+		Uri::trimSlashEnd(sock.getReq().getPathTranslated()));
+	struct stat infos;
+	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1 ||
+			!S_ISDIR(infos.st_mode))
+	{
+		if (errno != ENOENT)
+			throw std::runtime_error("Stat failed");
+		sock.getResp().setStatusCode(NOT_FOUND);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
+	}
+
+	if (access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
+	{
+		sock.getResp().setStatusCode(FORBIDDEN);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return (true);
+	}
+	sock.getResp().setStatusCode(OK);
+	sock.getResp().setRespType(HttpResponse::DIRECTORY_LISTING);
 	return (true);
 }

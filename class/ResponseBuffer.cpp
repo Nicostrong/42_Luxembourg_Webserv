@@ -6,21 +6,21 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 09:14:18 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 11:07:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 15:55:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ResponseBuffer.hpp"
 #include "../includes/Socket.hpp"
 
-ResponseBuffer::ResponseBuffer(Socket& ctx) : _ctx(ctx), _buff(RESPONSE_BUFFER_SIZE), _pos(0), _flushCount(0) 
+ResponseBuffer::ResponseBuffer(Socket& ctx) : _ctx(&ctx), _buff(RESPONSE_BUFFER_SIZE), _pos(0), _flushCount(0) 
 {}
 
 ResponseBuffer::ResponseBuffer(const ResponseBuffer& obj) : _ctx(obj._ctx),
     _buff(obj._buff), _pos(obj._pos), _flushCount(obj._flushCount) {}
 
 ResponseBuffer::ResponseBuffer(const ResponseBuffer& obj, Socket& ctx) : 
-    _ctx(ctx), _buff(obj._buff), _pos(obj._pos), _flushCount(obj._flushCount) {}
+    _ctx(&ctx), _buff(obj._buff), _pos(obj._pos), _flushCount(obj._flushCount) {}
 
 ResponseBuffer::~ResponseBuffer() {}
 
@@ -53,7 +53,7 @@ void    ResponseBuffer::bufferize(const std::vector<char>& buff, size_t n)
 
 void    ResponseBuffer::flush()
 {
-    this->_ctx.queueTxData(this->_buff, this->_pos);
+    this->_ctx->queueTxData(this->_buff, this->_pos);
     this->_pos = 0;
     this->_flushCount++;
 }

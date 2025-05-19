@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:18:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 18:34:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,43 @@ class HttpRequest : public HttpParser
 		virtual 				~HttpRequest();
 		HttpRequest&			operator=(const HttpRequest &obj);
 		void					readReceived(int clientSocket);
-		void					setLocation(const Location* const loc);
-		void					setPathTranslated(const std::string& pathTranslated);
-		void					setQueryParams(const std::string& queryParams);
-		void					setScriptLoc(const std::string& scriptLoc);
+		void					setLoc(const Location* const loc);
+		void					setPathTranslated(
+			const std::string& pathTranslated);
 		void					setPathInfo(const std::string& pathInfo);
-		const Location* 		getLocation() const;
+		void					setCgiScript(const std::string& cgiScript);
+		void					setCgiPath(const std::string& cgiPath);
+		void					setRedirect(const std::string& redirect);
+		void					setFilePath(const std::string& filePath);
+		void					setQueryParams(const std::string& queryParams);
+		void					setFileSize(size_t fileSize);
+		const Location* 		getLoc() const;
 		const std::string&		getPathTranslated() const;
-		const std::string&		getQueryParams() const;
-		const std::string&		getScriptLoc() const;
 		const std::string&		getPathInfo() const;
+		const std::string&		getCgiScript() const;
+		const std::string&		getCgiPath() const;
+		const std::string&		getRedirect() const;
+		const std::string&		getFilePath() const;
+		const std::string&		getQueryParams() const;
+		size_t					getFileSize() const;
+		
 
 	private:
 		
 		// Handling variables
 		std::string		_remoteIp;
+
+		// handling
 		const Location*	_loc;
 		std::string		_pathTranslated;
-		std::string		_queryParams;
-		
-		// CGI related
-		std::string		_scriptLoc;
 		std::string		_pathInfo;
+		std::string		_cgiScript;
+		std::string		_cgiPath;
+		std::string		_redirect;
+		std::string		_filePath;
+		std::string		_queryParams;
+		size_t			_fileSize;
+
 };
 
 #endif

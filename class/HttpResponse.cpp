@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 11:18:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 17:57:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpResponse.hpp"
 #include "../includes/Socket.hpp"
 
-HttpResponse::HttpResponse() : HttpParser()
+HttpResponse::HttpResponse() : HttpParser(), _respType(UNKNOWN)
 	{}
 
 HttpResponse::HttpResponse(const HttpResponse& obj) : HttpParser(obj)
@@ -29,6 +29,7 @@ HttpResponse& HttpResponse::operator=(const HttpResponse& obj)
 	{
 		HttpParser::operator=(obj);
 		this->_enc = obj._enc;
+		this->_respType = obj._respType;
 	}
 	return (*this);
 }
@@ -59,4 +60,14 @@ void	HttpResponse::sendData(Socket& ctx, const std::string& buff) const
 void	HttpResponse::flushData(Socket& ctx) const
 {
 	ctx.getRespBuffer().flush();
+}
+
+void HttpResponse::setRespType(ResponseType type)
+{
+	this->_respType = type;
+}
+
+HttpResponse::ResponseType HttpResponse::getRespType() const
+{
+	return (this->_respType);
 }

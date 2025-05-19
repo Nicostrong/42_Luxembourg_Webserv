@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 14:30:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 18:01:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Socket : public IEventHandler
 			public:
 				const char* what() const throw();
 		};
+	
 		Socket(int fd, EventMonitoring&	em, Server& ctx, 
 			const sockaddr_in& sockAddr);
 		Socket(const Socket& obj);
@@ -39,6 +40,9 @@ class Socket : public IEventHandler
 		bool 			operator==(const Socket& obj);
 		int				getSocket() const;
 		ResponseBuffer&	getRespBuffer();
+		HttpRequest&	getReq();
+		HttpResponse&	getResp();
+		Server& 		getCtx();
 		void 			addRessource(const std::string& path);
 		void 			queueTxData(const std::vector<char>& txData, size_t n);
 		void			reset();
@@ -58,6 +62,7 @@ class Socket : public IEventHandler
 		bool				_reset;
 		ResponseBuffer		_respBuffer;
 		File*				_file;
+		ResponseType		_respType;
 		
 };
 

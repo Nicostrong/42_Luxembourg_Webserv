@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 09:14:37 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 10:55:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 15:54:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class ResponseBuffer
 		void			clear();
 		void			reset();
     private:
-        Socket&				_ctx;
+        Socket*				_ctx;
         std::vector<char>	_buff;
         size_t				_pos;
 		size_t				_flushCount;

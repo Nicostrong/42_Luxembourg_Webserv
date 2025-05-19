@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 10:36:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 18:05:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,14 @@ class Socket;
 class HttpResponse: public HttpParser
 {
 	public:
-		enum State
+		enum ResponseType
 		{
-			SNEDING_HEAD = 0,
-			SENDING_BODY = 1,
-			SENT = 2,
+			UNKNOWN = 0,
+			STATIC_FILE = 1,
+			CGI = 2,
+			REDIRECT = 3,
+			DIRECTORY_LISTING = 4,
+			ERROR = 5,
 		};
 		HttpResponse();
 		HttpResponse(const HttpResponse& obj);
@@ -40,8 +43,11 @@ class HttpResponse: public HttpParser
 		void				sendData(Socket& ctx, const std::string& buff) 
 			const;
 		void				flushData(Socket& ctx) const;
+		void				setRespType(ResponseType type);
+		ResponseType		getRespType() const;
 	private:
 		Encoding 		_enc;
+		ResponseType	_respType;
 		
 		
 };

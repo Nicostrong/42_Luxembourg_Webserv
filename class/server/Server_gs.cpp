@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_gs.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:51:52 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 21:10:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,4 +204,13 @@ const Location*					Server::getMatchingLoc( const std::string& uri )
 		}
 	}
 	return (bestMatch);
+}
+
+std::string Server::getLocIndex(const Location* loc)
+{
+	const Directive* directive = loc->findDirective("index");
+
+	if (directive)
+		return (directive->getValue());
+	return (getIndex());
 }

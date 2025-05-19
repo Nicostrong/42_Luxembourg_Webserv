@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 11:19:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 22:35:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 	switch (statusCode)
 	{
 		case 200: return ("OK");
+		case 301: return ("Moved Permanently");
 		case 302: return ("Found");
 		case 400: return ("Bad Request");
 		case 403: return ("Forbidden");
