@@ -3,25 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main_parser.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:19:33 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:56:58 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 11:04:25 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parser/ParserServerConfig.hpp"
 
-int		main( int argc, char **argv)
+int		main( void )
 {
-	if (argc != 2)
-	{
-		std::cerr << "Usage: ./test_parser \"path_to_config_file\"" << std::endl;
-		return (1);
-	}
 	try
 	{
-		ParserServerConfig		pc(argv[1]);
+		ParserServerConfig		pc("../config/webserver.conf");
+
+		pc.getAllTokens()->printToken();
 	}
 	catch(const std::exception& e)
 	{
