@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:01:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:48:36 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 11:29:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,13 @@ Token*		Token::tokenize( const std::string& input )
 		throw ;
 	}
 	return (head);
+}
+
+/*
+ *	Delete all Tokens on the linked list of tokens
+ */
+void		Token::deleteList( void )
+{
+	this->deleteChain(this);
+	return ;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:47:11 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 13:06:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /*
  *	Call all the check function
  */
-void		CheckerTokens::validate( void )
+void		CheckerTokens::validateTokens( void )
 {
 	checkBracesAndBlocks();
 	checkHTTPKeyValuePairs();
@@ -329,21 +329,25 @@ void		CheckerTokens::checkpath( void )
 	while (current)
 	{
 		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
+		{
 			if (current->getValue()[0] != '/')
-				throw CheckerError("Path must start with a '/'");
-		if (current->getType() == Token::DIR_K && current->getValue() == "index")
-		{
-			current = current->getNext();
-			if (current && current->getType() == Token::DIR_V)
-				if (current->getValue()[0] != '/')
-					throw CheckerError("Path of index directive must start with a '/'");
+				throw CheckerError("Invalid path => " + current->getValue());
+			if (current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
+				throw CheckerError("Invalid path => " + current->getValue());
 		}
-		if (current->getType() == Token::DIR_K && current->getValue() == "root")
+		if (current->getType() == Token::DIR_K && 
+			(current->getValue() == "index" || current->getValue() == "root"))
 		{
 			current = current->getNext();
-			if (current && current->getType() == Token::DIR_V)
-				if (current->getValue()[0] != '/' && current->getValue()[0] != '.')
-					throw CheckerError("Path of root directive must start with a '/' or '.'");
+			if (current->getValue()[0] != '/' && 
+				(current->getValue()[0] != '.' && current->getValue()[1] != '/'))
+				throw CheckerError("Invalid path => " + current->getValue());
+			if (current->getValue()[0] == '.' && 
+				current->getValue().size() > 2 && !std::isalnum(current->getValue()[2]))
+				throw CheckerError("Invalid path => " + current->getValue());
+			if (current->getValue()[0] == '/' && 
+				current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
+				throw CheckerError("Invalid path => " + current->getValue());	
 		}
 		current = current->getNext();
 	}

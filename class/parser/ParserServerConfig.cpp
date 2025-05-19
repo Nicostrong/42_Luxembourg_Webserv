@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 11:08:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 13:51:39 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 		this->_allTokens = head;
 		if (!this->_allTokens)	
 			throw EmptyConfigError();
-		CheckerTokens::check(this->_allTokens);
+		CheckerTokens::check(*this->_allTokens);
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		throw ;
 	}
 	return ;
 }
@@ -54,8 +54,7 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
  */
 ParserServerConfig::~ParserServerConfig( void )
 {
-	if (this->_allTokens)
-		delete this->_allTokens;
+	delete this->_allTokens;
 	return ;
 }
 

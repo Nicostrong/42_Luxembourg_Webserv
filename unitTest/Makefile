@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/18 11:18:36 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/19 11:18:26 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ DEB				=	valgrind
 DEB_OPT			=	--tool=memcheck \
 					--leak-check=full \
 					--show-leak-kinds=all \
+					--track-origins=yes \
 					--track-fds=yes
 
 ARG0			=	"../config/webserver.conf"
@@ -315,7 +316,7 @@ deb_net:		networking
 
 deb_par:		parser 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(PAR_NAME) $(ARG0)
+	$(DEB) $(DEB_OPT) ./$(PAR_NAME)
 
 clean:
 	$(call delete_progress, *.o)

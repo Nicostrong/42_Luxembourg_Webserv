@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/17 11:36:12 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 13:43:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class	CheckerTokens
 
 	private:
 
-		Token*			_head;
+		const Token*	_head;
 		int				_braceCount;
 		bool			_inServer;
 		bool			_inLocation;
@@ -39,10 +39,10 @@ class	CheckerTokens
 
 		CheckerTokens	&operator=(  const CheckerTokens& src_obj );
 
-		void			validate( void );
 		void			checkCGI( void );
 		void			checkpath( void );
 		void			checkValue( void ) ;
+		void			validateTokens( void );
 		void			checkMethodHTTP( void );
 		void			checkBlockError( void );
 		void			checkBracesAndBlocks( void );
@@ -60,10 +60,10 @@ class	CheckerTokens
 	
 	public:
 
-		CheckerTokens( Token* head );
+		CheckerTokens( const Token& head );
 		~CheckerTokens( void );
 
-		static void		check( Token* head );
+		static void		check( const Token& head );
 	
 		/*	EXCEPTION	*/
 

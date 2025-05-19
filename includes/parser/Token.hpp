@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:34:17 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 11:28:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class 	Token
 		void						setNextToNull( void  );
 
 		/*	METHOD	*/
+		void						deleteList( void );
 		void						printToken( bool isNext = false ) const;
 
 		static Token*				tokenize( const std::string& serverConfig );

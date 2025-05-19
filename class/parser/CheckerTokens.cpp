@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:12 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/17 11:47:22 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 13:50:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /*
  *	Constructor CheckerTokens
  */
-CheckerTokens::CheckerTokens( Token* head ) : _head(head), _braceCount(0),
+CheckerTokens::CheckerTokens( const Token& head ) : _head(&head), _braceCount(0),
 											_inServer(false), _inLocation(false),
 											_inErrorBlk(false), _inCGI(false)
 {

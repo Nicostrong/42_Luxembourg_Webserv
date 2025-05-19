@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Token_gs.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:47:16 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:48:29 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 13:24:30 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void		Token::printToken( bool isNext ) const
 {
 	if (!isNext)
 		std::cout << "\t";
-	std::cout	<< "Token [" << getTypeName() << "] - Value: "
+	std::cout	<< "Token [" << this->getTypeName() << "] - Value: "
 				<< this->_value << std::endl;
 	if (this->_next)
 	{
