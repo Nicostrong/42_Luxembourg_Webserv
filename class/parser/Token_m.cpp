@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:01:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 11:29:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 06:59:28 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,20 @@ Token*		Token::tokenize( const std::string& input )
 				attachToken(head, current, serverTok);
 				inServer = true;
 			}
-			if (word == "{" || word == "}")
+			else if (word == "{" || word == "}")
 				current = createBrace(word, head, current, braceCount, inLocation, inErrorBlk, inServer);
-			if (word == "location")
+			else if (word == "location")
 				current = createLocation(iss, head, current, braceCount, inLocation);
-			if (word == "error_page")
+			else if (word == "error_page")
 				current = createErrorPage(iss, word, head, current, braceCount, inErrorBlk);
-			if (word == ";")
+			else if (word == ";")
 				current = createSemicolon(word, head, current, inHTTP);
-			if (isDirectiveKey(word))
+			else if (isDirectiveKey(word))
 				current = createDirective(iss, word, head, current);
-			if (!inServer && word != "server" && word != "}")
+			else if (!inServer && word != "server" && word != "}")
 				throw Token::TokenError("Unexpected data outside server block");
+			else
+				throw Token::TokenError("Unexpected data in server block");
 		}
 
 		if (braceCount != 0)
