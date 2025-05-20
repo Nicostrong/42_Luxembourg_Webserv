@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 13:51:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 12:55:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 		content.empty() ? throw EmptyConfigError() : formatString(content);
 		head = Token::tokenize(this->_formatedString);
 #ifdef DEBUG
-		head->printToken();
+		//head->printToken();
 #endif
 		this->_allTokens = head;
 		if (!this->_allTokens)	
@@ -44,6 +44,7 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 	}
 	catch(const std::exception& e)
 	{
+		delete this->_allTokens;
 		throw ;
 	}
 	return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/20 07:24:19 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 12:41:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class	CheckerTokens
 		CheckerTokens( const CheckerTokens& src_obj );
 
 		CheckerTokens	&operator=(  const CheckerTokens& src_obj );
-
+		
 		void			checkCGI( void );
 		void			checkpath( void );
 		void			checkValue( void ) ;
