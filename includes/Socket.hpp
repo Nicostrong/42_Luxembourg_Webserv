@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 18:01:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 11:34:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 # include "./HttpRequest.hpp"
 # include "./HttpResponse.hpp"
 
+
+# include "./ResponseHandling.hpp"
 # include "./IEventHandler.hpp"
 # include "./EventMonitoring.hpp"
-# include "./ResponseBuffer.hpp"
 # include "./File.hpp"
+# include "./Buffer.hpp"
 
 class Server;
 
@@ -36,19 +38,17 @@ class Socket : public IEventHandler
 			const sockaddr_in& sockAddr);
 		Socket(const Socket& obj);
 		~Socket();
-		Socket& 		operator=(const Socket& obj);
-		bool 			operator==(const Socket& obj);
-		int				getSocket() const;
-		ResponseBuffer&	getRespBuffer();
-		HttpRequest&	getReq();
-		HttpResponse&	getResp();
-		Server& 		getCtx();
-		void 			addRessource(const std::string& path);
-		void 			queueTxData(const std::vector<char>& txData, size_t n);
-		void			reset();
-		void			onReadEvent(int fd, int type, EventMonitoring& em);
-		void			onWriteEvent(int fd, int type, EventMonitoring& em);
-		void			onCloseEvent(int fd, int type, EventMonitoring& em);
+		Socket& 			operator=(const Socket& obj);
+		bool 				operator==(const Socket& obj);
+		int					getSocket() const;
+		HttpRequest&		getReq();
+		HttpResponse&		getResp();
+		Server& 			getCtx();
+		Buffer&				getTxBuffer();
+		void				reset();
+		void				onReadEvent(int fd, int type, EventMonitoring& em);
+		void				onWriteEvent(int fd, int type, EventMonitoring& em);
+		void				onCloseEvent(int fd, int type, EventMonitoring& em);
 		static std::string 				getReadableIp(
 			const struct sockaddr_in& addr);
 	private:
@@ -58,11 +58,10 @@ class Socket : public IEventHandler
 		EventMonitoring&	_em;
 		Server&				_ctx;
 		std::string			_remoteIp;
-		std::vector<char>	_txBuffer;
+		Buffer				_txBuffer;
 		bool				_reset;
-		ResponseBuffer		_respBuffer;
-		File*				_file;
-		ResponseType		_respType;
+		ResponseHandling	_rHandler;
+		
 		
 };
 

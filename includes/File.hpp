@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:36:33 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 13:29:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 10:56:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FILE_HPP
 
 #include "lib.hpp"
+#include "Buffer.hpp"
 
 class File
 {
@@ -21,12 +22,11 @@ class File
         File(const std::string& path);
         File(const File& obj);
         ~File();
-        File&               operator=(const File& obj);
-        bool                getEof() const;
-        std::vector<char>   read();
+        File&				operator=(const File& obj);
+        bool				getEof() const;
+        void				read(Buffer& buff, size_t n);
     private:
         std::string     _path;
-        bool            _isEof;
         std::ifstream   _fstream;
 };
 

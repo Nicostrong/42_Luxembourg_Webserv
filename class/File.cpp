@@ -6,20 +6,20 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:36:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 16:13:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 12:06:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/File.hpp"
 
-File::File(const std::string& path) : _path(path), _isEof(false)
+File::File(const std::string& path) : _path(path)
 {
     this->_fstream.open(path.c_str());
     if (!this->_fstream || !this->_fstream.is_open()) 
 		throw std::runtime_error("Failed to open file");
 }
 
-File::File(const File& obj) : _path(obj._path), _isEof(false)
+File::File(const File& obj) : _path(obj._path)
 {
     this->_fstream.open(this->_path.c_str());
      if (!this->_fstream || !this->_fstream.is_open()) 
@@ -39,19 +39,17 @@ File& File::operator=(const File& obj)
 
 bool File::getEof() const
 {
-    return (this->_isEof);
+    return (this->_fstream.eof());
 }
 
-std::vector<char> File::read()
+void File::read(Buffer& buff, size_t n)
 {
-    std::vector<char> buf(READ_BUFFER_SIZE);
-    
-    this->_fstream.read(buf.data(), READ_BUFFER_SIZE);
-    std::streamsize count = this->_fstream.gcount();
-
+    if (buff.isBufferFull())
+        return ;
+    size_t readSize = n < buff.getBufferUnused() ? n : buff.getBufferUnused();
+    this->_fstream.read(buff.getDataUnused(), readSize);
+   
     if (!this->_fstream && !this->_fstream.eof())
         throw std::runtime_error("Read failed");
-    this->_isEof = this->_fstream.eof();
-    buf.resize(count); 
-    return (buf);
+    buff.setBufferUsed(this->_fstream.gcount());
 }

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 18:05:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 15:26:15 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include "./HttpParser.hpp"
 #include "./HttpRequest.hpp"
 #include "./core/chunking/Encoding.hpp"
-
-class Socket;
+#include "./Buffer.hpp"
+#include "./Uri.hpp"
 
 class HttpResponse: public HttpParser
 {
@@ -37,19 +37,15 @@ class HttpResponse: public HttpParser
 		HttpResponse(const HttpResponse& obj);
 		virtual ~HttpResponse();
 		HttpResponse&		operator=(const HttpResponse& obj);
-		void				sendHead(Socket& ctx) const;	
-		void				sendData(Socket& ctx, const std::vector<char>& buff,
-			size_t n) const;
-		void				sendData(Socket& ctx, const std::string& buff) 
-			const;
-		void				flushData(Socket& ctx) const;
+		void				sendHead(Buffer& buff);
+		void 				sendDefaultErrorPage(Buffer& buff);	
+		void				sendDirectoryListing(Buffer& buff, 
+			const HttpRequest& req);
 		void				setRespType(ResponseType type);
 		ResponseType		getRespType() const;
 	private:
 		Encoding 		_enc;
 		ResponseType	_respType;
-		
-		
 };
 
 # endif
