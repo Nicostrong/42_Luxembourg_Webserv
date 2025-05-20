@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/19 11:18:26 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/05/20 16:44:48 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,9 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/core/chunking/Encoding.cpp \
 					../class/core/chunking/Chunk.cpp \
 					../class/HttpParser.cpp \
+					../class/File.cpp \
+					../class/Buffer.cpp \
+					../class/ResponseHandling.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -151,6 +154,9 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/core/chunking/Encoding.cpp \
 					../class/core/chunking/Chunk.cpp \
 					../class/HttpParser.cpp \
+					../class/File.cpp \
+					../class/Buffer.cpp \
+					../class/ResponseHandling.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)

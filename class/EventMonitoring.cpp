@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/14 09:00:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/19 16:22:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void EventMonitoring::unmonitor(int fd)
 void EventMonitoring::updateEvents()
 {
 	int res = epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1);
-	LOG_DEB("Epoll unlocked");
+	//LOG_DEB("Epoll unlocked");
 	if (res == -1)
 		throw EPollFailedWaitException(); 
 	std::vector<epoll_event>::const_iterator it = this->_events.begin();
@@ -90,17 +90,17 @@ void EventMonitoring::updateEvents()
 		{
 			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
 			{
-				LOG_DEB("Close epoll event");
+				//LOG_DEB("Close epoll event");
 				data->onClose();
 			}
 			else if (it->events & POLLIN)
 			{
-				LOG_DEB("Read epoll event");
+				//LOG_DEB("Read epoll event");
 				data->onRead();
 			}
 			else if (it->events & POLLOUT)
 			{
-				LOG_DEB("Write epoll event");
+				//LOG_DEB("Write epoll event");
 				data->onWrite();
 			}
 		}

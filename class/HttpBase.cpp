@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 08:46:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 15:24:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,12 @@ void HttpBase::setAsComplete()
 	this->_isComplete = true;
 }
 
-void HttpBase::addHeader(const std::string &name, const std::string& value)
-{
-	this->_headers[name] = value;
-}
-
 std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
 	switch (statusCode)
 	{
 		case 200: return ("OK");
+		case 301: return ("Moved Permanently");
 		case 302: return ("Found");
 		case 400: return ("Bad Request");
 		case 403: return ("Forbidden");
@@ -139,7 +135,7 @@ std::string 	HttpBase::getHeaders_raw() const
 		result += it->first;
 		result += ": ";
 		result += it->second;
-		result += "\n\r";
+		result += CRLF;
 		++it;
 	}
 	return (result);
@@ -148,56 +144,6 @@ std::string 	HttpBase::getHeaders_raw() const
 const std::map<std::string, std::string>&	HttpBase::getHeaders() const
 {
 	return _headers;
-}
-
-std::string  HttpBase::getDefaultErrorPage(HttpCode statusCode)
-{
-	std::ostringstream oss;
-	std::string strStatusCode = getStrStatusCode(statusCode);
-	
-	oss << "<html>" << CRLF
-		<< "<head><title>" << statusCode << " " << strStatusCode
-		<< "</title></head>" << CRLF
-		<< "<body>" << CRLF
-		<< "<center><h1>" << statusCode << " " << strStatusCode
-		<< "</h1></center>" << CRLF
-		<< "<hr>" << CRLF
-		<< "<center>" << SERVER_SOFT << "</center>" << CRLF
-		<< "</body>" << CRLF
-		<< "</html>" << CRLF;
-	return (oss.str());
-}
-
-std::string	HttpBase::getDirectoryListing(const std::string &dirPath, 
-	const std::string &relativeDir)
-{
-	std::ostringstream oss;
-	struct dirent* dirCont;
-	std::string cFile;
-	std::string fileName;
-
-	DIR* dir = opendir(dirPath.c_str());
-
-	if (!dir)
-		throw std::runtime_error("Failed to open directory");
-
-	oss << "<html>" << CRLF
-		<< "<head><title>Index of " << relativeDir << "</title></head>" << CRLF
-		<< "<body>" << CRLF
-		<< "<h1>Index of " << relativeDir 
-		<< "</h1><hr><pre><a href=\"../\">../</a>" << CRLF;
-
-	dirCont = readdir(dir);
-	while (dirCont != NULL) 
-	{
-		formatIndividualFile(oss, dirPath + dirCont->d_name, dirCont->d_name);
-		dirCont = readdir(dir);
-	}
-	
-	closedir(dir);
-	oss	<< "</pre><hr></body>" << CRLF
-		<< "</html>" << CRLF;
-	return (oss.str());
 }
 
 bool HttpBase::canBeValidMethod(const std::string& method)
@@ -341,6 +287,16 @@ std::string	HttpBase::formatTime(const time_t& time)
 	std::vector<char> buf(80);
 
 	std::strftime(buf.data(), buf.size(), "%d-%b-%Y %H:%M", timeInfo);
+	return (buf.data());
+}
+
+std::string	HttpBase::formatTimeHeader(const time_t& time)
+{
+	struct tm* timeInfo = localtime(&time);
+	std::vector<char> buf(80);
+
+	std::strftime(buf.data(), buf.size(), "%a, %d %b %Y %H:%M:%S GMT", timeInfo
+					);
 	return (buf.data());
 }
 

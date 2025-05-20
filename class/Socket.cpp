@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:17:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 15:08:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include "../includes/RequestHandling.hpp"
 
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
-	const sockaddr_in& sockAddr) : _fd(fd), _resp(), _em(em), _ctx(ctx) 
+	const sockaddr_in& sockAddr) : _fd(fd),
+	_resp(), _em(em), _ctx(ctx), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
 	{
 		this->_remoteIp = getReadableIp(sockAddr);
 		this->_req 		= HttpRequest(this->_remoteIp);
@@ -23,7 +24,8 @@ Socket::Socket(int fd, EventMonitoring&	em, Server& ctx,
 	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp) {}
+	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp), 
+	_txBuffer(obj._txBuffer), _reset(obj._reset), _rHandler(obj._rHandler) {}
 
 Socket::~Socket() {}
 
@@ -33,6 +35,7 @@ Socket& Socket::operator=(const Socket& obj)
 	{
 		this->_req = obj._req;
 		this->_resp = obj._resp;
+		this->_txBuffer = obj._txBuffer;
 	}
 	return (*this);
 }
@@ -45,6 +48,31 @@ bool Socket::operator==(const Socket& obj)
 int Socket::getSocket() const
 {
 	return (this->_fd);
+}
+
+HttpRequest& Socket::getReq()
+{
+	return (this->_req);
+}
+
+HttpResponse& Socket::getResp()
+{
+	return (this->_resp);
+}
+
+Server& Socket::getCtx()
+{
+	return (this->_ctx);
+}
+
+Buffer& Socket::getTxBuffer()
+{
+	return (this->_txBuffer);
+}
+
+void Socket::reset()
+{
+	this->_reset = true;
 }
 
 void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
@@ -61,7 +89,8 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 		if (this->_req.getState() == HttpParser::HTTP_INVALID || 
 			this->_req.getState() == HttpParser::HTTP_RECEIVED)
 		{
-			RequestHandling::getResponse(this->_ctx, this->_req, this->_resp);
+			RequestHandling::handleHeaders(*this);
+			this->_rHandler.init(*this);
 			em.unmonitor(fd);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
@@ -69,28 +98,41 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	}
 	catch(const std::exception& e)
 	{
+		LOG_DEB(e.what());
 		this->_ctx.onSocketClosedEvent(*this);
 	}
-	
-	
 }
 
 void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 {
-	(void)type;
-	(void)fd;
-	(void)em;
-	this->_resp.encodeResponse();
-	if (this->_resp.isEncoded())
+	try
 	{
-		send(fd, this->_resp.getRaw().c_str(), this->_resp.getRaw().size(), 0);
-		this->_req = HttpRequest(this->_remoteIp);
-		this->_resp = HttpResponse();
-		//this->_ctx.onSocketClosedEvent(*this);
-		em.unmonitor(fd);
-		em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
-			EventData::CLIENT, *this);
+		this->_rHandler.send(*this);
+		if (!this->_txBuffer.isBufferRead())
+		{
+			int dataSent = send(fd, this->_txBuffer.getDataUnread(), 
+				this->_txBuffer.getBufferUnread(), 0);
+			if (dataSent == -1)
+				throw std::runtime_error("send failed");
+			this->_txBuffer.setBufferRead(dataSent);
+		}
+		if (this->_reset && this->_txBuffer.isBufferRead())
+		{
+			this->_req = HttpRequest(this->_remoteIp);
+			this->_resp = HttpResponse();
+			this->_txBuffer.reset();
+			this->_rHandler.reset();
+			em.unmonitor(fd);
+			em.monitor(fd, POLLIN | POLLHUP | POLLRDHUP,
+				EventData::CLIENT, *this);
+			this->_reset = false;
+		}
 	}
+	catch(const std::exception& e)
+	{
+		this->_ctx.onSocketClosedEvent(*this);
+	}
+	(void)type;
 }
 
 void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)

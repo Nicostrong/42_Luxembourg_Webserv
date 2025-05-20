@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:42:42 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 15:25:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 
 #include "./lib.hpp"
+#include "./Buffer.hpp"
 
 class HttpBase
 {
@@ -25,6 +26,7 @@ class HttpBase
 		enum HttpCode
 		{
 			OK = 200,
+			MOVED_PERMANENTLY = 301,
 			FOUND = 302,
 			BAD_REQUEST = 400,
 			FORBIDDEN = 403,
@@ -51,11 +53,16 @@ class HttpBase
 		std::string			getHeaders_raw() const;
 		bool				isComplete() const;
 		void				setAsComplete();
-		void				addHeader(const std::string &name, 
-			const std::string& value);
+		template <typename T>
+		void 				addHeader(const std::string &name, const T& value)
+		{
+			std::ostringstream oss;
+
+			oss << value;
+			this->_headers[name] = oss.str();
+		}
 		const std::map<std::string, std::string>&	getHeaders() const;
 		static std::string	getStrStatusCode(HttpCode statusCode);
-		static std::string  getDefaultErrorPage(HttpCode statusCode);
 		static std::string	getDirectoryListing(const std::string &dirPath, 
 			const std::string &relativeDir);
 	protected:
@@ -67,6 +74,13 @@ class HttpBase
 		static bool isHeaderValueValid(const std::string& value);
 		static std::string normalizeHeaderName(const std::string& name);
 		static std::string normalizeUri(const std::string& uri);
+		static void 		formatIndividualFile(std::ostringstream& oss, 
+			const std::string& filePath, std::string fileName);
+		static std::string	formatTime(const time_t& time);
+		static std::string	formatTimeHeader(const time_t& time);
+		static std::string	truncateString(std::string str, size_t n, 
+			size_t truncLen, const std::string& trString);
+		static std::string	convertFileSize(off_t size);
 		std::string _raw;
 		std::string _method;
 		std::string _uri;
@@ -77,12 +91,7 @@ class HttpBase
 		bool		_transferEncoding;
 		bool 		_isComplete;
 	private:
-		static void 		formatIndividualFile(std::ostringstream& oss, 
-			const std::string& filePath, std::string fileName);
-		static std::string	formatTime(const time_t& time);
-		static std::string	truncateString(std::string str, size_t n, 
-			size_t truncLen, const std::string& trString);
-		static std::string	convertFileSize(off_t size);
 };
+		
 
 #endif

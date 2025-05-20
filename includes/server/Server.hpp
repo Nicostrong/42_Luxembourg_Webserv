@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:37:49 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/19 21:10:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ class	Server : public IEventHandler
 
 		const Location&		getLocations( std::string path ) const;
 		const Location*		getMatchingLoc( const std::string& uri );
+		std::string			getLocIndex( const Location* loc );
 
 		/*	CHECKER	*/
 		bool		checkUri( std::string uri );

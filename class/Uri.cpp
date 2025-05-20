@@ -6,11 +6,12 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/15 16:38:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 15:02:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Uri.hpp"
+#include "../includes/server/Server.hpp"
 
 Uri::Uri() {}
 

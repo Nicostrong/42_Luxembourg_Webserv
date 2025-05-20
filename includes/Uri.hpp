@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Uri.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:28 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:39:02 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 15:01:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 # define URI_HPP
 
 #include "./lib.hpp"
-#include "./server/Server.hpp"
 #include "./server/Location.hpp"
 #include "./server/Directive.hpp"
+
+class Server;
 
 class Uri
 {

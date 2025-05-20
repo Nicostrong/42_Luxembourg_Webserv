@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/16 15:02:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 15:20:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ const std::vector<std::string> CGI::getEnv() const
 
     // Server specific
 
-    env.push_back(getRawEnv("SERVER_SOFTWARE", SERVER_SOFT).c_str());
+    env.push_back(getRawEnv("SERVER_SOFTWARE", SERVER_VER).c_str());
     env.push_back(getRawEnv("SERVER_NAME", "")); //SHoudl implement correctly
     env.push_back(getRawEnv("GATEWAY_INTERFACE", CGI_REVISION));
 
