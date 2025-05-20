@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/05/19 13:43:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 07:24:19 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,16 @@ class	CheckerTokens
 		void			checkBracesAndBlocks( void );
 		void			checkHTTPKeyValuePairs( void );
 		void			assertFinalState( void ) const;
-		void 			checkCGITokens( Token* current );
+		void			checkUnexpectedSemicolons( void) ;
 		void			checkDuplicatedKeysInScope( void );
 		void			checkDirectiveKeyValuePairs( void );
-		void			checkServerTokens( Token* current );
 		void			checkSemicolonBeforeBlockEnd( void );
 		void			checkSemicolonAfterHTTPValue( void );
-		void			checkLocationTokens( Token* current );
-		void			checkErrorPageTokens( Token* current );
+		void 			checkCGITokens( const Token* current );
 		void			checkSemicolonAfterDirectiveValue( void );
+		void			checkServerTokens( const Token* current );
+		void			checkLocationTokens( const Token* current );
+		void			checkErrorPageTokens( const Token* current );
 	
 	public:
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 13:06:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 07:30:48 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void		CheckerTokens::validateTokens( void )
 	checkSemicolonAfterDirectiveValue();
 	checkSemicolonAfterHTTPValue();
 	checkSemicolonBeforeBlockEnd();
+	checkUnexpectedSemicolons();
 	checkDuplicatedKeysInScope();
 	checkpath();
 	checkBlockError();
@@ -42,7 +43,7 @@ void		CheckerTokens::validateTokens( void )
  */
 void		CheckerTokens::checkBracesAndBlocks( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current)
 	{
@@ -58,7 +59,7 @@ void		CheckerTokens::checkBracesAndBlocks( void )
 /*
  *	Check the brace and the localisation of block SERVER
  */
-void		CheckerTokens::checkServerTokens( Token* current )
+void		CheckerTokens::checkServerTokens( const Token* current )
 {
 	if (current->getType() == Token::SERVER)
 	{
@@ -88,7 +89,7 @@ void		CheckerTokens::checkServerTokens( Token* current )
 /*
  *	Check the brace and the localisation of block ERROR_PAGE
  */
-void		CheckerTokens::checkErrorPageTokens( Token* current )
+void		CheckerTokens::checkErrorPageTokens( const Token* current )
 {
 	if (current->getType() == Token::ERROR_PAGE)
 	{
@@ -121,7 +122,7 @@ void		CheckerTokens::checkErrorPageTokens( Token* current )
 /*
  *	Check the brace and the localisation of block LOCATION
  */
-void		CheckerTokens::checkLocationTokens( Token* current )
+void		CheckerTokens::checkLocationTokens( const Token* current )
 {
 	if (current->getType() == Token::LOCATION)
 	{
@@ -154,7 +155,7 @@ void		CheckerTokens::checkLocationTokens( Token* current )
 /*
  *	Check the brace and the localisation of block CGI
  */
-void CheckerTokens::checkCGITokens( Token* current )
+void CheckerTokens::checkCGITokens( const Token* current )
 {
 	if (current->getType() == Token::CGI)
 	{
@@ -193,7 +194,7 @@ void CheckerTokens::checkCGITokens( Token* current )
  */
 void		CheckerTokens::checkHTTPKeyValuePairs( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current && current->getNext() && current->getNext()->getNext())
 	{
@@ -214,7 +215,7 @@ void		CheckerTokens::checkHTTPKeyValuePairs( void )
  */
 void		CheckerTokens::checkDirectiveKeyValuePairs(void)
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current)
 	{
@@ -240,7 +241,7 @@ void		CheckerTokens::checkDirectiveKeyValuePairs(void)
  */
 void		CheckerTokens::checkSemicolonAfterDirectiveValue( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current && current->getNext())
 	{
@@ -257,7 +258,7 @@ void		CheckerTokens::checkSemicolonAfterDirectiveValue( void )
  */
 void		CheckerTokens::checkSemicolonAfterHTTPValue( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current && current->getNext())
 	{
@@ -274,7 +275,7 @@ void		CheckerTokens::checkSemicolonAfterHTTPValue( void )
  */
 void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current && current->getNext())
 	{
@@ -282,7 +283,7 @@ void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 			current->getType() == Token::ERR_BLK_E) &&
 			current != this->_head)
 		{
-			Token*		prev = this->_head;
+			const Token*		prev = this->_head;
 
 			while (prev->getNext()->getType() != current->getType())
 				prev = prev->getNext();
@@ -294,13 +295,39 @@ void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 	return ;
 }
 
+void		CheckerTokens::checkUnexpectedSemicolons( void )
+{
+	const Token*		current = this->_head;
+	const Token*		prev = NULL;
+
+	while (current)
+	{
+		if (current->getType() == Token::SEMICOLON)
+		{
+			if (!prev || !current->getNext())
+				throw CheckerError("Unexpected ';' at start or end");
+
+			if (prev->getType() == Token::SEMICOLON)
+				throw CheckerError("Unexpected consecutive ';'");
+
+			if (!(prev->getType() == Token::DIR_V ||
+				prev->getType() == Token::HTTP_V ||
+				prev->getType() == Token::CGI_V ))
+				throw CheckerError("Unexpected ';' after block declaration: " + prev->getValue());
+		}
+		prev = current;
+		current = current->getNext();
+	}
+	return ;
+}
+
 /*
  *	Check duplicated keys in the same scope
  */
 void		CheckerTokens::checkDuplicatedKeysInScope( void )
 {
 	std::set<std::string>		seenKeys;
-	Token*						current = this->_head;
+	const Token*				current = this->_head;
 
 	while (current)
 	{
@@ -324,7 +351,7 @@ void		CheckerTokens::checkDuplicatedKeysInScope( void )
  */
 void		CheckerTokens::checkpath( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current)
 	{
@@ -359,7 +386,7 @@ void		CheckerTokens::checkpath( void )
  */
 void		CheckerTokens::checkBlockError( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current)
 	{
@@ -381,7 +408,7 @@ void		CheckerTokens::checkBlockError( void )
  */
 void		CheckerTokens::checkValue( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current && current->getNext())
 	{
@@ -402,7 +429,7 @@ void		CheckerTokens::checkValue( void )
  */
 void		CheckerTokens::checkCGI( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 
 	while (current->getType() != Token::CGI_BLK_S)
 		current = current->getNext();
@@ -421,7 +448,7 @@ void		CheckerTokens::checkCGI( void )
  */
 void		CheckerTokens::checkMethodHTTP( void )
 {
-	Token*		current = this->_head;
+	const Token*		current = this->_head;
 	
 	while (current)
 	{

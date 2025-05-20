@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_m.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:03:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 13:42:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/20 07:14:26 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 void		CheckerTokens::check( const Token& head )
 {
 	CheckerTokens	checker(head);
+	
 	try
 	{
 		checker.validateTokens();
