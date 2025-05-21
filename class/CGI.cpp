@@ -6,34 +6,52 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:20:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/21 09:27:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/CGI.hpp"
 
-CGI::CGI(EventMonitoring& em, const HttpRequest& req, HttpResponse& resp, 
-    const Server& ctx, const std::string& remoteIp) : _em(em), _req(req), _resp(resp), _ctx(ctx), _remoteIp(remoteIp) {}
-
-CGI::CGI(const CGI& obj) : _em(obj._em), _req(obj._req), _resp(obj._resp), 
-	_ctx(obj._ctx), _remoteIp(obj._remoteIp) {}
+CGI::CGI(/*Socket& sock*/) : /*_sock(sock),*/ _pid(0)
+{}
 
 CGI::~CGI() {}
 
-CGI& CGI::operator=(const CGI& obj) 
-{
-    if (this != &obj)
-        this->_em = obj._em;
-    return (*this);
-}
 
-void	initCGI()
+void	init()
 {
-	const std::vector<std::string> env;
+	//const std::vector<std::string> env;
+
 	//execve("", env.data(), env);
 }
 
-const std::vector<std::string> CGI::getEnv() const
+void CGI::launch()
+{
+    this->_pid = fork();
+    if (this->_pid < 0)
+    {
+        LOG_DEB("Fork failed");
+    }
+    if (this->_pid == 0)
+    {
+        try {
+            {
+                std::vector<char *> vect(1);
+                if (execve("", vect.data(), vect.data()) == -1)
+                    throw std::runtime_error("execve failed");
+            }
+        } catch (...) {
+            return ;
+        }
+    }
+    else
+    {
+        this->_in.closeOut();
+        this->_out.closeIn();
+    }
+}
+
+/*const std::vector<std::string> CGI::getEnv() const
 {
     std::vector<std::string> env;
 
@@ -46,7 +64,7 @@ const std::vector<std::string> CGI::getEnv() const
     // Request specific
 
     env.push_back(getRawEnv("SERVER_PROTOCOL", this->_req.getHTTP()));
-    env.push_back(getRawEnv("SERVER_PORT", /*this->_ctx.getPort()*/8000));
+    env.push_back(getRawEnv("SERVER_PORT", this->_ctx.getPort()8000));
     env.push_back(getRawEnv("REQUEST_METHOD", this->_req.getMethod()));
     env.push_back(getRawEnv("PATH_INFO", "")); //Should take it from handled
     env.push_back(getRawEnv("PATH_TRANSLATED", "")); //Should take it from handled
@@ -88,4 +106,4 @@ std::string CGI::getRawEnv(const std::string& key, const T& value) const
 
     oss << key << "=" << value;
     return (oss.str());
-}
+}*/

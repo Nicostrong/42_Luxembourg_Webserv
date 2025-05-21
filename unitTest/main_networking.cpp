@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:56:42 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/21 09:29:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,19 @@
 #include "../includes/EventMonitoring.hpp"
 #include "../includes/server/ServerManager.hpp"
 #include "../includes/parser/ParserServerConfig.hpp"
+#include "../includes/CGI.hpp"
 
 int main()
 {
-	try
+	ParserServerConfig		pc("../config/webserver.conf");
+	CGI cgi;
+
+	while (1)
+		cgi.launch();
+	(void)pc;
+	/*try
 	{
-		ParserServerConfig		pc("../config/webserver.conf");
+		
 		EventMonitoring			em;
 		ServerManager			sm(pc.getAllTokens(), em);
 
@@ -31,5 +38,5 @@ int main()
 	{
 		std::cerr << e.what() << std::endl;
 	}		
-	return (0);
+	return (0);*/
 }

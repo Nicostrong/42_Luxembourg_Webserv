@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 14:48:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/20 22:42:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ bool RequestHandling::isIndexFile(Socket& sock)
 
 	if (stat(indexPath.c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT)
+		if (errno != ENOENT && errno != ENOTDIR && errno != EACCES)
 			throw std::runtime_error("Stat failed");
 		return (false);
 	}
@@ -225,9 +225,12 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1 ||
 			!S_ISDIR(infos.st_mode))
 	{
-		if (errno != ENOENT)
+		if (errno != ENOENT && errno != ENOTDIR && errno != EACCES)
 			throw std::runtime_error("Stat failed");
-		sock.getResp().setStatusCode(NOT_FOUND);
+		if (errno == EACCES)
+			sock.getResp().setStatusCode(FORBIDDEN);
+		else
+			sock.getResp().setStatusCode(NOT_FOUND);
 		sock.getResp().setRespType(HttpResponse::ERROR);
 		return (true);
 	}
