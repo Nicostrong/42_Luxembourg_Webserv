@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/20 12:41:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/21 13:49:11 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void		CheckerTokens::checkHTTPKeyValuePairs( void )
 	{
 		if (current->getType() == Token::HTTP_K)
 		{
-			Token*		next = current->getNext();
+			Token*			next = current->getNext();
 
 			if (next->getType() != Token::HTTP_V)
 				throw CheckerError("Expected HTTP value after key " + current->getValue());
@@ -352,29 +352,33 @@ void		CheckerTokens::checkDuplicatedKeysInScope( void )
 void		CheckerTokens::checkpath( void )
 {
 	const Token*		current = this->_head;
+	char cwd[PATH_MAX];
 
+	if (getcwd(cwd, sizeof(cwd)))
+		std::cout << "[DEBUG] Current working directory: " << cwd << std::endl;
 	while (current)
 	{
 		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
 		{
-			if (current->getValue()[0] != '/')
-				throw CheckerError("Invalid path => " + current->getValue());
-			if (current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
-				throw CheckerError("Invalid path => " + current->getValue());
+			std::string		value = current->getValue();
+			const char*		path = value.c_str();
+			struct stat		sb;
+			
+			if (access(path, F_OK) != 0)
+				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
+			if (stat(path, &sb) == 0 && !S_ISDIR(sb.st_mode))
+				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
 		}
-		if (current->getType() == Token::DIR_K && 
-			(current->getValue() == "index" || current->getValue() == "root"))
+		if (current->getType() == Token::DIR_K && current->getValue() == "root")
 		{
-			current = current->getNext();
-			if (current->getValue()[0] != '/' && 
-				(current->getValue()[0] != '.' && current->getValue()[1] != '/'))
-				throw CheckerError("Invalid path => " + current->getValue());
-			if (current->getValue()[0] == '.' && 
-				current->getValue().size() > 2 && !std::isalnum(current->getValue()[2]))
-				throw CheckerError("Invalid path => " + current->getValue());
-			if (current->getValue()[0] == '/' && 
-				current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
-				throw CheckerError("Invalid path => " + current->getValue());	
+			std::string		value = current->getNext()->getValue();
+			const char*		path = value.c_str();
+			struct stat		sb;
+			
+			if (access(path, F_OK) != 0)
+				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
+			if (stat(path, &sb) == 0 && !S_ISDIR(sb.st_mode))
+				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
 		}
 		current = current->getNext();
 	}
@@ -471,3 +475,36 @@ void		CheckerTokens::assertFinalState( void ) const
 		throw CheckerError("Unclosed block detected");
 	return ;
 }
+/*
+
+void		CheckerTokens::checkpath( void )
+{
+	const Token*		current = this->_head;
+
+	while (current)
+	{
+		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
+		{
+			if (current->getValue()[0] != '/')
+				throw CheckerError("Invalid path => " + current->getValue());
+			if (current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
+				throw CheckerError("Invalid path => " + current->getValue());
+		}
+		if (current->getType() == Token::DIR_K && 
+			(current->getValue() == "index" || current->getValue() == "root"))
+		{
+			current = current->getNext();
+			if (current->getValue()[0] != '/' && 
+				(current->getValue()[0] != '.' && current->getValue()[1] != '/'))
+				throw CheckerError("Invalid path => " + current->getValue());
+			if (current->getValue()[0] == '.' && 
+				current->getValue().size() > 2 && !std::isalnum(current->getValue()[2]))
+				throw CheckerError("Invalid path => " + current->getValue());
+			if (current->getValue()[0] == '/' && 
+				current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
+				throw CheckerError("Invalid path => " + current->getValue());	
+		}
+		current = current->getNext();
+	}
+	return ;
+}*/

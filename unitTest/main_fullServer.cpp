@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_fullServer.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:56:51 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/21 11:17:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main( void )
 {
 	try
 	{
-		ParserServerConfig								pc("../config/webserver.conf");
+		ParserServerConfig								pc("../config/webserv.conf");
 		EventMonitoring									em;
 		ServerManager									sm(pc.getAllTokens(), em);
 		const std::set<Server*>							setServ = sm.getAllServers();

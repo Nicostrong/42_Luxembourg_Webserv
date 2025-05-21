@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:56:42 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/21 11:17:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main()
 {
 	try
 	{
-		ParserServerConfig		pc("../config/webserver.conf");
+		ParserServerConfig		pc("../config/webserv.conf");
 		EventMonitoring			em;
 		ServerManager			sm(pc.getAllTokens(), em);
 

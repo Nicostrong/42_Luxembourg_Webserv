@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:19:33 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 13:46:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/21 11:17:10 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		main( void )
 {
 	try
 	{
-		ParserServerConfig		pc("../config/webserver.conf");
+		ParserServerConfig		pc("../config/webserv.conf");
 
 		pc.getAllTokens()->printToken();
 	}
