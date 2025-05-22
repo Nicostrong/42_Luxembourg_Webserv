@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/21 13:49:11 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/22 08:26:20 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void		CheckerTokens::validateTokens( void )
 	checkUnexpectedSemicolons();
 	checkDuplicatedKeysInScope();
 	checkpath();
-	checkBlockError();
 	checkValue();
 	checkCGI();
 	checkMethodHTTP();
@@ -295,6 +294,9 @@ void		CheckerTokens::checkSemicolonBeforeBlockEnd( void )
 	return ;
 }
 
+/*
+ *	Check unexpected semicolon
+ */
 void		CheckerTokens::checkUnexpectedSemicolons( void )
 {
 	const Token*		current = this->_head;
@@ -341,67 +343,6 @@ void		CheckerTokens::checkDuplicatedKeysInScope( void )
 				throw CheckerError("Duplicate directive: " + current->getValue());
 			seenKeys.insert(current->getValue());
 		}
-		current = current->getNext();
-	}
-	return ;
-}
-
-/*
- *	Check if the value of path start with a '/' or '.'
- */
-void		CheckerTokens::checkpath( void )
-{
-	const Token*		current = this->_head;
-	char cwd[PATH_MAX];
-
-	if (getcwd(cwd, sizeof(cwd)))
-		std::cout << "[DEBUG] Current working directory: " << cwd << std::endl;
-	while (current)
-	{
-		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
-		{
-			std::string		value = current->getValue();
-			const char*		path = value.c_str();
-			struct stat		sb;
-			
-			if (access(path, F_OK) != 0)
-				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
-			if (stat(path, &sb) == 0 && !S_ISDIR(sb.st_mode))
-				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
-		}
-		if (current->getType() == Token::DIR_K && current->getValue() == "root")
-		{
-			std::string		value = current->getNext()->getValue();
-			const char*		path = value.c_str();
-			struct stat		sb;
-			
-			if (access(path, F_OK) != 0)
-				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
-			if (stat(path, &sb) == 0 && !S_ISDIR(sb.st_mode))
-				throw CheckerError("Path doesn't exist for key: " + current->getValue() + " path: " + value);
-		}
-		current = current->getNext();
-	}
-	return ;
-}
-
-/*
- *	Check the key and the value of the block error
- */
-void		CheckerTokens::checkBlockError( void )
-{
-	const Token*		current = this->_head;
-
-	while (current)
-	{
-		if (current->getType() == Token::ERR_BLK_S)
-			while (current && current->getType() != Token::ERR_BLK_E)
-			{
-				if (current->getType() == Token::DIR_V)
-					if (current->getValue()[0] != '/')
-						throw CheckerError("Path error must start with a /");
-				current = current->getNext();
-			}
 		current = current->getNext();
 	}
 	return ;
@@ -475,36 +416,153 @@ void		CheckerTokens::assertFinalState( void ) const
 		throw CheckerError("Unclosed block detected");
 	return ;
 }
+
 /*
-
-void		CheckerTokens::checkpath( void )
+ *	Check if the path is a directory
+ */
+bool		CheckerTokens::is_valid_dir( const std::string& path )
 {
-	const Token*		current = this->_head;
+	struct stat		sb;
 
-	while (current)
+	return (access(path.c_str(), F_OK) == 0 && stat(path.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode));
+}
+
+/*
+ *	Check if the path is a file
+ */
+bool		CheckerTokens::is_valid_file( const std::string& path )
+{
+	struct stat		sb;
+
+	return (access(path.c_str(), F_OK) == 0 && stat(path.c_str(), &sb) == 0 && S_ISREG(sb.st_mode));
+}
+
+/*
+ *	Check if the path is a executable file (for cgi)
+ */
+bool		CheckerTokens::is_executable_file( const std::string& path )
+{
+	struct stat		sb;
+
+	return (access(path.c_str(), X_OK) == 0 &&
+		stat(path.c_str(), &sb) == 0 &&
+		S_ISREG(sb.st_mode));
+}
+
+/*
+ *	Check if the path is valid for root
+ */
+void		CheckerTokens::validate_root( const Token* current )
+{
+	const Token*		next = current->getNext();
+
+	if (!next || !is_valid_dir(next->getValue()))
+		throw CheckerError("Invalid root path: " + (next ? next->getValue() : "<missing>"));
+	return ;
+}
+
+/*
+ *	Check if the path is valid for index
+ */
+void		CheckerTokens::validate_index( const Token* current )
+{
+	const Token*			next = current->getNext();
+	const std::string&		val = next->getValue();
+
+	if (!(val.find("./") == 0 || (val[0] == '/' && isalnum(val[1]))))
+		throw CheckerError("Invalid index path: " + val);
+	return ;
+}
+
+/*
+ *	Check if the path is valid for return
+ */
+void		CheckerTokens::validate_return( const Token* current )
+{
+	const Token*			next = current->getNext();
+	const std::string&		val = next->getValue();
+
+	if (val.find("http://") != 0 && access(val.c_str(), R_OK) != 0)
+		throw CheckerError("Return path not readable: " + val);
+	return ;
+}
+
+/*
+ *	Check if the path is valid for location
+ */
+void		CheckerTokens::validate_location( const Token* current )
+{
+	const std::string&		val = current->getValue();
+
+	if (!(val == "/" || (val[0] == '/' && isalnum(val[1]))))
+		throw CheckerError("Invalid LOCATION value: " + val);
+	return ;
+}
+
+/*
+ *	Check if the path is valid for all value in error block
+ */
+const Token*		CheckerTokens::validate_error_block( const Token* current )
+{
+	while (current && current->getType() != Token::ERR_BLK_E)
 	{
-		if (current->getType() == Token::LOCATION || current->getType() == Token::CGI_V)
+		if (current->getType() == Token::DIR_K)
 		{
-			if (current->getValue()[0] != '/')
-				throw CheckerError("Invalid path => " + current->getValue());
-			if (current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
-				throw CheckerError("Invalid path => " + current->getValue());
-		}
-		if (current->getType() == Token::DIR_K && 
-			(current->getValue() == "index" || current->getValue() == "root"))
-		{
-			current = current->getNext();
-			if (current->getValue()[0] != '/' && 
-				(current->getValue()[0] != '.' && current->getValue()[1] != '/'))
-				throw CheckerError("Invalid path => " + current->getValue());
-			if (current->getValue()[0] == '.' && 
-				current->getValue().size() > 2 && !std::isalnum(current->getValue()[2]))
-				throw CheckerError("Invalid path => " + current->getValue());
-			if (current->getValue()[0] == '/' && 
-				current->getValue().size() > 1 && !std::isalnum(current->getValue()[1]))
-				throw CheckerError("Invalid path => " + current->getValue());	
+			const Token*		next = current->getNext();
+			
+			if (next && next->getType() == Token::DIR_V && !is_valid_file(next->getValue()))
+				throw CheckerError("Invalid path in ERR_BLK: " + next->getValue());
+			current = next;
 		}
 		current = current->getNext();
 	}
+	return (current);
+}
+
+/*
+ *	Check if the path is valid for all value in token list
+ */
+void CheckerTokens::checkpath(void)
+{
+	const Token*		current = this->_head;
+	char				cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)))
+		std::cout << "[DEBUG] Current working directory: " << cwd << std::endl;
+
+	while (current)
+	{
+		if (current->getType() == Token::CGI_V)
+		{
+			if (!is_executable_file(current->getValue()))
+				throw CheckerError("Invalid CGI_V path: " + current->getValue());
+		}
+		else if (current->getType() == Token::DIR_K)
+		{
+			if (current->getValue() == "root")
+			{
+				validate_root(current);
+				current = current->getNext();
+			}
+			else if (current->getValue() == "index")
+			{
+				validate_index(current);
+				current = current->getNext();
+			}
+		}
+		else if (current->getType() == Token::DIR_V)
+		{
+			if (current->getValue() == "return")
+			{
+				validate_return(current);
+				current = current->getNext();
+			}
+		}
+		else if (current->getType() ==  Token::LOCATION)
+			validate_location(current);
+		else if (current->getType() == Token::ERR_BLK_S)
+			current = validate_error_block(current->getNext());
+		current = current->getNext();
+	}
 	return ;
-}*/
+}
