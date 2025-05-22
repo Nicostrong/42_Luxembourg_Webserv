@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/20 15:20:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 18:23:15 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # include <sys/epoll.h>
 # include <netinet/in.h>
 # include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include <unistd.h>
 #include <iostream>
@@ -53,6 +55,7 @@
 # define SEND_BUFFER_SIZE 262144
 # define RESPONSE_BUFFER_SIZE 32768
 # define MAX_READ_SIZE 32768
+# define BODY_BUFFER_SIZE 32768
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"

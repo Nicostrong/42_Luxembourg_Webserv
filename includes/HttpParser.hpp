@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:17:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 17:58:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class HttpParser : public HttpBase
 		void 					parse(std::vector<char>& buff, size_t n);
 		
 		State					getState() const;
+		Buffer&					getBuffer();
 	protected:
 		HttpParser();
 		
@@ -44,6 +45,7 @@ class HttpParser : public HttpBase
 		void					parseHeaders(const std::string& headers);
 	private:
 		std::string				_buffer;
+		Buffer					_bodyBuffer;
 		State 					_state;
 		Encoding				_enc;
 		std::string				_queryParams;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 09:08:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 16:45:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "./EventMonitoring.hpp"
 # include "./Pipe.hpp"
 
-class CGI //: public IEventHandler
+class CGI : public IEventHandler
 {
     public:
         class ForkClean : public std::exception {
@@ -29,14 +29,14 @@ class CGI //: public IEventHandler
 				const char * what () const throw();
 		};
 
-        CGI(/*Socket& sock*/);
+        CGI(Socket& sock);
        
         ~CGI();
         
 
         void	init();
-        void    launch();
-        
+        void    launch(Socket& sock, const std::string& path);
+        pid_t   getPid() const;
     private:
         CGI(const CGI& obj);
         CGI&    operator=(const CGI& obj);
@@ -48,7 +48,7 @@ class CGI //: public IEventHandler
         
         const std::vector<const char*> getCArray(const std::vector<std::string>& in) 
             const;
-        /*Socket& _sock;*/
+        Socket& _sock;
         pid_t   _pid;
         Pipe    _in;
         Pipe    _out;

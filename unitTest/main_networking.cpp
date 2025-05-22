@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 09:56:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 13:17:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int main()
 		ServerManager			sm(pc.getAllTokens(), em);
 		CGI cgi;
 		
-		//cgi.launch();
+		cgi.launch();
 		(void)sm;
 		sm.startAll();
 		//while (1)

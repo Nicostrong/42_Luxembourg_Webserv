@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:33 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/22 13:14:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

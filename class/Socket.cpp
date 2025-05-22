@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:08:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 16:43:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ Server& Socket::getCtx()
 Buffer& Socket::getTxBuffer()
 {
 	return (this->_txBuffer);
+}
+
+EventMonitoring& Socket::getEventMonitoring()
+{
+	return (this->_em);
 }
 
 void Socket::reset()

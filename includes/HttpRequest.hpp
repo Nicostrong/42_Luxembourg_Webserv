@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 16:40:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 17:56:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "./lib.hpp"
 #include "./HttpBase.hpp"
-#include "HttpParser.hpp"
+#include "./HttpParser.hpp"
 #include "./server/Location.hpp"
 
 class HttpRequest : public HttpParser

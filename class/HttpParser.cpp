@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:12:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 18:00:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpParser.hpp"
 
-HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE) {}
+HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE), 
+	_buffer(), _bodyBuffer(BODY_BUFFER_SIZE) {}
 
 HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj), 
-	 _buffer(obj._buffer), _state(obj._state) {}
+	_buffer(obj._buffer), _state(obj._state), _bodyBuffer(obj._bodyBuffer) {}
 
 HttpParser::~HttpParser() {}
 
@@ -24,6 +25,7 @@ HttpParser& HttpParser::operator=(const HttpParser& obj)
 	HttpBase::operator=(obj);
 	this->_state = obj._state;
 	this->_buffer = obj._buffer;
+	this->_bodyBuffer = obj._bodyBuffer;
 	return (*this);
 }
 

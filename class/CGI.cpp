@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 09:52:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 16:46:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/CGI.hpp"
 
-CGI::CGI(/*Socket& sock*/) : /*_sock(sock),*/ _pid(0)
+CGI::CGI(Socket& sock) : _sock(sock), _pid(0)
 {}
 
 CGI::~CGI() {}
@@ -25,7 +25,7 @@ void	init()
 	//execve("", env.data(), env);
 }
 
-void CGI::launch()
+void CGI::launch(Socket& sock, const std::string& path)
 {
     this->_pid = fork();
     if (this->_pid < 0)
@@ -34,22 +34,30 @@ void CGI::launch()
     }
     if (this->_pid == 0)
     {
-            std::vector<char*> argv_vec;
-            argv_vec.push_back(strdup("/path/to/program"));
-            argv_vec.push_back(strdup("argument1"));
-            argv_vec.push_back(NULL);
+        std::vector<char*> argv_vec;
+        argv_vec.push_back(strdup("/path/to/program"));
+        argv_vec.push_back(strdup("argument1"));
+        argv_vec.push_back(NULL);
 
-            if (execve("", argv_vec.data(), argv_vec.data()) == -1)
-            {
-                LOG_DEB("exited fork");
-                _exit(1);
-            }
+        if (execve(path.c_str(), argv_vec.data(), argv_vec.data()) == -1)
+        {
+            LOG_DEB("exited fork");
+            throw ForkClean();
+        }
     }
     else
     {
         this->_in.closeOut();
         this->_out.closeIn();
+        sock.getEventMonitoring().monitor(this->_in.getIn(), POLLIN, 0, *this);
+        //sock.getEventMonitoring().monitor(this->_in.getOut(), POLLOUT, 0, *this);
+        //waitpid(this->_pid, NULL, 0);
     }
+}
+
+pid_t   CGI::getPid() const
+{
+    return (this->_pid);
 }
 
 /*const std::vector<std::string> CGI::getEnv() const

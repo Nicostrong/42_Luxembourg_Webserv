@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 11:34:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 16:42:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Socket : public IEventHandler
 		HttpResponse&		getResp();
 		Server& 			getCtx();
 		Buffer&				getTxBuffer();
+		EventMonitoring&	getEventMonitoring();
 		void				reset();
 		void				onReadEvent(int fd, int type, EventMonitoring& em);
 		void				onWriteEvent(int fd, int type, EventMonitoring& em);
