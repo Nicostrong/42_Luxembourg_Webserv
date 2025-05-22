@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 16:22:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 10:06:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ EventMonitoring::~EventMonitoring()
 		if (data->getFd() > 2)
 			close(data->getFd());
 		delete data;
+		++it;
 	}
 	this->_openFds.clear();
 	if (this->_epollFd > 2)
