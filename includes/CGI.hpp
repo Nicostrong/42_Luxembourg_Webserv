@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/21 09:11:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 09:08:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 class CGI //: public IEventHandler
 {
     public:
+        class ForkClean : public std::exception {
+			public:
+				const char * what () const throw();
+		};
+
         CGI(/*Socket& sock*/);
        
         ~CGI();

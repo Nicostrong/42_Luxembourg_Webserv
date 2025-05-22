@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/21 09:27:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 09:52:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,16 @@ void CGI::launch()
     }
     if (this->_pid == 0)
     {
-        try {
+            std::vector<char*> argv_vec;
+            argv_vec.push_back(strdup("/path/to/program"));
+            argv_vec.push_back(strdup("argument1"));
+            argv_vec.push_back(NULL);
+
+            if (execve("", argv_vec.data(), argv_vec.data()) == -1)
             {
-                std::vector<char *> vect(1);
-                if (execve("", vect.data(), vect.data()) == -1)
-                    throw std::runtime_error("execve failed");
+                LOG_DEB("exited fork");
+                _exit(1);
             }
-        } catch (...) {
-            return ;
-        }
     }
     else
     {
@@ -107,3 +108,10 @@ std::string CGI::getRawEnv(const std::string& key, const T& value) const
     oss << key << "=" << value;
     return (oss.str());
 }*/
+
+// Exceptions
+
+const char *CGI::ForkClean::what() const throw()
+{
+	return ("Fork clean");
+}
