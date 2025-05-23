@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:18:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 23:33:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 10:09:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ Buffer* MemoryPool::getBufferFromPool(std::vector<Buffer*>& buffs, std::queue<Bu
 void MemoryPool::setAvailableBuffer(Buffer* buff)
 {
 	size_t buffSize = buff->getVector().size();
-
+	
+	buff->reset();
 	switch (buffSize)
 	{
 		case SMALL_BUFF:

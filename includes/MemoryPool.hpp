@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:13:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 23:33:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 09:42:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include "Buffer.hpp"
 
 # define SMALL_BUFF 1024
+# define SMALL_AMOUNT 2048
 # define MEDIUM_BUFF 8192
-# define MEDIUM_AMOUNT 4
+# define MEDIUM_AMOUNT 256
 # define LARGE_BUFF 16384
-
+# define SMALL_AMOUNT 256
 
 # define MAX_CLIENT 1024
 

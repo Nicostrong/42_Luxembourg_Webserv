@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 12:06:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 10:47:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void Buffer::setBufferRead(size_t n)
 	size_t bRead = n + this->_bufferRead;
 	
 	if (bRead - n != this->_bufferRead || bRead >= this->_bufferUsed)
-		reset();
+		this->_bufferUsed = this->_bufferUsed;
 	else
 		this->_bufferRead = bRead;
 
@@ -107,6 +107,21 @@ bool Buffer::isBufferRead()
 std::vector<char>::iterator	Buffer::beginUnused()
 {
 	return (this->_buffer.begin() + this->_bufferUsed);
+}
+
+std::vector<char>::iterator	Buffer::beginUnread()
+{
+	return (this->_buffer.begin() + this->_bufferRead);
+}
+
+void Buffer::copyFrom(Buffer& buff)
+{
+    if (buff.getVector().size() < this->_buffer.size())
+        return ;
+    std::copy(buff.getVector().begin(), buff.beginUnused(), 
+        this->_buffer.begin());
+    setBufferUsed(buff.getBufferUsed());
+    setBufferRead(buff.getBufferRead());
 }
 
 void Buffer::reset()

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 11:14:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 10:47:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ class Buffer
 		bool						isBufferFull();
 		bool						isBufferRead();
 		std::vector<char>::iterator	beginUnused();
+		std::vector<char>::iterator	beginUnread();
+		void						copyFrom(Buffer& buff);
 		void 						reset();
     private:
         std::vector<char>	_buffer;
