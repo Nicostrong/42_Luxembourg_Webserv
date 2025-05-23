@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Buffer.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 10:47:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:22:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Buffer
         Buffer&						operator=(const Buffer& obj);
 		std::vector<char>&			getVector();
 		char*						getData();
+		const char*					getData() const;
 		char*						getDataUnused();
 		char*						getDataUnread();
 		size_t						getBufferUsed();
@@ -37,6 +38,13 @@ class Buffer
 		std::vector<char>::iterator	beginUnused();
 		std::vector<char>::iterator	beginUnread();
 		void						copyFrom(Buffer& buff);
+		size_t						find(const char& c, size_t pos = 0,
+											size_t n = std::string::npos);
+		size_t						find(const std::string& str, size_t pos = 0,
+											size_t n = std::string::npos);
+		size_t						find(const char* str, size_t pos = 0,
+											size_t n = std::string::npos);
+		char&						at(size_t n);
 		void 						reset();
     private:
         std::vector<char>	_buffer;

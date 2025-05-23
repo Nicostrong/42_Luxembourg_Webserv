@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Headers.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:43:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 10:57:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:32:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,56 @@ Buffer* Headers::getBuffer()
     return (this->_buff);
 }
 
-void Headers::isHeadersReceived()
+void Headers::parseHeaders()
 {
-    std::vector<char> buff = this->_buff->getVector();
-    size_t pos = this->_buff->getBufferRead();
-    size_t length = 0;
-    while (pos < this->_buff->getBufferUsed())
+	size_t sPos = 0;
+	size_t ePos = this->_buff->find(CRLF);
+
+	while (ePos != std::string::npos)
+	{
+		parseHeader(sPos, ePos - 1);
+		sPos = ePos + 2;
+		ePos = this->_buff->find(CRLF, sPos);
+	}
+
+	/*if (this->_headers.find("HOST") == this->_headers.end())
+	{
+		this->_state = HTTP_INVALID;
+		return ;
+	}*/
+}
+
+void Headers::parseHeader(size_t start, size_t end)
+{
+    size_t length = end - start;
+
+    if (length == 0)
     {
-        if (buff.at(pos) == CRLF)
-        
-        ++pos;
+        this->_headersEnd = start + 2;
+        this->_state = READY;
+        return ;
     }
+
+	size_t sep = this->_buff->find(':', start, length);
+    
+	if (sep == std::string::npos || sep == start)
+	{
+		this->_state = MALFORMED;
+		return ;
+	}
+
+	int	folding = (length - sep > 1) ? 
+				  this->_buff->at(sep + 1) == ' ' || this->_buff->at(sep + 1) == '\t' : 0;
+
+	if (!isHeaderNameValid(start, sep - 1))
+	{
+		this->_state = MALFORMED;
+		return ;
+	}
+	normalizeHeaderName(start, sep - 1);
+
+	this->_mapKeys.push_back({start, sep - start - 1});
+    this->_mapValues.push_back({sep + 1, end - sep});
 }
 
 void Headers::allocateBuff()
@@ -70,4 +109,52 @@ void Headers::allocateBuff()
             temp->copyFrom(*this->_buff);
     }
     this->_buff = temp;
+}
+
+bool Headers::isHeaderNameValid(size_t nStart, size_t nEnd)
+{
+	while (nStart != nEnd) 
+	{
+        char c = this->_buff->at(nStart);
+		if (!std::isalnum(c) && c != '-' && c != '_' )
+			return (false);
+        ++nStart;
+	}
+	return (true);
+}
+
+void Headers::normalizeHeaderName(size_t nStart, size_t nEnd)
+{
+    while (nStart != nEnd) 
+	{
+        this->_buff->at(nStart) = std::toupper(this->_buff->at(nStart));
+        ++nStart;
+	}
+}
+
+bool Headers::isHeaderPresent(const std::string& name) const
+{
+    return (getHeaderIndex(name) != std::string::npos);
+}
+
+const t_string* Headers::getHeaderValue(const std::string& name) const
+{
+    size_t headerPos = getHeaderIndex(name);
+
+    if (headerPos == std::string::npos)
+        return (NULL);
+    return (&this->_mapValues.at(headerPos));
+}
+
+size_t Headers::getHeaderIndex(const std::string& name) const
+{
+    for (int i = 0; i < this->_mapKeys.size(); ++i)
+    {
+        t_string key = this->_mapKeys.at(i);
+        
+        if (key.len == name.size() && std::strncmp(
+            this->_buff->getData() + key.pos, name.c_str(),key.len) == 0)
+            return (i);
+    }
+    return (std::string::npos);
 }

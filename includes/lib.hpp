@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/22 18:23:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:24:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@
 # define BLUE		"\033[94m"		//	Directive log
 # define MAGENTA	"\033[95m"		//	Method log
 # define CYAN		"\033[96m"		//	Debug log
+
+struct t_string 
+{
+    size_t pos;
+    size_t len;
+};
 
 #define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
 

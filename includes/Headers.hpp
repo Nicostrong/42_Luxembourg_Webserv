@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:43:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 10:54:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:35:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,27 @@ class Headers
 		enum State
 		{
 			RECEIVING = 0,
-			HANDLING = 1,
-			READY = 2,
-			MALFORMED = 3,
-			TOO_LARGE = 4,
+			READY = 1,
+			MALFORMED = 2,
+			TOO_LARGE = 3,
 		};
         Headers(MemoryPool& mPool);
         Headers(const Headers& obj);
         ~Headers();
-        Headers&	operator=(const Headers& obj);
-		Buffer*		getBuffer();
-		void		read(int socket);
-		void		isHeadersReceived();
+        Headers&		operator=(const Headers& obj);
+		Buffer*			getBuffer();
+		void			read(int socket);
+		void 			parseHeaders();
+		void			parseHeader(size_t start, size_t end);
+		bool			isHeaderNameValid(size_t nStart, size_t nEnd);
+		void			normalizeHeaderName(size_t nStart, size_t nEnd);
+		bool			isHeaderPresent(const std::string& name) const;
+		const t_string* getHeaderValue(const std::string& name) const;
     private:
-        struct t_string 
-        {
-            size_t pos;
-            size_t len;
-        };
+        
 
-		void allocateBuff();
+		void 	allocateBuff();
+		size_t 	getHeaderIndex(const std::string& name) const;
 
 		MemoryPool&				_mPool;
         Buffer*					_buff;

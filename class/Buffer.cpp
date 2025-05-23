@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Buffer.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 10:47:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:22:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ std::vector<char>&	Buffer::getVector()
 }
 
 char*  Buffer::getData()
+{
+    return (this->_buffer.data());
+}
+
+const char*  Buffer::getData() const
 {
     return (this->_buffer.data());
 }
@@ -122,6 +127,66 @@ void Buffer::copyFrom(Buffer& buff)
         this->_buffer.begin());
     setBufferUsed(buff.getBufferUsed());
     setBufferRead(buff.getBufferRead());
+}
+
+size_t Buffer::find(const char& c, size_t pos, size_t n)
+{
+    while (pos < this->_bufferUsed && pos < pos + n)
+    {
+        if (this->_buffer.at(pos))
+            return (pos);
+        ++pos;
+    }
+    return (std::string::npos);
+}
+
+size_t Buffer::find(const std::string& str, size_t pos, size_t n)
+{
+    
+    
+    while (pos < this->_bufferUsed && pos < pos + n)
+    {
+        bool flag = true;
+
+        for (int i = 0; 
+                flag && i < str.size(); ++i)
+        {
+            if (pos + i < this->_bufferUsed || 
+                pos + i >= pos + n ||
+                this->_buffer.at(pos + i) != str.at(i))
+                flag = false;
+        }
+        if (flag)
+            return (pos);
+        ++pos;
+    }
+    return (std::string::npos);
+}
+
+size_t Buffer::find(const char* str, size_t pos, size_t n)
+{
+    while (pos < this->_bufferUsed&& pos < pos + n)
+    {
+        bool flag = true;
+
+        for (int i = 0; 
+                flag && str[i]; ++i)
+        {
+            if (pos + i < this->_bufferUsed ||
+                pos + i >= pos + n ||
+                this->_buffer.at(pos + i) != str[i])
+                flag = false;
+        }
+        if (flag)
+            return (pos);
+        ++pos;
+    }
+    return (std::string::npos);
+}
+
+char& Buffer::at(size_t n)
+{
+    return (this->_buffer.at(n));
 }
 
 void Buffer::reset()
