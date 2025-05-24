@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:18:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 10:09:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/24 09:30:15 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 MemoryPool::MemoryPool() 
 {
-	this->_smallBuffers.reserve(MAX_CLIENT);
+	this->_smallBuffers.reserve(MAX_CLIENT * 2);
 	this->_mediumBuffers.reserve(MEDIUM_AMOUNT);
-	this->_largeBuffers.reserve(MAX_CLIENT);;
+	this->_largeBuffers.reserve(MAX_CLIENT);
 }
 
 MemoryPool::MemoryPool(const MemoryPool& obj) : 

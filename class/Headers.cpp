@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Headers.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:43:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 16:32:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/24 09:41:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ Headers::~Headers()
 
 Headers& Headers::operator=(const Headers& obj)
 {
+    (void)obj;
     return (*this);
 }
 
@@ -57,6 +58,11 @@ void Headers::parseHeaders()
 		ePos = this->_buff->find(CRLF, sPos);
 	}
 
+    if (this->_state == RECEIVING && this->_buff->isBufferFull())
+    {
+        this->_state = TOO_LARGE;
+        return ;
+    }
 	/*if (this->_headers.find("HOST") == this->_headers.end())
 	{
 		this->_state = HTTP_INVALID;

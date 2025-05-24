@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Headers.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:43:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 16:35:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/24 09:24:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ class Headers
 		bool			isHeaderPresent(const std::string& name) const;
 		const t_string* getHeaderValue(const std::string& name) const;
     private:
-        
-
 		void 	allocateBuff();
 		size_t 	getHeaderIndex(const std::string& name) const;
 
