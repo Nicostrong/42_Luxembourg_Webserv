@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:43:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/24 09:24:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:36:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ class Headers
         Headers(const Headers& obj);
         ~Headers();
         Headers&		operator=(const Headers& obj);
+		State			getState() const;
 		Buffer*			getBuffer();
+		void			readBufferLeft(Buffer& buff, size_t pos);
 		void			read(int socket);
 		void 			parseHeaders();
 		void			parseHeader(size_t start, size_t end);

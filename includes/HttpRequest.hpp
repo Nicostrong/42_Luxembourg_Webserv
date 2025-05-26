@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 17:56:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:33:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include "./HttpBase.hpp"
 #include "./HttpParser.hpp"
 #include "./server/Location.hpp"
+#include "./MemoryPool.hpp"
+#include "./StartLine.hpp"
+#include "./Headers.hpp"
 
 class HttpRequest : public HttpParser
 {
@@ -47,6 +50,7 @@ class HttpRequest : public HttpParser
 		const std::string&		getFilePath() const;
 		const std::string&		getQueryParams() const;
 		size_t					getFileSize() const;
+		void					onRead(int socket);
 		
 
 	private:
@@ -65,6 +69,10 @@ class HttpRequest : public HttpParser
 		std::string		_queryParams;
 		size_t			_fileSize;
 
+		//Requests parts
+
+		StartLine	_sl;
+		Headers		_headers;
 };
 
 #endif

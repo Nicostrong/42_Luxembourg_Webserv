@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 16:42:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:06:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Socket : public IEventHandler
 				const char* what() const throw();
 		};
 	
-		Socket(int fd, EventMonitoring&	em, Server& ctx, 
+		Socket(int fd, EventMonitoring&	em, MemoryPool& memPool, Server& ctx, 
 			const sockaddr_in& sockAddr);
 		Socket(const Socket& obj);
 		~Socket();
@@ -57,6 +57,7 @@ class Socket : public IEventHandler
 		HttpRequest 		_req;
 		HttpResponse 		_resp;
 		EventMonitoring&	_em;
+		MemoryPool&			_memPool;
 		Server&				_ctx;
 		std::string			_remoteIp;
 		Buffer				_txBuffer;

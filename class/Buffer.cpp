@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 09:55:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:52:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,14 @@ std::vector<char>::iterator	Buffer::beginUnread()
 	return (this->_buffer.begin() + this->_bufferRead);
 }
 
-void Buffer::copyFrom(Buffer& buff)
+void Buffer::copyFrom(Buffer& buff, size_t pos, size_t n)
 {
     if (buff.getVector().size() < this->_buffer.size())
         return ;
-    std::copy(buff.getVector().begin(), buff.beginUnused(), 
+    std::copy(buff.getVector().begin() + pos, 
+        std::min(pos + n, buff._bufferUsed) + buff.getVector().begin(), 
         this->_buffer.begin());
-    setBufferUsed(buff.getBufferUsed());
+    setBufferUsed(std::min(pos + n, buff._bufferUsed) - pos);
     setBufferRead(buff.getBufferRead());
 }
 

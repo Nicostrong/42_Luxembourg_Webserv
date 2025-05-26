@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:09 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/26 11:02:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 /*
  *	Server constructor with tokens in argument
  */
-Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
+Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring, MemoryPool& memPool) 
 	: _maxClient(1), _serverSocket(0), _maxSizeBody(1024), _path("/www/html"),
-	_index("index.html"), _serverIp(SERVER_IP), _em(eventMonitoring)
+	_index("index.html"), _serverIp(SERVER_IP), _em(eventMonitoring), 
+	_memPool(memPool)
 {
 	try
 	{

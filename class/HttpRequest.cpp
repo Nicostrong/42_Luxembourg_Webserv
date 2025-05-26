@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 18:36:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:42:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_filePath = obj._filePath;
 		this->_queryParams = obj._queryParams;
 		this->_fileSize = obj._fileSize;
+		this->_sl = obj._sl;
+		this->_headers = obj._headers;
 	}
 	return (*this);
 }
@@ -133,4 +135,12 @@ const std::string& HttpRequest::getQueryParams() const
 size_t HttpRequest::getFileSize() const
 {
 	return (this->_fileSize);
+}
+
+void HttpRequest::onRead(int socket)
+{
+	if (this->_sl.getState() == StartLine::RECEIVING)
+		this->_sl.read(socket);
+	else if (this->_sl.getState() == StartLine::READY && this->_headers.getState() == Headers::RECEIVING)
+		this->_headers.read(socket);
 }

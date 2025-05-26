@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 09:44:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:44:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Buffer
 		bool						isBufferRead();
 		std::vector<char>::iterator	beginUnused();
 		std::vector<char>::iterator	beginUnread();
-		void						copyFrom(Buffer& buff);
+		void						copyFrom(Buffer& buff, size_t pos = 0, size_t n = std::string::npos);
 		size_t						find(const char& c, size_t pos = 0,
 											size_t n = std::string::npos);
 		size_t						find(const std::string& str, size_t pos = 0,

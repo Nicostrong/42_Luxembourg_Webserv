@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 09:10:49 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 09:38:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:35:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class StartLine
 		StartLine(const StartLine& obj);
 		~StartLine();
 		StartLine&	operator=(const StartLine& obj);
+		State		getState() const;
 		void 		read(int socket);
 		void		parseStartLine();
 		void		canBeValidMethod(const t_string& str);

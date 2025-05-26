@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/22 13:14:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:04:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 /*
  *	ServerManager constructor with a list of Token in argument
  */
-ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring )
+ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring
+	, MemoryPool& memPool )
 	: _nbServer(0)
 {
 	try
@@ -35,7 +36,7 @@ ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring
 			std::list<size_t>::const_iterator		pit;
 
 			tokens = *it;
-			server = new Server(tokens, eventMonitoring);
+			server = new Server(tokens, eventMonitoring, memPool);
 			ports = server->getPortList();
 			for (pit = ports.begin(); pit != ports.end(); ++pit)
 				this->_mServers[*pit].push_back(server);

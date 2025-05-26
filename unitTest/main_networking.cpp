@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 13:17:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:59:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../includes/EventMonitoring.hpp"
 #include "../includes/server/ServerManager.hpp"
 #include "../includes/parser/ParserServerConfig.hpp"
+#include "../includes/MemoryPool.hpp"
 #include "../includes/CGI.hpp"
 
 int main()
@@ -22,14 +23,14 @@ int main()
 	{
 		ParserServerConfig		pc("../config/webserver.conf");
 		EventMonitoring			em;
+		MemoryPool				memPool;
 		ServerManager			sm(pc.getAllTokens(), em);
-		CGI cgi;
+		//CGI cgi;
 		
-		cgi.launch();
-		(void)sm;
+		//cgi.launch();
 		sm.startAll();
-		//while (1)
-			//em.updateEvents();
+		while (1)
+			em.updateEvents();
 	}
 	catch (const CGI::ForkClean& e)
 	{

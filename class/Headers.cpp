@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 09:43:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/24 09:41:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:37:40 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Headers::Headers(const Headers& obj) : _mPool(obj._mPool), _buff(NULL), _headers
 
 Headers::~Headers() 
 {
-    if (_buff)
+    if (this->_buff)
         this->_mPool.setAvailableBuffer(this->_buff);
 }
 
@@ -27,6 +27,17 @@ Headers& Headers::operator=(const Headers& obj)
 {
     (void)obj;
     return (*this);
+}
+
+Headers::State Headers::getState() const
+{
+    return (this->_state);
+}
+
+void    Headers::readBufferLeft(Buffer& buff, size_t pos)
+{
+    allocateBuff();
+    this->_buff->copyFrom(buff, pos);
 }
 
 void    Headers::read(int socket)
@@ -107,14 +118,16 @@ void Headers::allocateBuff()
 {
     Buffer* temp = NULL;
     if (!this->_buff)
-        temp = this->_mPool.getSmallBufferFromPool();
+        this->_buff = this->_mPool.getSmallBufferFromPool();
     else if (this->_buff->isBufferFull())
     {
         temp = this->_mPool.getMediumBufferFromPool();
         if (temp)
+        {
             temp->copyFrom(*this->_buff);
+            this->_buff = temp;
+        }
     }
-    this->_buff = temp;
 }
 
 bool Headers::isHeaderNameValid(size_t nStart, size_t nEnd)

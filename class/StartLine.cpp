@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 09:10:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 10:02:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:36:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ StartLine::StartLine(MemoryPool& mPool) : _mPool(mPool), _state(RECEIVING),
 }
 
 StartLine::StartLine(const StartLine& obj) : _mPool(obj._mPool), 
-	_state(obj._state), _startLineEnd(0) 
+	_state(RECEIVING), _startLineEnd(0) 
 {
 	this->_map.reserve(3);
 }
@@ -31,6 +31,11 @@ StartLine& StartLine::operator=(const StartLine& obj)
 {
 	(void)obj;
 	return (*this);
+}
+
+StartLine::State StartLine::getState() const
+{
+	return (this->_state);
 }
 
 void StartLine::read(int socket)
@@ -53,6 +58,7 @@ void StartLine::parseStartLine()
 
 	if (pos)
 	{
+		this->_startLineEnd = pos;
 		for (size_t j = 0; j < this->_map.capacity(); ++j)
 		{
 			while (i < this->_buff->getBufferUnread() && 
