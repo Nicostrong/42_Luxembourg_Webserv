@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 09:10:49 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/24 10:09:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 09:38:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ class StartLine
 		void 		read(int socket);
 		void		parseStartLine();
 		void		canBeValidMethod(const t_string& str);
+		void 		canBeValidUri(const t_string& path);
+		void		canBeValidHttpVersion(const t_string& ver);
     private:
 		
 		void		allocateBuff();

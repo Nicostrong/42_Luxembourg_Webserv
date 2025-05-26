@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 09:10:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/24 10:10:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 10:02:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void StartLine::parseStartLine()
 			return ;
 		}
 		canBeValidMethod(this->_map.at(0));
+		canBeValidUri(this->_map.at(1));
+		canBeValidHttpVersion(this->_map.at(2));
 	}
 
 	if (this->_buff->isBufferFull() && this->_state == RECEIVING)
@@ -80,7 +82,10 @@ void StartLine::parseStartLine()
 
 void StartLine::canBeValidMethod(const t_string& str)
 {
-	if (str.len == 0)
+	if (this->_state != RECEIVING)
+		return ;
+		
+	if (str.len == 0 )
 	{
 		this->_state = MALFORMED;
 		return ;
@@ -93,6 +98,34 @@ void StartLine::canBeValidMethod(const t_string& str)
 			this->_state = MALFORMED;
 			return ;
 		}
+	}
+}
+
+void StartLine::canBeValidUri(const t_string& path)
+{
+	if (this->_state != RECEIVING)
+		return ;
+		
+	if (path.len == 0 || this->_buff->at(path.pos) != '/' ||
+		this->_buff->find("//", path.pos, path.len) != std::string::npos)
+	{
+		this->_state = MALFORMED;
+		return ;
+	}
+}
+
+void StartLine::canBeValidHttpVersion(const t_string& ver)
+{
+	if (this->_state != RECEIVING)
+		return ;
+		
+	if (ver.len != 8 || !this->_buff->startWith("HTTP/", ver.pos, ver.len) || 
+		!std::isdigit(this->_buff->at(ver.pos + 5)) || 
+		this->_buff->at(ver.pos + 6) != '.' || 
+		!std::isdigit(this->_buff->at(ver.pos + 7)))
+	{
+		this->_state = MALFORMED;
+		return ;
 	}
 }
 

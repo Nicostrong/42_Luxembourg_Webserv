@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Buffer.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 16:22:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/26 09:55:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ size_t Buffer::find(const std::string& str, size_t pos, size_t n)
 
 size_t Buffer::find(const char* str, size_t pos, size_t n)
 {
-    while (pos < this->_bufferUsed&& pos < pos + n)
+    while (pos < this->_bufferUsed && pos < pos + n)
     {
         bool flag = true;
 
@@ -187,6 +187,23 @@ size_t Buffer::find(const char* str, size_t pos, size_t n)
 char& Buffer::at(size_t n)
 {
     return (this->_buffer.at(n));
+}
+
+bool Buffer::startWith(const char& c, size_t pos, size_t n)
+{
+    return (!(n == 0 || this->_buffer.at(pos) != c ));
+}
+
+bool Buffer::startWith(const std::string& str, size_t pos, size_t n)
+{
+    return (find(str, pos , n < str.size() ? n : str.size()) != 
+                std::string::npos);
+}
+
+bool Buffer::startWith(const char* str, size_t pos, size_t n)
+{
+    return (find(str, pos , n < std::strlen(str) ? n : std::strlen(str)) != 
+                std::string::npos);
 }
 
 void Buffer::reset()
