@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:33 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/26 10:27:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		cleanRessources();
+		throw ;
 	}
 	return ;
 }
@@ -55,16 +56,7 @@ ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring
  */
 ServerManager::~ServerManager( void )
 {
-	std::set<Server*>::iterator		itSer;
-	std::list<Token*>::iterator		itTok;
-
-	for (itSer = this->_sServers.begin(); itSer != this->_sServers.end(); ++itSer)
-		delete *itSer;
-	this->_mServers.clear();
-	this->_sServers.clear();
-
-	for (itTok = this->_lServerToken.begin(); itTok != this->_lServerToken.end(); ++itTok)
-		delete (*itTok);
+	cleanRessources();
 	return ;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/22 14:33:49 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/26 10:20:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 	}
 	catch(const std::exception& e)
 	{
-		delete this->_allTokens;
+		if (this->_allTokens)
+			this->_allTokens->deleteList();
 		throw ;
 	}
 	return ;
@@ -55,7 +56,6 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
  */
 ParserServerConfig::~ParserServerConfig( void )
 {
-	//delete this->_allTokens;
 	return ;
 }
 

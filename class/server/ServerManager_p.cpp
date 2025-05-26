@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:13:20 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:27 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/26 10:27:26 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,25 @@ void			ServerManager::splitServerToken( Token *head )
 		(*it)->printToken();
 	}
 #endif
+	return ;
+}
+
+/*
+ *	Clean all ressources of the object ServerManager
+ */
+void		ServerManager::cleanRessources( void )
+{
+	std::set<Server*>::iterator		itSer;
+	std::list<Token*>::iterator		itTok;
+
+	for (itSer = this->_sServers.begin(); itSer != this->_sServers.end(); ++itSer)
+		delete *itSer;
+
+	for (itTok = this->_lServerToken.begin(); itTok != this->_lServerToken.end(); ++itTok)
+		(*itTok)->deleteList();
+	
+	this->_mServers.clear();
+	this->_sServers.clear();
+	this->_lServerToken.clear();
 	return ;
 }
