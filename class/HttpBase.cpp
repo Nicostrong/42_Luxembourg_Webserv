@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:24:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 10:55:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 		case 403: return ("Forbidden");
 		case 404: return ("Not Found");
 		case 405: return ("Method Not Allowed");
+		case 414: return ("URI Too Long");
 		case 500: return ("Internal Server Error");
 	default:
 		return ("Internal Server Error");

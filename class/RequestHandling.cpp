@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 22:42:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 10:55:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ void RequestHandling::handleHeaders(Socket& sock)
 		if (sock.getReq().getState() == HttpParser::HTTP_INVALID)
 		{
 			sock.getResp().setStatusCode(BAD_REQUEST);
+			sock.getResp().setRespType(HttpResponse::ERROR);
+			return ;
+		}
+
+		if (sock.getReq().getState() == HttpParser::HTTP_SL_TOOBIG)
+		{
+			sock.getResp().setStatusCode(URI_TOO_LONG);
 			sock.getResp().setRespType(HttpResponse::ERROR);
 			return ;
 		}

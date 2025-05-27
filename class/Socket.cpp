@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 10:09:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 10:50:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	{
 		if (this->_rxBuffer.isBufferRead())
 			this->_rxBuffer.reset();
-		LOG_DEB(this->_rxBuffer.getBufferUnused());
 		ssize_t bytes = recv(fd, this->_rxBuffer.getDataUnused(), 
 			this->_rxBuffer.getBufferUnused(), 0);
 		if (bytes == -1)
@@ -99,8 +98,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 		this->_rxBuffer.setBufferUsed(bytes);
 		
 		this->_req.parse(this->_rxBuffer);
-		if (this->_req.getState() == HttpParser::HTTP_INVALID || 
-			this->_req.getState() == HttpParser::HTTP_RECEIVED)
+		if (this->_req.getState() >= HttpParser::HTTP_RECEIVED)
 		{
 			RequestHandling::handleHeaders(*this);
 			this->_rHandler.init(*this);
