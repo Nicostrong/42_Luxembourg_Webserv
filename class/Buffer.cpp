@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 08:53:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 10:05:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,19 +166,22 @@ size_t Buffer::find(const std::string& str, size_t pos, size_t n)
 
 size_t Buffer::find(const char* str, size_t pos, size_t n)
 {
-    while (pos < this->_bufferUsed && pos < pos + n)
+    size_t sLimit = std::min(pos + n, this->_bufferUsed);
+    size_t strSize = std::strlen(str);
+    
+    if (strSize == 0 || pos + strSize > sLimit)
+        return (std::string::npos);
+        
+    for (size_t j = pos; j < sLimit - strSize; ++j)
     {
-        bool flag = true;
+        bool match = true;
 
-        for (int i = 0; 
-                flag && str[i]; ++i)
+        for (size_t i = 0; match && i < strSize; ++i)
         {
-            if (pos + i < this->_bufferUsed ||
-                pos + i >= pos + n ||
-                this->_buffer.at(pos + i) != str[i])
-                flag = false;
+            if (this->_buffer.at(pos + i) != str[i])
+                match = false;
         }
-        if (flag)
+        if (match)
             return (pos);
         ++pos;
     }

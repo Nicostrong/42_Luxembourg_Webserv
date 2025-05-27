@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 08:51:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 10:09:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
 	const sockaddr_in& sockAddr) : _fd(fd),
-	_resp(), _em(em), _ctx(ctx), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
+	_resp(), _em(em), _ctx(ctx), _rxBuffer(RX_SIZE), 
+	_txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
 	{
 		this->_remoteIp = getReadableIp(sockAddr);
 		this->_req 		= HttpRequest(this->_remoteIp);
@@ -24,8 +25,9 @@ Socket::Socket(int fd, EventMonitoring&	em, Server& ctx,
 	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp), 
-	_txBuffer(obj._txBuffer), _reset(obj._reset), _rHandler(obj._rHandler) {}
+	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp),
+	_rxBuffer(obj._rxBuffer), _txBuffer(obj._txBuffer), _reset(obj._reset), 
+	_rHandler(obj._rHandler) {}
 
 Socket::~Socket() {}
 
@@ -35,6 +37,7 @@ Socket& Socket::operator=(const Socket& obj)
 	{
 		this->_req = obj._req;
 		this->_resp = obj._resp;
+		this->_rxBuffer = obj._rxBuffer;
 		this->_txBuffer = obj._txBuffer;
 	}
 	return (*this);
@@ -85,12 +88,17 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	(void)type;
 	try
 	{
-		std::vector<char> buffer(BUFFER_SIZE);
-		ssize_t bytes = recv(fd, buffer.data(), BUFFER_SIZE, 0);
-		
+		if (this->_rxBuffer.isBufferRead())
+			this->_rxBuffer.reset();
+		LOG_DEB(this->_rxBuffer.getBufferUnused());
+		ssize_t bytes = recv(fd, this->_rxBuffer.getDataUnused(), 
+			this->_rxBuffer.getBufferUnused(), 0);
 		if (bytes == -1)
 			throw SocketReadException();
-		this->_req.parse(buffer, bytes);
+		
+		this->_rxBuffer.setBufferUsed(bytes);
+		
+		this->_req.parse(this->_rxBuffer);
 		if (this->_req.getState() == HttpParser::HTTP_INVALID || 
 			this->_req.getState() == HttpParser::HTTP_RECEIVED)
 		{

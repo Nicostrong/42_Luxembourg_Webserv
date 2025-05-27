@@ -6,17 +6,22 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 08:52:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 10:39:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpParser.hpp"
 
 HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE), 
-	_buffer(), _bodyBuffer(BODY_BUFFER_SIZE) {}
+	_bodyBuffer(BODY_BUFFER_SIZE) 
+	{
+		this->_slBuffer.reserve(SL_BSIZE);
+		this->_headBuffer.reserve(HEAD_BSIZE);
+	}
 
 HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj), 
-	 _state(obj._state), _buffer(obj._buffer), _bodyBuffer(obj._bodyBuffer) {}
+	_state(obj._state), _slBuffer(obj._slBuffer), _headBuffer(obj._headBuffer), 
+	_bodyBuffer(obj._bodyBuffer) {}
 
 HttpParser::~HttpParser() {}
 
@@ -24,42 +29,64 @@ HttpParser& HttpParser::operator=(const HttpParser& obj)
 {
 	HttpBase::operator=(obj);
 	this->_state = obj._state;
-	this->_buffer = obj._buffer;
+	this->_slBuffer = obj._slBuffer;
+	this->_headBuffer = obj._headBuffer;
 	this->_bodyBuffer = obj._bodyBuffer;
 	return (*this);
 }
 
-void HttpParser::parse(std::vector<char>& buff, size_t n)
+void HttpParser::parse(Buffer& buff)
 {
 	size_t pos;
-
-	this->_buffer.append(buff.data(), n);
+	size_t len;
 
 	switch (this->_state)
 	{
 		// fallthrough
 		case HttpParser::HTTP_STARTLINE:
-			pos = this->_buffer.find(CRLF);
+			len = std::min(buff.getBufferUnread(), 
+				SL_BSIZE - this->_slBuffer.size());
+			this->_slBuffer.append(buff.getDataUnread(), len);
+			buff.setBufferRead(len);
+			pos = this->_slBuffer.find(CRLF);
+			if (pos == std::string::npos && this->_slBuffer.size() >= 
+				this->_slBuffer.capacity())
+			{
+				this->_state = HTTP_SL_TOOBIG;
+				return ;
+			}
 			if (pos == std::string::npos)
 				return ;
-			parseStartLine(this->_buffer.substr(0, pos));
-			if (this->_state != HTTP_INVALID)
-			{
+			this->_headBuffer.insert(0,
+						this->_slBuffer.c_str() + pos + 2);
+			this->_slBuffer.erase(pos);
+
+			parseStartLine();
+			if (this->_state == HTTP_STARTLINE)
 				this->_state = HTTP_HEADERS;
-				this->_buffer = this->_buffer.substr(pos + 2);
-			}
+			
 		// fallthrough
 		case HttpParser::HTTP_HEADERS:
-			pos = this->_buffer.find(CRLF CRLF);
+			len = std::min(buff.getBufferUnread(), 
+				HEAD_BSIZE - this->_headBuffer.size());
+			this->_headBuffer.append(buff.getDataUnread(), len);
+			buff.setBufferRead(len);
+			pos = this->_headBuffer.find(CRLF CRLF);
+			if (pos == std::string::npos && this->_headBuffer.size() >= 
+				this->_headBuffer.capacity())
+			{
+				this->_state = HTTP_HEAD_TOOBIG;
+				return ;
+			}
 			if (pos == std::string::npos)
 				return ;
-			parseHeaders(this->_buffer.substr(0, pos));
-			if (this->_state != HTTP_INVALID)
+			this->_headBuffer.erase(pos);
+			parseHeaders();
+			if (this->_state == HTTP_HEADERS)
 			{
 				//if (this->_method)
 				//this->_state = HTTP_BODY;
 				this->_state = HTTP_RECEIVED;
-				//this->_buffer = this->_buffer.substr(pos + 4);
 			}
 		case HttpParser::HTTP_BODY:
 			// SHould check what to do depending
@@ -69,10 +96,10 @@ void HttpParser::parse(std::vector<char>& buff, size_t n)
 	}
 }
 
-void HttpParser::parseStartLine(const std::string& line)
+void HttpParser::parseStartLine()
 {
 	std::vector<std::string> tokens;
-    std::istringstream iss(line);
+    std::istringstream iss(this->_slBuffer);
     std::string token;
 
 	while (iss >> token) {
@@ -94,18 +121,18 @@ void HttpParser::parseStartLine(const std::string& line)
 	this->_httpVersion = tokens.at(2);
 }
 
-void HttpParser::parseHeaders(const std::string& headers)
+void HttpParser::parseHeaders()
 {
 	size_t sPos = 0;
-	size_t ePos = headers.find(CRLF);
+	size_t ePos = this->_headBuffer.find(CRLF);
 
 	while (ePos != std::string::npos)
 	{
-		parseHeader(headers.substr(sPos, ePos));
+		parseHeader(this->_headBuffer.substr(sPos, ePos));
 		sPos = ePos + 2;
-		ePos = headers.find(CRLF, sPos);
+		ePos = this->_headBuffer.find(CRLF, sPos);
 	}
-	parseHeader(headers.substr(sPos));
+	parseHeader(this->_headBuffer.substr(sPos));
 
 	if (this->_headers.find("HOST") == this->_headers.end())
 	{
