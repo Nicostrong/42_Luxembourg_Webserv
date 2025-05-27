@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 11:33:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:50:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ class HttpRequest : public HttpParser
 		const std::string&		getFilePath() const;
 		const std::string&		getQueryParams() const;
 		size_t					getFileSize() const;
-		void					onRead(int socket);
 		
 
 	private:
@@ -68,11 +67,6 @@ class HttpRequest : public HttpParser
 		std::string		_filePath;
 		std::string		_queryParams;
 		size_t			_fileSize;
-
-		//Requests parts
-
-		StartLine	_sl;
-		Headers		_headers;
 };
 
 #endif

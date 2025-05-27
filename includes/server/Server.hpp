@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/26 11:02:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:56:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include "../lib.hpp"
 # include "../Socket.hpp"
 # include "../Ressource.hpp"
-# include "../MemoryPool.hpp"
 # include "../parser/Token.hpp"
 # include "../IEventHandler.hpp"
 # include "../EventMonitoring.hpp"
@@ -50,7 +49,6 @@ class	Server : public IEventHandler
 		std::map<size_t, std::string>			_mError;
 		std::map<std::string, Location *>		_mLocations;
 		EventMonitoring&						_em;
-		MemoryPool&								_memPool;
 
 		Server( const Server &src_obj );
 		Server		&operator=( const Server &src_obj );
@@ -74,7 +72,7 @@ class	Server : public IEventHandler
 		
 	public:
 
-		Server( Token*& serverTokensConfig, EventMonitoring& eventMonitoring, MemoryPool& memPool );
+		Server( Token*& serverTokensConfig, EventMonitoring& eventMonitoring );
 		~Server( void );
 
 		/*  GETTER	*/

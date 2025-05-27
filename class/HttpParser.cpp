@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 18:00:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:52:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE),
 	_buffer(), _bodyBuffer(BODY_BUFFER_SIZE) {}
 
 HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj), 
-	_buffer(obj._buffer), _state(obj._state), _bodyBuffer(obj._bodyBuffer) {}
+	 _state(obj._state), _buffer(obj._buffer), _bodyBuffer(obj._bodyBuffer) {}
 
 HttpParser::~HttpParser() {}
 

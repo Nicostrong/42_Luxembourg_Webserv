@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 18:13:04 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/23 09:42:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:49:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # define MEDIUM_BUFF 8192
 # define MEDIUM_AMOUNT 256
 # define LARGE_BUFF 16384
-# define SMALL_AMOUNT 256
 
 # define MAX_CLIENT 1024
 

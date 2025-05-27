@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 10:59:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:54:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "../includes/EventMonitoring.hpp"
 #include "../includes/server/ServerManager.hpp"
 #include "../includes/parser/ParserServerConfig.hpp"
-#include "../includes/MemoryPool.hpp"
 #include "../includes/CGI.hpp"
 
 int main()
@@ -23,7 +22,6 @@ int main()
 	{
 		ParserServerConfig		pc("../config/webserver.conf");
 		EventMonitoring			em;
-		MemoryPool				memPool;
 		ServerManager			sm(pc.getAllTokens(), em);
 		//CGI cgi;
 		

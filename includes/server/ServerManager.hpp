@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/26 11:03:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:53:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class	ServerManager
 
 	public:
 
-		ServerManager( Token* allTokens, EventMonitoring& eventMonitoring, MemoryPool& memPool );
+		ServerManager( Token* allTokens, EventMonitoring& eventMonitoring );
 		~ServerManager( void );
 
 		/*	GETTER	*/

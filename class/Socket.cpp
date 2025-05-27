@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 11:06:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 08:51:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "../includes/server/Server.hpp"
 #include "../includes/RequestHandling.hpp"
 
-Socket::Socket(int fd, EventMonitoring&	em, MemoryPool& memPool, Server& ctx, 
+Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
 	const sockaddr_in& sockAddr) : _fd(fd),
-	_resp(), _em(em), _memPool(memPool), _ctx(ctx), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
+	_resp(), _em(em), _ctx(ctx), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
 	{
 		this->_remoteIp = getReadableIp(sockAddr);
 		this->_req 		= HttpRequest(this->_remoteIp);
@@ -24,7 +24,7 @@ Socket::Socket(int fd, EventMonitoring&	em, MemoryPool& memPool, Server& ctx,
 	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _memPool(obj._memPool), _ctx(obj._ctx), _remoteIp(obj._remoteIp), 
+	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp), 
 	_txBuffer(obj._txBuffer), _reset(obj._reset), _rHandler(obj._rHandler) {}
 
 Socket::~Socket() {}
