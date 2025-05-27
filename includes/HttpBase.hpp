@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 10:54:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/27 11:03:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class HttpBase
 			NOT_FOUND = 404,
 			METHOD_NOT_ALLOWED = 405,
 			URI_TOO_LONG = 414,
+			REQUEST_HEADER_FIELDS_TOO_LARGE = 431,
 			INTERNAL_SERVER_ERROR = 500,
 		};
 		
