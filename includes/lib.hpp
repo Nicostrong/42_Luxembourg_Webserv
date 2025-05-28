@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/23 16:24:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 11:04:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@
 # define RESPONSE_BUFFER_SIZE 32768
 # define MAX_READ_SIZE 32768
 # define BODY_BUFFER_SIZE 32768
+# define MAX_CLIENT 1024
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"
