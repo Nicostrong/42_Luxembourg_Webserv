@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestBody.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:21:21 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 10:55:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 16:46:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define REQUESTBODY_HPP
 
 #include "Buffer.hpp"
+#include "Chunk.hpp"
 #include "lib.hpp"
 
 #define RAM_BUFF 20480
@@ -33,6 +34,7 @@ class RequestBody
 		Buffer	 		_buff;
 		std::fstream	_fBuff;
 		size_t			_size;
+		Chunk			_chunk;
 		std::string		_fName;
 };
 
