@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 10:50:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:24:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,34 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	(void)type;
 	try
 	{
-		if (this->_rxBuffer.isBufferRead())
-			this->_rxBuffer.reset();
-		ssize_t bytes = recv(fd, this->_rxBuffer.getDataUnused(), 
-			this->_rxBuffer.getBufferUnused(), 0);
-		if (bytes == -1)
-			throw SocketReadException();
-		
-		this->_rxBuffer.setBufferUsed(bytes);
-		
-		this->_req.parse(this->_rxBuffer);
-		if (this->_req.getState() >= HttpParser::HTTP_RECEIVED)
+		try
 		{
-			RequestHandling::handleHeaders(*this);
+			if (this->_rxBuffer.isBufferRead())
+				this->_rxBuffer.reset();
+			
+			ssize_t bytes = recv(fd, this->_rxBuffer.getDataUnused(), 
+				this->_rxBuffer.getBufferUnused(), 0);
+				
+			if (bytes == -1)
+				throw SocketReadException();
+			
+			this->_rxBuffer.setBufferUsed(bytes);
+			this->_req.onRequest(this->_rxBuffer, *this);
+			
+			if (this->_req.getState() < HttpParser::HTTP_RECEIVED)
+				return ;
+
+			this->_rHandler.init(*this);
+			em.unmonitor(fd);
+			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
+				EventData::CLIENT, *this);
+		}
+		catch(const HttpExceptions& e)
+		{
+			LOG_ERROR("An error occured while parsing request "
+				"(can be bad request as well)");
+			this->_resp.setRespType(HttpResponse::ERROR);
+			this->_resp.setStatusCode((HttpBase::HttpCode)e.getCode());
 			this->_rHandler.init(*this);
 			em.unmonitor(fd);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,

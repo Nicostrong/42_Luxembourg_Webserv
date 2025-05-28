@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 11:03:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:48:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,6 @@ void RequestHandling::handleHeaders(Socket& sock)
 	try
 	{
 		sock.getResp().addHeader("Content-Length", 0);
-		if (sock.getReq().getState() == HttpParser::HTTP_INVALID)
-		{
-			sock.getResp().setStatusCode(BAD_REQUEST);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
-
-		if (sock.getReq().getState() == HttpParser::HTTP_SL_TOOBIG)
-		{
-			sock.getResp().setStatusCode(URI_TOO_LONG);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
-
-		if (sock.getReq().getState() == HttpParser::HTTP_HEAD_TOOBIG)
-		{
-			sock.getResp().setStatusCode(REQUEST_HEADER_FIELDS_TOO_LARGE);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
 
 		sock.getReq().setLoc(
 			sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
@@ -98,8 +78,7 @@ void RequestHandling::handleHeaders(Socket& sock)
 	}
 	catch(const std::exception& e)
 	{
-		sock.getResp().setStatusCode(INTERNAL_SERVER_ERROR);
-		sock.getResp().setRespType(HttpResponse::ERROR);
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 	}
 }
 

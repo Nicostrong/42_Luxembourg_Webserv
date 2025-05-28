@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 09:04:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:10:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "./EventMonitoring.hpp"
 # include "./File.hpp"
 # include "./Buffer.hpp"
+# include "./HttpExceptions.hpp"
 
 # define RX_SIZE 1024
 

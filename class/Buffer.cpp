@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 19:54:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:41:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void Buffer::setBufferRead(size_t n)
 	size_t bRead = n + this->_bufferRead;
 	
 	if (bRead - n != this->_bufferRead || bRead >= this->_bufferUsed)
-		this->_bufferUsed = this->_bufferUsed;
+		this->_bufferRead = this->_bufferUsed;
 	else
 		this->_bufferRead = bRead;
 

@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/21 09:09:22 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/28 22:09:53 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -158,6 +158,7 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/Buffer.cpp \
 					../class/ResponseHandling.cpp \
 					../class/Pipe.cpp \
+					../class/HttpExceptions.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 21:17:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:14:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@
 # include "./HttpBase.hpp"
 # include "./core/chunking/Encoding.hpp"
 # include "./Buffer.hpp"
+# include "./HttpExceptions.hpp"
 
 # define SL_BSIZE 1024
 # define HEAD_BSIZE 8192
+
+class Socket;
 
 class HttpParser : public HttpBase
 {
@@ -30,17 +33,15 @@ class HttpParser : public HttpBase
 			HTTP_HEADERS = 1,
 			HTTP_HEAD_HANDLING = 2,
 			HTTP_BODY = 3,
-			HTTP_RECEIVED = 4,
-			HTTP_SENT = 5,
-			HTTP_INVALID = 6,
-			HTTP_SL_TOOBIG = 7,
-			HTTP_HEAD_TOOBIG = 8,
+			HTTP_BODY_HANDLING = 4,
+			HTTP_RECEIVED = 5,
+			HTTP_SENT = 6
 		};
 		
 		HttpParser(const HttpParser& obj);
 		virtual					~HttpParser();
 		HttpParser&				operator=(const HttpParser& obj);
-		void 					parse(Buffer& buff);
+		void 					onRequest(Buffer& buff, Socket& sock);
 		
 		State					getState() const;
 		Buffer&					getBuffer();
