@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 16:59:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:53:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ class Chunk
     public:
 		enum State
 		{
-			CHUNK_LEN = 0,
-			CHUNK_TRAILER = 1,
-			CHUNK_DATA = 2,
+			CHUNK_HEAD = 0,
+			CHUNK_DATA = 1,
 		};
         Chunk();
         Chunk(size_t len);
@@ -35,6 +34,10 @@ class Chunk
         size_t  getLen() const;
 		size_t	handleChunk(Buffer& buff);
     private:
+        void    handleChunkHead(Buffer& buff);
+        size_t  handleChunkData(Buffer& buff);
+        size_t  convertHexa(const std::string& str);
+        
         size_t	_received;
         size_t	_len;
 		State 	_state;

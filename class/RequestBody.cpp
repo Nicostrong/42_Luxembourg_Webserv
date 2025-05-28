@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestBody.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:20:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 15:02:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:14:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,17 @@ void RequestBody::add(Buffer& buff)
 		return ;
 
 	openTmpFile();
-	//Data to put in the file
+	
 	
 }
 
 void RequestBody::openTmpFile()
 {
 	std::stringstream ss;
-	if (!this->_fBuff.is_open())
-	{
-		
-		//Shoudl open
-	}
+
+	if (this->_fBuff.is_open())
+		return ;
+	
 	for (int i = 0; !this->_fBuff.is_open() && i < MAX_CLIENT; ++i)
 	{
 		ss << TMP_PATH << "webserv_" << i;
@@ -65,8 +64,5 @@ void RequestBody::openTmpFile()
 	if (!this->_fBuff.is_open())
 		throw std::runtime_error("Cannot create a tmp file");
 	
-	this->_fName = ss.str();p
+	this->_fName = ss.str();
 }
-
-
-

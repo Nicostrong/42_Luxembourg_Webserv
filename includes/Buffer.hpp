@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 10:44:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 19:42:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class Buffer
 											size_t n = std::string::npos);
 		bool						startWith(const char* str, size_t pos = 0,
 											size_t n = std::string::npos);
+		void 						alignData();
 		void 						reset();
     private:
         std::vector<char>	_buffer;

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:56:59 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 23:03:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:05:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Chunk
     public:
         enum State
         {
-            CHUNK_LEN = 0,
+            CHUNK_HEAD = 0,
             CHUNK_EXT = 1,
             CHUNK_DATA = 2,
             CHUNK_REICEIVED = 3,

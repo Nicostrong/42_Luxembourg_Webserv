@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:27:27 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 17:02:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:52:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,72 @@ size_t Chunk::getLen() const
 
 size_t Chunk::handleChunk(Buffer& buff)
 {
-	if (buff.getBufferUnread() < 1)
+	if (!buff.getBufferUnread())
 		return (0);
 
 	switch (this->_state)
 	{
-		case 
+		case CHUNK_HEAD:
+			handleChunkHead(buff);
+		// fallthrough
+		case CHUNK_DATA:
+			return (handleChunkData(buff));	
 	}
+	return (0);
+}
+
+//Helpers
+
+void Chunk::handleChunkHead(Buffer& buff)
+{
+	buff.alignData();
+	
+	size_t pos = buff.find(CRLF);
+
+	if (pos == std::string::npos)
+	{
+		if (buff.isBufferFull())
+			throw std::runtime_error("Malformed chunk");
+		return ;
+	}
+
+	this->_len = convertHexa(
+		std::string(buff.getDataUnread(), std::min(pos, buff.find(';'))));
+	
+	buff.setBufferRead(pos - buff.getBufferRead() + 2);
+	this->_state = CHUNK_DATA;
+}
+
+size_t Chunk::handleChunkData(Buffer& buff)
+{
+	if (this->_received == this->_len)
+	{
+		buff.alignData();
+		if (buff.getBufferUnread() < 2)
+			return (0);
+
+		if (buff.find(CRLF) != 0)
+			throw std::runtime_error("Malformed chunk");
+		
+		buff.setBufferRead(2);
+		this->_received = 0;
+		this->_state = CHUNK_HEAD;
+		return (0);
+	}
+
+	size_t len = std::min(buff.getBufferUnread(), this->_len - this->_received);
+	
+	this->_received += len;
+	return (len);
+}
+
+size_t Chunk::convertHexa(const std::string& str)
+{
+    std::istringstream iss(str);
+    size_t res;
+
+    iss >> std::hex >> res;
+    if (iss.fail()) 
+        throw std::runtime_error("Malformed chunk");
+    return (res);
 }

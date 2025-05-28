@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 10:39:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 21:36:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE),
 
 HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj), 
 	_state(obj._state), _slBuffer(obj._slBuffer), _headBuffer(obj._headBuffer), 
-	_bodyBuffer(obj._bodyBuffer) {}
+	_bodyBuffer(obj._bodyBuffer) 
+{
+	this->_slBuffer.reserve(SL_BSIZE);
+	this->_headBuffer.reserve(HEAD_BSIZE);
+}
 
 HttpParser::~HttpParser() {}
 
@@ -37,57 +41,17 @@ HttpParser& HttpParser::operator=(const HttpParser& obj)
 
 void HttpParser::parse(Buffer& buff)
 {
-	size_t pos;
-	size_t len;
-
 	switch (this->_state)
 	{
 		// fallthrough
 		case HttpParser::HTTP_STARTLINE:
-			len = std::min(buff.getBufferUnread(), 
-				SL_BSIZE - this->_slBuffer.size());
-			this->_slBuffer.append(buff.getDataUnread(), len);
-			buff.setBufferRead(len);
-			pos = this->_slBuffer.find(CRLF);
-			if (pos == std::string::npos && this->_slBuffer.size() >= 
-				this->_slBuffer.capacity())
-			{
-				this->_state = HTTP_SL_TOOBIG;
+			if (!handleStartLine(buff))
 				return ;
-			}
-			if (pos == std::string::npos)
-				return ;
-			this->_headBuffer.insert(0,
-						this->_slBuffer.c_str() + pos + 2);
-			this->_slBuffer.erase(pos);
-
-			parseStartLine();
-			if (this->_state == HTTP_STARTLINE)
-				this->_state = HTTP_HEADERS;
-			
 		// fallthrough
 		case HttpParser::HTTP_HEADERS:
-			len = std::min(buff.getBufferUnread(), 
-				HEAD_BSIZE - this->_headBuffer.size());
-			this->_headBuffer.append(buff.getDataUnread(), len);
-			buff.setBufferRead(len);
-			pos = this->_headBuffer.find(CRLF CRLF);
-			if (pos == std::string::npos && this->_headBuffer.size() >= 
-				this->_headBuffer.capacity())
-			{
-				this->_state = HTTP_HEAD_TOOBIG;
+			if (!handleHeaders(buff))
 				return ;
-			}
-			if (pos == std::string::npos)
-				return ;
-			this->_headBuffer.erase(pos);
-			parseHeaders();
-			if (this->_state == HTTP_HEADERS)
-			{
-				//if (this->_method)
-				//this->_state = HTTP_BODY;
-				this->_state = HTTP_RECEIVED;
-			}
+			break;
 		case HttpParser::HTTP_BODY:
 			// SHould check what to do depending
 			break;
@@ -175,4 +139,58 @@ void HttpParser::parseHeader(const std::string& line)
 HttpParser::State HttpParser::getState() const
 {
 	return (this->_state);
+}
+
+// Helper
+
+bool HttpParser::handleStartLine(Buffer& buff)
+{
+	size_t len = std::min(buff.getBufferUnread(), 
+		this->_slBuffer.capacity() - this->_slBuffer.size());
+	
+	this->_slBuffer.append(buff.getDataUnread(), len);
+	
+	size_t pos = this->_slBuffer.find(CRLF);
+	
+	if (pos == std::string::npos)
+	{
+		buff.setBufferRead(len);
+		if (this->_slBuffer.size() >= this->_slBuffer.capacity())
+			this->_state = HTTP_SL_TOOBIG;
+		return (false);
+	}
+	
+	buff.setBufferRead(pos + len - this->_slBuffer.size() + 2);
+	this->_slBuffer.erase(pos);
+	
+	parseStartLine();
+	if (this->_state == HTTP_STARTLINE)
+		this->_state = HTTP_HEADERS;
+	return (true);
+}
+
+bool HttpParser::handleHeaders(Buffer& buff)
+{
+	size_t len = std::min(buff.getBufferUnread(), 
+				this->_headBuffer.capacity() - this->_headBuffer.size());
+
+	this->_headBuffer.append(buff.getDataUnread(), len);
+	
+	size_t pos = this->_headBuffer.find(CRLF CRLF);
+
+	if (pos == std::string::npos)
+	{
+		buff.setBufferRead(len);
+		if (this->_headBuffer.size() >= this->_headBuffer.capacity())
+			this->_state = HTTP_HEAD_TOOBIG;
+		return (false);
+	}
+	
+	buff.setBufferRead(pos + len - this->_headBuffer.size() + 4);
+	this->_headBuffer.erase(pos);
+
+	parseHeaders();
+	if (this->_state == HTTP_HEADERS)
+		this->_state = HTTP_RECEIVED;
+	return (true);
 }

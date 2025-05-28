@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:21:21 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 16:46:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:31:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class RequestBody
 		void			add(Buffer& buff);
 	private:
 		RequestBody(const RequestBody& obj);
-		RequestBody& operator=(const RequestBody& obj);
+		RequestBody&	operator=(const RequestBody& obj);
 		void			openTmpFile();
 		
 		Buffer	 		_buff;

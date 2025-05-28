@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 09:15:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 21:17:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@ class HttpParser : public HttpBase
 		{
 			HTTP_STARTLINE = 0,
 			HTTP_HEADERS = 1,
-			HTTP_BODY = 2,
-			HTTP_RECEIVED = 3,
-			HTTP_SENT = 4,
-			HTTP_INVALID = 5,
-			HTTP_SL_TOOBIG = 6,
-			HTTP_HEAD_TOOBIG = 7,
+			HTTP_HEAD_HANDLING = 2,
+			HTTP_BODY = 3,
+			HTTP_RECEIVED = 4,
+			HTTP_SENT = 5,
+			HTTP_INVALID = 6,
+			HTTP_SL_TOOBIG = 7,
+			HTTP_HEAD_TOOBIG = 8,
 		};
 		
 		HttpParser(const HttpParser& obj);
@@ -49,6 +50,8 @@ class HttpParser : public HttpBase
 		void					parseStartLine();
 		void					parseHeaders();
 		void 					parseHeader(const std::string& line);
+		bool					handleStartLine(Buffer& buff);
+		bool					handleHeaders(Buffer& buff);
 		
 	private:
 		State 					_state;

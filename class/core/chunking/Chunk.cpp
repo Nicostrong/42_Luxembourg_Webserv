@@ -6,13 +6,13 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:55:18 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 10:40:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 20:05:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/core/chunking/Chunk.hpp"
 
-Chunk::Chunk() : _state(CHUNK_LEN), _len(0), _dataSent(0) {}
+Chunk::Chunk() : _state(CHUNK_HEAD), _len(0), _dataSent(0) {}
 
 Chunk::Chunk(const std::vector<char>& buffer, size_t bytes) : 
     _state(CHUNK_REICEIVED), _dataSent(0)
@@ -49,7 +49,7 @@ void Chunk::decodeChunk(std::string& data)
     switch (this->_state)
     {
         // fallthrough
-        case CHUNK_LEN:
+        case CHUNK_HEAD:
             pos = data.find(CRLF);
             pos = std::min(data.find(";"), pos);
             if (!pos)

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 10:05:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 19:54:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,17 @@ bool Buffer::startWith(const char* str, size_t pos, size_t n)
 {
     return (find(str, pos , n < std::strlen(str) ? n : std::strlen(str)) != 
                 std::string::npos);
+}
+
+void Buffer::alignData()
+{
+    if (!this->_bufferRead)
+        return ;
+    
+    std::memmove(this->_buffer.data(), getDataUnread(), getBufferUnread());
+    
+    this->_bufferUsed -= this->_bufferRead;
+    this->_bufferRead = 0;
 }
 
 void Buffer::reset()
