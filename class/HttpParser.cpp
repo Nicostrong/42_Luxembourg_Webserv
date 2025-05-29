@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 22:43:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 09:57:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include "../includes/Socket.hpp"
 #include "../includes/RequestHandling.hpp"
 
-HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE), 
-	_bodyBuffer(BODY_BUFFER_SIZE) 
+HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE), _reqBody(NULL)
 	{
 		this->_slBuffer.reserve(SL_BSIZE);
 		this->_headBuffer.reserve(HEAD_BSIZE);
@@ -23,7 +22,7 @@ HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE),
 
 HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj), 
 	_state(obj._state), _slBuffer(obj._slBuffer), _headBuffer(obj._headBuffer), 
-	_bodyBuffer(obj._bodyBuffer) 
+	_reqBody(NULL)
 {
 	this->_slBuffer.reserve(SL_BSIZE);
 	this->_headBuffer.reserve(HEAD_BSIZE);
@@ -33,12 +32,24 @@ HttpParser::~HttpParser() {}
 
 HttpParser& HttpParser::operator=(const HttpParser& obj)
 {
-	HttpBase::operator=(obj);
-	this->_state = obj._state;
-	this->_slBuffer = obj._slBuffer;
-	this->_headBuffer = obj._headBuffer;
-	this->_bodyBuffer = obj._bodyBuffer;
+	if (this != &obj)
+	{
+		HttpBase::operator=(obj);
+		this->_state = obj._state;
+		this->_slBuffer = obj._slBuffer;
+		this->_headBuffer = obj._headBuffer;
+	}
 	return (*this);
+}
+
+HttpParser::State HttpParser::getState() const
+{
+	return (this->_state);
+}
+
+void HttpParser::setState(HttpParser::State state)
+{
+	this->_state = state;
 }
 
 void HttpParser::onRequest(Buffer& buff, Socket& sock)
@@ -55,10 +66,12 @@ void HttpParser::onRequest(Buffer& buff, Socket& sock)
 				return ;
 		// fallthrough
 		case HttpParser::HTTP_HEAD_HANDLING:
-			RequestHandling::handleHeaders(sock);
 			this->_state = HTTP_RECEIVED;
-			return ;
+			RequestHandling::handleHeaders(sock);
+			if (this->_state == HTTP_RECEIVED)
+				return ;
 		case HttpParser::HTTP_BODY:
+
 			// SHould check what to do depending
 			break;
 		default:
@@ -127,11 +140,6 @@ void HttpParser::parseHeader(const std::string& line)
 	this->_headers[name] = value;
 }
 
-HttpParser::State HttpParser::getState() const
-{
-	return (this->_state);
-}
-
 // Helper
 
 bool HttpParser::handleStartLine(Buffer& buff)
@@ -185,4 +193,10 @@ bool HttpParser::handleHeaders(Buffer& buff)
 	if (this->_state == HTTP_HEADERS)
 		this->_state = HTTP_HEAD_HANDLING;
 	return (true);
+}
+
+bool HttpParser::handleBody(Buffer& buff)
+{
+	if (!this->_reqBody)
+		this->_reqBody = new RequestBody();
 }

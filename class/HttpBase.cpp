@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 11:04:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 10:49:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,16 @@ void HttpBase::setAsComplete()
 	this->_isComplete = true;
 }
 
+bool HttpBase::findHeader(const char* name)
+{
+	return (this->_headers.find(name) != this->_headers.end());
+}
+
+std::string& HttpBase::findHeaderValue(const char* name)
+{
+	return (this->_headers.at(name));
+}
+
 std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
 	switch (statusCode)
@@ -120,9 +130,11 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 		case 403: return ("Forbidden");
 		case 404: return ("Not Found");
 		case 405: return ("Method Not Allowed");
+		case 411: return ("Length Required");
 		case 414: return ("URI Too Long");
 		case 431: return ("Request Header Fields Too Large");
 		case 500: return ("Internal Server Error");
+		case 501: return ("Not Implemented");
 	default:
 		return ("Internal Server Error");
 	}

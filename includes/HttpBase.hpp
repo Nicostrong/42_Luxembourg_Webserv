@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/27 11:03:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 10:49:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ class HttpBase
 			FORBIDDEN = 403,
 			NOT_FOUND = 404,
 			METHOD_NOT_ALLOWED = 405,
+			LENGTH_REQUIRED = 411,
 			URI_TOO_LONG = 414,
 			REQUEST_HEADER_FIELDS_TOO_LARGE = 431,
 			INTERNAL_SERVER_ERROR = 500,
+			NOT_IMPLEMENTED = 501,
 		};
 		
 		HttpBase(const HttpBase& obj);
@@ -63,6 +65,8 @@ class HttpBase
 			oss << value;
 			this->_headers[name] = oss.str();
 		}
+		bool				findHeader(const char* name);
+		std::string&		findHeaderValue(const char* name);
 		const std::map<std::string, std::string>&	getHeaders() const;
 		static std::string	getStrStatusCode(HttpCode statusCode);
 		static std::string	getDirectoryListing(const std::string &dirPath, 

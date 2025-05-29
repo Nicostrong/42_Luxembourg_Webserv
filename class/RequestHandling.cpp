@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 09:34:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 11:02:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
 	return (*this);
 }
 
-/*
- * Should clean this abomination but its 23h30 so.. not now
- * and getRealPath seems working, need to check if the path is valid and exist
- * and excute cgi if the location let it run.
- */
 void RequestHandling::handleHeaders(Socket& sock)
 {
 	sock.getResp().addHeader("Content-Length", 0);
@@ -40,38 +35,35 @@ void RequestHandling::handleHeaders(Socket& sock)
 		sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
 
 	if (!sock.getReq().getLoc())
-	{
-		sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return ;
-	}
+		throw HttpExceptions(NOT_FOUND);
 
 	if (!sock.getReq().getLoc()->getMethod()->isAllowed(
 			sock.getReq().getMethod()))
-	{
-		sock.getResp().setStatusCode(METHOD_NOT_ALLOWED);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return ;
-	}
+		throw HttpExceptions(METHOD_NOT_ALLOWED);
 
-	if (isRedirect(sock))
-		return ;
-		
-	if (isCGI(sock))
-		return ;
-		
 	sock.getReq().setPathTranslated(
-		Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
-			sock.getReq().getUri()));
-
-	if (isIndexFile(sock))
-		return ;
-		
-	if (isDirctoryListing(sock))
-		return ;
+			Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
+				sock.getReq().getUri()));
+	
+	if (sock.getReq().getMethod() == "GET")
+	{
+		if (isRedirect(sock))
+			return ;
 			
-	if (isStaticFile(sock))
-		return ;
+		if (isCGI(sock))
+			return ;
+		
+		if (isIndexFile(sock))
+			return ;
+			
+		if (isDirctoryListing(sock))
+			return ;
+				
+		if (isStaticFile(sock))
+			return ;
+	}
+	else if (sock.getReq().getMethod() == "POST")
+		handlePost(sock);
 
 	throw HttpExceptions(INTERNAL_SERVER_ERROR);
 }
@@ -247,4 +239,55 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 	sock.getResp().setStatusCode(OK);
 	sock.getResp().setRespType(HttpResponse::DIRECTORY_LISTING);
 	return (true);
+}
+
+void RequestHandling::handlePost(Socket& sock)
+{
+	handleBodyLength(sock);
+	sock.getReq().setState(HttpParser::HTTP_BODY);
+}
+
+void RequestHandling::handleBodyLength(Socket& sock)
+{
+	bool te = sock.getReq().findHeader("TRANSFER-ENCODING");
+	bool cl = sock.getReq().findHeader("CONTENT-LENGTH");
+	
+	if (te && cl)
+		throw HttpExceptions(BAD_REQUEST);
+	
+	if (te)
+		handleTE(sock);
+	else if (cl)
+		handleContentLength(sock);
+	else
+		throw HttpExceptions(LENGTH_REQUIRED);
+}
+
+void RequestHandling::handleTE(Socket& sock)
+{
+	std::string value = sock.getReq().findHeaderValue("TRANSFER-ENCODING");
+	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+
+	if (value != "chunked")
+		throw HttpExceptions(NOT_IMPLEMENTED);
+	
+	sock.getReq().setTE(true);
+}
+
+void RequestHandling::handleContentLength(Socket& sock)
+{
+	std::string value = sock.getReq().findHeaderValue("CONTENT-LENGTH");
+
+	if (value.empty() || 
+		value.find_first_not_of("0123456789") != std::string::npos)
+		throw HttpExceptions(BAD_REQUEST);
+
+	std::istringstream iss(value);
+	size_t cl;
+    iss >> cl;
+
+	if (iss.fail())
+		throw HttpExceptions(BAD_REQUEST);
+	
+	sock.getReq().setContentLength(cl);
 }

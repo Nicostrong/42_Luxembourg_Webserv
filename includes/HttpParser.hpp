@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 22:14:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 09:57:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define HTTPPARSER_HPP
 
 # include "./HttpBase.hpp"
-# include "./core/chunking/Encoding.hpp"
 # include "./Buffer.hpp"
 # include "./HttpExceptions.hpp"
+# include "./RequestBody.hpp"
 
 # define SL_BSIZE 1024
 # define HEAD_BSIZE 8192
@@ -43,8 +43,8 @@ class HttpParser : public HttpBase
 		HttpParser&				operator=(const HttpParser& obj);
 		void 					onRequest(Buffer& buff, Socket& sock);
 		
+		void 					setState(State state);
 		State					getState() const;
-		Buffer&					getBuffer();
 	protected:
 		HttpParser();
 		
@@ -53,14 +53,14 @@ class HttpParser : public HttpBase
 		void 					parseHeader(const std::string& line);
 		bool					handleStartLine(Buffer& buff);
 		bool					handleHeaders(Buffer& buff);
+		bool					handleBody(Buffer& buff);
 		
 	private:
 		State 					_state;
 		std::string				_slBuffer;
 		std::string				_headBuffer;
-		Buffer					_bodyBuffer;
-		Encoding				_enc;
 		std::string				_queryParams;
+		RequestBody*			_reqBody;
 		
 };
 
