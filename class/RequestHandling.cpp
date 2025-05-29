@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 22:48:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 09:34:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,52 +34,46 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
  */
 void RequestHandling::handleHeaders(Socket& sock)
 {
-	try
+	sock.getResp().addHeader("Content-Length", 0);
+
+	sock.getReq().setLoc(
+		sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
+
+	if (!sock.getReq().getLoc())
 	{
-		sock.getResp().addHeader("Content-Length", 0);
+		sock.getResp().setStatusCode(NOT_FOUND);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return ;
+	}
 
-		sock.getReq().setLoc(
-			sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
-
-		if (!sock.getReq().getLoc())
-		{
-			sock.getResp().setStatusCode(NOT_FOUND);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
-
-		if (!sock.getReq().getLoc()->getMethod()->isAllowed(
+	if (!sock.getReq().getLoc()->getMethod()->isAllowed(
 			sock.getReq().getMethod()))
-		{
-			sock.getResp().setStatusCode(METHOD_NOT_ALLOWED);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
-
-		if (isRedirect(sock))
-			return ;
-		
-		if (isCGI(sock))
-			return ;
-		
-		sock.getReq().setPathTranslated(
-			Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
-				sock.getReq().getUri()));
-
-		if (isIndexFile(sock))
-			return ;
-		
-		if (isDirctoryListing(sock))
-			return ;
-			
-		if (isStaticFile(sock))
-			return ;
-		throw std::runtime_error("No match found");
-	}
-	catch(const std::exception& e)
 	{
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+		sock.getResp().setStatusCode(METHOD_NOT_ALLOWED);
+		sock.getResp().setRespType(HttpResponse::ERROR);
+		return ;
 	}
+
+	if (isRedirect(sock))
+		return ;
+		
+	if (isCGI(sock))
+		return ;
+		
+	sock.getReq().setPathTranslated(
+		Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
+			sock.getReq().getUri()));
+
+	if (isIndexFile(sock))
+		return ;
+		
+	if (isDirctoryListing(sock))
+		return ;
+			
+	if (isStaticFile(sock))
+		return ;
+
+	throw HttpExceptions(INTERNAL_SERVER_ERROR);
 }
 
 
@@ -120,11 +114,20 @@ bool RequestHandling::isStaticFile(Socket& sock)
 	
 	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT)
-			throw std::runtime_error("Stat failed");
-		sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
 	}
 
 	if (S_ISDIR(infos.st_mode))
@@ -137,18 +140,11 @@ bool RequestHandling::isStaticFile(Socket& sock)
 	}
 	
 	if (!S_ISREG(infos.st_mode))
-	{
-		sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(NOT_FOUND);
 
 	if (access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
-	{
-		sock.getResp().setStatusCode(FORBIDDEN);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(FORBIDDEN);
+	
 	sock.getReq().setFilePath(sock.getReq().getPathTranslated());
 	sock.getReq().setFileSize(infos.st_size);
 	sock.getResp().setStatusCode(OK);
@@ -186,20 +182,25 @@ bool RequestHandling::isIndexFile(Socket& sock)
 
 	if (stat(indexPath.c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT && errno != ENOTDIR && errno != EACCES)
-			throw std::runtime_error("Stat failed");
-		return (false);
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			default:
+				return (false);
+		}
 	}
 
 	if (!S_ISREG(infos.st_mode))
 		return (false);
 
 	if (access(indexPath.c_str(), R_OK) == -1)
-	{
-		sock.getResp().setStatusCode(FORBIDDEN);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(FORBIDDEN);
+	
 	sock.getReq().setFilePath(indexPath);
 	sock.getReq().setFileSize(infos.st_size);
 	sock.getResp().setStatusCode(OK);
@@ -215,29 +216,34 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 	sock.getReq().setPathTranslated(
 		Uri::trimSlashEnd(sock.getReq().getPathTranslated()));
 	struct stat infos;
-	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1 ||
-			!S_ISDIR(infos.st_mode))
+	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT && errno != ENOTDIR && errno != EACCES)
-			throw std::runtime_error("Stat failed");
-		if (errno == EACCES)
-			sock.getResp().setStatusCode(FORBIDDEN);
-		else
-			sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
 	}
+
+	if (!S_ISDIR(infos.st_mode))
+		throw HttpExceptions(NOT_FOUND);
 
 	const Directive* directive = 
 		sock.getReq().getLoc()->findDirective("autoindex");
 
 	if (!directive || directive->getValue() != "on" || 
 		access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
-	{
-		sock.getResp().setStatusCode(FORBIDDEN);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(FORBIDDEN);
+	
 	sock.getResp().setStatusCode(OK);
 	sock.getResp().setRespType(HttpResponse::DIRECTORY_LISTING);
 	return (true);
