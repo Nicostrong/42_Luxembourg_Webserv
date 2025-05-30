@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleConfig.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:31:34 by gzenner           #+#    #+#             */
-/*   Updated: 2025/05/17 11:53:06 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/22 13:28:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -5,42 +5,47 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 10:56:59 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 23:03:43 by fdehan           ###   ########.fr       */
+/*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
+/*   Updated: 2025/05/29 23:44:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHUNK_HPP
-#define CHUNK_HPP
+# define CHUNK_HPP
 
-#include "../../lib.hpp"
+#include "Buffer.hpp"
+#include "lib.hpp"
+#include "HttpExceptions.hpp"
+#include "HttpBase.hpp"
 
 class Chunk
 {
     public:
-        enum State
-        {
-            CHUNK_LEN = 0,
-            CHUNK_EXT = 1,
-            CHUNK_DATA = 2,
-            CHUNK_REICEIVED = 3,
-        };
+		enum State
+		{
+            CHUNK_START = 0,
+			CHUNK_HEAD = 1,
+			CHUNK_DATA = 2,
+            CHUNK_END = 3,
+		};
         Chunk();
-        Chunk(const std::vector<char>& buffer, size_t bytes);
+        Chunk(size_t len);
         Chunk(const Chunk& obj);
         ~Chunk();
-        Chunk&	operator=(const Chunk& obj);
-		void	decodeChunk(std::string& data);
-        void    encodeChunk();
+        Chunk& operator=(const Chunk& obj);
+        void    setReceived(size_t received);
+        size_t  getReceived() const;
+        size_t  getLen() const;
         State   getState() const;
+		size_t	handleChunk(Buffer& buff);
     private:
-		static size_t convertHexa(const std::string& str);
-		
-        State		_state;
-        size_t		_len;
-        size_t      _dataSent;
-        std::string	_data;
-        std::string _encoded;
+        void    handleChunkHead(Buffer& buff);
+        size_t  handleChunkData(Buffer& buff);
+        size_t  convertHexa(const std::string& str);
+        
+        size_t	_received;
+        size_t	_len;
+		State 	_state;
 };
 
-#endif
+# endif

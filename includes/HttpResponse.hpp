@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:26:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:36:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "./HttpBase.hpp"
 #include "./HttpParser.hpp"
 #include "./HttpRequest.hpp"
-#include "./core/chunking/Encoding.hpp"
 #include "./Buffer.hpp"
 #include "./Uri.hpp"
 
@@ -44,7 +43,6 @@ class HttpResponse: public HttpParser
 		void				setRespType(ResponseType type);
 		ResponseType		getRespType() const;
 	private:
-		Encoding 		_enc;
 		ResponseType	_respType;
 };
 

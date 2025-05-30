@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:08:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:50:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
 	const sockaddr_in& sockAddr) : _fd(fd),
-	_resp(), _em(em), _ctx(ctx), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
+	_resp(), _em(em), _ctx(ctx), _rxBuffer(RX_SIZE), 
+	_txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
 	{
 		this->_remoteIp = getReadableIp(sockAddr);
 		this->_req 		= HttpRequest(this->_remoteIp);
@@ -24,8 +25,9 @@ Socket::Socket(int fd, EventMonitoring&	em, Server& ctx,
 	}
 
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp), 
-	_txBuffer(obj._txBuffer), _reset(obj._reset), _rHandler(obj._rHandler) {}
+	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp),
+	_rxBuffer(obj._rxBuffer), _txBuffer(obj._txBuffer), _reset(obj._reset), 
+	_rHandler(obj._rHandler) {}
 
 Socket::~Socket() {}
 
@@ -35,6 +37,7 @@ Socket& Socket::operator=(const Socket& obj)
 	{
 		this->_req = obj._req;
 		this->_resp = obj._resp;
+		this->_rxBuffer = obj._rxBuffer;
 		this->_txBuffer = obj._txBuffer;
 	}
 	return (*this);
@@ -70,6 +73,11 @@ Buffer& Socket::getTxBuffer()
 	return (this->_txBuffer);
 }
 
+EventMonitoring& Socket::getEventMonitoring()
+{
+	return (this->_em);
+}
+
 void Socket::reset()
 {
 	this->_reset = true;
@@ -80,18 +88,39 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	(void)type;
 	try
 	{
-		std::vector<char> buffer(BUFFER_SIZE);
-		ssize_t bytes = recv(fd, buffer.data(), BUFFER_SIZE, 0);
-		
-		if (bytes == -1)
-			throw SocketReadException();
-		this->_req.parse(buffer, bytes);
-		if (this->_req.getState() == HttpParser::HTTP_INVALID || 
-			this->_req.getState() == HttpParser::HTTP_RECEIVED)
+		try
 		{
-			RequestHandling::handleHeaders(*this);
+			if (this->_rxBuffer.isBufferRead())
+				this->_rxBuffer.reset();
+			
+			ssize_t bytes = recv(fd, this->_rxBuffer.getDataUnused(), 
+				this->_rxBuffer.getBufferUnused(), 0);
+				
+			if (bytes == -1)
+				throw SocketReadException();
+			
+			this->_rxBuffer.setBufferUsed(bytes);
+			this->_req.onRequest(this->_rxBuffer, *this);
+			
+			if (this->_req.getState() < HttpParser::HTTP_RECEIVED)
+				return ;
+
 			this->_rHandler.init(*this);
 			em.unmonitor(fd);
+			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
+				EventData::CLIENT, *this);
+		}
+		catch(const HttpExceptions& e)
+		{
+			LOG_ERROR("An error occured while parsing request "
+				"(can be bad request as well)");
+			LOG_ERROR(e.getCode());
+			
+			this->_resp.setRespType(HttpResponse::ERROR);
+			this->_resp.setStatusCode((HttpBase::HttpCode)e.getCode());
+			this->_rHandler.init(*this);
+			em.unmonitor(fd);
+			//this->_ctx.onSocketClosedEvent(*this);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
 		}
@@ -107,6 +136,8 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 {
 	try
 	{
+		if (this->_txBuffer.isBufferRead())
+			this->_txBuffer.reset();
 		this->_rHandler.send(*this);
 		if (!this->_txBuffer.isBufferRead())
 		{

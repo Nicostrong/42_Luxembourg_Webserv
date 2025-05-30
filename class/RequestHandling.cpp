@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 14:48:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:42:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,66 +27,65 @@ RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
 	return (*this);
 }
 
-/*
- * Should clean this abomination but its 23h30 so.. not now
- * and getRealPath seems working, need to check if the path is valid and exist
- * and excute cgi if the location let it run.
- */
 void RequestHandling::handleHeaders(Socket& sock)
 {
-	try
-	{
-		sock.getResp().addHeader("Content-Length", 0);
-		if (sock.getReq().getState() == HttpParser::HTTP_INVALID)
-		{
-			sock.getResp().setStatusCode(BAD_REQUEST);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
+	sock.getResp().addHeader("Content-Length", 0);
 
-		sock.getReq().setLoc(
-			sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
+	sock.getReq().setLoc(
+		sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
 
-		if (!sock.getReq().getLoc())
-		{
-			sock.getResp().setStatusCode(NOT_FOUND);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
+	if (!sock.getReq().getLoc())
+		throw HttpExceptions(NOT_FOUND);
 
-		if (!sock.getReq().getLoc()->getMethod()->isAllowed(
+	if (!sock.getReq().getLoc()->getMethod()->isAllowed(
 			sock.getReq().getMethod()))
-		{
-			sock.getResp().setStatusCode(METHOD_NOT_ALLOWED);
-			sock.getResp().setRespType(HttpResponse::ERROR);
-			return ;
-		}
+		throw HttpExceptions(METHOD_NOT_ALLOWED);
 
+	sock.getReq().setPathTranslated(
+			Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
+				sock.getReq().getUri()));
+	
+	if (sock.getReq().getMethod() == "GET")
+	{
 		if (isRedirect(sock))
 			return ;
-		
+			
 		if (isCGI(sock))
 			return ;
 		
-		sock.getReq().setPathTranslated(
-			Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
-				sock.getReq().getUri()));
-
 		if (isIndexFile(sock))
 			return ;
-		
+			
 		if (isDirctoryListing(sock))
 			return ;
-			
+				
 		if (isStaticFile(sock))
 			return ;
-		throw std::runtime_error("No match found");
+		
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 	}
-	catch(const std::exception& e)
-	{
-		sock.getResp().setStatusCode(INTERNAL_SERVER_ERROR);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-	}
+	else if (sock.getReq().getMethod() == "POST")
+		handlePost(sock);
+	else
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+}
+
+void RequestHandling::handleBody(Socket& sock)
+{
+	//SHould handle verything else than upload
+	RequestBody* body = sock.getReq().getBody();
+	
+	if (!body)
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+
+	std::string	path = sock.getReq().getPathTranslated();
+
+	checkFileExistUpload(path);
+	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
+	body->moveBodyFile(path);
+	sock.getResp().addHeader("Location", 
+		Uri::getPathInfo(sock.getReq().getLoc(), sock.getReq().getUri()));
+	throw HttpExceptions(CREATED);
 }
 
 
@@ -127,11 +126,20 @@ bool RequestHandling::isStaticFile(Socket& sock)
 	
 	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT)
-			throw std::runtime_error("Stat failed");
-		sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
 	}
 
 	if (S_ISDIR(infos.st_mode))
@@ -144,18 +152,11 @@ bool RequestHandling::isStaticFile(Socket& sock)
 	}
 	
 	if (!S_ISREG(infos.st_mode))
-	{
-		sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(NOT_FOUND);
 
 	if (access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
-	{
-		sock.getResp().setStatusCode(FORBIDDEN);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(FORBIDDEN);
+	
 	sock.getReq().setFilePath(sock.getReq().getPathTranslated());
 	sock.getReq().setFileSize(infos.st_size);
 	sock.getResp().setStatusCode(OK);
@@ -193,20 +194,25 @@ bool RequestHandling::isIndexFile(Socket& sock)
 
 	if (stat(indexPath.c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT)
-			throw std::runtime_error("Stat failed");
-		return (false);
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			default:
+				return (false);
+		}
 	}
 
 	if (!S_ISREG(infos.st_mode))
 		return (false);
 
 	if (access(indexPath.c_str(), R_OK) == -1)
-	{
-		sock.getResp().setStatusCode(FORBIDDEN);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(FORBIDDEN);
+	
 	sock.getReq().setFilePath(indexPath);
 	sock.getReq().setFileSize(infos.st_size);
 	sock.getResp().setStatusCode(OK);
@@ -222,27 +228,142 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 	sock.getReq().setPathTranslated(
 		Uri::trimSlashEnd(sock.getReq().getPathTranslated()));
 	struct stat infos;
-	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1 ||
-			!S_ISDIR(infos.st_mode))
+	if (stat(sock.getReq().getPathTranslated().c_str(), &infos) == -1)
 	{
-		if (errno != ENOENT)
-			throw std::runtime_error("Stat failed");
-		sock.getResp().setStatusCode(NOT_FOUND);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
 	}
+
+	if (!S_ISDIR(infos.st_mode))
+		throw HttpExceptions(NOT_FOUND);
 
 	const Directive* directive = 
 		sock.getReq().getLoc()->findDirective("autoindex");
 
 	if (!directive || directive->getValue() != "on" || 
 		access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
-	{
-		sock.getResp().setStatusCode(FORBIDDEN);
-		sock.getResp().setRespType(HttpResponse::ERROR);
-		return (true);
-	}
+		throw HttpExceptions(FORBIDDEN);
+	
 	sock.getResp().setStatusCode(OK);
 	sock.getResp().setRespType(HttpResponse::DIRECTORY_LISTING);
 	return (true);
+}
+
+void RequestHandling::handlePost(Socket& sock)
+{
+	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() == '/')
+		throw HttpExceptions(METHOD_NOT_ALLOWED);
+
+	LOG_DEB(sock.getReq().getUri());
+	std::string	path = sock.getReq().getPathTranslated();
+
+	handleBodyLength(sock);
+	checkFileExistUpload(path);
+	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
+	sock.getReq().setState(HttpParser::HTTP_BODY);
+}
+
+void RequestHandling::handleBodyLength(Socket& sock)
+{
+	bool te = sock.getReq().findHeader("TRANSFER-ENCODING");
+	bool cl = sock.getReq().findHeader("CONTENT-LENGTH");
+	
+	if (te && cl)
+		throw HttpExceptions(BAD_REQUEST);
+	
+	if (te)
+		handleTE(sock);
+	else if (cl)
+		handleContentLength(sock);
+	else
+		throw HttpExceptions(LENGTH_REQUIRED);
+}
+
+void RequestHandling::handleTE(Socket& sock)
+{
+	std::string value = sock.getReq().findHeaderValue("TRANSFER-ENCODING");
+	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+
+	if (value != "chunked")
+		throw HttpExceptions(NOT_IMPLEMENTED);
+	
+	sock.getReq().setTE(true);
+}
+
+void RequestHandling::handleContentLength(Socket& sock)
+{
+	std::string value = sock.getReq().findHeaderValue("CONTENT-LENGTH");
+
+	if (value.empty() || 
+		value.find_first_not_of("0123456789") != std::string::npos)
+		throw HttpExceptions(BAD_REQUEST);
+
+	std::istringstream iss(value);
+	size_t cl;
+    iss >> cl;
+
+	if (iss.fail())
+		throw HttpExceptions(BAD_REQUEST);
+	
+	sock.getReq().setContentLength(cl);
+}
+
+void RequestHandling::checkFileExistUpload(const std::string& path)
+{
+	struct stat infos;
+
+	if (stat(path.c_str(), &infos) == -1)
+	{
+		switch (errno)
+		{
+			case ENOENT:
+				return ;
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
+	}
+	throw HttpExceptions(CONFLICT);
+}
+
+void RequestHandling::checkFolderExistUpload(const std::string& dir)
+{
+	struct stat infos;
+
+	if (stat(dir.c_str(), &infos) == -1)
+	{
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
+	}
 }

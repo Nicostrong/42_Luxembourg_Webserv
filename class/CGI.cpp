@@ -3,37 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:20:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/22 16:46:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/CGI.hpp"
 
-CGI::CGI(EventMonitoring& em, const HttpRequest& req, HttpResponse& resp, 
-    const Server& ctx, const std::string& remoteIp) : _em(em), _req(req), _resp(resp), _ctx(ctx), _remoteIp(remoteIp) {}
-
-CGI::CGI(const CGI& obj) : _em(obj._em), _req(obj._req), _resp(obj._resp), 
-	_ctx(obj._ctx), _remoteIp(obj._remoteIp) {}
+CGI::CGI(Socket& sock) : _sock(sock), _pid(0)
+{}
 
 CGI::~CGI() {}
 
-CGI& CGI::operator=(const CGI& obj) 
-{
-    if (this != &obj)
-        this->_em = obj._em;
-    return (*this);
-}
 
-void	initCGI()
+void	init()
 {
-	const std::vector<std::string> env;
+	//const std::vector<std::string> env;
+
 	//execve("", env.data(), env);
 }
 
-const std::vector<std::string> CGI::getEnv() const
+void CGI::launch(Socket& sock, const std::string& path)
+{
+    this->_pid = fork();
+    if (this->_pid < 0)
+    {
+        LOG_DEB("Fork failed");
+    }
+    if (this->_pid == 0)
+    {
+        std::vector<char*> argv_vec;
+        argv_vec.push_back(strdup("/path/to/program"));
+        argv_vec.push_back(strdup("argument1"));
+        argv_vec.push_back(NULL);
+
+        if (execve(path.c_str(), argv_vec.data(), argv_vec.data()) == -1)
+        {
+            LOG_DEB("exited fork");
+            throw ForkClean();
+        }
+    }
+    else
+    {
+        this->_in.closeOut();
+        this->_out.closeIn();
+        sock.getEventMonitoring().monitor(this->_in.getIn(), POLLIN, 0, *this);
+        //sock.getEventMonitoring().monitor(this->_in.getOut(), POLLOUT, 0, *this);
+        //waitpid(this->_pid, NULL, 0);
+    }
+}
+
+pid_t   CGI::getPid() const
+{
+    return (this->_pid);
+}
+
+/*const std::vector<std::string> CGI::getEnv() const
 {
     std::vector<std::string> env;
 
@@ -46,7 +73,7 @@ const std::vector<std::string> CGI::getEnv() const
     // Request specific
 
     env.push_back(getRawEnv("SERVER_PROTOCOL", this->_req.getHTTP()));
-    env.push_back(getRawEnv("SERVER_PORT", /*this->_ctx.getPort()*/8000));
+    env.push_back(getRawEnv("SERVER_PORT", this->_ctx.getPort()8000));
     env.push_back(getRawEnv("REQUEST_METHOD", this->_req.getMethod()));
     env.push_back(getRawEnv("PATH_INFO", "")); //Should take it from handled
     env.push_back(getRawEnv("PATH_TRANSLATED", "")); //Should take it from handled
@@ -88,4 +115,11 @@ std::string CGI::getRawEnv(const std::string& key, const T& value) const
 
     oss << key << "=" << value;
     return (oss.str());
+}*/
+
+// Exceptions
+
+const char *CGI::ForkClean::what() const throw()
+{
+	return ("Fork clean");
 }

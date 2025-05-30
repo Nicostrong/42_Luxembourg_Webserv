@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/22 08:26:20 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 13:59:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

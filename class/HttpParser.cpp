@@ -6,71 +6,96 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/18 11:12:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:18:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/HttpParser.hpp"
+#include "../includes/Socket.hpp"
+#include "../includes/RequestHandling.hpp"
 
-HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE) {}
+HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE), _reqBody(NULL)
+	{
+		this->_slBuffer.reserve(SL_BSIZE);
+		this->_headBuffer.reserve(HEAD_BSIZE);
+	}
 
 HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj), 
-	 _buffer(obj._buffer), _state(obj._state) {}
+	_state(obj._state), _slBuffer(obj._slBuffer), _headBuffer(obj._headBuffer), 
+	_reqBody(NULL)
+{
+	this->_slBuffer.reserve(SL_BSIZE);
+	this->_headBuffer.reserve(HEAD_BSIZE);
+}
 
 HttpParser::~HttpParser() {}
 
 HttpParser& HttpParser::operator=(const HttpParser& obj)
 {
-	HttpBase::operator=(obj);
-	this->_state = obj._state;
-	this->_buffer = obj._buffer;
+	if (this != &obj)
+	{
+		HttpBase::operator=(obj);
+		this->_state = obj._state;
+		this->_slBuffer = obj._slBuffer;
+		this->_headBuffer = obj._headBuffer;
+		if (this->_reqBody)
+			delete this->_reqBody;
+		LOG_DEB("Request reseted");
+		this->_reqBody = obj._reqBody;
+	}
 	return (*this);
 }
 
-void HttpParser::parse(std::vector<char>& buff, size_t n)
+HttpParser::State HttpParser::getState() const
 {
-	size_t pos;
+	return (this->_state);
+}
 
-	this->_buffer.append(buff.data(), n);
+void HttpParser::setState(HttpParser::State state)
+{
+	this->_state = state;
+}
 
+RequestBody* HttpParser::getBody() const
+{
+	return (this->_reqBody);
+}
+
+void HttpParser::onRequest(Buffer& buff, Socket& sock)
+{
 	switch (this->_state)
 	{
 		// fallthrough
 		case HttpParser::HTTP_STARTLINE:
-			pos = this->_buffer.find(CRLF);
-			if (pos == std::string::npos)
+			if (!handleStartLine(buff))
 				return ;
-			parseStartLine(this->_buffer.substr(0, pos));
-			if (this->_state != HTTP_INVALID)
-			{
-				this->_state = HTTP_HEADERS;
-				this->_buffer = this->_buffer.substr(pos + 2);
-			}
 		// fallthrough
 		case HttpParser::HTTP_HEADERS:
-			pos = this->_buffer.find(CRLF CRLF);
-			if (pos == std::string::npos)
+			if (!handleHeaders(buff))
 				return ;
-			parseHeaders(this->_buffer.substr(0, pos));
-			if (this->_state != HTTP_INVALID)
-			{
-				//if (this->_method)
-				//this->_state = HTTP_BODY;
-				this->_state = HTTP_RECEIVED;
-				//this->_buffer = this->_buffer.substr(pos + 4);
-			}
+		// fallthrough
+		case HttpParser::HTTP_HEAD_HANDLING:
+			this->_state = HTTP_RECEIVED;
+			RequestHandling::handleHeaders(sock);
+			if (this->_state == HTTP_RECEIVED)
+				return ;
+		// fallthrough
 		case HttpParser::HTTP_BODY:
-			// SHould check what to do depending
-			break;
+			if (!handleBody(buff, sock))
+				return ;
+		// fallthrough
+		case HttpParser::HTTP_BODY_HANDLING:
+			this->_state = HTTP_RECEIVED;
+			RequestHandling::handleBody(sock);
 		default:
 			break;
 	}
 }
 
-void HttpParser::parseStartLine(const std::string& line)
+void HttpParser::parseStartLine()
 {
 	std::vector<std::string> tokens;
-    std::istringstream iss(line);
+    std::istringstream iss(this->_slBuffer);
     std::string token;
 
 	while (iss >> token) {
@@ -79,10 +104,7 @@ void HttpParser::parseStartLine(const std::string& line)
 	
 	if (tokens.size() != 3 || !canBeValidMethod(tokens.at(0)) || 
 		!canBeValidPath(tokens.at(1)) || !canBeValidHttpProtocol(tokens.at(2)))
-	{
-		this->_state = HTTP_INVALID;
-		return ;
-	}
+		throw HttpExceptions(BAD_REQUEST);
 
 	//size_t queryPos = tokens.at(1).find('?');
 	this->_method = tokens.at(0);
@@ -92,24 +114,21 @@ void HttpParser::parseStartLine(const std::string& line)
 	this->_httpVersion = tokens.at(2);
 }
 
-void HttpParser::parseHeaders(const std::string& headers)
+void HttpParser::parseHeaders()
 {
 	size_t sPos = 0;
-	size_t ePos = headers.find(CRLF);
+	size_t ePos = this->_headBuffer.find(CRLF);
 
 	while (ePos != std::string::npos)
 	{
-		parseHeader(headers.substr(sPos, ePos));
+		parseHeader(this->_headBuffer.substr(sPos, ePos - sPos));
 		sPos = ePos + 2;
-		ePos = headers.find(CRLF, sPos);
+		ePos = this->_headBuffer.find(CRLF, sPos);
 	}
-	parseHeader(headers.substr(sPos));
+	parseHeader(this->_headBuffer.substr(sPos));
 
 	if (this->_headers.find("HOST") == this->_headers.end())
-	{
-		this->_state = HTTP_INVALID;
-		return ;
-	}
+		throw HttpExceptions(BAD_REQUEST);
 }
 
 void HttpParser::parseHeader(const std::string& line)
@@ -117,10 +136,7 @@ void HttpParser::parseHeader(const std::string& line)
 	size_t sep = line.find(':');
 	
 	if (sep == std::string::npos || sep == 0)
-	{
-		this->_state = HTTP_INVALID;
-		return ;
-	}
+		throw HttpExceptions(BAD_REQUEST);
 
 	int	folding = (line.size() - sep > 1) ? 
 				  line.at(sep + 1) == ' ' || line.at(sep + 1) == '\t' : 0;
@@ -128,22 +144,73 @@ void HttpParser::parseHeader(const std::string& line)
 	std::string value = line.substr(sep + folding + 1);
 
 	if (!isHeaderNameValid(name))
-	{
-		this->_state = HTTP_INVALID;
-		return ;
-	}
+		throw HttpExceptions(BAD_REQUEST);
 	name = normalizeHeaderName(name);
 
 	if (name == "HOST" && this->_headers.find(name) != this->_headers.end())
-	{
-		this->_state = HTTP_INVALID;
-		return;
-	}
+		throw HttpExceptions(BAD_REQUEST);
 
 	this->_headers[name] = value;
 }
 
-HttpParser::State HttpParser::getState() const
+// Helper
+
+bool HttpParser::handleStartLine(Buffer& buff)
 {
-	return (this->_state);
+	size_t len = std::min(buff.getBufferUnread(), 
+		this->_slBuffer.capacity() - this->_slBuffer.size());
+	
+	this->_slBuffer.append(buff.getDataUnread(), len);
+	
+	size_t pos = this->_slBuffer.find(CRLF);
+	
+	if (pos == std::string::npos)
+	{
+		buff.setBufferRead(len);
+		if (this->_slBuffer.size() >= this->_slBuffer.capacity())
+			throw HttpExceptions(URI_TOO_LONG);
+		return (false);
+	}
+	
+	buff.setBufferRead(pos + len - this->_slBuffer.size() + 2);
+	this->_slBuffer.erase(pos);
+	
+	parseStartLine();
+	if (this->_state == HTTP_STARTLINE)
+		this->_state = HTTP_HEADERS;
+	return (true);
+}
+
+bool HttpParser::handleHeaders(Buffer& buff)
+{
+	size_t len = std::min(buff.getBufferUnread(), 
+				this->_headBuffer.capacity() - this->_headBuffer.size());
+
+	this->_headBuffer.append(buff.getDataUnread(), len);
+	
+	size_t pos = this->_headBuffer.find(CRLF CRLF);
+
+	if (pos == std::string::npos)
+	{
+		buff.setBufferRead(len);
+
+		if (this->_headBuffer.size() >= this->_headBuffer.capacity())
+			throw HttpExceptions(REQUEST_HEADER_FIELDS_TOO_LARGE);
+		return (false);
+	}
+	
+	buff.setBufferRead(pos + len - this->_headBuffer.size() + 4);
+	this->_headBuffer.erase(pos);
+
+	parseHeaders();
+	if (this->_state == HTTP_HEADERS)
+		this->_state = HTTP_HEAD_HANDLING;
+	return (true);
+}
+
+bool HttpParser::handleBody(Buffer& buff, Socket& sock)
+{
+	if (!this->_reqBody)
+		this->_reqBody = new RequestBody(0);
+	return (this->_reqBody->onBodyReceived(buff, sock));
 }

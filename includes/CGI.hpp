@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:44 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:44:48 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/22 16:45:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,29 @@
 # include "./HttpRequest.hpp"
 # include "./IEventHandler.hpp"
 # include "./server/Server.hpp"
+# include "./Socket.hpp"
 # include "./EventMonitoring.hpp"
+# include "./Pipe.hpp"
 
 class CGI : public IEventHandler
 {
     public:
-        CGI(EventMonitoring& em, const HttpRequest& req, HttpResponse& resp, 
-			const Server& ctx, const std::string& remoteIp);
-        CGI(const CGI& obj);
+        class ForkClean : public std::exception {
+			public:
+				const char * what () const throw();
+		};
+
+        CGI(Socket& sock);
+       
         ~CGI();
-        CGI&    operator=(const CGI& obj);
-        void	initCGI();
         
+
+        void	init();
+        void    launch(Socket& sock, const std::string& path);
+        pid_t   getPid() const;
     private:
+        CGI(const CGI& obj);
+        CGI&    operator=(const CGI& obj);
         const std::vector<std::string> getEnv() const;
         
         template <typename T>
@@ -38,12 +48,10 @@ class CGI : public IEventHandler
         
         const std::vector<const char*> getCArray(const std::vector<std::string>& in) 
             const;
-            
-        EventMonitoring&    _em;
-        const HttpRequest&  _req;
-        HttpResponse&       _resp;
-        const Server&       _ctx;
-        std::string         _remoteIp;
+        Socket& _sock;
+        pid_t   _pid;
+        Pipe    _in;
+        Pipe    _out;
 };
 
 #endif

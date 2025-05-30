@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 18:36:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:15:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 HttpRequest::HttpRequest() {}
 
 HttpRequest::HttpRequest(const std::string& remoteIp) : HttpParser(), 
-	_remoteIp(remoteIp), _loc(NULL) {}
+	_remoteIp(remoteIp), _loc(NULL), _isTE(false), _contentLength(0) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpParser(obj)
 {
@@ -40,6 +40,8 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_filePath = obj._filePath;
 		this->_queryParams = obj._queryParams;
 		this->_fileSize = obj._fileSize;
+		this->_isTE = obj._isTE;
+		this->_contentLength = obj._contentLength;
 	}
 	return (*this);
 }
@@ -90,6 +92,16 @@ void HttpRequest::setFileSize(size_t fileSize)
 	this->_fileSize = fileSize;
 }
 
+void HttpRequest::setContentLength(size_t length)
+{
+	this->_contentLength = length;
+}
+		
+void HttpRequest::setTE(bool state)
+{
+	this->_isTE = state;
+}
+
 const Location* HttpRequest::getLoc() const
 {
 	return (this->_loc);
@@ -133,4 +145,14 @@ const std::string& HttpRequest::getQueryParams() const
 size_t HttpRequest::getFileSize() const
 {
 	return (this->_fileSize);
+}
+
+size_t HttpRequest::getContentLength() const
+{
+	return (this->_contentLength);
+}
+
+bool HttpRequest::isTE() const
+{
+	return (this->_isTE);
 }

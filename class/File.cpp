@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 11:36:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 12:06:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:48:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ void File::read(Buffer& buff, size_t n)
    
     if (!this->_fstream && !this->_fstream.eof())
         throw std::runtime_error("Read failed");
+
     buff.setBufferUsed(this->_fstream.gcount());
 }

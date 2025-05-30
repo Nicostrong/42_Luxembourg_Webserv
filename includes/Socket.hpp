@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 11:34:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/28 22:10:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # include "./EventMonitoring.hpp"
 # include "./File.hpp"
 # include "./Buffer.hpp"
+# include "./HttpExceptions.hpp"
+
+# define RX_SIZE 1024
 
 class Server;
 
@@ -45,6 +48,7 @@ class Socket : public IEventHandler
 		HttpResponse&		getResp();
 		Server& 			getCtx();
 		Buffer&				getTxBuffer();
+		EventMonitoring&	getEventMonitoring();
 		void				reset();
 		void				onReadEvent(int fd, int type, EventMonitoring& em);
 		void				onWriteEvent(int fd, int type, EventMonitoring& em);
@@ -58,6 +62,7 @@ class Socket : public IEventHandler
 		EventMonitoring&	_em;
 		Server&				_ctx;
 		std::string			_remoteIp;
+		Buffer				_rxBuffer;
 		Buffer				_txBuffer;
 		bool				_reset;
 		ResponseHandling	_rHandler;

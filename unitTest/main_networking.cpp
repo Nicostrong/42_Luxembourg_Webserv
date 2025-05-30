@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/26 09:56:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 14:00:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../includes/EventMonitoring.hpp"
 #include "../includes/server/ServerManager.hpp"
 #include "../includes/parser/ParserServerConfig.hpp"
+#include "../includes/CGI.hpp"
 
 bool	g_running = true;
 
@@ -31,10 +32,17 @@ int main()
 		ParserServerConfig		pc("../config/webserv.conf");
 		EventMonitoring			em;
 		ServerManager			sm(pc.getAllTokens(), em);
-
+		//CGI cgi;
+		
+		//cgi.launch();
 		sm.startAll();
 		while (g_running)
 			em.updateEvents();
+	}
+	catch (const CGI::ForkClean& e)
+	{
+		LOG_DEB("Fork exit");
+		return (1);
 	}
 	catch(const std::exception& e)
 	{

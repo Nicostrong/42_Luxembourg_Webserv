@@ -6,17 +6,20 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/19 18:34:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 10:39:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTP_REQUEST
-#define HTTP_REQUEST
+#ifndef HTTP_REQUEST_HPP
+#define HTTP_REQUEST_HPP
 
 #include "./lib.hpp"
 #include "./HttpBase.hpp"
-#include "HttpParser.hpp"
+#include "./HttpParser.hpp"
 #include "./server/Location.hpp"
+#include "./MemoryPool.hpp"
+#include "./StartLine.hpp"
+#include "./Headers.hpp"
 
 class HttpRequest : public HttpParser
 {
@@ -38,6 +41,8 @@ class HttpRequest : public HttpParser
 		void					setFilePath(const std::string& filePath);
 		void					setQueryParams(const std::string& queryParams);
 		void					setFileSize(size_t fileSize);
+		void					setContentLength(size_t length);
+		void					setTE(bool state);
 		const Location* 		getLoc() const;
 		const std::string&		getPathTranslated() const;
 		const std::string&		getPathInfo() const;
@@ -47,6 +52,9 @@ class HttpRequest : public HttpParser
 		const std::string&		getFilePath() const;
 		const std::string&		getQueryParams() const;
 		size_t					getFileSize() const;
+		size_t					getContentLength() const;
+		bool					isTE() const;
+		
 		
 
 	private:
@@ -65,6 +73,10 @@ class HttpRequest : public HttpParser
 		std::string		_queryParams;
 		size_t			_fileSize;
 
+		//Request Body
+		bool			_isTE;
+		size_t			_contentLength;
+		
 };
 
 #endif

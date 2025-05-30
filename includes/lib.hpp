@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/26 09:55:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 13:59:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # include <sys/epoll.h>
 # include <netinet/in.h>
 # include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include <unistd.h>
 #include <iostream>
@@ -54,6 +56,8 @@
 # define SEND_BUFFER_SIZE 262144
 # define RESPONSE_BUFFER_SIZE 32768
 # define MAX_READ_SIZE 32768
+# define BODY_BUFFER_SIZE 32768
+# define MAX_CLIENT 1024
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"
@@ -63,6 +67,12 @@
 # define BLUE		"\033[94m"		//	Directive log
 # define MAGENTA	"\033[95m"		//	Method log
 # define CYAN		"\033[96m"		//	Debug log
+
+struct t_string 
+{
+    size_t pos;
+    size_t len;
+};
 
 #define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
 

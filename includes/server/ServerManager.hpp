@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/26 10:26:03 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 13:59:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

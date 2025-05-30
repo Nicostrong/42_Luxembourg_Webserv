@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/26 10:20:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 13:59:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
