@@ -16,3 +16,6 @@
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
        modification timestamp in hexa and y teh file content len in hexa.
+-Rework base Architecture to listen on each port and redirect request on the 
+    corrrect structure and have all sockets in one list and have servers where 
+    the request will be redirected depending on mandatory HOST header
