@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:10:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:42:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void RequestHandling::handleHeaders(Socket& sock)
 				
 		if (isStaticFile(sock))
 			return ;
+		
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 	}
 	else if (sock.getReq().getMethod() == "POST")
 		handlePost(sock);

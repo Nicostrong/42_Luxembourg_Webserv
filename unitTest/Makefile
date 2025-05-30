@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/29 14:35:42 by fdehan           ###   ########.fr        #
+#    Updated: 2025/05/30 13:35:39 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,12 +85,14 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/Socket.cpp \
 					../class/Ressource.cpp \
 					../class/Uri.cpp \
-					../class/core/chunking/Encoding.cpp \
-					../class/core/chunking/Chunk.cpp \
 					../class/HttpParser.cpp \
 					../class/File.cpp \
 					../class/Buffer.cpp \
 					../class/ResponseHandling.cpp \
+					../class/Pipe.cpp \
+					../class/HttpExceptions.cpp \
+					../class/RequestBody.cpp \
+					../class/Chunk.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)

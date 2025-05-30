@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:08:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:50:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,8 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 {
 	try
 	{
+		if (this->_txBuffer.isBufferRead())
+			this->_txBuffer.reset();
 		this->_rHandler.send(*this);
 		if (!this->_txBuffer.isBufferRead())
 		{
