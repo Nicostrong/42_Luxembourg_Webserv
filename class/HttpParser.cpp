@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:18:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:51:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void HttpParser::parseStartLine()
 
 void HttpParser::parseHeaders()
 {
-	size_t sPos = 0;
-	size_t ePos = this->_headBuffer.find(CRLF);
+	size_t sPos = 2;
+	size_t ePos = this->_headBuffer.find(CRLF, sPos);
 
 	while (ePos != std::string::npos)
 	{
@@ -125,7 +125,9 @@ void HttpParser::parseHeaders()
 		sPos = ePos + 2;
 		ePos = this->_headBuffer.find(CRLF, sPos);
 	}
-	parseHeader(this->_headBuffer.substr(sPos));
+	
+	if (this->_headBuffer.size())
+		parseHeader(this->_headBuffer.substr(sPos));
 
 	if (this->_headers.find("HOST") == this->_headers.end())
 		throw HttpExceptions(BAD_REQUEST);
@@ -172,7 +174,7 @@ bool HttpParser::handleStartLine(Buffer& buff)
 		return (false);
 	}
 	
-	buff.setBufferRead(pos + len - this->_slBuffer.size() + 2);
+	buff.setBufferRead(pos + len - this->_slBuffer.size());
 	this->_slBuffer.erase(pos);
 	
 	parseStartLine();
