@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:21:21 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 20:31:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 10:43:32 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,24 @@
 
 #define RAM_BUFF 20480
 #define TMP_PATH "/tmp/"
+#define MAX_RETRY 3
+
+class Socket;
 
 class RequestBody
 {
 	public:
-		RequestBody();
+		RequestBody(size_t bufferSize);
 		~RequestBody();
-		void			add(Buffer& buff);
+		void 			onBodyReceived(Buffer& buff, Socket& sock);
+		
 	private:
 		RequestBody(const RequestBody& obj);
 		RequestBody&	operator=(const RequestBody& obj);
+		void			onBodyReceivedLength(Buffer& buff, size_t bodyLen);
+		void 			onBodyReceivedTE(Buffer& buff);
+		size_t			writeInMemory(Buffer& buff, size_t max);
+		size_t			writeInFile(Buffer& buff, size_t max);
 		void			openTmpFile();
 		
 		Buffer	 		_buff;

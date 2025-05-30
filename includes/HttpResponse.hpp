@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:26:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:36:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ class HttpResponse: public HttpParser
 		void				setRespType(ResponseType type);
 		ResponseType		getRespType() const;
 	private:
-		Encoding 		_enc;
 		ResponseType	_respType;
 };
 

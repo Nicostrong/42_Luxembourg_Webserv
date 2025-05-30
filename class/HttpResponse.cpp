@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:28:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:36:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ HttpResponse& HttpResponse::operator=(const HttpResponse& obj)
 	if (this != &obj)
 	{
 		HttpParser::operator=(obj);
-		this->_enc = obj._enc;
 		this->_respType = obj._respType;
 	}
 	return (*this);

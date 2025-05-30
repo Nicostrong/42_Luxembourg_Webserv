@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 22:41:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 10:20:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ std::vector<char>&	Buffer::getVector()
     return (this->_buffer);
 }
 
+const std::vector<char>&	Buffer::getVector() const
+{
+    return (this->_buffer);
+}
+
 char*  Buffer::getData()
 {
     return (this->_buffer.data());
@@ -48,7 +53,7 @@ const char*  Buffer::getData() const
     return (this->_buffer.data());
 }
 
-char*	Buffer::getDataUnused()
+char*	Buffer::getDataUnused() 
 {
     return (this->_buffer.data() + this->_bufferUsed);
 }
@@ -58,24 +63,29 @@ char*	Buffer::getDataUnread()
      return (this->_buffer.data() + this->_bufferRead);
 }
 
-size_t Buffer::getBufferUsed()
+size_t Buffer::getBufferUsed() const
 {
     return (this->_bufferUsed);
 }
 
-size_t Buffer::getBufferRead()
+size_t Buffer::getBufferRead() const
 {
     return (this->_bufferRead);
 }
 
-size_t Buffer::getBufferUnused()
+size_t Buffer::getBufferUnused() const
 {
     return (this->_bufferSize - this->_bufferUsed);
 }
 
-size_t Buffer::getBufferUnread()
+size_t Buffer::getBufferUnread() const
 {
     return (this->_bufferUsed - this->_bufferRead);
+}
+
+size_t Buffer::getBufferSize()	const
+{
+    return (this->_buffer.capacity());
 }
 
 void Buffer::setBufferRead(size_t n)
@@ -99,12 +109,12 @@ void Buffer::setBufferUsed(size_t n)
 		this->_bufferUsed = bUsed;
 }
 
-bool Buffer::isBufferFull()
+bool Buffer::isBufferFull() const
 {
 	return (this->_bufferUsed == this->_bufferSize);
 }
 
-bool Buffer::isBufferRead()
+bool Buffer::isBufferRead() const
 {
 	return (this->_bufferRead == this->_bufferUsed);
 }
@@ -121,16 +131,22 @@ std::vector<char>::iterator	Buffer::beginUnread()
 
 void Buffer::copyFrom(Buffer& buff, size_t pos, size_t n)
 {
-    if (buff.getVector().size() < this->_buffer.size())
+    size_t endPos = std::min(pos + n, buff._bufferUsed);
+
+    if (pos >= endPos)
         return ;
+    
+    if (endPos - pos > getBufferUnused())
+        return ;
+    
     std::copy(buff.getVector().begin() + pos, 
-        std::min(pos + n, buff._bufferUsed) + buff.getVector().begin(), 
-        this->_buffer.begin());
-    setBufferUsed(std::min(pos + n, buff._bufferUsed) - pos);
-    setBufferRead(buff.getBufferRead());
+                buff.getVector().begin() + endPos + 1, 
+                    this->beginUnused());
+    
+    setBufferUsed(endPos - pos);
 }
 
-size_t Buffer::find(const char& c, size_t pos, size_t n)
+size_t Buffer::find(const char& c, size_t pos, size_t n) const
 {
     while (pos < this->_bufferUsed && pos < pos + n)
     {
@@ -141,7 +157,7 @@ size_t Buffer::find(const char& c, size_t pos, size_t n)
     return (std::string::npos);
 }
 
-size_t Buffer::find(const std::string& str, size_t pos, size_t n)
+size_t Buffer::find(const std::string& str, size_t pos, size_t n) const
 {
     
     
@@ -164,7 +180,7 @@ size_t Buffer::find(const std::string& str, size_t pos, size_t n)
     return (std::string::npos);
 }
 
-size_t Buffer::find(const char* str, size_t pos, size_t n)
+size_t Buffer::find(const char* str, size_t pos, size_t n) const
 {
     size_t sLimit = std::min(pos + n, this->_bufferUsed);
     size_t strSize = std::strlen(str);
@@ -172,23 +188,27 @@ size_t Buffer::find(const char* str, size_t pos, size_t n)
     if (strSize == 0 || pos + strSize > sLimit)
         return (std::string::npos);
         
-    for (size_t j = pos; j < sLimit - strSize; ++j)
+    for (size_t j = pos; j <= sLimit - strSize; ++j)
     {
         bool match = true;
 
         for (size_t i = 0; match && i < strSize; ++i)
         {
-            if (this->_buffer.at(pos + i) != str[i])
+            if (this->_buffer.at(j + i) != str[i])
                 match = false;
         }
         if (match)
-            return (pos);
-        ++pos;
+            return (j);
     }
     return (std::string::npos);
 }
 
 char& Buffer::at(size_t n)
+{
+    return (this->_buffer.at(n));
+}
+
+const char& Buffer::at(size_t n) const
 {
     return (this->_buffer.at(n));
 }
@@ -225,4 +245,20 @@ void Buffer::reset()
 {
 	this->_bufferUsed = 0;
 	this->_bufferRead = 0;
+}
+
+std::ostream& operator<<(std::ostream& os, const Buffer& obj)
+{
+    os << "Buffer Max Size: " << obj.getVector().capacity() << " Curr Size: " 
+       << obj.getBufferUnread() << std::endl;
+    
+    os << "\"";
+    
+    for (size_t i = obj.getBufferRead(); i < obj.getBufferUsed(); ++i)
+    {
+        const char c = obj.at(i);
+        os << (std::isprint(c) ? c : (int)c) << " ";
+    }
+    os << "\"" << std::endl;
+    return (os);
 }

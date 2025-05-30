@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 22:24:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 10:17:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,13 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 		{
 			LOG_ERROR("An error occured while parsing request "
 				"(can be bad request as well)");
+			LOG_ERROR(e.getCode());
+			
 			this->_resp.setRespType(HttpResponse::ERROR);
 			this->_resp.setStatusCode((HttpBase::HttpCode)e.getCode());
 			this->_rHandler.init(*this);
 			em.unmonitor(fd);
+			this->_ctx.onSocketClosedEvent(*this);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
 		}

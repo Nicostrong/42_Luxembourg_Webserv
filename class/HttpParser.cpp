@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 09:57:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 10:23:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ void HttpParser::onRequest(Buffer& buff, Socket& sock)
 			RequestHandling::handleHeaders(sock);
 			if (this->_state == HTTP_RECEIVED)
 				return ;
+		// fallthrough
 		case HttpParser::HTTP_BODY:
-
+			handleBody(buff, sock);
 			// SHould check what to do depending
 			break;
 		default:
@@ -108,7 +109,7 @@ void HttpParser::parseHeaders()
 
 	while (ePos != std::string::npos)
 	{
-		parseHeader(this->_headBuffer.substr(sPos, ePos));
+		parseHeader(this->_headBuffer.substr(sPos, ePos - sPos));
 		sPos = ePos + 2;
 		ePos = this->_headBuffer.find(CRLF, sPos);
 	}
@@ -195,8 +196,11 @@ bool HttpParser::handleHeaders(Buffer& buff)
 	return (true);
 }
 
-bool HttpParser::handleBody(Buffer& buff)
+bool HttpParser::handleBody(Buffer& buff, Socket& sock)
 {
+	(void)buff;
 	if (!this->_reqBody)
-		this->_reqBody = new RequestBody();
+		this->_reqBody = new RequestBody(0);
+	this->_reqBody->onBodyReceived(buff, sock);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 20:53:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 23:44:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@
 
 #include "Buffer.hpp"
 #include "lib.hpp"
+#include "HttpExceptions.hpp"
+#include "HttpBase.hpp"
 
 class Chunk
 {
     public:
 		enum State
 		{
-			CHUNK_HEAD = 0,
-			CHUNK_DATA = 1,
+            CHUNK_START = 0,
+			CHUNK_HEAD = 1,
+			CHUNK_DATA = 2,
+            CHUNK_END = 3,
 		};
         Chunk();
         Chunk(size_t len);
@@ -32,6 +36,7 @@ class Chunk
         void    setReceived(size_t received);
         size_t  getReceived() const;
         size_t  getLen() const;
+        State   getState() const;
 		size_t	handleChunk(Buffer& buff);
     private:
         void    handleChunkHead(Buffer& buff);

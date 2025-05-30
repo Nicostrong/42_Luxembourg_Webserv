@@ -6,15 +6,15 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:27:27 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 20:52:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 09:59:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/Chunk.hpp"
+#include "./../includes/Chunk.hpp"
 
-Chunk::Chunk() : _received(0), _len(0) {}
+Chunk::Chunk() : _received(0), _len(0), _state(CHUNK_HEAD) {}
 
-Chunk::Chunk(size_t len) : _received(0), _len(len) {}
+Chunk::Chunk(size_t len) : _received(0), _len(len), _state(CHUNK_HEAD) {}
 
 Chunk::Chunk(const Chunk& obj)
 {
@@ -53,18 +53,27 @@ size_t Chunk::getLen() const
 	return (this->_len);
 }
 
+Chunk::State Chunk::getState() const
+{
+	return (this->_state);
+}
+
 size_t Chunk::handleChunk(Buffer& buff)
 {
-	if (!buff.getBufferUnread())
-		return (0);
-
 	switch (this->_state)
 	{
+		case CHUNK_START:
+			this->_state = CHUNK_HEAD;
+		// fallthrough
 		case CHUNK_HEAD:
 			handleChunkHead(buff);
+			if (this->_state == CHUNK_HEAD)
+				return (0);
 		// fallthrough
 		case CHUNK_DATA:
-			return (handleChunkData(buff));	
+			return (handleChunkData(buff));
+		default:
+			return (0);
 	}
 	return (0);
 }
@@ -80,7 +89,10 @@ void Chunk::handleChunkHead(Buffer& buff)
 	if (pos == std::string::npos)
 	{
 		if (buff.isBufferFull())
-			throw std::runtime_error("Malformed chunk");
+		{
+			std::cout << "test1" << std::endl;
+			throw HttpExceptions(HttpBase::BAD_REQUEST);
+		}
 		return ;
 	}
 
@@ -100,11 +112,20 @@ size_t Chunk::handleChunkData(Buffer& buff)
 			return (0);
 
 		if (buff.find(CRLF) != 0)
-			throw std::runtime_error("Malformed chunk");
+		{
+			std::cout << buff.find(CRLF) << std::endl;
+			std::cout << this->_len << std::endl;
+			std::cout << buff.getBufferUnread() << std::endl;
+			std::cout << (int)buff.at(0) << ", " << (int)buff.at(1) << std::endl;
+			std::cout << "test2" << std::endl;
+			throw HttpExceptions(HttpBase::BAD_REQUEST);
+		}
 		
 		buff.setBufferRead(2);
 		this->_received = 0;
-		this->_state = CHUNK_HEAD;
+		this->_state = CHUNK_START;
+		if (!this->_len)
+			this->_state = CHUNK_END;
 		return (0);
 	}
 

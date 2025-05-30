@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 09:57:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 11:31:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class HttpParser : public HttpBase
 		void 					parseHeader(const std::string& line);
 		bool					handleStartLine(Buffer& buff);
 		bool					handleHeaders(Buffer& buff);
-		bool					handleBody(Buffer& buff);
+		bool					handleBody(Buffer& buff, Socket& sock);
 		
 	private:
 		State 					_state;

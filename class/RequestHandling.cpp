@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 11:02:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/29 17:10:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void RequestHandling::handleHeaders(Socket& sock)
 	}
 	else if (sock.getReq().getMethod() == "POST")
 		handlePost(sock);
-
-	throw HttpExceptions(INTERNAL_SERVER_ERROR);
+	else
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 }
 
 
