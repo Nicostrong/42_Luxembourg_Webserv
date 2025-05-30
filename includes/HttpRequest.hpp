@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 10:39:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 15:29:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 #include "./HttpBase.hpp"
 #include "./HttpParser.hpp"
 #include "./server/Location.hpp"
-#include "./MemoryPool.hpp"
-#include "./StartLine.hpp"
-#include "./Headers.hpp"
 
 class HttpRequest : public HttpParser
 {
