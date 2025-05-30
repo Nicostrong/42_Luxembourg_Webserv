@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 12:57:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:18:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void HttpBase::setBody(const std::string body)
 	this->_body = body;
 }
 
-const std::string& HttpBase::getHTTP() const
+const std::string& HttpBase::getHttpVersion() const
 {
 	return (this->_httpVersion);
 }
@@ -125,6 +125,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 	{
 		case 200: return ("OK");
 		case 201: return ("Created");
+		case 204: return ("No Content");
 		case 301: return ("Moved Permanently");
 		case 302: return ("Found");
 		case 400: return ("Bad Request");
@@ -137,6 +138,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 		case 431: return ("Request Header Fields Too Large");
 		case 500: return ("Internal Server Error");
 		case 501: return ("Not Implemented");
+		case 505: return ("HTTP Version Not Supported");
 	default:
 		return ("Internal Server Error");
 	}

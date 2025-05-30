@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 12:56:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:18:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class HttpBase
 		{
 			OK = 200,
 			CREATED = 201,
+			NO_CONTENT = 204,
 			MOVED_PERMANENTLY = 301,
 			FOUND = 302,
 			BAD_REQUEST = 400,
@@ -39,6 +40,7 @@ class HttpBase
 			REQUEST_HEADER_FIELDS_TOO_LARGE = 431,
 			INTERNAL_SERVER_ERROR = 500,
 			NOT_IMPLEMENTED = 501,
+			HTTP_VERSION_NOT_SUPPORTED = 505,
 		};
 		
 		HttpBase(const HttpBase& obj);
@@ -52,7 +54,7 @@ class HttpBase
 		void				setUri(std::string uri);
 		const std::string& 	getBody() const;
 		void 				setBody(const std::string body);
-		const std::string& 	getHTTP() const;
+		const std::string& 	getHttpVersion() const;
 		void 				setHTTP(const std::string html);
 		const std::string& 	getRaw() const;
 		void 				setRaw(const std::string raw);

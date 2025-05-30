@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 15:24:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:19:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ void RequestHandling::handleHeaders(Socket& sock)
 
 	resp->addHeader("Content-Length", 0);
 
+	if (std::strcmp(req->getHttpVersion().c_str(), SUPPORTED_HTTPVER) != 0)
+		throw HttpExceptions(HTTP_VERSION_NOT_SUPPORTED);
+	
 	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
 		throw HttpExceptions(NOT_IMPLEMENTED);
 
@@ -361,6 +364,57 @@ void RequestHandling::checkFolderExistUpload(const std::string& dir)
 	}
 }
 
+void RequestHandling::handleDelete(Socket& sock)
+{
+	HttpRequest* req = &sock.getReq();
+	std::string	path = sock.getReq().getPathTranslated();
+
+	if (req->getUri().size() && *req->getUri().rbegin() == '/')
+		throw HttpExceptions(METHOD_NOT_ALLOWED);
+	
+	LOG_DEB(req->getUri());
+
+	checkFileExistDelete(path);
+
+	if (std::remove(path.c_str()) != 0) 
+	{
+		switch (errno) 
+		{
+            case EACCES:
+            case EPERM:
+                throw HttpExceptions(FORBIDDEN);
+            default:
+                throw HttpExceptions(INTERNAL_SERVER_ERROR);
+        }
+	}
+	throw HttpExceptions(NO_CONTENT);
+}
+
+void RequestHandling::checkFileExistDelete(const std::string& path)
+{
+	struct stat infos;
+
+	if (stat(path.c_str(), &infos) == -1)
+	{
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
+	}
+	if (!S_ISREG(infos.st_mode))
+        throw HttpExceptions(METHOD_NOT_ALLOWED);
+}
+
 std::map<std::string, RequestHandling::HandlerFunc> 
 	RequestHandling::initHandlers()
 {
@@ -368,6 +422,7 @@ std::map<std::string, RequestHandling::HandlerFunc>
 
 	handlers["GET"] = &RequestHandling::handleGet;
 	handlers["POST"] = &RequestHandling::handlePost;
+	handlers["DELETE"] = &RequestHandling::handleDelete;
 
 	return (handlers);
 }

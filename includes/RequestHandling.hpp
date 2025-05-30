@@ -6,12 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 15:13:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:16:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HANDLING_HPP
 # define REQUEST_HANDLING_HPP
+
+#define SUPPORTED_HTTPVER "HTTP/1.1"
 
 # include "./lib.hpp"
 # include "./Uri.hpp"
@@ -51,6 +53,10 @@ class RequestHandling: public HttpBase
 		static void			handleContentLength(Socket& sock);
 		static void			checkFileExistUpload(const std::string& path);
 		static void			checkFolderExistUpload(const std::string& dir);
+
+		// Delete related
+		static void			handleDelete(Socket& sock);
+		static void			checkFileExistDelete(const std::string& path);
 		
 		static std::map<std::string, HandlerFunc> _handlers;
 

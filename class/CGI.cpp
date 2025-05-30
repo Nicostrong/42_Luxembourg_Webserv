@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/22 16:46:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 16:15:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ pid_t   CGI::getPid() const
 
     // Request specific
 
-    env.push_back(getRawEnv("SERVER_PROTOCOL", this->_req.getHTTP()));
+    env.push_back(getRawEnv("SERVER_PROTOCOL", this->_req.getHttpVersion()));
     env.push_back(getRawEnv("SERVER_PORT", this->_ctx.getPort()8000));
     env.push_back(getRawEnv("REQUEST_METHOD", this->_req.getMethod()));
     env.push_back(getRawEnv("PATH_INFO", "")); //Should take it from handled
