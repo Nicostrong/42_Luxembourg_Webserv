@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 10:49:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 12:57:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,12 +124,14 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 	switch (statusCode)
 	{
 		case 200: return ("OK");
+		case 201: return ("Created");
 		case 301: return ("Moved Permanently");
 		case 302: return ("Found");
 		case 400: return ("Bad Request");
 		case 403: return ("Forbidden");
 		case 404: return ("Not Found");
 		case 405: return ("Method Not Allowed");
+		case 409: return ("Conflict");
 		case 411: return ("Length Required");
 		case 414: return ("URI Too Long");
 		case 431: return ("Request Header Fields Too Large");

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 10:54:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 12:41:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class RequestHandling: public HttpBase
 		~RequestHandling();
 		RequestHandling& operator=(const RequestHandling& obj);
 		static void	handleHeaders(Socket& sock);
+		static void handleBody(Socket& sock);
 	private:
 		RequestHandling();
 		static bool isCGI(Socket& sock);
@@ -39,6 +40,8 @@ class RequestHandling: public HttpBase
 		static void handleBodyLength(Socket& sock);
 		static void handleTE(Socket& sock);
 		static void handleContentLength(Socket& sock);
+		static void checkFileExistUpload(const std::string& path);
+		static void checkFolderExistUpload(const std::string& dir);
 };
 
 #endif

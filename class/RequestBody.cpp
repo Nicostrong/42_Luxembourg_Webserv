@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:20:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 10:46:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 11:19:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,47 +17,86 @@ RequestBody::RequestBody(size_t bufferSize) : _buff(bufferSize), _size(0) {}
 
 RequestBody::~RequestBody() 
 {
-	/*if (this->_fBuff.is_open()) {
-        this->_fBuff.flush();
-        this->_fBuff.close();
-    }
-	if (this->_fBuff.is_open())
-	{
-		std::remove(this->_fName.c_str());
-	}*/
+	if (!this->_fBuff.is_open())
+		return ;
+	
+    this->_fBuff.flush();
+    this->_fBuff.close();
+	std::remove(this->_fName.c_str());
 }
 
-void RequestBody::onBodyReceived(Buffer& buff, Socket& sock)
+const std::string& RequestBody::getTmpFileName() const
+{
+	return (this->_fName);
+}
+
+void RequestBody::moveBodyFile(const std::string& name)
+{
+	if (!this->_fBuff.is_open() || this->_fName.empty())
+	{
+		std::ofstream dst(name.c_str(), std::ios::binary);
+
+		if (!dst)
+			throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+		
+		dst.close();
+		return ;
+	}
+	
+	this->_fBuff.flush();
+    this->_fBuff.close();
+	
+	if(std::rename(this->_fName.c_str(), name.c_str()) < 0) 
+	{
+		std::ifstream src(this->_fName.c_str(), std::ios::binary);
+        std::ofstream dst(name.c_str(), std::ios::binary);
+
+		if (!src || !dst) {
+            throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+        }
+        
+        dst << src.rdbuf();
+        
+        if (dst.fail()) {
+            throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+        }
+        
+        src.close();
+        dst.close();
+        std::remove(this->_fName.c_str());
+	}
+}
+
+bool RequestBody::onBodyReceived(Buffer& buff, Socket& sock)
 {
 	if (sock.getReq().isTE())
+	{
 		onBodyReceivedTE(buff);
+		return (this->_chunk.getState() == Chunk::CHUNK_END);
+	}
 	else
+	{
 		onBodyReceivedLength(buff, sock.getReq().getContentLength());
+		return (this->_size >= sock.getReq().getContentLength());
+	}
 }
 
 void RequestBody::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
 {
 	if (buff.getBufferUnread() < 1)
 		return ;
-	//writeInMemory(buff, 
-		//std::min(bodyLen - this->_size, buff.getBufferUnread()));
-
-	//std::cout << this->_buff;
+	writeInMemory(buff, 
+		std::min(bodyLen - this->_size, buff.getBufferUnread()));
 	
-	//std::cout  << std::endl;
-	
-	/*if (buff.getBufferUnread() < 1)
-		return ;*/
+	if (buff.getBufferUnread() < 1)
+		return ;
 
 	openTmpFile();
 	writeInFile(buff, 
 		std::min(bodyLen - this->_size, buff.getBufferUnread()));
 	
 	if (this->_size >= bodyLen)
-	{
 		this->_fBuff.flush();
-		std::cout << this->_size << "\n" << bodyLen << std::endl;
-	}
 }
 
 void RequestBody::onBodyReceivedTE(Buffer& buff)
@@ -81,11 +120,7 @@ void RequestBody::onBodyReceivedTE(Buffer& buff)
 	}
 
 	if (this->_chunk.getState() == Chunk::CHUNK_END)
-	{
 		this->_fBuff.flush();
-		std::cout << "Request received with " << this->_size << std::endl;
-		std::cout << this->_buff;
-	}
 }
 
 size_t RequestBody::writeInMemory(Buffer& buff, size_t max)

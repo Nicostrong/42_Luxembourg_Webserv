@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 11:31:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 12:48:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class HttpParser : public HttpBase
 		
 		void 					setState(State state);
 		State					getState() const;
+		RequestBody*			getBody() const;
 	protected:
 		HttpParser();
 		

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 10:49:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 12:56:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ class HttpBase
 		enum HttpCode
 		{
 			OK = 200,
+			CREATED = 201,
 			MOVED_PERMANENTLY = 301,
 			FOUND = 302,
 			BAD_REQUEST = 400,
 			FORBIDDEN = 403,
 			NOT_FOUND = 404,
 			METHOD_NOT_ALLOWED = 405,
+			CONFLICT = 409,
 			LENGTH_REQUIRED = 411,
 			URI_TOO_LONG = 414,
 			REQUEST_HEADER_FIELDS_TOO_LARGE = 431,

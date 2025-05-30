@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 17:10:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:10:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,24 @@ void RequestHandling::handleHeaders(Socket& sock)
 		handlePost(sock);
 	else
 		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+}
+
+void RequestHandling::handleBody(Socket& sock)
+{
+	//SHould handle verything else than upload
+	RequestBody* body = sock.getReq().getBody();
+	
+	if (!body)
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+
+	std::string	path = sock.getReq().getPathTranslated();
+
+	checkFileExistUpload(path);
+	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
+	body->moveBodyFile(path);
+	sock.getResp().addHeader("Location", 
+		Uri::getPathInfo(sock.getReq().getLoc(), sock.getReq().getUri()));
+	throw HttpExceptions(CREATED);
 }
 
 
@@ -243,7 +261,15 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 
 void RequestHandling::handlePost(Socket& sock)
 {
+	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() == '/')
+		throw HttpExceptions(METHOD_NOT_ALLOWED);
+
+	LOG_DEB(sock.getReq().getUri());
+	std::string	path = sock.getReq().getPathTranslated();
+
 	handleBodyLength(sock);
+	checkFileExistUpload(path);
+	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
 	sock.getReq().setState(HttpParser::HTTP_BODY);
 }
 
@@ -290,4 +316,52 @@ void RequestHandling::handleContentLength(Socket& sock)
 		throw HttpExceptions(BAD_REQUEST);
 	
 	sock.getReq().setContentLength(cl);
+}
+
+void RequestHandling::checkFileExistUpload(const std::string& path)
+{
+	struct stat infos;
+
+	if (stat(path.c_str(), &infos) == -1)
+	{
+		switch (errno)
+		{
+			case ENOENT:
+				return ;
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
+	}
+	throw HttpExceptions(CONFLICT);
+}
+
+void RequestHandling::checkFolderExistUpload(const std::string& dir)
+{
+	struct stat infos;
+
+	if (stat(dir.c_str(), &infos) == -1)
+	{
+		switch (errno)
+		{
+			case EACCES:
+				throw HttpExceptions(FORBIDDEN);
+			case EIO:
+			case ELOOP:
+			case EOVERFLOW:
+				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+			case ENAMETOOLONG:
+			case ENOENT:
+			case ENOTDIR:
+			default:
+				throw HttpExceptions(NOT_FOUND);
+		}
+	}
 }

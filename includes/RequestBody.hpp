@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:21:21 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 10:43:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 11:19:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,18 @@ class RequestBody
 	public:
 		RequestBody(size_t bufferSize);
 		~RequestBody();
-		void 			onBodyReceived(Buffer& buff, Socket& sock);
+		const std::string&		getTmpFileName() const;
+		void					moveBodyFile(const std::string& name);
+		bool 					onBodyReceived(Buffer& buff, Socket& sock);
 		
 	private:
 		RequestBody(const RequestBody& obj);
-		RequestBody&	operator=(const RequestBody& obj);
-		void			onBodyReceivedLength(Buffer& buff, size_t bodyLen);
-		void 			onBodyReceivedTE(Buffer& buff);
-		size_t			writeInMemory(Buffer& buff, size_t max);
-		size_t			writeInFile(Buffer& buff, size_t max);
-		void			openTmpFile();
+		RequestBody&			operator=(const RequestBody& obj);
+		void					onBodyReceivedLength(Buffer& buff, size_t bodyLen);
+		void 					onBodyReceivedTE(Buffer& buff);
+		size_t					writeInMemory(Buffer& buff, size_t max);
+		size_t					writeInFile(Buffer& buff, size_t max);
+		void					openTmpFile();
 		
 		Buffer	 		_buff;
 		std::fstream	_fBuff;

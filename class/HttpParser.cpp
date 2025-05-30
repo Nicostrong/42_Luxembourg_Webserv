@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 10:23:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 13:18:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ HttpParser& HttpParser::operator=(const HttpParser& obj)
 		this->_state = obj._state;
 		this->_slBuffer = obj._slBuffer;
 		this->_headBuffer = obj._headBuffer;
+		if (this->_reqBody)
+			delete this->_reqBody;
+		LOG_DEB("Request reseted");
+		this->_reqBody = obj._reqBody;
 	}
 	return (*this);
 }
@@ -50,6 +54,11 @@ HttpParser::State HttpParser::getState() const
 void HttpParser::setState(HttpParser::State state)
 {
 	this->_state = state;
+}
+
+RequestBody* HttpParser::getBody() const
+{
+	return (this->_reqBody);
 }
 
 void HttpParser::onRequest(Buffer& buff, Socket& sock)
@@ -72,9 +81,12 @@ void HttpParser::onRequest(Buffer& buff, Socket& sock)
 				return ;
 		// fallthrough
 		case HttpParser::HTTP_BODY:
-			handleBody(buff, sock);
-			// SHould check what to do depending
-			break;
+			if (!handleBody(buff, sock))
+				return ;
+		// fallthrough
+		case HttpParser::HTTP_BODY_HANDLING:
+			this->_state = HTTP_RECEIVED;
+			RequestHandling::handleBody(sock);
 		default:
 			break;
 	}
@@ -198,9 +210,7 @@ bool HttpParser::handleHeaders(Buffer& buff)
 
 bool HttpParser::handleBody(Buffer& buff, Socket& sock)
 {
-	(void)buff;
 	if (!this->_reqBody)
 		this->_reqBody = new RequestBody(0);
-	this->_reqBody->onBodyReceived(buff, sock);
-	return (true);
+	return (this->_reqBody->onBodyReceived(buff, sock));
 }
