@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:34:55 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:36:56 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 14:36:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class	MethodHTTP
 
 		std::set<std::string>			_allowed;
 		static std::set<std::string>	_validMethods;
+		static std::set<std::string>	_implementedMethods;
 
 		MethodHTTP( const MethodHTTP& src_obj );
 
@@ -42,12 +43,14 @@ class	MethodHTTP
 		~MethodHTTP( void );
 
 		static std::set<std::string>	initMethods( void );
+		static std::set<std::string>	initImplementedMethods( void );
 		
 		/*	GETTER	*/
 		const std::string				getAllowed( void ) const;
 
 		/*	METHODE	*/
 		static bool						isMethod( const std::string& method );
+		static bool						isMethodImplemented( const std::string &method );
 		bool							isAllowed( const std::string& method ) const;
 
 		/*	Unknow method exception	*/

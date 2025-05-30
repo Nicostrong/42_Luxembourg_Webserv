@@ -6,85 +6,58 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:42:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/05/30 15:24:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/RequestHandling.hpp"
 
-RequestHandling::RequestHandling() {}
-
-RequestHandling::RequestHandling(const RequestHandling& obj): HttpBase()
-{
-	(void)obj;
-}
-
-RequestHandling::~RequestHandling() {}
-
-RequestHandling& RequestHandling::operator=(const RequestHandling& obj)
-{
-	(void)obj;
-	return (*this);
-}
+std::map<std::string, RequestHandling::HandlerFunc> RequestHandling::_handlers =
+	RequestHandling::initHandlers();
 
 void RequestHandling::handleHeaders(Socket& sock)
 {
-	sock.getResp().addHeader("Content-Length", 0);
+	Server*	ctx = &sock.getCtx();
+	HttpRequest* req = &sock.getReq();
+	HttpResponse* resp = &sock.getResp();
 
-	sock.getReq().setLoc(
-		sock.getCtx().getMatchingLoc(sock.getReq().getUri()));
+	resp->addHeader("Content-Length", 0);
 
-	if (!sock.getReq().getLoc())
+	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
+		throw HttpExceptions(NOT_IMPLEMENTED);
+
+	req->setLoc(
+		ctx->getMatchingLoc(req->getUri()));
+
+	if (!req->getLoc())
 		throw HttpExceptions(NOT_FOUND);
 
-	if (!sock.getReq().getLoc()->getMethod()->isAllowed(
-			sock.getReq().getMethod()))
+	if (!req->getLoc()->getMethod()->isAllowed(req->getMethod()))
 		throw HttpExceptions(METHOD_NOT_ALLOWED);
 
-	sock.getReq().setPathTranslated(
-			Uri::buildRealAbsolute(sock.getCtx(), sock.getReq().getLoc(), 
-				sock.getReq().getUri()));
+	req->setPathTranslated(
+			Uri::buildRealAbsolute(*ctx, req->getLoc(), req->getUri()));
 	
-	if (sock.getReq().getMethod() == "GET")
-	{
-		if (isRedirect(sock))
-			return ;
-			
-		if (isCGI(sock))
-			return ;
-		
-		if (isIndexFile(sock))
-			return ;
-			
-		if (isDirctoryListing(sock))
-			return ;
-				
-		if (isStaticFile(sock))
-			return ;
-		
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
-	}
-	else if (sock.getReq().getMethod() == "POST")
-		handlePost(sock);
-	else
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+	_handlers[req->getMethod()](sock);
 }
 
 void RequestHandling::handleBody(Socket& sock)
 {
-	//SHould handle verything else than upload
-	RequestBody* body = sock.getReq().getBody();
+	//SHould handle everything else than upload
+	HttpRequest* req = &sock.getReq();
+	RequestBody* body = req->getBody();
+	HttpResponse* resp = &sock.getResp();
+	std::string	path = req->getPathTranslated();
 	
 	if (!body)
 		throw HttpExceptions(INTERNAL_SERVER_ERROR);
-
-	std::string	path = sock.getReq().getPathTranslated();
-
+	
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
+
 	body->moveBodyFile(path);
-	sock.getResp().addHeader("Location", 
-		Uri::getPathInfo(sock.getReq().getLoc(), sock.getReq().getUri()));
+	resp->addHeader("Location", Uri::getPathInfo(req->getLoc(), req->getUri()));
+	
 	throw HttpExceptions(CREATED);
 }
 
@@ -261,6 +234,26 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 	return (true);
 }
 
+void RequestHandling::handleGet(Socket& sock)
+{
+	if (isRedirect(sock))
+		return ;
+			
+	if (isCGI(sock))
+		return ;
+		
+	if (isIndexFile(sock))
+		return ;
+			
+	if (isDirctoryListing(sock))
+		return ;
+				
+	if (isStaticFile(sock))
+		return ;
+		
+	throw HttpExceptions(INTERNAL_SERVER_ERROR);
+}
+
 void RequestHandling::handlePost(Socket& sock)
 {
 	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() == '/')
@@ -366,4 +359,15 @@ void RequestHandling::checkFolderExistUpload(const std::string& dir)
 				throw HttpExceptions(NOT_FOUND);
 		}
 	}
+}
+
+std::map<std::string, RequestHandling::HandlerFunc> 
+	RequestHandling::initHandlers()
+{
+	std::map<std::string, RequestHandling::HandlerFunc> handlers;
+
+	handlers["GET"] = &RequestHandling::handleGet;
+	handlers["POST"] = &RequestHandling::handlePost;
+
+	return (handlers);
 }

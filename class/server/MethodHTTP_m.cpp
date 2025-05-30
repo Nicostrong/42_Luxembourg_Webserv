@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP_m.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:50:42 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:51:08 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 14:37:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ bool	MethodHTTP::isAllowed( const std::string &method ) const
 bool	MethodHTTP::isMethod( const std::string &method )
 {
 	return (MethodHTTP::_validMethods.find(method) != MethodHTTP::_validMethods.end());
+}
+
+/*
+ *	Check if the method is an implemented method
+ */
+bool	MethodHTTP::isMethodImplemented( const std::string &method )
+{
+	return (MethodHTTP::_implementedMethods.find(method) != MethodHTTP::_implementedMethods.end());
 }
 
 /*******************************************************************************

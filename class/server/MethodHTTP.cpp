@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodHTTP.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:41 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:51:35 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/05/30 14:36:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@
  *							INITIALISATION CLASS							   *
  ******************************************************************************/
 
-std::set<std::string>		MethodHTTP::_validMethods = MethodHTTP::initMethods();
+std::set<std::string>		MethodHTTP::_validMethods = 
+										MethodHTTP::initMethods();
+std::set<std::string>		MethodHTTP::_implementedMethods = 
+										MethodHTTP::initImplementedMethods();
 
 /*
  *	Initialise the set of valid methods
@@ -33,6 +36,19 @@ std::set<std::string>		MethodHTTP::initMethods( void )
 	methods.insert("PATCH");
 	methods.insert("OPTIONS");
 	methods.insert("HEAD");
+	return (methods);
+}
+
+/*
+ *	Initialise the set of implemented methods
+ */
+std::set<std::string>		MethodHTTP::initImplementedMethods( void )
+{
+	std::set<std::string>		methods;
+
+	methods.insert("GET");
+	methods.insert("POST");
+	methods.insert("DELETE");
 	return (methods);
 }
 
