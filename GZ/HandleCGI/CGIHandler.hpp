@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/04/30 16:54:57 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/02 11:39:39 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 #include <string>
 #include <map>
 #include <unistd.h>
+#include "../../includes/Pipe.hpp"
 
-class HandleCGI
+class HandleCGI: public IEventHandler
 {
-	private:
 	public:
 		HandleCGI();
 		HandleCGI(HandleCGI& copy);
@@ -29,6 +29,9 @@ class HandleCGI
 		void UpdateNewsLetter(const char *compiler, const char *script);
 		void UpdateShowData(const char *compiler, const char *script);
 		std::string DoCGI(const char *cmd_list[3]);
+		void onReadEvent(int fd, int type, EventMonitoring& em);
+		void onWriteEvent(int fd, int type, EventMonitoring& em);
+		void onCloseEvent(int fd, int type, EventMonitoring& em);
 };
 
 #endif
