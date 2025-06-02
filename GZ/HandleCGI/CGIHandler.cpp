@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/02 11:48:00 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/02 13:06:31 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ HandleCGI& HandleCGI::operator=(HandleCGI& copy)
 	return *this;
 }
 
-std::string HandleCGI::DoCGI(const char *cmd_list[3])
+std::string HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 {
     Pipe send_data_to_cgi();
     Pipe receive_data_from_cgi();
@@ -97,18 +97,23 @@ void HandleCGI::UpdateShowData(const char *compiler, const char *script)
 }
 
 void HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
-{
-    
+{   
     (void)fd;
+    (void)type;
     (void)em;
+    return ;
 }
 void HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
 {
     (void)fd;
+    (void)type;
     (void)em;
+    return ;
 }
 void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
 {
     (void)fd;
+    (void)type;
     (void)em;
+    return ;
 }
