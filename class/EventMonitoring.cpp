@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:57:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 11:06:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
 	_clientsConnected(0)
 {
-	this->_epollFd = epoll_create1(0);
+	this->_epollFd = epoll_create(MAX_EVENTS);
 	if (this->_epollFd == -1)
 		throw EPollFailedInitException();
 }
@@ -27,12 +27,16 @@ EventMonitoring::EventMonitoring(const EventMonitoring &obj)
 
 EventMonitoring::~EventMonitoring() 
 {
+	LOG_DEB("Epoll closed");
 	std::list<epoll_event>::const_iterator it = this->_openFds.begin();
 	while (it != _openFds.end())
 	{
 		EventData *data = static_cast<EventData *>(it->data.ptr);
 		if (data->getFd() > 2)
+		{
+			epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, data->getFd(), NULL);
 			close(data->getFd());
+		}
 		delete data;
 		++it;
 	}
@@ -80,9 +84,12 @@ void EventMonitoring::unmonitor(int fd)
 void EventMonitoring::updateEvents()
 {
 	int res = epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1);
-	//LOG_DEB("Epoll unlocked");
 	if (res == -1)
-		throw EPollFailedWaitException(); 
+	{
+		if (errno == EINTR)
+			return ;
+		throw EPollFailedWaitException();
+	}
 	std::vector<epoll_event>::const_iterator it = this->_events.begin();
 	while (it != this->_events.begin() + res)
 	{

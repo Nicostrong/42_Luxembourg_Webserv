@@ -19,3 +19,4 @@
 -Rework base Architecture to listen on each port and redirect request on the 
     corrrect structure and have all sockets in one list and have servers where 
     the request will be redirected depending on mandatory HOST header
+-Handle upload with diffrents content types not only plain/text
