@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/02 13:39:44 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/03 10:50:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,12 @@ void RequestHandling::handleHeaders(Socket& sock)
 
 	LOG_DEB(req->getUri());
 	resp->addHeader("Content-Length", 0);
+	resp->addHeader("Connection", "keep-alive");
 
 	if (std::strcmp(req->getHttpVersion().c_str(), SUPPORTED_HTTPVER) != 0)
-		throw HttpExceptions(HTTP_VERSION_NOT_SUPPORTED);
+		throw HttpSevereExceptions(HTTP_VERSION_NOT_SUPPORTED);
+	
+	
 	
 	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
 	{
@@ -52,7 +55,7 @@ void RequestHandling::handleBody(Socket& sock)
 {
 	//SHould handle everything else than upload
 	HttpRequest* req = &sock.getReq();
-	RequestBody* body = req->getBody();
+	BodyParsing* body = req->getBody();
 	HttpResponse* resp = &sock.getResp();
 	std::string	path = req->getPathTranslated();
 	

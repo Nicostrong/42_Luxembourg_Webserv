@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 10:05:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:48:40 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,10 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 		catch(const HttpExceptions& e)
 		{
 			if (dynamic_cast<const HttpSevereExceptions*>(&e))
+			{
 				this->_keepAlive = false;
+				this->_resp.addHeader("Connection", "close");
+			}
 			LOG_ERROR("An error occured while parsing request "
 				"(can be bad request as well)");
 			LOG_ERROR(e.getCode());
