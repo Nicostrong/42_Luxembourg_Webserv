@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 16:19:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/02 13:39:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,17 @@ void RequestHandling::handleHeaders(Socket& sock)
 	HttpRequest* req = &sock.getReq();
 	HttpResponse* resp = &sock.getResp();
 
+	LOG_DEB(req->getUri());
 	resp->addHeader("Content-Length", 0);
 
 	if (std::strcmp(req->getHttpVersion().c_str(), SUPPORTED_HTTPVER) != 0)
 		throw HttpExceptions(HTTP_VERSION_NOT_SUPPORTED);
 	
 	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
+	{
+		LOG_DEB(req->getMethod());
 		throw HttpExceptions(NOT_IMPLEMENTED);
+	}
 
 	req->setLoc(
 		ctx->getMatchingLoc(req->getUri()));

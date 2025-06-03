@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_ev.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:37:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/22 18:55:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/02 10:52:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,20 @@ void		Server::start( void )
 
 	if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
 		std::cerr << "Setsockopt failed: " << strerror(errno) << std::endl;
+		close(serverSocket);
 		return ;
 	}
 
 	if (bind(serverSocket, (struct sockaddr *)&addr, sizeof(addr)) == -1)
 	{
 		std::cerr << "Socket failed to start listening" << std::endl;
+		close(serverSocket);
 		return ;
 	}
 	if (listen(serverSocket, 5) == -1)
 	{
 		std::cerr << "Socket failed to start listening" << strerror(errno) << std::endl;
+		close(serverSocket);
 		return ;
 	}
 
