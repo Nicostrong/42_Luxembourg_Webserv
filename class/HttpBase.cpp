@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 16:18:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 23:13:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,9 +232,9 @@ bool HttpBase::isHeaderValueValid(const std::string& value)
 	{
 		bool isCharValid = std::isalnum(*it);
 
-		for (size_t i = 0; i < strlen(ALLOWED_HEADER_VAL); i++)
+		for (size_t i = 0; i < std::strlen(ALLOWED_HEADER_VAL); i++)
 		{
-			if (*it == ALLOWED_URI_SPECIALS[i])
+			if (*it == ALLOWED_HEADER_VAL[i])
 				isCharValid = true;
 		}
 		if (!isCharValid)
