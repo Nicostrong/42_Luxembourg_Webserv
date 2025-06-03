@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/30 13:35:39 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/03 09:43:58 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,8 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/ResponseHandling.cpp \
 					../class/Pipe.cpp \
 					../class/HttpExceptions.cpp \
-					../class/RequestBody.cpp \
+					../class/HttpSevereExceptions.cpp \
+					../class/BodyParsing.cpp \
 					../class/Chunk.cpp \
 					main_fullServer.cpp
 
@@ -159,7 +160,8 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/ResponseHandling.cpp \
 					../class/Pipe.cpp \
 					../class/HttpExceptions.cpp \
-					../class/RequestBody.cpp \
+					../class/HttpSevereExceptions.cpp \
+					../class/BodyParsing.cpp \
 					../class/Chunk.cpp \
 					main_networking.cpp
 

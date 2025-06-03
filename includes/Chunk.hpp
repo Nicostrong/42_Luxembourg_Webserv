@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 23:44:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:00:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "lib.hpp"
 #include "HttpExceptions.hpp"
 #include "HttpBase.hpp"
+#include "HttpSevereExceptions.hpp"
 
 class Chunk
 {

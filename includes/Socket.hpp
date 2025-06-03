@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/28 22:10:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:11:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "./File.hpp"
 # include "./Buffer.hpp"
 # include "./HttpExceptions.hpp"
+# include "./HttpSevereExceptions.hpp"
 
 # define RX_SIZE 1024
 
@@ -65,6 +66,7 @@ class Socket : public IEventHandler
 		Buffer				_rxBuffer;
 		Buffer				_txBuffer;
 		bool				_reset;
+		bool				_keepAlive;
 		ResponseHandling	_rHandler;
 		
 		

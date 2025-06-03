@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:27:27 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 09:59:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:01:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,7 @@ void Chunk::handleChunkHead(Buffer& buff)
 	if (pos == std::string::npos)
 	{
 		if (buff.isBufferFull())
-		{
-			std::cout << "test1" << std::endl;
-			throw HttpExceptions(HttpBase::BAD_REQUEST);
-		}
+			throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 		return ;
 	}
 
@@ -112,14 +109,7 @@ size_t Chunk::handleChunkData(Buffer& buff)
 			return (0);
 
 		if (buff.find(CRLF) != 0)
-		{
-			std::cout << buff.find(CRLF) << std::endl;
-			std::cout << this->_len << std::endl;
-			std::cout << buff.getBufferUnread() << std::endl;
-			std::cout << (int)buff.at(0) << ", " << (int)buff.at(1) << std::endl;
-			std::cout << "test2" << std::endl;
-			throw HttpExceptions(HttpBase::BAD_REQUEST);
-		}
+			throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 		
 		buff.setBufferRead(2);
 		this->_received = 0;
@@ -142,6 +132,6 @@ size_t Chunk::convertHexa(const std::string& str)
 
     iss >> std::hex >> res;
     if (iss.fail()) 
-        throw std::runtime_error("Malformed chunk");
+        throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
     return (res);
 }

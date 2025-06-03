@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HttpExceptions.hpp                                 :+:      :+:    :+:   */
+/*   HttpSevereExceptions.hpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 21:59:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 09:41:55 by fdehan           ###   ########.fr       */
+/*   Created: 2025/06/03 09:35:12 by fdehan            #+#    #+#             */
+/*   Updated: 2025/06/03 10:01:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTPEXCEPTIONS_HPP
-# define HTTPEXCEPTIONS_HPP
+#ifndef HTTPSEVEREEXCEPTIONS_HPP
+#define HTTPSEVEREEXCEPTIONS_HPP
 
-#include "lib.hpp"
+#include "HttpExceptions.hpp"
 
-class HttpExceptions : public std::exception
+class HttpSevereExceptions : public HttpExceptions
 {
     public:
-        HttpExceptions(size_t code);
-        HttpExceptions(const HttpExceptions& obj);
-        virtual ~HttpExceptions() throw ();
-        HttpExceptions&			operator=(const HttpExceptions& obj);
+        HttpSevereExceptions(size_t code);
+        HttpSevereExceptions(const HttpSevereExceptions& obj);
+        virtual ~HttpSevereExceptions() throw ();
+        HttpSevereExceptions&	operator=(const HttpSevereExceptions& obj);
         virtual const char*		what() const throw();
-        size_t					getCode() const;
     private:
-        size_t					_code;
-       
 };
 
-# endif
+#endif

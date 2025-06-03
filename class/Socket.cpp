@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:50:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:05:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
 	const sockaddr_in& sockAddr) : _fd(fd),
 	_resp(), _em(em), _ctx(ctx), _rxBuffer(RX_SIZE), 
-	_txBuffer(RESPONSE_BUFFER_SIZE), _reset(false)
+	_txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), _keepAlive(true)
 	{
 		this->_remoteIp = getReadableIp(sockAddr);
 		this->_req 		= HttpRequest(this->_remoteIp);
@@ -27,7 +27,7 @@ Socket::Socket(int fd, EventMonitoring&	em, Server& ctx,
 Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
 	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp),
 	_rxBuffer(obj._rxBuffer), _txBuffer(obj._txBuffer), _reset(obj._reset), 
-	_rHandler(obj._rHandler) {}
+	_keepAlive(true), _rHandler(obj._rHandler) {}
 
 Socket::~Socket() {}
 
@@ -112,6 +112,8 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 		}
 		catch(const HttpExceptions& e)
 		{
+			if (dynamic_cast<const HttpSevereExceptions*>(&e))
+				this->_keepAlive = false;
 			LOG_ERROR("An error occured while parsing request "
 				"(can be bad request as well)");
 			LOG_ERROR(e.getCode());
@@ -149,6 +151,11 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 		}
 		if (this->_reset && this->_txBuffer.isBufferRead())
 		{
+			if (!this->_keepAlive)
+			{
+				this->_ctx.onSocketClosedEvent(*this);
+				return ;
+			}
 			this->_req = HttpRequest(this->_remoteIp);
 			this->_resp = HttpResponse();
 			this->_txBuffer.reset();

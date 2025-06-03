@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 12:48:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 09:17:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "./HttpBase.hpp"
 # include "./Buffer.hpp"
 # include "./HttpExceptions.hpp"
-# include "./RequestBody.hpp"
+# include "./BodyParsing.hpp"
 
 # define SL_BSIZE 1024
 # define HEAD_BSIZE 8192
@@ -45,7 +45,7 @@ class HttpParser : public HttpBase
 		
 		void 					setState(State state);
 		State					getState() const;
-		RequestBody*			getBody() const;
+		BodyParsing*			getBody() const;
 	protected:
 		HttpParser();
 		
@@ -61,7 +61,7 @@ class HttpParser : public HttpBase
 		std::string				_slBuffer;
 		std::string				_headBuffer;
 		std::string				_queryParams;
-		RequestBody*			_reqBody;
+		BodyParsing*			_reqBody;
 		
 };
 

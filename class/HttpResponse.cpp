@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/29 14:36:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 09:29:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void HttpResponse::sendHead(Buffer& buff)
 
 	head = ss.str();
 	if (head.size() > buff.getBufferUnused())
-		throw std::runtime_error("Headers too big");
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 	std::copy(head.begin(), head.end(), buff.beginUnused());
 	buff.setBufferUsed(head.size());
 }
@@ -72,8 +72,7 @@ void  HttpResponse::sendDefaultErrorPage(Buffer& buff)
 	addHeader("Content-Type", "text/html");
 	sendHead(buff);
 	if (buff.getBufferUnused() < errorPage.size())
-		throw std::runtime_error(
-			"If DEFAULT error page is too big we cant do ANYTHING ;(");
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 	std::copy(errorPage.begin(), errorPage.end(), buff.beginUnused());
 	buff.setBufferUsed(errorPage.size());
 }

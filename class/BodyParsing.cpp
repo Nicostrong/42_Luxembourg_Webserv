@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestBody.cpp                                    :+:      :+:    :+:   */
+/*   BodyParsing.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:20:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 11:19:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:11:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../includes/RequestBody.hpp"
+#include "./../includes/BodyParsing.hpp"
 #include "./../includes/Socket.hpp"
 
-RequestBody::RequestBody(size_t bufferSize) : _buff(bufferSize), _size(0) {}
+BodyParsing::BodyParsing(size_t bufferSize) : _buff(bufferSize), _size(0) {}
 
-RequestBody::~RequestBody() 
+BodyParsing::~BodyParsing() 
 {
 	if (!this->_fBuff.is_open())
 		return ;
@@ -25,12 +25,12 @@ RequestBody::~RequestBody()
 	std::remove(this->_fName.c_str());
 }
 
-const std::string& RequestBody::getTmpFileName() const
+const std::string& BodyParsing::getTmpFileName() const
 {
 	return (this->_fName);
 }
 
-void RequestBody::moveBodyFile(const std::string& name)
+void BodyParsing::moveBodyFile(const std::string& name)
 {
 	if (!this->_fBuff.is_open() || this->_fName.empty())
 	{
@@ -67,7 +67,7 @@ void RequestBody::moveBodyFile(const std::string& name)
 	}
 }
 
-bool RequestBody::onBodyReceived(Buffer& buff, Socket& sock)
+bool BodyParsing::onBodyReceived(Buffer& buff, Socket& sock)
 {
 	if (sock.getReq().isTE())
 	{
@@ -81,7 +81,7 @@ bool RequestBody::onBodyReceived(Buffer& buff, Socket& sock)
 	}
 }
 
-void RequestBody::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
+void BodyParsing::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
 {
 	if (buff.getBufferUnread() < 1)
 		return ;
@@ -99,7 +99,7 @@ void RequestBody::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
 		this->_fBuff.flush();
 }
 
-void RequestBody::onBodyReceivedTE(Buffer& buff)
+void BodyParsing::onBodyReceivedTE(Buffer& buff)
 {
 	if (buff.getBufferUnread() < 1 || 
 		this->_chunk.getState() == Chunk::CHUNK_END)
@@ -123,7 +123,7 @@ void RequestBody::onBodyReceivedTE(Buffer& buff)
 		this->_fBuff.flush();
 }
 
-size_t RequestBody::writeInMemory(Buffer& buff, size_t max)
+size_t BodyParsing::writeInMemory(Buffer& buff, size_t max)
 {
 	if (this->_size >= buff.getBufferSize())
 		return (0);
@@ -137,11 +137,11 @@ size_t RequestBody::writeInMemory(Buffer& buff, size_t max)
 	return (len);
 }
 
-size_t RequestBody::writeInFile(Buffer& buff, size_t max)
+size_t BodyParsing::writeInFile(Buffer& buff, size_t max)
 {
 	this->_fBuff.write(buff.getDataUnread(), max);
 	if (this->_fBuff.fail()) 
-		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+		throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 	
 	this->_size += max;
 	buff.setBufferRead(max);
@@ -149,7 +149,7 @@ size_t RequestBody::writeInFile(Buffer& buff, size_t max)
 	return (max);
 }
 
-void RequestBody::openTmpFile()
+void BodyParsing::openTmpFile()
 {
 	char* tmpname;
 
@@ -165,7 +165,7 @@ void RequestBody::openTmpFile()
 	}
 	
 	if (!this->_fBuff.is_open())
-		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+		throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 	
 	this->_fName = tmpname;
 }

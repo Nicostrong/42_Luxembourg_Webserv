@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 16:51:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 10:10:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ HttpParser& HttpParser::operator=(const HttpParser& obj)
 		this->_headBuffer = obj._headBuffer;
 		if (this->_reqBody)
 			delete this->_reqBody;
-		LOG_DEB("Request reseted");
 		this->_reqBody = obj._reqBody;
 	}
 	return (*this);
@@ -56,7 +55,7 @@ void HttpParser::setState(HttpParser::State state)
 	this->_state = state;
 }
 
-RequestBody* HttpParser::getBody() const
+BodyParsing* HttpParser::getBody() const
 {
 	return (this->_reqBody);
 }
@@ -104,7 +103,7 @@ void HttpParser::parseStartLine()
 	
 	if (tokens.size() != 3 || !canBeValidMethod(tokens.at(0)) || 
 		!canBeValidPath(tokens.at(1)) || !canBeValidHttpProtocol(tokens.at(2)))
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(BAD_REQUEST);
 
 	//size_t queryPos = tokens.at(1).find('?');
 	this->_method = tokens.at(0);
@@ -130,7 +129,7 @@ void HttpParser::parseHeaders()
 		parseHeader(this->_headBuffer.substr(sPos));
 
 	if (this->_headers.find("HOST") == this->_headers.end())
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(BAD_REQUEST);
 }
 
 void HttpParser::parseHeader(const std::string& line)
@@ -138,7 +137,7 @@ void HttpParser::parseHeader(const std::string& line)
 	size_t sep = line.find(':');
 	
 	if (sep == std::string::npos || sep == 0)
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(BAD_REQUEST);
 
 	int	folding = (line.size() - sep > 1) ? 
 				  line.at(sep + 1) == ' ' || line.at(sep + 1) == '\t' : 0;
@@ -146,11 +145,11 @@ void HttpParser::parseHeader(const std::string& line)
 	std::string value = line.substr(sep + folding + 1);
 
 	if (!isHeaderNameValid(name))
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(BAD_REQUEST);
 	name = normalizeHeaderName(name);
 
 	if (name == "HOST" && this->_headers.find(name) != this->_headers.end())
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(BAD_REQUEST);
 
 	this->_headers[name] = value;
 }
@@ -170,7 +169,7 @@ bool HttpParser::handleStartLine(Buffer& buff)
 	{
 		buff.setBufferRead(len);
 		if (this->_slBuffer.size() >= this->_slBuffer.capacity())
-			throw HttpExceptions(URI_TOO_LONG);
+			throw HttpSevereExceptions(URI_TOO_LONG);
 		return (false);
 	}
 	
@@ -197,7 +196,7 @@ bool HttpParser::handleHeaders(Buffer& buff)
 		buff.setBufferRead(len);
 
 		if (this->_headBuffer.size() >= this->_headBuffer.capacity())
-			throw HttpExceptions(REQUEST_HEADER_FIELDS_TOO_LARGE);
+			throw HttpSevereExceptions(REQUEST_HEADER_FIELDS_TOO_LARGE);
 		return (false);
 	}
 	
@@ -213,6 +212,6 @@ bool HttpParser::handleHeaders(Buffer& buff)
 bool HttpParser::handleBody(Buffer& buff, Socket& sock)
 {
 	if (!this->_reqBody)
-		this->_reqBody = new RequestBody(0);
+		this->_reqBody = new BodyParsing(0);
 	return (this->_reqBody->onBodyReceived(buff, sock));
 }
