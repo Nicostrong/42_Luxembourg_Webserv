@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/03 14:41:38 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/03 18:52:05 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -197,6 +197,13 @@ PAR_OBJ			=	$(PAR_SRC:.cpp=.o)
 
 PAR_NAME		=	test_parser
 
+FUNC_SRC		= ../class/Ip.cpp \
+				  main_testfunc.cpp
+
+FUNC_OBJ		=	$(FUNC_SRC:.cpp=.o)
+
+FUNC_NAME		=	test_func
+
 ################################################################################
 #	Colors																	   #
 ################################################################################
@@ -244,6 +251,7 @@ CURRENT_FILE	= 	0
 NB_SERVER		=	$(words $(SERVER_SRC))
 NB_NET			=	$(words $(NET_SRC))
 NB_PAR			=	$(words $(PAR_SRC))
+NB_FUNC			=	$(words $(FUNC_SRC))
 SLEEP_TIME		=	0.001
 
 ################################################################################
@@ -296,7 +304,7 @@ endef
 #	Rules																	   #
 ################################################################################
 
-.PHONY : all server networking parser deb_serv deb_net deb_par clean fclean re help
+.PHONY : all server networking parser func deb_serv deb_net deb_par clean fclean re help
 
 all: 		help
 
@@ -314,6 +322,11 @@ parser:		NUM_FILES=$(NB_PAR)
 parser:		$(PAR_OBJ)
 	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(PAR_OBJ) $(MYLIBS) -o $(PAR_NAME)
 	@echo "$(CGREEN)The programm $(PAR_NAME) successfully compilled"
+
+func:	NUM_FILES=$(NB_FUNC)
+func:	$(FUNC_OBJ)
+	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(FUNC_OBJ) $(MYLIBS) -o $(FUNC_NAME)
+	@echo "$(CGREEN)The programm $(FUNC_NAME) successfully compilled"
 
 %.o :		%.cpp
 	$(call compile_c_to_o)
@@ -340,6 +353,7 @@ fclean: 	clean
 	$(call delete_file, $(SERVER_NAME))
 	$(call delete_file, $(NET_NAME))
 	$(call delete_file, $(PAR_NAME))
+	$(call delete_file, $(FUNC_NAME))
 
 re : 		fclean all
 
