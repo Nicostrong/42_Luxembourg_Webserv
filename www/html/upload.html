@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<title>WEBSERVER - upload - WEBSERVER</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<div class="title" style="text-align: center;">
+			<p>Welcone on the upload page of this WebServer.</p>
+		</div>
+        <div class="container">
+            <form action="../uploads/toto2" method="POST" enctype="multipart/form-data">
+                <label for="file">Select file to upload 1:</label>
+                <input type="file" name="file1" id="file1">
+                <label for="file">Select file to upload 2:</label>
+                <input type="file" name="file2" id="file2">
+                <input class="buton" type="submit" value="Upload"> 
+            </form>
+        </div>
+	</body>
+</html>

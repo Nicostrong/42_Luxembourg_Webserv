@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Uri.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 21:30:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/20 15:02:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 14:00:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ std::string Uri::trimSlashEnd(const std::string& uri)
 std::string Uri::buildUri(std::string p1, std::string p2)
 {
     p1 = trimSlashEnd(p1);
-    p2 = trimSlashBegin(p1);
+    p2 = trimSlashBegin(p2);
     return (p1 + '/' + p2);
 }
 

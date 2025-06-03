@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 10:50:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/03 14:41:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,10 +170,12 @@ bool RequestHandling::isIndexFile(Socket& sock)
 	
 	std::string str = sock.getCtx().getLocIndex(
 		sock.getReq().getLoc());
-	
+	LOG_DEB(str);
 	struct stat infos;
 	std::string indexPath = Uri::buildUri(
 			sock.getReq().getPathTranslated(), str);
+
+	LOG_DEB(indexPath);
 
 	if (stat(indexPath.c_str(), &infos) == -1)
 	{
@@ -199,6 +201,7 @@ bool RequestHandling::isIndexFile(Socket& sock)
 	sock.getReq().setFilePath(indexPath);
 	sock.getReq().setFileSize(infos.st_size);
 	sock.getResp().setStatusCode(OK);
+	sock.getResp().addHeader("Content-Length", infos.st_size);
 	sock.getResp().setRespType(HttpResponse::STATIC_FILE);
 	return (true);
 }

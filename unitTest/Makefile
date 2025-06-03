@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/03 09:43:58 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/03 14:41:38 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 ################################################################################
 
 CXX				=	c++
-CXXFLAGS		=	-Wall -Werror -Wextra -g
+CXXFLAGS		=	-Wall -Werror -Wextra -g -O3
 CXX_OPT			=	-std=c++98
 CXX_DEF			=	-DDEBUG=1
 
