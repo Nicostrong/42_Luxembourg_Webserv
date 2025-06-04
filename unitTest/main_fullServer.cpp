@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:28:13 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/21 11:17:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 13:52:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,14 @@ int	main( void )
 		ServerManager									sm(pc.getAllTokens(), em);
 		const std::set<Server*>							setServ = sm.getAllServers();
 		std::set<Server*>::const_iterator				itServ = setServ.begin();
+		Ip												ip("127.120.120.0");
 
-		assert(sm.getNbServer() == 3);
+		assert(sm.getNbServer() == 4);
 		std::cout << "✅ [OK] Number of servers parsed correctly" << std::endl;
 		for ( ; itServ != setServ.end(); ++itServ)
 			std::cout << **itServ << std::endl;
+		std::cout << "Test new method object IP" << std::endl;
+		std::cout << *sm.getMatchingServer(ip, 2121, "toto") << std::endl;
 		std::cout << "✅✅✅✅✅✅✅ [OK] ALL IS ALLRIGHT ✅✅✅✅✅✅✅" << std::endl;
 	}
 	catch(const std::exception& e)

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:45 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 13:12:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 13:51:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 /*******************************************************************************
  *								GETTER										   *
- ******************************************************************************/
+******************************************************************************/
 
- /*
-  *	get the server matchin with the port and host
-  */
+/*
+*	get the server matchin with the port and host
+*/
 const Server*		ServerManager::getServer( size_t port, std::string host ) const
 {
 	std::map<size_t, std::vector<Server*> >::const_iterator		it;
@@ -40,16 +40,16 @@ const Server*		ServerManager::getServer( size_t port, std::string host ) const
 }
 
 /*
- *	Get all server for a specific port
- */
+*	Get all server for a specific port
+*/
 const std::set<Server*>&		ServerManager::getAllServers( void ) const
 {
 	return (this->_sServers);
 }
 
 /*
- *	Get all server for a specific port
- */
+*	Get all server for a specific port
+*/
 std::vector<Server*>		ServerManager::getAllServersForPort( size_t port ) const
 {
 	std::map<size_t, std::vector<Server*> >::const_iterator		it;
@@ -61,8 +61,8 @@ std::vector<Server*>		ServerManager::getAllServersForPort( size_t port ) const
 }
 
 /*
- *	Get the number of server on the config
- */
+*	Get the number of server on the config
+*/
 int			ServerManager::getNbServer( void ) const
 {
 	return (this->_nbServer);
@@ -88,31 +88,34 @@ const std::set<std::pair< Ip , size_t> >	ServerManager::getSocketSet( void )
 const Server*		ServerManager::getMatchingServer( const Ip& ip, size_t port, const std::string& host ) const
 {
 	std::map<size_t, std::vector<Server*> >::const_iterator		findIt;
-	const Server*												fallbackServer = NULL;
+	const Server*												defaultServer = NULL;
+	const Server*												ipMatchServer = NULL;
 	std::vector<Server*>::const_iterator						serverIt;
 
 	findIt = _mServers.find(port);
 	if (findIt == _mServers.end()) 
 		return (NULL);
 
-	for (serverIt = findIt->second.begin(); serverIt != findIt->second.end(); ++serverIt) 
+	for (serverIt = findIt->second.begin(); serverIt != findIt->second.end(); ++serverIt)
 	{
-		const Server*		server = *serverIt;
-		
-		if (server->getIp().getIpBytes() == ip.getIpBytes() ||
-			server->getIp().getIpString() == "0.0.0.0") 
-		{
-			const std::list<std::string>&				hostList = server->getHost();
-			std::list<std::string>::const_iterator		hostIt;
+		const Server*								server = *serverIt;
+		const std::list<std::string>&				hostList = server->getHost();
+		std::list<std::string>::const_iterator		hostIt;
 
-			for (hostIt = hostList.begin(); hostIt != hostList.end(); ++hostIt) 
-				if (*hostIt == host) 
+		for (hostIt = hostList.begin(); hostIt != hostList.end(); ++hostIt)
+		{
+			if (*hostIt == host)
+			{
+				if (server->getIp().getIpBytes() == ip.getIpBytes())
 					return (server);
-        }
-		if (!fallbackServer) 
-			fallbackServer = server;
+				else if (server->getIp().getIpString() == "0.0.0.0") 
+					ipMatchServer = server;
+			}
+		}
+		if (!defaultServer) 
+			defaultServer = server;
 	}
-	return (fallbackServer);
+	return (ipMatchServer ? ipMatchServer : defaultServer);
 }
 
 /*	ADD SOME GETTER A CHECKER	*/
