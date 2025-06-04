@@ -20,3 +20,6 @@
     corrrect structure and have all sockets in one list and have servers where 
     the request will be redirected depending on mandatory HOST header
 -Handle upload with diffrents content types not only plain/text
+
+// Mapping of all unique ip:port for binding
+    -> Priorize specific ip adress bedore wildcard ones
