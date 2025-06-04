@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/02 13:06:31 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:07:52 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void HandleCGI::UpdateShowData(const char *compiler, const char *script)
 
 void HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
 {   
+    
     (void)fd;
     (void)type;
     (void)em;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestBody.hpp                                    :+:      :+:    :+:   */
+/*   BodyParsing.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:21:21 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 09:15:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 14:15:45 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class BodyParsing
 		void 					onBodyReceivedTE(Buffer& buff);
 		size_t					writeInMemory(Buffer& buff, size_t max);
 		size_t					writeInFile(Buffer& buff, size_t max);
+		void					readInFile(std::vector<char>& receivedTxtBuffer);
 		void					openTmpFile();
 		
 		Buffer	 		_buff;

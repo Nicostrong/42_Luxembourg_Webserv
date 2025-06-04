@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BodyParsing.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:20:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 10:11:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:12:32 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,4 +168,20 @@ void BodyParsing::openTmpFile()
 		throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 	
 	this->_fName = tmpname;
+}
+
+void	readInFile(std::vector<char>& receivedTxtBuffer)
+{
+    //std::fstream _fBuff("dummyfile");
+    std::string filecontent;
+    while(getline(_fBuff, filecontent))
+    {
+        std::string::iterator it = filecontent.begin();
+        for(std::string::iterator it = filecontent.begin(); it != filecontent.end(); ++it)
+        {
+            receivedTxtBuffer.push_back(*it);
+        }
+        receivedTxtBuffer.push_back('\n');
+    }
+    _fBuff.close();
 }

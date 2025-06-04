@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/02 13:00:51 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:14:04 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@
 #include <map>
 #include <unistd.h>
 #include "../../includes/Pipe.hpp"
+#include "../../includes/BodyParsing.hpp"
 
 class HandleCGI: public IEventHandler
 {
+	private:
+		BodyParsing *bp;
+		std::vector<char> receivedTxtBuffer;
 	public:
 		HandleCGI();
 		HandleCGI(HandleCGI& copy);
