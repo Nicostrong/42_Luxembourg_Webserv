@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 17:24:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:28:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 #include "../includes/SocketManager.hpp"
 #include "../includes/RequestHandling.hpp"
 
-Socket::Socket(int fd, const std::pair<Ip, size_t>& sockAddr, ServerManager& sm, SocketManager& sockm)
-	: _fd(fd), _sockAddr(sockAddr), _resp(), _rxBuffer(RX_SIZE), 
-	  _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), _keepAlive(true), _sm(sm), _sockm(sockm)
-	{
-		this->_req 		= HttpRequest(this->_sockAddr.first.getIpString());
-		LOG_DEB(this->_sockAddr.first.getIpString() + " opened connection");
-	}
+Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr, 
+	ServerManager& sm, SocketManager& sockm)
+	: _fd(fd), _sockAddr(sockAddr), _entryAddr(entryAddr), _resp(), 
+	  _rxBuffer(RX_SIZE), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), 
+	  _keepAlive(true), _sm(sm), _sockm(sockm)
+{
+	this->_req 		= HttpRequest(this->_sockAddr.getIp().getIpString());
+	LOG_DEB(this->_sockAddr.getIp().getIpString() + " opened connection");
+}
 
 Socket::~Socket() 
 {
 	if (this->_fd > 2)
 		close(this->_fd);
-	LOG_DEB(this->_sockAddr.first.getIpString() + " closed connection");
+	LOG_DEB(this->_sockAddr.getIp().getIpString() + " closed connection");
 }
 
 bool Socket::operator==(const Socket& obj)
@@ -37,6 +39,16 @@ bool Socket::operator==(const Socket& obj)
 int Socket::getSocket() const
 {
 	return (this->_fd);
+}
+
+const Endpoint& Socket::getSockAddr() const
+{
+	return (this->_sockAddr);
+}
+		
+const Endpoint& Socket::getEntryAddr() const
+{
+	return (this->_entryAddr);
 }
 
 HttpRequest& Socket::getReq()
@@ -140,7 +152,7 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 				this->_sockm.remove(*this, em);
 				return ;
 			}
-			this->_req = HttpRequest(this->_sockAddr.first.getIpString());
+			this->_req = HttpRequest(this->_sockAddr.getIp().getIpString());
 			this->_resp = HttpResponse();
 			this->_txBuffer.reset();
 			this->_rHandler.reset();

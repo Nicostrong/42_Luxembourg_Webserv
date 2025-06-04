@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:39:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 18:43:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:52:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,12 @@ void ServerListener::onReadEvent(int fd, int type, EventMonitoring& em)
 	{
 		if (clientSocket == -1)
 			throw std::runtime_error("Failed to accept client");
-		
+
 		sock = new Socket(clientSocket, 
-			std::pair<Ip, size_t>(Ip(clientAddr.sin_addr.s_addr), clientAddr.sin_port),
-			this->_servm, this->_sockm);
+			Endpoint::getEndpoint(clientAddr),
+			Endpoint::getEntryAddress(clientSocket),
+			this->_servm, 
+			this->_sockm);
 
 		if (!sock)
 			throw std::runtime_error("Failed to accept client");

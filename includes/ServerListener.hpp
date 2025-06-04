@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 15:09:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:06:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "SocketManager.hpp"
 #include "server/ServerManager.hpp"
 #include "IEventHandler.hpp"
+#include "Endpoint.hpp"
 
 class ServerListener : public IEventHandler
 {

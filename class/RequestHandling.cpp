@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 11:29:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 22:13:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@ std::map<std::string, RequestHandling::HandlerFunc> RequestHandling::_handlers =
 
 void RequestHandling::handleHeaders(Socket& sock)
 {
-	
-	Server*	ctx = *sock.getSM().getAllServers().begin();
+	const Endpoint entryAddr = sock.getEntryAddr();
 	HttpRequest* req = &sock.getReq();
 	HttpResponse* resp = &sock.getResp();
+	const Server*	ctx = sock.getSM().getMatchingServer(
+		entryAddr.getIp(), entryAddr.getPort(), req->findHeaderValue("HOST"));
 
 	LOG_DEB(req->getUri());
+
+	if (!ctx)
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+
 	req->setServer(*ctx);
 	resp->addHeader("Content-Length", 0);
 	resp->addHeader("Connection", "keep-alive");
@@ -30,13 +35,8 @@ void RequestHandling::handleHeaders(Socket& sock)
 	if (std::strcmp(req->getHttpVersion().c_str(), SUPPORTED_HTTPVER) != 0)
 		throw HttpSevereExceptions(HTTP_VERSION_NOT_SUPPORTED);
 	
-	
-	
 	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
-	{
-		LOG_DEB(req->getMethod());
 		throw HttpExceptions(NOT_IMPLEMENTED);
-	}
 
 	req->setLoc(
 		ctx->getMatchingLoc(req->getUri()));
@@ -168,7 +168,7 @@ bool RequestHandling::isIndexFile(Socket& sock)
 {
 	HttpRequest* req = &sock.getReq();
 	HttpResponse* resp = &sock.getResp();
-	Server* serv = req->getServer();
+	const Server* serv = req->getServer();
 	struct stat infos;
 	
 	if (req->getUri().size() && *req->getUri().rbegin() != '/')

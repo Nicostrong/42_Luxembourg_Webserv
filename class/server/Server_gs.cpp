@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_gs.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 10:57:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 22:11:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,9 @@ const Location&			Server::getLocations( std::string path ) const
  *	Check if the uri exist in the map of Location and return a const pointer of
  *	the Location object
  */
-const Location*					Server::getMatchingLoc( const std::string& uri )
+const Location*					Server::getMatchingLoc( const std::string& uri ) const
 {
-	std::map<std::string, Location *>::iterator		it;
+	std::map<std::string, Location *>::const_iterator		it;
 	Location* 										bestMatch = NULL;
 	
 	for (it = this->_mLocations.begin(); it != this->_mLocations.end(); it++)
@@ -206,7 +206,7 @@ const Location*					Server::getMatchingLoc( const std::string& uri )
 	return (bestMatch);
 }
 
-std::string Server::getLocIndex(const Location* loc)
+const std::string& Server::getLocIndex(const Location* loc) const
 {
 	const Directive* directive = loc->findDirective("index");
 

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 17:17:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:27:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "./HttpSevereExceptions.hpp"
 # include "./server/ServerManager.hpp"
 # include "./Ip.hpp"
+# include "./Endpoint.hpp"
 
 # define RX_SIZE 1024
 
@@ -40,12 +41,14 @@ class Socket : public IEventHandler
 				const char* what() const throw();
 		};
 	
-		Socket(int fd, const std::pair<Ip, size_t>& sockAddr,
+		Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
 				ServerManager& sm, SocketManager& sockm);
 		~Socket();
 		
 		bool 				operator==(const Socket& obj);
 		int					getSocket() const;
+		const Endpoint&		getSockAddr() const;
+		const Endpoint&		getEntryAddr() const;
 		HttpRequest&		getReq();
 		HttpResponse&		getResp();
 		Buffer&				getTxBuffer();
@@ -59,7 +62,8 @@ class Socket : public IEventHandler
 		Socket& 			operator=(const Socket& obj);
 
 		const int					_fd;
-		const std::pair<Ip, size_t> _sockAddr;
+		const Endpoint				_sockAddr;
+		const Endpoint				_entryAddr;
 		HttpRequest 				_req;
 		HttpResponse 				_resp;
 		Buffer						_rxBuffer;

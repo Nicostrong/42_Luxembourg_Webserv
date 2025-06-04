@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 16:52:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:34:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ class	Server
 		const std::map<std::string, Location *>		getAllLocation( void ) const;
 
 		const Location&		getLocations( std::string path ) const;
-		const Location*		getMatchingLoc( const std::string& uri );
-		std::string			getLocIndex( const Location* loc );
+		const Location*		getMatchingLoc( const std::string& uri ) const;
+		const std::string&	getLocIndex( const Location* loc ) const;
 
 		/*	CHECKER	*/
 		bool		checkUri( std::string uri );

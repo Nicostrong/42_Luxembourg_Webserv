@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 11:23:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:33:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void HttpRequest::setTE(bool state)
 	this->_isTE = state;
 }
 
-void HttpRequest::setServer(Server& server)
+void HttpRequest::setServer(const Server& server)
 {
 	this->_server = &server;
 }
@@ -158,7 +158,7 @@ size_t HttpRequest::getContentLength() const
 	return (this->_contentLength);
 }
 
-Server* HttpRequest::getServer()
+const Server* HttpRequest::getServer() const
 {
 	return (this->_server);
 }

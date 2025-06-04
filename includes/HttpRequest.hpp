@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 11:23:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:33:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class HttpRequest : public HttpParser
 		void					setFileSize(size_t fileSize);
 		void					setContentLength(size_t length);
 		void					setTE(bool state);
-		void					setServer(Server& server);
+		void					setServer(const Server& server);
 		const Location* 		getLoc() const;
 		const std::string&		getPathTranslated() const;
 		const std::string&		getPathInfo() const;
@@ -52,7 +52,7 @@ class HttpRequest : public HttpParser
 		const std::string&		getQueryParams() const;
 		size_t					getFileSize() const;
 		size_t					getContentLength() const;
-		Server*					getServer();
+		const Server*			getServer() const;
 		bool					isTE() const;
 		
 		
@@ -78,7 +78,7 @@ class HttpRequest : public HttpParser
 		size_t			_contentLength;
 
 		// Server config
-		Server*			_server;
+		const Server*			_server;
 		
 };
 
