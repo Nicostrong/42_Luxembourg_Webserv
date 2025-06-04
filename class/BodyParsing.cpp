@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BodyParsing.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:20:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 16:03:21 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:46:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,12 +170,11 @@ void BodyParsing::openTmpFile()
 	this->_fName = tmpname;
 }
 
-void	readInFile(std::vector<char>& receivedTxtBuffer)
+void	BodyParsing::readInFile(std::vector<char>& receivedTxtBuffer)
 {
     std::string filecontent;
     while(getline(_fBuff, filecontent))
     {
-        std::string::iterator it = filecontent.begin();
         for(std::string::iterator it = filecontent.begin(); it != filecontent.end(); ++it)
         {
             receivedTxtBuffer.push_back(*it);
