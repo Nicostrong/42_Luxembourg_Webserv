@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 11:17:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:13:06 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "./Buffer.hpp"
 # include "./HttpExceptions.hpp"
 # include "./HttpSevereExceptions.hpp"
-# include "./ServerManager.hpp"
+# include "./server/ServerManager.hpp"
 # include "./Ip.hpp"
 
 # define RX_SIZE 1024

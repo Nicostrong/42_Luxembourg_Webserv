@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_m.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:59 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:21 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 15:20:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
  */
 void		ServerManager::startAll( void )
 {
-	std::set<Server*>::iterator		it;
+	/*std::set<Server*>::iterator		it;
 
 	for (it = this->_sServers.begin(); it != this->_sServers.end(); ++it)
-		(*it)->start();
+		(*it)->start();*/
 	return ;
 }
 

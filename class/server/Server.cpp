@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/27 08:56:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:20:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 /*
  *	Server constructor with tokens in argument
  */
-Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
-	: _maxClient(1), _serverSocket(0), _maxSizeBody(1024), _path("/www/html"),
-	_index("index.html"), _serverIp(SERVER_IP), _em(eventMonitoring)
+Server::Server( Token*& serverTokensConfig ) 
+	: _maxClient(1), _maxSizeBody(1024), _path("/www/html"),
+	_index("index.html"), _serverIp(SERVER_IP)
 {
 	try
 	{
@@ -43,7 +43,7 @@ Server::~Server( void )
 	std::list<Directive *>::iterator				itDir;
 	std::map<std::string, Location *>::iterator		itLoc;
 
-	cleanup();
+	//cleanup();
 	for ( itDir = this->_lDirectives.begin(); itDir != this->_lDirectives.end(); ++itDir)
 		delete *itDir;
 	this->_lDirectives.clear();
