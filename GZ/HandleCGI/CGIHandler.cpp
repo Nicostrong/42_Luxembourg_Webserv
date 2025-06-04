@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 17:13:58 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 17:25:53 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,11 @@ void HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
     (void)type;
     (void)em;
 
-    // Assume you have a member buffer _cgiInput and an offset _cgiInputSent
-    if (_cgiInput.size() > _cgiInputSent) {
-        ssize_t written = write(fd, _cgiInput.c_str() + _cgiInputSent, _cgiInput.size() - _cgiInputSent);
+    if (input.size() > input_sent) {
+        ssize_t written = write(fd, input.c_str() + input_sent, input.size() - input_sent);
         if (written > 0) {
             _cgiInputSent += written;
-            if (_cgiInputSent == _cgiInput.size()) {
-                // All data sent, close write end and stop monitoring
+            if (input_sent == input.size()) {
                 em.unmonitor(fd);
                 close(fd);
             }
@@ -143,11 +141,9 @@ void HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
             close(fd);
         }
     } else {
-        // Nothing to write, close write end
         em.unmonitor(fd);
         close(fd);
-    }
-    
+    }    
     return ;
 }
 void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
@@ -158,11 +154,8 @@ void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
     
     em.unmonitor(fd);
     close(fd);
-    // Optionally, reset or clear any member state related to this CGI process
-    _cgiInput.clear();
-    _cgiOutput.clear();
-    _cgiInputSent = 0;
-    // You may want to log or handle the CGI completion here
-    
+    input.clear();
+    output.clear();
+
     return ;
 }

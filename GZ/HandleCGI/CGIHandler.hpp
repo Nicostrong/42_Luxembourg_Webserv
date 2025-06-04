@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 17:14:11 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 17:24:47 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class HandleCGI: public IEventHandler
 		BodyParsing *bp;
 		std::vector<char> receivedTxtBuffer;
 		std::string output;
+		std::string input;
+		size_t input_sent;
 	public:
 		HandleCGI();
 		HandleCGI(HandleCGI& copy);
