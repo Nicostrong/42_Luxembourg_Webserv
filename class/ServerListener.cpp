@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ServerListener.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:39:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 23:00:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 10:58:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../includes/ServerListener.hpp"
 
 
-ServerListener::ServerListener(const Ip& ip, size_t port,
-	std::vector<Socket*>& sockets) 
-	: _ip(ip), _port(port), _serverSocket(-1), _sockets(sockets) {}
+ServerListener::ServerListener(const Ip& ip, size_t port, SocketManager& sockm) 
+	: _ip(ip), _port(port), _serverSocket(-1), _sockm(sockm) {}
 
 ServerListener::~ServerListener() {}
 
@@ -67,25 +66,33 @@ void ServerListener::onReadEvent(int fd, int type, EventMonitoring& em)
 {
 	sockaddr_in	clientAddr;
 	socklen_t addrLen = sizeof(clientAddr);
-	
+	Socket* sock = NULL;
+		
 	int clientSocket = accept(this->_serverSocket, 
 		(struct sockaddr*)&clientAddr, &addrLen);
-		
-	if (clientSocket == -1)
-		return ;
 	
-	Socket*		s = new Socket(clientSocket, em, NULL, clientAddr);
-
-	if (!s)
+	try
 	{
-		close(clientSocket);
-		return ;
+		if (clientSocket == -1)
+			throw std::runtime_error("Failed to accept client");
+		
+		sock = new Socket(clientSocket, 
+			std::pair(Ip(clientAddr.sin_addr.s_addr), clientAddr.sin_port));
+
+		if (!sock)
+			throw std::runtime_error("Failed to accept client");
+
+		this->_sockm.add(*sock, em);
 	}
-
-	this->_sockets.push_back(s);
-
-	em.monitor(clientSocket, POLLIN | POLLHUP | POLLRDHUP,
-		EventData::CLIENT, *s);
+	catch(const std::exception& e)
+	{
+		if (sock)
+			delete sock;
+		else if (clientSocket > 2)
+			close(clientSocket);
+		
+		std::cerr << "Failed to accept client" << std::endl;
+	}
 }
 
 void ServerListener::onWriteEvent(int fd, int type, EventMonitoring& em)
