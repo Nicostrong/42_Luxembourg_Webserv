@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerListener.hpp                                 :+:      :+:    :+:   */
+/*   Listener.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 22:17:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 23:18:40 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVERLISTENER_HPP
-#define SERVERLISTENER_HPP
+#ifndef LISTENER_HPP
+#define LISTENER_HPP
 
 #include "lib.hpp"
 #include "Ip.hpp"
@@ -22,20 +22,20 @@
 #include "IEventHandler.hpp"
 #include "Endpoint.hpp"
 
-class ServerListener : public IEventHandler
+class Listener : public IEventHandler
 {
     public:
-        ServerListener(const Endpoint& addr, SocketManager& sockm, 
+        Listener(const Endpoint& addr, SocketManager& sockm, 
                 ServerManager& servm);
-        ~ServerListener();
+        ~Listener();
         bool    		listenSocket(EventMonitoring& em);
 
 		void onReadEvent(int fd, int type, EventMonitoring& em);
 		void onWriteEvent(int fd, int type, EventMonitoring& em);
 		void onCloseEvent(int fd, int type, EventMonitoring& em);
     private:
-		ServerListener(const ServerListener& obj);
-		ServerListener& operator=(const ServerListener& obj);
+		Listener(const Listener& obj);
+		Listener& operator=(const Listener& obj);
 		
         const Endpoint&             _addr;
 		int				            _serverSocket;

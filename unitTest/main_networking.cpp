@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 22:34:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 23:36:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "../includes/parser/ParserServerConfig.hpp"
 #include "../includes/CGI.hpp"
 #include "../includes/SocketManager.hpp"
-#include "../includes/ServerListener.hpp"
+#include "../includes/Listener.hpp"
+#include "../includes/ListenerManager.hpp"
 
 bool	g_running = true;
 
@@ -29,34 +30,14 @@ void	handle_sigint( int signal )
 int main()
 {
 	signal(SIGINT, handle_sigint);
-
-	std::vector<ServerListener*>	slVector;
-	std::vector<ServerListener*>::const_iterator it1;
 	try
 	{
 		ParserServerConfig		pc("../config/webserv.conf");
+		ServerManager			sm(pc.getAllTokens());
 		EventMonitoring			em;
 		SocketManager			sockm;
-
-		ServerManager			sm(pc.getAllTokens());
+		ListenerManager			lm(sm, sockm, em);
 		
-		const std::set<std::pair<Ip, size_t> > endpoints = sm.getSocketSet();
-		std::set<std::pair<Ip, size_t> >::const_iterator it;
-		
-		slVector.reserve(endpoints.size());
-		for (it = endpoints.begin(); it != endpoints.end(); ++it)
-		{
-			ServerListener* sl = new ServerListener(
-				Endpoint(it->first, it->second), sockm, sm);
-			
-			if (sl)
-				slVector.push_back(sl);
-			sl->listenSocket(em);
-		}
-		//CGI cgi;
-		
-		//cgi.launch();
-		//sm.startAll();
 		while (g_running)
 			em.updateEvents();
 	}
@@ -69,9 +50,5 @@ int main()
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	
-	for (it1 = slVector.begin(); it1 != slVector.end(); ++it1)
-		delete *it1;
-	
 	return (0);
 }

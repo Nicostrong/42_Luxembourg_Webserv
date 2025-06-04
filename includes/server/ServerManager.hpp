@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 16:53:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 23:25:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class	ServerManager
 
 		/*	GETTER	*/
 		/*	retourne un set d ip:port de tout les servers de la config */
-		const std::set<std::pair<Ip , size_t> >		getSocketSet( void );
+		const std::set<std::pair<Ip , size_t> >		getSocketSet( void ) const;
 		/*	rertourne le server qui match avec host, ip et hostname	*/
 		const Server*			getMatchingServer( const Ip& ip, size_t port, const std::string& host ) const;
 		/*	retourne le server qui correspond au hostname et port	*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_gs.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:45 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 13:51:53 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 23:26:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ int			ServerManager::getNbServer( void ) const
 }
 
 /*	retourne un set d ip:port de tout les servers de la config */
-const std::set<std::pair< Ip , size_t> >	ServerManager::getSocketSet( void )
+const std::set<std::pair< Ip , size_t> >	ServerManager::getSocketSet( void ) const
 {
 	std::set<std::pair<Ip, size_t> >						retSet;
-	std::map<size_t, std::vector<Server*> >::iterator		itMap;
+	std::map<size_t, std::vector<Server*> >::const_iterator		itMap;
 
 	for (itMap = this->_mServers.begin(); itMap != this->_mServers.end(); ++itMap)
 	{
-		std::vector<Server* >::iterator		itVec;
+		std::vector<Server* >::const_iterator		itVec;
 
 		for (itVec = itMap->second.begin(); itVec != itMap->second.end(); ++itVec)
 			retSet.insert(std::make_pair((*itVec)->getIp(), itMap->first));

@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerListener.cpp                                 :+:      :+:    :+:   */
+/*   Listener.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:39:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 22:18:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 23:34:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../includes/ServerListener.hpp"
+#include "./../includes/Listener.hpp"
 
 
-ServerListener::ServerListener(const Endpoint& addr, 
+Listener::Listener(const Endpoint& addr, 
 	SocketManager& sockm, ServerManager& servm) 
 	: _addr(addr), _serverSocket(-1), _sockm(sockm), _servm(servm) {}
 
-ServerListener::~ServerListener() 
+Listener::~Listener() 
 {
 	if (this->_serverSocket > 2)
 		close(this->_serverSocket);
 }
 
-bool ServerListener::listenSocket(EventMonitoring& em)
+bool Listener::listenSocket(EventMonitoring& em)
 {
     sockaddr_in		addr;
 
@@ -67,7 +67,7 @@ bool ServerListener::listenSocket(EventMonitoring& em)
 
 // Socket events
 
-void ServerListener::onReadEvent(int fd, int type, EventMonitoring& em)
+void Listener::onReadEvent(int fd, int type, EventMonitoring& em)
 {
 	(void)fd;
 	(void)type;
@@ -105,14 +105,14 @@ void ServerListener::onReadEvent(int fd, int type, EventMonitoring& em)
 	}
 }
 
-void ServerListener::onWriteEvent(int fd, int type, EventMonitoring& em)
+void Listener::onWriteEvent(int fd, int type, EventMonitoring& em)
 {
 	(void)em;
 	(void)fd;
 	(void)type;
 }
 
-void ServerListener::onCloseEvent(int fd, int type, EventMonitoring& em)
+void Listener::onCloseEvent(int fd, int type, EventMonitoring& em)
 {
 	(void)em;
 	(void)fd;
