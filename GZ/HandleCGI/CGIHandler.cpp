@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 16:05:39 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:24:15 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ extern char **environ;
 
 HandleCGI::HandleCGI()
 {
+    
 }
 
 HandleCGI::~HandleCGI()
@@ -39,10 +40,10 @@ HandleCGI::HandleCGI(HandleCGI& copy)
 HandleCGI& HandleCGI::operator=(HandleCGI& copy)
 {
 	(void)copy;
-	return *this;
+	return (*this);
 }
 
-std::string HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
+void HandleCGI::DoCGI(const char *cmd_list[3], std::string& output, EventMonitoring& em)
 {
     Pipe send_data_to_cgi();
     Pipe receive_data_from_cgi();
@@ -55,9 +56,9 @@ std::string HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
     
     pid_t pid = fork(); 
 
-    if (pid == -1) { 
+    if (pid == -1) {
         std::cerr << "fork failed\n"; 
-        return "ERROR\n";
+        return ;
     } 
     else if (pid == 0) {
         dup2(send_data_to_cgi.getOut(), STDOUT_FILENO);
@@ -66,20 +67,17 @@ std::string HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
         receive_data_from_cgi.closeOut();
         execve(cmd_list[0], (char * const *)cmd_list, environ);
         _exit(1);
-    } 
+    }
     else {
         char buffer[1024];
         send_data_to_cgi.closeOut();
         receive_data_from_cgi.closeIn();
         ssize_t count;
-        std::string output;
         while ((count = read(receive_data_from_cgi.getOut(), buffer, sizeof(buffer))) > 0) {
             output.append(buffer, count);
         }
-        waitpid(pid, NULL, 0);
-        return output;
     }
-    return "ERROR\n"; 
+    return ;
 }
 
 //"/usr/bin/python3", "update_register_newsletter.py"

@@ -6,12 +6,14 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 15:21:00 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:24:24 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HandleCGI_HPP
 #define HandleCGI_HPP
+
+#define ERROR "ERROR\n"
 
 #include <iostream>
 #include <string>
@@ -32,7 +34,7 @@ class HandleCGI: public IEventHandler
 		~HandleCGI();
 		void UpdateNewsLetter(const char *compiler, const char *script);
 		void UpdateShowData(const char *compiler, const char *script);
-		std::string DoCGI(const char *cmd_list[3],EventMonitoring& em);
+		void HandleCGI::DoCGI(const char *cmd_list[3], std::string& output, EventMonitoring& em);
 		void onReadEvent(int fd, int type, EventMonitoring& em);
 		void onWriteEvent(int fd, int type, EventMonitoring& em);
 		void onCloseEvent(int fd, int type, EventMonitoring& em);
