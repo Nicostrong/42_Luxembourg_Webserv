@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:20:30 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 15:12:32 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:02:47 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ void BodyParsing::openTmpFile()
 
 void	readInFile(std::vector<char>& receivedTxtBuffer)
 {
-    //std::fstream _fBuff("dummyfile");
     std::string filecontent;
     while(getline(_fBuff, filecontent))
     {
