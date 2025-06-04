@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_p.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 10:14:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 16:51:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void		Server::setAttributs( void )
 /*
  *	When a client close the connection, it close the socket and remove its from the list
  */
-void		Server::cleanup( void )
+/*void		Server::cleanup( void )
 {
 	std::list<Socket>::const_iterator		it = this->_lSockets.begin();
 
@@ -110,7 +110,7 @@ void		Server::cleanup( void )
 		close(this->_serverSocket);
 	std::cout << "Server closed" << std::endl;
 	return ;
-}
+}*/
 
 /*
  *	Check if the host exist in the list of host of the server

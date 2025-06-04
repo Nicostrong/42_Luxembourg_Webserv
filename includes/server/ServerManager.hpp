@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 13:12:09 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 16:53:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class	ServerManager
 
 	public:
 
-		ServerManager( Token* allTokens, EventMonitoring& eventMonitoring );
+		ServerManager( Token* allTokens );
 		~ServerManager( void );
 
 		/*	GETTER	*/

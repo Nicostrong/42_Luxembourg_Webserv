@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:50 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/30 13:59:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:21:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /*
  *	ServerManager constructor with a list of Token in argument
  */
-ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring )
+ServerManager::ServerManager( Token* allTokens )
 	: _nbServer(0)
 {
 	try
@@ -35,7 +35,7 @@ ServerManager::ServerManager( Token* allTokens, EventMonitoring& eventMonitoring
 			std::list<size_t>::const_iterator		pit;
 
 			tokens = *it;
-			server = new Server(tokens, eventMonitoring);
+			server = new Server(tokens);
 			ports = server->getPortList();
 			for (pit = ports.begin(); pit != ports.end(); ++pit)
 				this->_mServers[*pit].push_back(server);
