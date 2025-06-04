@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 10:48:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:18:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,15 @@
 #include "../includes/server/Server.hpp"
 #include "../includes/RequestHandling.hpp"
 
-Socket::Socket(int fd, EventMonitoring&	em, Server& ctx, 
-	const sockaddr_in& sockAddr) : _fd(fd),
-	_resp(), _em(em), _ctx(ctx), _rxBuffer(RX_SIZE), 
-	_txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), _keepAlive(true)
+Socket::Socket(int fd, const std::pair<Ip, size_t>& sockAddr, ServerManager& sm)
+	: _fd(fd), _sockAddr(sockAddr), _resp(), _rxBuffer(RX_SIZE), 
+	  _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), _keepAlive(true), _sm(sm)
 	{
-		this->_remoteIp = getReadableIp(sockAddr);
-		this->_req 		= HttpRequest(this->_remoteIp);
-		LOG_DEB(this->_remoteIp + " opened connection");
+		this->_req 		= HttpRequest(this->_sockAddr.first.getIpString());
+		LOG_DEB(this->_sockAddr.first.getIpString() + " opened connection");
 	}
-
-Socket::Socket(const Socket& obj) : _fd(obj._fd), _req(obj._req), 
-	_resp(obj._resp), _em(obj._em), _ctx(obj._ctx), _remoteIp(obj._remoteIp),
-	_rxBuffer(obj._rxBuffer), _txBuffer(obj._txBuffer), _reset(obj._reset), 
-	_keepAlive(true), _rHandler(obj._rHandler) {}
 
 Socket::~Socket() {}
-
-Socket& Socket::operator=(const Socket& obj)
-{
-	if (this != &obj)
-	{
-		this->_req = obj._req;
-		this->_resp = obj._resp;
-		this->_rxBuffer = obj._rxBuffer;
-		this->_txBuffer = obj._txBuffer;
-	}
-	return (*this);
-}
 
 bool Socket::operator==(const Socket& obj)
 {
@@ -63,19 +44,14 @@ HttpResponse& Socket::getResp()
 	return (this->_resp);
 }
 
-Server& Socket::getCtx()
-{
-	return (this->_ctx);
-}
-
 Buffer& Socket::getTxBuffer()
 {
 	return (this->_txBuffer);
 }
 
-EventMonitoring& Socket::getEventMonitoring()
+ServerManager& Socket::getSM()
 {
-	return (this->_em);
+	return (this->_sm);
 }
 
 void Socket::reset()
@@ -133,7 +109,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	catch(const std::exception& e)
 	{
 		LOG_DEB(e.what());
-		this->_ctx.onSocketClosedEvent(*this);
+		//this->_ctx.onSocketClosedEvent(*this);
 	}
 }
 
@@ -156,10 +132,10 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 		{
 			if (!this->_keepAlive)
 			{
-				this->_ctx.onSocketClosedEvent(*this);
+				//this->_ctx.onSocketClosedEvent(*this);
 				return ;
 			}
-			this->_req = HttpRequest(this->_remoteIp);
+			this->_req = HttpRequest(this->_sockAddr.first.getIpString());
 			this->_resp = HttpResponse();
 			this->_txBuffer.reset();
 			this->_rHandler.reset();
@@ -171,31 +147,17 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 	}
 	catch(const std::exception& e)
 	{
-		this->_ctx.onSocketClosedEvent(*this);
+		//this->_ctx.onSocketClosedEvent(*this);
 	}
 	(void)type;
 }
 
 void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
 {
-	this->_ctx.onSocketClosedEvent(*this);
+	//this->_ctx.onSocketClosedEvent(*this);
 	(void)fd;
 	(void)em;
 	(void)type;
-}
-
-std::string Socket::getReadableIp(const struct sockaddr_in& addr)
-{
-	std::stringstream ss;
-    uint32_t ip = ntohl(addr.sin_addr.s_addr);
-	
-    int a = (ip >> 24) & 0xFF;
-    int b = (ip >> 16) & 0xFF;
-    int c = (ip >> 8) & 0xFF;
-    int d = ip & 0xFF;
-    
-    ss << a << "." << b << "." << c << "." << d;
-    return (ss.str());
 }
 
 // Custom exceptions

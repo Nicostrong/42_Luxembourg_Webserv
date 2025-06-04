@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 13:15:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:23:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 HttpRequest::HttpRequest() {}
 
 HttpRequest::HttpRequest(const std::string& remoteIp) : HttpParser(), 
-	_remoteIp(remoteIp), _loc(NULL), _isTE(false), _contentLength(0) {}
+	_remoteIp(remoteIp), _loc(NULL), _isTE(false), _contentLength(0), 
+	_server(NULL) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpParser(obj)
 {
@@ -102,6 +103,11 @@ void HttpRequest::setTE(bool state)
 	this->_isTE = state;
 }
 
+void HttpRequest::setServer(Server& server)
+{
+	this->_server = &server;
+}
+
 const Location* HttpRequest::getLoc() const
 {
 	return (this->_loc);
@@ -150,6 +156,11 @@ size_t HttpRequest::getFileSize() const
 size_t HttpRequest::getContentLength() const
 {
 	return (this->_contentLength);
+}
+
+Server* HttpRequest::getServer()
+{
+	return (this->_server);
 }
 
 bool HttpRequest::isTE() const

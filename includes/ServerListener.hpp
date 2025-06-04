@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerListener.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 22:49:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 10:36:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 #include "Ip.hpp"
 #include "EventMonitoring.hpp"
 #include "Socket.hpp"
+#include "SocketManager.hpp"
 #include "IEventHandler.hpp"
 
 class ServerListener : public IEventHandler
 {
     public:
-        ServerListener(const Ip& ip, size_t port, std::vector<Socket*>& sockets);
+        ServerListener(const Ip& ip, size_t port, SocketManager& sockm);
         ~ServerListener();
         bool    		listenSocket(EventMonitoring& em);
 
@@ -33,10 +34,10 @@ class ServerListener : public IEventHandler
 		ServerListener(const ServerListener& obj);
 		ServerListener& operator=(const ServerListener& obj);
 		
-        Ip						_ip;
-        size_t					_port;
-		int						_serverSocket;
-		std::vector<Socket*>&	_sockets;
+        Ip				_ip;
+        size_t			_port;
+		int				_serverSocket;
+		SocketManager&	_sockm;
 };
 
 #endif
