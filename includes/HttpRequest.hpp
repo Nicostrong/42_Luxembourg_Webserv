@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 15:29:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:23:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "./HttpBase.hpp"
 #include "./HttpParser.hpp"
 #include "./server/Location.hpp"
+#include "./server/Server.hpp"
 
 class HttpRequest : public HttpParser
 {
@@ -40,6 +41,7 @@ class HttpRequest : public HttpParser
 		void					setFileSize(size_t fileSize);
 		void					setContentLength(size_t length);
 		void					setTE(bool state);
+		void					setServer(Server& server);
 		const Location* 		getLoc() const;
 		const std::string&		getPathTranslated() const;
 		const std::string&		getPathInfo() const;
@@ -50,12 +52,13 @@ class HttpRequest : public HttpParser
 		const std::string&		getQueryParams() const;
 		size_t					getFileSize() const;
 		size_t					getContentLength() const;
+		Server*					getServer();
 		bool					isTE() const;
+		
 		
 		
 
 	private:
-		
 		// Handling variables
 		std::string		_remoteIp;
 
@@ -73,6 +76,9 @@ class HttpRequest : public HttpParser
 		//Request Body
 		bool			_isTE;
 		size_t			_contentLength;
+
+		// Server config
+		Server*			_server;
 		
 };
 

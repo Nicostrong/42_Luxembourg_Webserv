@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 08:46:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/30 16:15:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:22:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	init()
 
 void CGI::launch(Socket& sock, const std::string& path)
 {
+    (void)sock;
     this->_pid = fork();
     if (this->_pid < 0)
     {
@@ -49,7 +50,7 @@ void CGI::launch(Socket& sock, const std::string& path)
     {
         this->_in.closeOut();
         this->_out.closeIn();
-        sock.getEventMonitoring().monitor(this->_in.getIn(), POLLIN, 0, *this);
+        //sock.getEventMonitoring().monitor(this->_in.getIn(), POLLIN, 0, *this);
         //sock.getEventMonitoring().monitor(this->_in.getOut(), POLLOUT, 0, *this);
         //waitpid(this->_pid, NULL, 0);
     }

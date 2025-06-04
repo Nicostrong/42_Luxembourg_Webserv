@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 10:56:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 16:52:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,8 @@
 
 # include "../Ip.hpp"
 # include "../lib.hpp"
-# include "../Socket.hpp"
 # include "../Ressource.hpp"
 # include "../parser/Token.hpp"
-# include "../IEventHandler.hpp"
-# include "../EventMonitoring.hpp"
 # include "../server/Location.hpp"
 # include "../server/Directive.hpp"
 
@@ -32,13 +29,12 @@
  *	You can also check if a requested uri is valid and if the method is allowed
  *	for this uri.
  */
-class	Server : public IEventHandler
+class	Server
 {
 	
 	private:
 
 		int										_maxClient;
-		int										_serverSocket;
 		size_t									_maxSizeBody;
 		std::string								_path;
 		std::string								_index;
@@ -46,10 +42,8 @@ class	Server : public IEventHandler
 		std::list<size_t>						_lPorts;
 		std::list<std::string>					_lHost;
 		std::list<Directive *>					_lDirectives;
-		std::list<Socket>						_lSockets;
 		std::map<size_t, std::string>			_mError;
 		std::map<std::string, Location *>		_mLocations;
-		EventMonitoring&						_em;
 
 		Server( const Server &src_obj );
 		Server		&operator=( const Server &src_obj );
@@ -69,11 +63,11 @@ class	Server : public IEventHandler
 		bool		matchServerNameWildcard( const std::string& host ) const;
 
 		/* Cleanup func to close all sockets(server included)*/
-		void		cleanup( void );
+		//void		cleanup( void );
 		
 	public:
 
-		Server( Token*& serverTokensConfig, EventMonitoring& eventMonitoring );
+		Server( Token*& serverTokensConfig );
 		~Server( void );
 
 		/*  GETTER	*/
@@ -102,14 +96,6 @@ class	Server : public IEventHandler
 		bool		checkUri( std::string uri );
 		bool		matchHost( const std::string& host ) const;
 		bool		checkMethod( std::string uri, std::string method );
-
-
-		/*	Server exec related	*/
-		void		start( void );
-		void 		onReadEvent( int fd, int type, EventMonitoring& em );
-		void 		onWriteEvent( int fd, int type, EventMonitoring& em );
-		void 		onCloseEvent( int fd, int type, EventMonitoring& em );
-		void 		onSocketClosedEvent( const Socket &s );
 
 		/*	EXCEPTION	*/
 		/*	parsing error Exception	*/

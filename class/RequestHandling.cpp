@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 14:41:38 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 11:29:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ std::map<std::string, RequestHandling::HandlerFunc> RequestHandling::_handlers =
 
 void RequestHandling::handleHeaders(Socket& sock)
 {
-	Server*	ctx = &sock.getCtx();
+	
+	Server*	ctx = *sock.getSM().getAllServers().begin();
 	HttpRequest* req = &sock.getReq();
 	HttpResponse* resp = &sock.getResp();
 
 	LOG_DEB(req->getUri());
+	req->setServer(*ctx);
 	resp->addHeader("Content-Length", 0);
 	resp->addHeader("Connection", "keep-alive");
 
@@ -164,18 +166,18 @@ bool RequestHandling::isRedirect(Socket& sock)
 
 bool RequestHandling::isIndexFile(Socket& sock)
 {
-	if (sock.getReq().getUri().size() && 
-		*sock.getReq().getUri().rbegin() != '/')
+	HttpRequest* req = &sock.getReq();
+	HttpResponse* resp = &sock.getResp();
+	Server* serv = req->getServer();
+	struct stat infos;
+	
+	if (req->getUri().size() && *req->getUri().rbegin() != '/')
 		return (false);
 	
-	std::string str = sock.getCtx().getLocIndex(
-		sock.getReq().getLoc());
-	LOG_DEB(str);
-	struct stat infos;
+	std::string str = serv->getLocIndex(
+		req->getLoc());
 	std::string indexPath = Uri::buildUri(
-			sock.getReq().getPathTranslated(), str);
-
-	LOG_DEB(indexPath);
+			req->getPathTranslated(), str);
 
 	if (stat(indexPath.c_str(), &infos) == -1)
 	{
@@ -198,11 +200,11 @@ bool RequestHandling::isIndexFile(Socket& sock)
 	if (access(indexPath.c_str(), R_OK) == -1)
 		throw HttpExceptions(FORBIDDEN);
 	
-	sock.getReq().setFilePath(indexPath);
-	sock.getReq().setFileSize(infos.st_size);
-	sock.getResp().setStatusCode(OK);
-	sock.getResp().addHeader("Content-Length", infos.st_size);
-	sock.getResp().setRespType(HttpResponse::STATIC_FILE);
+	req->setFilePath(indexPath);
+	req->setFileSize(infos.st_size);
+	resp->setStatusCode(OK);
+	resp->addHeader("Content-Length", infos.st_size);
+	resp->setRespType(HttpResponse::STATIC_FILE);
 	return (true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 23:03:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 15:13:06 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "./Buffer.hpp"
 # include "./HttpExceptions.hpp"
 # include "./HttpSevereExceptions.hpp"
+# include "./server/ServerManager.hpp"
+# include "./Ip.hpp"
 
 # define RX_SIZE 1024
 
@@ -38,38 +40,34 @@ class Socket : public IEventHandler
 				const char* what() const throw();
 		};
 	
-		Socket(int fd, EventMonitoring&	em, Server& ctx, 
-			const sockaddr_in& sockAddr);
-		Socket(const Socket& obj);
+		Socket(int fd, const std::pair<Ip, size_t>& sockAddr,
+				ServerManager& sm);
 		~Socket();
-		Socket& 			operator=(const Socket& obj);
+		
 		bool 				operator==(const Socket& obj);
 		int					getSocket() const;
 		HttpRequest&		getReq();
 		HttpResponse&		getResp();
-		Server& 			getCtx();
 		Buffer&				getTxBuffer();
-		EventMonitoring&	getEventMonitoring();
+		ServerManager&		getSM();
 		void				reset();
 		void				onReadEvent(int fd, int type, EventMonitoring& em);
 		void				onWriteEvent(int fd, int type, EventMonitoring& em);
 		void				onCloseEvent(int fd, int type, EventMonitoring& em);
-		static std::string 				getReadableIp(
-			const struct sockaddr_in& addr);
 	private:
-		const int			_fd;
-		HttpRequest 		_req;
-		HttpResponse 		_resp;
-		EventMonitoring&	_em;
-		Server&				_ctx;
-		std::string			_remoteIp;
-		Buffer				_rxBuffer;
-		Buffer				_txBuffer;
-		bool				_reset;
-		bool				_keepAlive;
-		ResponseHandling	_rHandler;
-		
-		
+		Socket(const Socket& obj);
+		Socket& 			operator=(const Socket& obj);
+
+		const int					_fd;
+		const std::pair<Ip, size_t> _sockAddr;
+		HttpRequest 				_req;
+		HttpResponse 				_resp;
+		Buffer						_rxBuffer;
+		Buffer						_txBuffer;
+		bool						_reset;
+		bool						_keepAlive;
+		ResponseHandling			_rHandler;
+		ServerManager&				_sm;
 };
 
 #endif
