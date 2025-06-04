@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 21:06:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 22:17:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 class ServerListener : public IEventHandler
 {
     public:
-        ServerListener(const std::pair<Ip, size_t>& addr, SocketManager& sockm, 
+        ServerListener(const Endpoint& addr, SocketManager& sockm, 
                 ServerManager& servm);
         ~ServerListener();
         bool    		listenSocket(EventMonitoring& em);
@@ -37,7 +37,7 @@ class ServerListener : public IEventHandler
 		ServerListener(const ServerListener& obj);
 		ServerListener& operator=(const ServerListener& obj);
 		
-        const std::pair<Ip, size_t> _addr;
+        const Endpoint&             _addr;
 		int				            _serverSocket;
 		SocketManager&	            _sockm;
         ServerManager&              _servm;

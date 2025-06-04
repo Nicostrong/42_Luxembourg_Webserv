@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:52:43 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 22:06:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 22:16:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,5 @@ Endpoint Endpoint::getEndpoint(sockaddr_in endpoint)
 {
     LOG_DEB(Ip(endpoint.sin_addr.s_addr).getIpString());
     LOG_DEB(endpoint.sin_port);
-    return (Endpoint(Ip(endpoint.sin_addr.s_addr),  htons(endpoint.sin_port)));
+    return (Endpoint(Ip(endpoint.sin_addr.s_addr), htons(endpoint.sin_port)));
 }

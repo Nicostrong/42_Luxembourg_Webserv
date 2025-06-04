@@ -6,14 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:39:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 21:52:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 22:18:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../includes/ServerListener.hpp"
 
 
-ServerListener::ServerListener(const std::pair<Ip, size_t>& addr, 
+ServerListener::ServerListener(const Endpoint& addr, 
 	SocketManager& sockm, ServerManager& servm) 
 	: _addr(addr), _serverSocket(-1), _sockm(sockm), _servm(servm) {}
 
@@ -28,8 +28,8 @@ bool ServerListener::listenSocket(EventMonitoring& em)
     sockaddr_in		addr;
 
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(this->_addr.second);
-	addr.sin_addr.s_addr = this->_addr.first.getIpBytes();
+	addr.sin_port = htons(this->_addr.getPort());
+	addr.sin_addr.s_addr = this->_addr.getIp().getIpBytes();
 
     try
     {
@@ -48,16 +48,16 @@ bool ServerListener::listenSocket(EventMonitoring& em)
         if (listen(this->_serverSocket, 16) == -1)
 			throw std::runtime_error("Failed to listen");
 
-        std::cout << "Listening to " << this->_addr.first.getIpString() 
-                << ":" <<this->_addr.second << std::endl;
+        std::cout << "Listening to " << this->_addr.getIp().getIpString() 
+                << ":" <<this->_addr.getPort() << std::endl;
         em.monitor(this->_serverSocket, POLLIN, EventData::SERVER, 
             *this);
         return (true);
     }
     catch(const std::exception& e)
     {
-        std::cerr << "Failed to listen to " << this->_addr.first.getIpString() 
-                    << ":" << this->_addr.second << std::endl;
+        std::cerr << "Failed to listen to " << this->_addr.getIp().getIpString() 
+                    << ":" << this->_addr.getPort() << std::endl;
 
         if (this->_serverSocket > 2)
             close(this->_serverSocket);
