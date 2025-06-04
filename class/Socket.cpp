@@ -3,26 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 11:18:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:24:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Socket.hpp"
-#include "../includes/server/Server.hpp"
+#include "../includes/SocketManager.hpp"
 #include "../includes/RequestHandling.hpp"
 
-Socket::Socket(int fd, const std::pair<Ip, size_t>& sockAddr, ServerManager& sm)
+Socket::Socket(int fd, const std::pair<Ip, size_t>& sockAddr, ServerManager& sm, SocketManager& sockm)
 	: _fd(fd), _sockAddr(sockAddr), _resp(), _rxBuffer(RX_SIZE), 
-	  _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), _keepAlive(true), _sm(sm)
+	  _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), _keepAlive(true), _sm(sm), _sockm(sockm)
 	{
 		this->_req 		= HttpRequest(this->_sockAddr.first.getIpString());
 		LOG_DEB(this->_sockAddr.first.getIpString() + " opened connection");
 	}
 
-Socket::~Socket() {}
+Socket::~Socket() 
+{
+	if (this->_fd > 2)
+		close(this->_fd);
+	LOG_DEB(this->_sockAddr.first.getIpString() + " closed connection");
+}
 
 bool Socket::operator==(const Socket& obj)
 {
@@ -101,7 +106,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 			this->_resp.setStatusCode((HttpBase::HttpCode)e.getCode());
 			this->_rHandler.init(*this);
 			em.unmonitor(fd);
-			//this->_ctx.onSocketClosedEvent(*this);
+			this->_sockm.remove(*this, em);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
 		}
@@ -109,7 +114,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	catch(const std::exception& e)
 	{
 		LOG_DEB(e.what());
-		//this->_ctx.onSocketClosedEvent(*this);
+		this->_sockm.remove(*this, em);
 	}
 }
 
@@ -132,7 +137,7 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 		{
 			if (!this->_keepAlive)
 			{
-				//this->_ctx.onSocketClosedEvent(*this);
+				this->_sockm.remove(*this, em);
 				return ;
 			}
 			this->_req = HttpRequest(this->_sockAddr.first.getIpString());
@@ -147,14 +152,14 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 	}
 	catch(const std::exception& e)
 	{
-		//this->_ctx.onSocketClosedEvent(*this);
+		this->_sockm.remove(*this, em);
 	}
 	(void)type;
 }
 
 void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
 {
-	//this->_ctx.onSocketClosedEvent(*this);
+	this->_sockm.remove(*this, em);
 	(void)fd;
 	(void)em;
 	(void)type;

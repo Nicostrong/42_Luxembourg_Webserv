@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 15:13:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:17:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # define RX_SIZE 1024
 
-class Server;
+class SocketManager;
 
 class Socket : public IEventHandler
 {
@@ -41,7 +41,7 @@ class Socket : public IEventHandler
 		};
 	
 		Socket(int fd, const std::pair<Ip, size_t>& sockAddr,
-				ServerManager& sm);
+				ServerManager& sm, SocketManager& sockm);
 		~Socket();
 		
 		bool 				operator==(const Socket& obj);
@@ -68,6 +68,7 @@ class Socket : public IEventHandler
 		bool						_keepAlive;
 		ResponseHandling			_rHandler;
 		ServerManager&				_sm;
+		SocketManager&				_sockm;
 };
 
 #endif

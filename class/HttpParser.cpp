@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 10:10:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:03:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ HttpParser::HttpParser(const HttpParser& obj) : HttpBase(obj),
 	this->_headBuffer.reserve(HEAD_BSIZE);
 }
 
-HttpParser::~HttpParser() {}
+HttpParser::~HttpParser() 
+{
+	if (this->_reqBody)
+		delete this->_reqBody;
+}
 
 HttpParser& HttpParser::operator=(const HttpParser& obj)
 {

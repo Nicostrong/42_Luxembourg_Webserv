@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:25:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 10:31:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:17:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class SocketManager
 		~SocketManager();
 
 		void	add(Socket& sock, EventMonitoring& em);
+		void	remove(Socket& sock, EventMonitoring& em);
 	private:
 		SocketManager(const SocketManager& obj);
 		SocketManager& operator=(const SocketManager& obj);

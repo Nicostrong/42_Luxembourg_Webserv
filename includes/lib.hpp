@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/05/30 13:59:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:42:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,19 @@ struct t_string
 #define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
 
 # if DEBUG
-#  define LOG_DEB(msg)	std::cout << CYAN << "[DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
+#  define LOG_DEB(msg)	std::cout << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
 # else
 #  define LOG_DEB(msg)
 # endif
 
-# define LOG_ERROR(msg)	std::cerr << RED << "[ERROR] " << msg << " in " << PRINT_INFOS() << RESET << std::endl
+# define LOG_ERROR(msg)	std::cerr << RED << "[" << getCurrentTimeStr()  << "] [ERROR] " << msg << " in " << PRINT_INFOS() << RESET << std::endl
+
+inline std::string getCurrentTimeStr() {
+    char buffer[9];
+    time_t t = std::time(NULL);
+    struct tm* tm_info = std::localtime(&t);
+    std::strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
+    return std::string(buffer);
+}
 
 #endif

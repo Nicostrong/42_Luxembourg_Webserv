@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 11:06:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 18:43:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,10 @@ EventMonitoring::EventMonitoring(const EventMonitoring &obj)
 
 EventMonitoring::~EventMonitoring() 
 {
-	LOG_DEB("Epoll closed");
 	std::list<epoll_event>::const_iterator it = this->_openFds.begin();
 	while (it != _openFds.end())
 	{
 		EventData *data = static_cast<EventData *>(it->data.ptr);
-		if (data->getFd() > 2)
-		{
-			epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, data->getFd(), NULL);
-			close(data->getFd());
-		}
 		delete data;
 		++it;
 	}
