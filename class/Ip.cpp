@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ip.cpp                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:49:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 11:19:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 16:53:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,15 @@ in_addr_t Ip::ipv4StringToBytes(const std::string& ip)
     if (i < 4)
         throw std::runtime_error("Invalid IP");
     
-    return (ipBytes);
+    return (htonl(ipBytes));
 }
 
 std::string Ip::ipv4BytesToString(in_addr_t ip)
 {
+    
     std::stringstream ss;
    
+    ip = htonl(ip);
     ss << ((ip >> 24) & 0xFF) << "." 
        << ((ip >> 16) & 0xFF) << "." 
        << ((ip >> 8) & 0xFF) << "." 
