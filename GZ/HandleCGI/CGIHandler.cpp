@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 16:24:15 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:40:45 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void HandleCGI::DoCGI(const char *cmd_list[3], std::string& output, EventMonitor
         receive_data_from_cgi.closeOut();
         execve(cmd_list[0], (char * const *)cmd_list, environ);
         _exit(1);
-    }
+    } 
     else {
         char buffer[1024];
         send_data_to_cgi.closeOut();
