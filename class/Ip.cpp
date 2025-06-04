@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ip.cpp                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:49:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 21:34:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:19:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,9 @@ size_t  Ip::getOctetDecimalValue(const std::string& o)
         throw std::runtime_error("Invalid IP");
 
     return (result);
+}
+
+bool				Ip::operator<(const Ip& other) const
+{
+    return (this->_ipBytes < other._ipBytes);
 }

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:45 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/18 11:20:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 13:12:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,54 @@ int			ServerManager::getNbServer( void ) const
 	return (this->_nbServer);
 }
 
-/*	ADD SOME GETTER A CHECKER	*/
+/*	retourne un set d ip:port de tout les servers de la config */
+const std::set<std::pair< Ip , size_t> >	ServerManager::getSocketSet( void )
+{
+	std::set<std::pair<Ip, size_t> >						retSet;
+	std::map<size_t, std::vector<Server*> >::iterator		itMap;
 
+	for (itMap = this->_mServers.begin(); itMap != this->_mServers.end(); ++itMap)
+	{
+		std::vector<Server* >::iterator		itVec;
+
+		for (itVec = itMap->second.begin(); itVec != itMap->second.end(); ++itVec)
+			retSet.insert(std::make_pair((*itVec)->getIp(), itMap->first));
+	}
+	return (retSet);
+}
+
+/*	rertourne le server qui match avec host, ip et hostname	*/
+const Server*		ServerManager::getMatchingServer( const Ip& ip, size_t port, const std::string& host ) const
+{
+	std::map<size_t, std::vector<Server*> >::const_iterator		findIt;
+	const Server*												fallbackServer = NULL;
+	std::vector<Server*>::const_iterator						serverIt;
+
+	findIt = _mServers.find(port);
+	if (findIt == _mServers.end()) 
+		return (NULL);
+
+	for (serverIt = findIt->second.begin(); serverIt != findIt->second.end(); ++serverIt) 
+	{
+		const Server*		server = *serverIt;
+		
+		if (server->getIp().getIpBytes() == ip.getIpBytes() ||
+			server->getIp().getIpString() == "0.0.0.0") 
+		{
+			const std::list<std::string>&				hostList = server->getHost();
+			std::list<std::string>::const_iterator		hostIt;
+
+			for (hostIt = hostList.begin(); hostIt != hostList.end(); ++hostIt) 
+				if (*hostIt == host) 
+					return (server);
+        }
+		if (!fallbackServer) 
+			fallbackServer = server;
+	}
+	return (fallbackServer);
+}
+
+/*	ADD SOME GETTER A CHECKER	*/
 const Location*		ServerManager::getLocationForUri( const Server* server, const std::string& uri ) const
 {
 	const std::map<std::string, Location*>&					locations = server->getAllLocation();

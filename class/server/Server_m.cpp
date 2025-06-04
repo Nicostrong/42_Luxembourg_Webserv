@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_m.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:19:37 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:51:57 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 13:14:08 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ std::ostream	&operator<<( std::ostream &out, Server const &src_object )
 		out << "\t- " << *itHost << std::endl;
 
 	out << RESET <<std::endl
-		<< GREEN << "Listen adress:\n\t" << src_object.getServerIp() << RESET << std::endl
+		<< GREEN << "Listen adress:\n\t" << src_object.getIp().getIpString() << RESET << std::endl
 		<< GREEN << "Listen port:" << RESET << std::endl;
 	for ( itPort = ports.begin(); itPort != ports.end(); ++itPort)
    		out << GREEN << "\t- " << *itPort << RESET << std::endl;

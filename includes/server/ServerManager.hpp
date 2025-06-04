@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/30 13:59:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 13:12:09 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SERVERMANAGER_HPP
 
 # include "../server/Server.hpp"
+# include "../Ip.hpp"
 
 class	Token;
 
@@ -45,6 +46,10 @@ class	ServerManager
 		~ServerManager( void );
 
 		/*	GETTER	*/
+		/*	retourne un set d ip:port de tout les servers de la config */
+		const std::set<std::pair<Ip , size_t> >		getSocketSet( void );
+		/*	rertourne le server qui match avec host, ip et hostname	*/
+		const Server*			getMatchingServer( const Ip& ip, size_t port, const std::string& host ) const;
 		/*	retourne le server qui correspond au hostname et port	*/
 		const Server*			getServer( size_t port, std::string host ) const;
 		/*	retourne la loction correspondant a l uri	*/

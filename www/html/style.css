@@ -1,59 +1,118 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   style.css                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 08:02:11 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/06/04 08:32:59 by nfordoxc         ###   Luxembourg.lu     */
+/*                                                                            */
+/* ************************************************************************** */
+
 body {
     font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: #87afb4;
+    margin: 0;
 }
 
-.title {
-    display: flex;
-    align-self: flex-start;
+.header {
+    background-image: url("./images/Dream_Team_42.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     text-align: center;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    height: 120px;;
+    top: 0;
+    left: 0;
+}
+
+.header h1 {
     color: blue;
 }
 
 .navbar {
-    display: block;
+    position: fixed;
+    top: 150px;
+    width: 100%;
     height: 50px;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px dashed black;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
 }
 
 .container {
     background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: left;
 }
 
-.line {
-    margin-top: 1em;
-    padding-top: 1em;
-    border-top: thin dashed burlywood;
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.title {
+    color: blue;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-size: 14px;
+    color: #555;
+}
+
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 button {
-    background: #007bff;
+    background: #6e8efb;
     color: white;
-    padding: 10px 15px;
     border: none;
+    padding: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 16px;
+    transition: background 0.3s;
 }
 
 button:hover {
-    background: #0056b3;
+    background: #4c6ef5;
 }
 
-a:link {
-    color: red;
-}
 a:hover {
-    color: yellow;
-}
-
-a:visited {
-    color: white;
+    cursor: help;
 }

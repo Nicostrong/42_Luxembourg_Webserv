@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/27 08:56:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 10:56:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
+# include "../Ip.hpp"
 # include "../lib.hpp"
 # include "../Socket.hpp"
 # include "../Ressource.hpp"
@@ -41,7 +42,7 @@ class	Server : public IEventHandler
 		size_t									_maxSizeBody;
 		std::string								_path;
 		std::string								_index;
-		std::string								_serverIp;
+		Ip										_serverIp;
 		std::list<size_t>						_lPorts;
 		std::list<std::string>					_lHost;
 		std::list<Directive *>					_lDirectives;
@@ -82,8 +83,9 @@ class	Server : public IEventHandler
 
 		const std::string&		getPath( void ) const;
 		const std::string&		getIndex( void ) const;
-		const std::string&		getServerIp( void ) const;
 		const std::string&		getPathError( size_t error_code ) const;
+
+		const Ip&				getIp( void ) const;
 
 		const std::list<size_t>&		getPortList( void ) const;
 

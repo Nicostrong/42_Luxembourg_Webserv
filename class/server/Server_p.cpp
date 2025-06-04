@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_p.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:02 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/04 10:14:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		Server::setAttributs( void )
 		if (key == "listen")
 			setPort(values);
 		if (key == "host")
-			this->_serverIp = *values.begin();
+			this->_serverIp = Ip(*values.begin());
 		else if (key == "root")
 			this->_path = *values.begin();
 		else if (key == "server_name")

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ip.hpp                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:49:43 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/03 21:33:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:18:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class Ip
 {
-    public:
+	public:
 		Ip(const in_addr_t ipv4);
 		Ip(const std::string& ipv4);
 		Ip(const Ip& obj);
@@ -25,9 +25,11 @@ class Ip
 		Ip&					operator=(const Ip& obj);
 		in_addr_t			getIpBytes() const;
 		const std::string&	getIpString() const;
-		static in_addr_t ipv4StringToBytes(const std::string& ip);
-		static std::string ipv4BytesToString(in_addr_t ip);
-    private:
+		static in_addr_t	ipv4StringToBytes(const std::string& ip);
+		static std::string	ipv4BytesToString(in_addr_t ip);
+		bool				operator<(const Ip& other) const;
+		
+	private:
 		static bool		isDigits(const std::string& str);
 		static size_t	getOctetDecimalValue(const std::string& o);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_gs.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:35:34 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 21:10:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 10:57:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,9 @@ const std::string&		Server::getIndex( void ) const
 }
 
 /*
- *	get _serverIp value
+ *	get the objetc Ip of the server
  */
-const std::string&		Server::getServerIp( void ) const
+const Ip&				Server::getIp( void ) const
 {
 	return (this->_serverIp);
 }

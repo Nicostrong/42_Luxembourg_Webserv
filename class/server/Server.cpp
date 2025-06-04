@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/27 08:56:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/04 10:16:42 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  */
 Server::Server( Token*& serverTokensConfig, EventMonitoring &eventMonitoring) 
 	: _maxClient(1), _serverSocket(0), _maxSizeBody(1024), _path("/www/html"),
-	_index("index.html"), _serverIp(SERVER_IP), _em(eventMonitoring)
+	_index("index.html"), _serverIp(Ip(SERVER_IP)), _em(eventMonitoring)
 {
 	try
 	{
@@ -71,8 +71,6 @@ int	main( void )
 		Server	s(hg.getwebconfMap());
 		assert(s.getPort() == 8080);
 		std::cout << "✅ [OK] get Port test passed." << std::endl;
-		assert(s.getAdress() == "127.0.0.1");
-		std::cout << "✅ [OK] get Adress test passed." << std::endl;
 		assert(s.getName() == "localhost");
 		std::cout << "✅ [OK] get Name test passed." << std::endl;
 		assert(s.getPath() == "./www/html");

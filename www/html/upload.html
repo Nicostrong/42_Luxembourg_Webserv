@@ -4,16 +4,19 @@
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
-		<div class="title" style="text-align: center;">
-			<p>Welcone on the upload page of this WebServer.</p>
+		<div class="header">
+			<h1>Welcone on the WebServer of GneugneuTeam.</h1>
+		</div>
+		<div class="navbar">
+			<a	href="./index.html">Index</a>
 		</div>
         <div class="container">
-            <form action="../uploads/toto2" method="POST" enctype="multipart/form-data">
-                <label for="file">Select file to upload 1:</label>
-                <input type="file" name="file1" id="file1">
-                <label for="file">Select file to upload 2:</label>
-                <input type="file" name="file2" id="file2">
-                <input class="buton" type="submit" value="Upload"> 
+            <form action="upload_script.php" method="POST" enctype="multipart/form-data">
+                <p><label for="file">Select file to upload 1:</label></p>  
+                <p><input type="file" name="file1" id="file1"></p>
+                <p><label for="file">Select file to upload 2:</label></p>
+                <p><input type="file" name="file2" id="file2"></p>
+                <p><input class="buton" type="submit" value="Upload"></p>
             </form>
         </div>
 	</body>
