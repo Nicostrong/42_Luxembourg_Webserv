@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 14:07:52 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:05:39 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,15 @@ std::string HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 
 //"/usr/bin/python3", "update_register_newsletter.py"
 
-void HandleCGI::UpdateNewsLetter(const char *compiler, const char *script)
+void HandleCGI::UpdateNewsLetter(const char *compiler, const char *script, const char *newvalue)
 {
-	const char *cmd_list[] = { compiler, script, "abc", NULL};
+	const char *cmd_list[] = { compiler, script, newvalue, NULL};
 	std::cout << DoCGI(cmd_list);
 }
 
-void HandleCGI::UpdateShowData(const char *compiler, const char *script)
+void HandleCGI::UpdateShowData(const char *compiler, const char *script, const char *newvalue)
 {
-	const char *cmd_list[] = { compiler, script, "abc", "abc", "abc", "abc", NULL};
+	const char *cmd_list[] = { compiler, script, newvalue, newvalue, newvalue, newvalue, NULL};
 	std::cout << DoCGI(cmd_list);
 }
 
