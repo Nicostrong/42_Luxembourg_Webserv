@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 16:40:45 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/04 17:13:58 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ HandleCGI& HandleCGI::operator=(HandleCGI& copy)
 	return (*this);
 }
 
-void HandleCGI::DoCGI(const char *cmd_list[3], std::string& output, EventMonitoring& em)
+void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 {
     Pipe send_data_to_cgi();
     Pipe receive_data_from_cgi();
@@ -69,13 +69,13 @@ void HandleCGI::DoCGI(const char *cmd_list[3], std::string& output, EventMonitor
         _exit(1);
     } 
     else {
-        char buffer[1024];
+        //char buffer[1024];
         send_data_to_cgi.closeOut();
         receive_data_from_cgi.closeIn();
-        ssize_t count;
+        /*ssize_t count;
         while ((count = read(receive_data_from_cgi.getOut(), buffer, sizeof(buffer))) > 0) {
             output.append(buffer, count);
-        }
+        }*/
     }
     return ;
 }
@@ -95,11 +95,30 @@ void HandleCGI::UpdateShowData(const char *compiler, const char *script, const c
 }
 
 void HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
-{   
-    
+{
     (void)fd;
     (void)type;
     (void)em;
+
+    char buffer[1024];
+    ssize_t count;
+
+    count = read(fd, buffer, sizeof(buffer));
+    if (count > 0)
+    {
+        this->output.append(buffer, count);
+    }
+    else if (count == 0)
+    {
+        em.unmonitor(fd);
+        close(fd);
+    }
+    else
+    {
+        std::cerr << "Error reading from CGI pipe\n";
+        em.unmonitor(fd);
+        close(fd);
+    }
     return ;
 }
 void HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
@@ -107,6 +126,28 @@ void HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
     (void)fd;
     (void)type;
     (void)em;
+
+    // Assume you have a member buffer _cgiInput and an offset _cgiInputSent
+    if (_cgiInput.size() > _cgiInputSent) {
+        ssize_t written = write(fd, _cgiInput.c_str() + _cgiInputSent, _cgiInput.size() - _cgiInputSent);
+        if (written > 0) {
+            _cgiInputSent += written;
+            if (_cgiInputSent == _cgiInput.size()) {
+                // All data sent, close write end and stop monitoring
+                em.unmonitor(fd);
+                close(fd);
+            }
+        } else if (written < 0) {
+            std::cerr << "Error writing to CGI pipe\n";
+            em.unmonitor(fd);
+            close(fd);
+        }
+    } else {
+        // Nothing to write, close write end
+        em.unmonitor(fd);
+        close(fd);
+    }
+    
     return ;
 }
 void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
@@ -114,5 +155,14 @@ void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
     (void)fd;
     (void)type;
     (void)em;
+    
+    em.unmonitor(fd);
+    close(fd);
+    // Optionally, reset or clear any member state related to this CGI process
+    _cgiInput.clear();
+    _cgiOutput.clear();
+    _cgiInputSent = 0;
+    // You may want to log or handle the CGI completion here
+    
     return ;
 }
