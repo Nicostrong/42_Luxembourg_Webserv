@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 10:37:50 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:04:02 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "./../http/HttpResponse.hpp"
 # include "./../server/Server.hpp"
 # include "./CGI.hpp"
+# include "./HandleCGI.hpp"
 
 class RequestHandling: public HttpBase
 {

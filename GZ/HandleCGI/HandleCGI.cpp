@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CGIHandler.cpp                                     :+:      :+:    :+:   */
+/*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 10:19:34 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 10:42:42 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "CGIHandler.hpp"
+#include "HandleCGI.hpp"
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>

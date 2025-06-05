@@ -1,16 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CGIHandler.hpp                                     :+:      :+:    :+:   */
+/*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/05 10:08:34 by gzenner          ###   ########.fr       */
-=======
-/*   Updated: 2025/06/05 09:55:47 by fdehan           ###   ########.fr       */
->>>>>>> 57ecd7f1a96ced8d81fbf58b3791aecd59b5d6a7
+/*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
+/*   Updated: 2025/06/05 11:05:48 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +41,7 @@ class HandleCGI: public IEventHandler
 		void onWriteEvent(int fd, int type, EventMonitoring& em);
 		void onCloseEvent(int fd, int type, EventMonitoring& em);
 		void string_to_map(std::string& data);
-		void getQueryString(std::string& request, std::string& data);
+		//void getQueryString(std::string& request, std::string& data);
 };
 
 #endif
