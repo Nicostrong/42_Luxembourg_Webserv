@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:28:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:56:15 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@
 # include "./../http/HttpExceptions.hpp"
 # include "./../http/HttpSevereExceptions.hpp"
 # include "./../handling/ResponseHandling.hpp"
-
-
-
-
-
 
 # define RX_SIZE 1024
 

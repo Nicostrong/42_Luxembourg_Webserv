@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BodyParsing.hpp                                    :+:      :+:    :+:   */
+/*   BodyParser.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -23,18 +23,18 @@
 
 class Socket;
 
-class BodyParsing
+class BodyParser
 {
 	public:
-		BodyParsing(size_t bufferSize);
-		~BodyParsing();
+		BodyParser(size_t bufferSize);
+		~BodyParser();
 		const std::string&		getTmpFileName() const;
 		void					moveBodyFile(const std::string& name);
 		bool 					onBodyReceived(Buffer& buff, Socket& sock);
 		
 	private:
-		BodyParsing(const BodyParsing& obj);
-		BodyParsing&			operator=(const BodyParsing& obj);
+		BodyParser(const BodyParser& obj);
+		BodyParser&			operator=(const BodyParser& obj);
 		void					onBodyReceivedLength(Buffer& buff, size_t bodyLen);
 		void 					onBodyReceivedTE(Buffer& buff);
 		size_t					writeInMemory(Buffer& buff, size_t max);

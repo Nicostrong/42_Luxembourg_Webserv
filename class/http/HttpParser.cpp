@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:11:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:55:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void HttpParser::setState(HttpParser::State state)
 	this->_state = state;
 }
 
-BodyParsing* HttpParser::getBody() const
+BodyParser* HttpParser::getBody() const
 {
 	return (this->_reqBody);
 }
@@ -216,6 +216,6 @@ bool HttpParser::handleHeaders(Buffer& buff)
 bool HttpParser::handleBody(Buffer& buff, Socket& sock)
 {
 	if (!this->_reqBody)
-		this->_reqBody = new BodyParsing(0);
+		this->_reqBody = new BodyParser(0);
 	return (this->_reqBody->onBodyReceived(buff, sock));
 }

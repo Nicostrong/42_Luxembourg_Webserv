@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:10:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:55:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void RequestHandling::handleBody(Socket& sock)
 {
 	//SHould handle everything else than upload
 	HttpRequest* req = &sock.getReq();
-	BodyParsing* body = req->getBody();
+	BodyParser* body = req->getBody();
 	HttpResponse* resp = &sock.getResp();
 	std::string	path = req->getPathTranslated();
 	

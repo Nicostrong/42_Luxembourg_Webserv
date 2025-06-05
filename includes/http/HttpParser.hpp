@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:19:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:57:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define HTTPPARSER_HPP
 
 # include "./../utils/Buffer.hpp"
-# include "./../networking/BodyParsing.hpp"
+# include "./../networking/BodyParser.hpp"
 # include "./HttpBase.hpp"
 # include "./HttpExceptions.hpp"
 
@@ -45,7 +45,7 @@ class HttpParser : public HttpBase
 		
 		void 					setState(State state);
 		State					getState() const;
-		BodyParsing*			getBody() const;
+		BodyParser*			getBody() const;
 	protected:
 		HttpParser();
 		
@@ -61,7 +61,7 @@ class HttpParser : public HttpBase
 		std::string				_slBuffer;
 		std::string				_headBuffer;
 		std::string				_queryParams;
-		BodyParsing*			_reqBody;
+		BodyParser*			_reqBody;
 		
 };
 
