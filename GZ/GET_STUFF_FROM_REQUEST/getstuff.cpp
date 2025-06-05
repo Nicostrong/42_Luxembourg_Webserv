@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 10:19:09 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 13:11:42 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ void string_to_map(std::string& data, std::map<std::string, std::string>& datama
     datamap[key] = value;
 }
 
+void map_to_chartab(std::map<std::string, std::string>& datamap)
+{
+    size_t i = 0;
+    char const** newenviron = (char const**)malloc(datamap.size() * sizeof(char const*) * 2);
+    for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
+    {
+        newenviron[i++] = it->first.c_str();
+        newenviron[i++] = it->second.c_str();
+        std::cout << "[debug key]" << newenviron[i-2] << ":";
+        std::cout << "[debug value]" << newenviron[i-1] << ".\n";
+    }
+}
+
 int main()
 {
     std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
@@ -48,5 +61,6 @@ int main()
     std::map<std::string, std::string> datamap;
     getQueryString(request, data);
     string_to_map(data, datamap);
+    map_to_chartab(datamap);
     return (0);
 }
