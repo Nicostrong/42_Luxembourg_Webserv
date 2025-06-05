@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 09:16:19 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 10:08:12 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,4 +202,28 @@ void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
     output.clear();
 
     return ;
+}
+
+//Function goes into CGI - splits the string into map values
+void HandleCGI::string_to_map(std::string& data)
+{
+    std::string tmp = data;
+    while(tmp.find("&") != std::string::npos)
+    {
+        std::string snippet = tmp.substr(0, tmp.find("&"));
+        std::cout << "[debug snippet]" << snippet << "\n";
+        tmp = tmp.substr(tmp.find("&") + 1);
+        std::string key = snippet.substr(0, snippet.find("="));
+        std::cout << "[debug key]" << key << ".\n";
+        std::string value = snippet.substr(snippet.find("=") + 1);
+        std::cout << "[debug value]" << value << ".\n";
+        datamap[key] = value;
+    }
+    std::string snippet = tmp.substr(0, tmp.find("&"));
+    std::cout << "[debug snippet]" << snippet << "\n";
+    std::string key = snippet.substr(0, snippet.find("="));
+    std::cout << "[debug key]" << key << ".\n";
+    std::string value = snippet.substr(snippet.find("=") + 1);
+    std::cout << "[debug value]" << value << ".\n";
+    datamap[key] = value;
 }

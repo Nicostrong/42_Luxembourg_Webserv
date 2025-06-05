@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 08:42:08 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 10:08:34 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class HandleCGI: public IEventHandler
 		std::string output;
 		std::string input;
 		size_t input_sent;
+		std::map<std::string, std::string>& datamap;
 	public:
 		HandleCGI();
 		HandleCGI(HandleCGI& copy);
@@ -39,6 +40,7 @@ class HandleCGI: public IEventHandler
 		void onReadEvent(int fd, int type, EventMonitoring& em);
 		void onWriteEvent(int fd, int type, EventMonitoring& em);
 		void onCloseEvent(int fd, int type, EventMonitoring& em);
+		void string_to_map(std::string& data);
 };
 
 #endif
