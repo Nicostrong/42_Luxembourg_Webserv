@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 11:05:25 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:08:51 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,8 +267,8 @@ void RequestHandling::handleGet(Socket& sock)
 	if (isCGI(sock))
 	{
 		getQueryString(request);
-		HandleCGI hcgi;
-		hcgi.
+		//HandleCGI hcgi;
+		//hcgi.string_to_map(data);
 		return ;
 	}
 		

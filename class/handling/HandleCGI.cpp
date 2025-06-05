@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 11:05:41 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 11:15:54 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@ I think we have to add a function to the Parsing that initiates all these to NUL
 HandleCGI::HandleCGI()
 {
     
+}
+
+HandleCGI::HandleCGI(std::string& _data)
+{
+    this->data = _data;
+    string_to_map();
 }
 
 HandleCGI::~HandleCGI()
@@ -205,7 +211,7 @@ void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
 }
 
 //Function goes into CGI - splits the string into map values
-void HandleCGI::string_to_map(std::string& data)
+void HandleCGI::string_to_map()
 {
     std::string tmp = data;
     while(tmp.find("&") != std::string::npos)
@@ -221,13 +227,3 @@ void HandleCGI::string_to_map(std::string& data)
     std::string value = snippet.substr(snippet.find("=") + 1);
     datamap[key] = value;
 }
-
-/*// this goes somewhere before CGI and gets us the string to pass to CGI
-void HandleCGI::getQueryString(std::string& request, std::string& data)
-{
-    if (request.find("?") != std::string::npos)
-    {
-        request = request.substr(request.find("?") + 1);
-        data = request.substr(0, request.find_first_of(" \t"));
-    }
-}*/
