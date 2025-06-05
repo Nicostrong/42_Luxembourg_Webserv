@@ -6,14 +6,12 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 17:24:47 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 08:42:08 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HandleCGI_HPP
 #define HandleCGI_HPP
-
-#define ERROR "ERROR\n"
 
 #include <iostream>
 #include <string>
