@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/05 09:44:34 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/05 09:49:43 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -352,8 +352,13 @@ deb_par:		parser
 clean:
 	$(call delete_progress, *.o)
 	$(call delete_progress, ../class/*.o)
-	$(call delete_progress, ../class/parsing/*.o)
 	$(call delete_progress, ../class/server/*.o)
+	$(call delete_progress, ../class/parser/*.o)
+	$(call delete_progress, ../class/events/*.o)
+	$(call delete_progress, ../class/handling/*.o)
+	$(call delete_progress, ../class/http/*.o)
+	$(call delete_progress, ../class/networking/*.o)
+	$(call delete_progress, ../class/utils/*.o)
 
 fclean: 	clean
 	$(call delete_file, $(SERVER_NAME))
