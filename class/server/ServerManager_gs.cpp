@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_gs.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:45 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 23:26:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 07:41:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int			ServerManager::getNbServer( void ) const
 /*	retourne un set d ip:port de tout les servers de la config */
 const std::set<std::pair< Ip , size_t> >	ServerManager::getSocketSet( void ) const
 {
-	std::set<std::pair<Ip, size_t> >						retSet;
+	std::set<std::pair<Ip, size_t> >							retSet;
 	std::map<size_t, std::vector<Server*> >::const_iterator		itMap;
 
 	for (itMap = this->_mServers.begin(); itMap != this->_mServers.end(); ++itMap)
@@ -88,9 +88,9 @@ const std::set<std::pair< Ip , size_t> >	ServerManager::getSocketSet( void ) con
 const Server*		ServerManager::getMatchingServer( const Ip& ip, size_t port, const std::string& host ) const
 {
 	std::map<size_t, std::vector<Server*> >::const_iterator		findIt;
+	std::vector<Server*>::const_iterator						serverIt;
 	const Server*												defaultServer = NULL;
 	const Server*												ipMatchServer = NULL;
-	std::vector<Server*>::const_iterator						serverIt;
 
 	findIt = _mServers.find(port);
 	if (findIt == _mServers.end()) 
