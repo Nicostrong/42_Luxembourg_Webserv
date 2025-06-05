@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:55:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 10:26:08 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,13 +249,26 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 	return (true);
 }
 
+// this goes somewhere before CGI and gets us the string to pass to CGI
+void RequestHandling::getQueryString(std::string& request)
+{
+    if (request.find("?") != std::string::npos)
+    {
+        request = request.substr(request.find("?") + 1);
+        data = request.substr(0, request.find_first_of(" \t"));
+    }
+}
+
 void RequestHandling::handleGet(Socket& sock)
 {
 	if (isRedirect(sock))
 		return ;
 			
 	if (isCGI(sock))
+	{
+		getQueryString(request);
 		return ;
+	}
 		
 	if (isIndexFile(sock))
 		return ;

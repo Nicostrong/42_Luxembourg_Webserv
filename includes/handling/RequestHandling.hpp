@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:38:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 10:27:09 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ class RequestHandling: public HttpBase
 
 		static std::map<std::string, RequestHandling::HandlerFunc> 
 			initHandlers();
+		
+		// CGI
+		// CGI Variables	
+			std::string data;
+		// CGI Functions
+		void getQueryString(std::string& request);
 };
 
 #endif

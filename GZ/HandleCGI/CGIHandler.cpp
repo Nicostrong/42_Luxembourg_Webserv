@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 10:08:12 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 10:19:34 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,19 +211,23 @@ void HandleCGI::string_to_map(std::string& data)
     while(tmp.find("&") != std::string::npos)
     {
         std::string snippet = tmp.substr(0, tmp.find("&"));
-        std::cout << "[debug snippet]" << snippet << "\n";
         tmp = tmp.substr(tmp.find("&") + 1);
         std::string key = snippet.substr(0, snippet.find("="));
-        std::cout << "[debug key]" << key << ".\n";
         std::string value = snippet.substr(snippet.find("=") + 1);
-        std::cout << "[debug value]" << value << ".\n";
         datamap[key] = value;
     }
     std::string snippet = tmp.substr(0, tmp.find("&"));
-    std::cout << "[debug snippet]" << snippet << "\n";
     std::string key = snippet.substr(0, snippet.find("="));
-    std::cout << "[debug key]" << key << ".\n";
     std::string value = snippet.substr(snippet.find("=") + 1);
-    std::cout << "[debug value]" << value << ".\n";
     datamap[key] = value;
+}
+
+// this goes somewhere before CGI and gets us the string to pass to CGI
+void HandleCGI::getQueryString(std::string& request, std::string& data)
+{
+    if (request.find("?") != std::string::npos)
+    {
+        request = request.substr(request.find("?") + 1);
+        data = request.substr(0, request.find_first_of(" \t"));
+    }
 }

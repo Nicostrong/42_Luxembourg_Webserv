@@ -45,6 +45,7 @@ class HandleCGI: public IEventHandler
 		void onWriteEvent(int fd, int type, EventMonitoring& em);
 		void onCloseEvent(int fd, int type, EventMonitoring& em);
 		void string_to_map(std::string& data);
+		void getQueryString(std::string& request, std::string& data);
 };
 
 #endif
