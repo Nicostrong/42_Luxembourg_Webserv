@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 10:27:09 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 10:37:50 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ class RequestHandling: public HttpBase
 		
 		// CGI
 		// CGI Variables	
-			std::string data;
+		std::string data;
 		// CGI Functions
 		void getQueryString(std::string& request);
 };
