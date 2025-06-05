@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:01:48 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:09:11 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,13 @@ void string_to_map(std::string& data, std::map<std::string, std::string>& datama
 char * const* map_to_chartab(std::map<std::string, std::string>& datamap)
 {
     size_t i = 0;
-    char **newenviron = new char*[datamap.size() * 2];
+    char **newenviron = new char*[datamap.size() * 2 + 1];
     for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
     {
         newenviron[i++] = strdup(it->first.c_str());
         newenviron[i++] = strdup(it->second.c_str());
-        std::cout << "[debug key]" << newenviron[i-2] << ":";
-        std::cout << "[debug value]" << newenviron[i-1] << ".\n";
     }
+    newenviron[i] = NULL;
     return (newenviron);
 }
 
@@ -64,6 +63,11 @@ int main()
     getQueryString(request, data);
     string_to_map(data, datamap);
     char * const* newenviron = map_to_chartab(datamap);
+    size_t i = 0;
+    while(newenviron[i])
+    {
+        std::cout << "[debug]" << newenviron[i++] << "\n";
+    }
     delete[](newenviron);
     return (0);
 }
