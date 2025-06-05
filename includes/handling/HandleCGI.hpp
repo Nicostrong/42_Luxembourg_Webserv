@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:47:06 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:49:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class HandleCGI: public IEventHandler
 		void string_to_map();
 		char * const* map_to_chartab();
 		void initEnvironMapNULL();
+		void	completeEnvironMap( const Socket& socket );
 };
 
 #endif
