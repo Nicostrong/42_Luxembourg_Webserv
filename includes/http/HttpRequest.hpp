@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:19:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 15:44:06 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class HttpRequest : public HttpParser
 		void					setContentLength(size_t length);
 		void					setTE(bool state);
 		void					setServer(const Server& server);
+		const std::string&		getRemotIp( void ) const;
 		const Location* 		getLoc() const;
 		const std::string&		getPathTranslated() const;
 		const std::string&		getPathInfo() const;
