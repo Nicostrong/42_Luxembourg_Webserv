@@ -6,12 +6,13 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 13:48:14 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:01:48 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <map>
+#include <cstring>
 
 // this goes somewhere before CGI and gets us the string to pass to CGI
 void getQueryString(std::string& request, std::string& data)
@@ -41,14 +42,14 @@ void string_to_map(std::string& data, std::map<std::string, std::string>& datama
     datamap[key] = value;
 }
 
-char const** map_to_chartab(std::map<std::string, std::string>& datamap)
+char * const* map_to_chartab(std::map<std::string, std::string>& datamap)
 {
     size_t i = 0;
-    char const** newenviron = (char const**)malloc(datamap.size() * sizeof(char const*) * 2);
+    char **newenviron = new char*[datamap.size() * 2];
     for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
     {
-        newenviron[i++] = it->first.c_str();
-        newenviron[i++] = it->second.c_str();
+        newenviron[i++] = strdup(it->first.c_str());
+        newenviron[i++] = strdup(it->second.c_str());
         std::cout << "[debug key]" << newenviron[i-2] << ":";
         std::cout << "[debug value]" << newenviron[i-1] << ".\n";
     }
@@ -62,7 +63,7 @@ int main()
     std::map<std::string, std::string> datamap;
     getQueryString(request, data);
     string_to_map(data, datamap);
-    char const** newenviron = map_to_chartab(datamap);
-    free(newenviron);
+    char * const* newenviron = map_to_chartab(datamap);
+    delete[](newenviron);
     return (0);
 }
