@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:45:44 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:48:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,47 +222,7 @@ void HandleCGI::initEnvironMapNULL()
     environmap["SERVER_SOFTWARE"] = "NULL";
 }
 
+void        HandleCGI::completeEnvironMap( void )
+{
 
-/*
-We need to add
-
-AUTH_TYPE: Type of authentication used (if any).
-
-CONTENT_LENGTH: Length of the request body (for POST requests).
-
-CONTENT_TYPE: MIME type of the request body (for POST requests).
-
-GATEWAY_INTERFACE: Version of CGI being used (e.g., "CGI/1.1").
-
-PATH_INFO: Extra path information after the script name.
-
-PATH_TRANSLATED: Translated version of PATH_INFO (filesystem path).
-
-QUERY_STRING: Data from the URL after the "?" (for GET requests).
-
-REMOTE_ADDR: IP address of the client.
-
-REMOTE_HOST: Hostname of the client (if available).
-
-REMOTE_IDENT: Remote user name (if available, rarely used).
-
-REMOTE_USER: Authenticated user name (if applicable).
-
-REQUEST_METHOD: HTTP method (GET, POST, etc.).
-
-SCRIPT_NAME: Path to the script being executed.
-
-SERVER_NAME: Server's hostname or IP.
-
-SERVER_PORT: Port number the server is listening on.
-
-SERVER_PROTOCOL: Protocol and version (e.g., "HTTP/1.1").
-
-SERVER_SOFTWARE: Name and version of the server software.
-
-to environ
-
-So we need to get those values from from the Parsing to here and add them to environ
-Most of these values will be empty/NULL
-I think we have to add a function to the Parsing that initiates all these to NULL and then replaces them with the real values if found.
-*/
+}
