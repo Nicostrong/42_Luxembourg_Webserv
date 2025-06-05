@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 16:05:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/05 16:44:15 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class HandleCGI: public IEventHandler
 		std::map<std::string, std::string>		environmap;
 	public:
 		HandleCGI();
-		HandleCGI(std::string& data);
+		HandleCGI(std::string& data, Socket& socket);
 		HandleCGI(HandleCGI& copy);
 		HandleCGI& operator=(HandleCGI& copy);
 		~HandleCGI();

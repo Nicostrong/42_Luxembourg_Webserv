@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 16:40:50 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:45:22 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ HandleCGI::HandleCGI()
 	
 }
 
-HandleCGI::HandleCGI(std::string& _data)
+HandleCGI::HandleCGI(std::string& data, Socket& socket)
 {
 	this->data = _data;
-	string_to_map();
-	map_to_chartab();
+	//string_to_map();
+	//map_to_chartab();
 	initEnvironMapNULL();
+    completeEnvironMap(socket);
 }
 
 HandleCGI::~HandleCGI()
