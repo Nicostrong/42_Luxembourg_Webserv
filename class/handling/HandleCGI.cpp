@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 16:37:22 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:40:50 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 		dup2(receive_data_from_cgi.getIn(), STDIN_FILENO);
 		send_data_to_cgi.closeIn();
 		receive_data_from_cgi.closeOut();
-		execve(cmd_list[0], (char * const *)cmd_list, environ);
+		execve(cmd_list[0], (char * const *)cmd_list, newenviron);
 		_exit(1);
 	} 
 	else {
@@ -179,7 +179,6 @@ void HandleCGI::string_to_map()
 char * const* HandleCGI::map_to_chartab()
 {
 	size_t  i;
-	char    **newenviron;
 	
 	i = 0;
 	newenviron = new char*[datamap.size() * 4 + 1];
