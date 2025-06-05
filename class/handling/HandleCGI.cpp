@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 16:05:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/05 16:06:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,8 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 
 	environmap["SERVER_PROTOCOL"] = "HTTP/1.1";
 	return ;
+}
+
 char * const* HandleCGI::map_to_chartab()
 {
     size_t  i;
