@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 16:06:24 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/05 16:22:29 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ HandleCGI& HandleCGI::operator=(HandleCGI& copy)
 
 void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 {
-	Pipe send_data_to_cgi();
-	Pipe receive_data_from_cgi();
+	Pipe send_data_to_cgi;
+	Pipe receive_data_from_cgi;
 	
 	em.monitor(send_data_to_cgi.getIn(), POLLIN | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
