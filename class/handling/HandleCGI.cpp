@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 13:12:16 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:30:36 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,17 +228,37 @@ void HandleCGI::string_to_map()
     datamap[key] = value;
 }
 
-void map_to_chartab()
+char * const* HandleCGI::map_to_chartab(std::map<std::string, std::string>& datamap)
 {
-    size_t i;
-    
-    char const** newenviron = (char const**)malloc(datamap.size() * sizeof(char const*) * 2);
-    i = 0;
+    size_t i = 0;
+    char **newenviron = new char*[datamap.size() * 4 + 1];
     for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
     {
-        newenviron[i++] = it->first.c_str();
-        newenviron[i++] = it->second.c_str();
-        std::cout << "[debug key]" << newenviron[i-2] << ":";
-        std::cout << "[debug value]" << newenviron[i-1] << ".\n";
+        newenviron[i++] = strdup(it->first.c_str());
+        newenviron[i++] = strdup(";");
+        newenviron[i++] = strdup(it->second.c_str());
+        newenviron[i++] = strdup(";");
     }
+    newenviron[i] = NULL;
+    return (newenviron);
+}
+
+void HandleCGI::initEnvironMapNULL()
+{
+    environmap["AUTH_TYPE"] = "NULL";
+    environmap["CONTENT_LENGTH"] = "NULL";
+    environmap["CONTENT_TYPE"] = "NULL";
+    environmap["GATEWAY_INTERFACE"] = "NULL";
+    environmap["PATH_INFO"] = "NULL";
+    environmap["PATH_TRANSLATED"] = "NULL";
+    environmap["QUERY_STRING"] = "NULL";
+    environmap["REMOTE_ADDR"] = "NULL";
+    environmap["REMOTE_HOST"] = "NULL";
+    environmap["REMOTE_IDENT"] = "NULL";
+    environmap["REMOTE_USER"] = "NULL";
+    environmap["SCRIPT_NAME"] = "NULL";
+    environmap["SERVER_NAME"] = "NULL";
+    environmap["SERVER_PORT"] = "NULL";
+    environmap["SERVER_PROTOCOL"] = "NULL";
+    environmap["SERVER_SOFTWARE"] = "NULL";
 }
