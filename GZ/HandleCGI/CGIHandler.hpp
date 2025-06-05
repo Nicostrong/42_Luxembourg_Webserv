@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   CGIHandler.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:30:40 by gzenner           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/05 10:08:34 by gzenner          ###   ########.fr       */
+=======
+/*   Updated: 2025/06/05 09:55:47 by fdehan           ###   ########.fr       */
+>>>>>>> 57ecd7f1a96ced8d81fbf58b3791aecd59b5d6a7
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +27,7 @@
 class HandleCGI: public IEventHandler
 {
 	private:
-		BodyParsing *bp;
+		BodyParser *bp;
 		std::vector<char> receivedTxtBuffer;
 		std::string output;
 		std::string input;
