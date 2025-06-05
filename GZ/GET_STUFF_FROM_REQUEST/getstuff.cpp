@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 10:17:57 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 10:19:09 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <map>
 
 // this goes somewhere before CGI and gets us the string to pass to CGI
-void getStuff(std::string& request, std::string& data)
+void getQueryString(std::string& request, std::string& data)
 {
     if (request.find("?") != std::string::npos)
     {
@@ -46,7 +46,7 @@ int main()
     std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
     std::string data;
     std::map<std::string, std::string> datamap;
-    getStuff(request, data);
+    getQueryString(request, data);
     string_to_map(data, datamap);
     return (0);
 }
