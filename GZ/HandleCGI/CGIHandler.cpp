@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/04 17:26:13 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 08:57:51 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
     if (input.size() > input_sent) {
         ssize_t written = write(fd, input.c_str() + input_sent, input.size() - input_sent);
         if (written > 0) {
-            _cgiInputSent += written;
+            input_sent += written;
             if (input_sent == input.size()) {
                 em.unmonitor(fd);
                 close(fd);
