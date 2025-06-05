@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 09:54:11 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 09:57:53 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,18 @@ void string_to_map(std::string& data, std::map<std::string, std::string>& datama
         std::cout << "[debug value]" << value << ".\n";
         datamap[key] = value;
     }
+    std::string snippet = tmp.substr(0, tmp.find("&"));
+    std::cout << "[debug snippet]" << snippet << "\n";
+    std::string key = snippet.substr(0, snippet.find("="));
+    std::cout << "[debug key]" << key << ".\n";
+    std::string value = snippet.substr(snippet.find("=") + 1);
+    std::cout << "[debug value]" << value << ".\n";
+    datamap[key] = value;
 }
 
 int main()
 {
-    std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30";
+    std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
     std::string data;
     std::map<std::string, std::string> datamap;
     getStuff(request, data);
