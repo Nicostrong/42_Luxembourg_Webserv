@@ -3,15 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2025/06/05 15:18:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 15:47:46 by gzenner          ###   ########.fr       */
-=======
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 16:22:29 by nfordoxc         ###   Luxembourg.lu     */
->>>>>>> dd88ce82d4e0d9585c69bdda00c18cfb4662b32b
+/*   Updated: 2025/06/05 16:37:22 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
