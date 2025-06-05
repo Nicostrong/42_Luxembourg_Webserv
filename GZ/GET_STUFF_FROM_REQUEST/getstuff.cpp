@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 13:11:42 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 13:48:14 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void string_to_map(std::string& data, std::map<std::string, std::string>& datama
     datamap[key] = value;
 }
 
-void map_to_chartab(std::map<std::string, std::string>& datamap)
+char const** map_to_chartab(std::map<std::string, std::string>& datamap)
 {
     size_t i = 0;
     char const** newenviron = (char const**)malloc(datamap.size() * sizeof(char const*) * 2);
@@ -52,6 +52,7 @@ void map_to_chartab(std::map<std::string, std::string>& datamap)
         std::cout << "[debug key]" << newenviron[i-2] << ":";
         std::cout << "[debug value]" << newenviron[i-1] << ".\n";
     }
+    return (newenviron);
 }
 
 int main()
@@ -61,6 +62,7 @@ int main()
     std::map<std::string, std::string> datamap;
     getQueryString(request, data);
     string_to_map(data, datamap);
-    map_to_chartab(datamap);
+    char const** newenviron = map_to_chartab(datamap);
+    free(newenviron);
     return (0);
 }
