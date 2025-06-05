@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 21:28:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 08:46:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 			this->_resp.setStatusCode((HttpBase::HttpCode)e.getCode());
 			this->_rHandler.init(*this);
 			em.unmonitor(fd);
-			this->_sockm.remove(*this, em);
 			em.monitor(fd, POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
 		}
