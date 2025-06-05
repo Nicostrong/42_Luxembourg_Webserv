@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 11:04:02 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:11:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ class RequestHandling: public HttpBase
 		// CGI Variables	
 		std::string data;
 		// CGI Functions
-		void getQueryString(std::string& request);
+		static std::string getQueryString(const std::string& request);
 };
 
 #endif

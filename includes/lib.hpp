@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/06/05 08:01:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/06/05 14:53:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define LIB_HPP
 
 # include <ctime>
+# include <cstdio>
 # include <poll.h>
 # include <string>
 # include <netdb.h>
@@ -32,15 +33,15 @@
 # include <algorithm>
 # include <exception>
 # include <sys/stat.h>
+# include <sys/wait.h>
 # include <sys/epoll.h>
+# include <sys/types.h>
 # include <netinet/in.h>
 # include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 
-#include <unistd.h>
-#include <iostream>
-#include <iomanip>
+# include <unistd.h>
+# include <iostream>
+# include <iomanip>
 
 # include <map>
 # include <set>

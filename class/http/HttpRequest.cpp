@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:03:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 15:44:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ void HttpRequest::setTE(bool state)
 void HttpRequest::setServer(const Server& server)
 {
 	this->_server = &server;
+}
+
+const std::string& HttpRequest::getRemotIp( void ) const
+{
+	return (this->_remoteIp);
 }
 
 const Location* HttpRequest::getLoc() const

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 11:18:12 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:15:56 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,24 +250,30 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 }
 
 // this goes somewhere before CGI and gets us the string to pass to CGI
-void RequestHandling::getQueryString(std::string& request)
+std::string RequestHandling::getQueryString(const std::string& request)
 {
-    if (request.find("?") != std::string::npos)
+	std::string		data;
+	std::string		tmp = request;
+
+    if (tmp.find("?") != std::string::npos)
     {
-        request = request.substr(request.find("?") + 1);
-        data = request.substr(0, request.find_first_of(" \t"));
+        tmp = tmp.substr(tmp.find("?") + 1);
+        data = tmp.substr(0, tmp.find_first_of(" \t"));
     }
+	return (data);
 }
 
 void RequestHandling::handleGet(Socket& sock)
 {
+	std::string		data;
+
 	if (isRedirect(sock))
 		return ;
 			
 	if (isCGI(sock))
 	{
-		getQueryString(request);
-		HandleCGI hcgi = HandleCGI(data);
+		data = getQueryString(sock.getReq().getUri());
+		HandleCGI hcgi(data);
 		return ;
 	}
 		
