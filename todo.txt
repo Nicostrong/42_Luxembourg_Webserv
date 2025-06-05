@@ -1,4 +1,5 @@
 -Implement CGI
+    -> Implement CGI parser that read header and reconstruct a http response according to cgi headers.
 -Handle redirection for POST/DELETE 
     -> In the config file ask for the redirection code
 -Add timeouts to prevent having persistents sockte that can be closed
