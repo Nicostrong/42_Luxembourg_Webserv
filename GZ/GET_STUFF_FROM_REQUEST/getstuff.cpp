@@ -6,13 +6,14 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:16:43 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:28:59 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <map>
 #include <cstring>
+#include <string>
 
 // this goes somewhere before CGI and gets us the string to pass to CGI
 void getQueryString(std::string& request, std::string& data)
@@ -57,9 +58,32 @@ char * const* map_to_chartab(std::map<std::string, std::string>& datamap)
     return (newenviron);
 }
 
+void initEnvironMapNULL()
+{
+    std::map<std::string, std::string> environmap;
+    environmap["AUTH_TYPE"] = "NULL";
+    environmap["CONTENT_LENGTH"] = "NULL";
+    environmap["CONTENT_TYPE"] = "NULL";
+    environmap["GATEWAY_INTERFACE"] = "NULL";
+    environmap["PATH_INFO"] = "NULL";
+    environmap["PATH_TRANSLATED"] = "NULL";
+    environmap["QUERY_STRING"] = "NULL";
+    environmap["REMOTE_ADDR"] = "NULL";
+    environmap["REMOTE_HOST"] = "NULL";
+    environmap["REMOTE_IDENT"] = "NULL";
+    environmap["REMOTE_USER"] = "NULL";
+    environmap["SCRIPT_NAME"] = "NULL";
+    environmap["SERVER_NAME"] = "NULL";
+    environmap["SERVER_PORT"] = "NULL";
+    environmap["SERVER_PROTOCOL"] = "NULL";
+    environmap["SERVER_SOFTWARE"] = "NULL";
+}
+
 int main()
 {
-    std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
+    initEnvironMapNULL();
+    
+    /*std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
     std::string data;
     std::map<std::string, std::string> datamap;
     getQueryString(request, data);
@@ -70,6 +94,6 @@ int main()
     {
         std::cout << "[debug]" << newenviron[i++] << "\n";
     }
-    delete[](newenviron);
+    delete[](newenviron);*/
     return (0);
 }
