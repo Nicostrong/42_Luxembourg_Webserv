@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 11:17:16 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 13:12:16 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ void HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
 void HandleCGI::string_to_map()
 {
     std::string tmp = data;
-    while(tmp.find("&") != std::string::npos)
+    while (tmp.find("&") != std::string::npos)
     {
         std::string snippet = tmp.substr(0, tmp.find("&"));
         tmp = tmp.substr(tmp.find("&") + 1);
@@ -226,4 +226,19 @@ void HandleCGI::string_to_map()
     std::string key = snippet.substr(0, snippet.find("="));
     std::string value = snippet.substr(snippet.find("=") + 1);
     datamap[key] = value;
+}
+
+void map_to_chartab()
+{
+    size_t i;
+    
+    char const** newenviron = (char const**)malloc(datamap.size() * sizeof(char const*) * 2);
+    i = 0;
+    for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
+    {
+        newenviron[i++] = it->first.c_str();
+        newenviron[i++] = it->second.c_str();
+        std::cout << "[debug key]" << newenviron[i-2] << ":";
+        std::cout << "[debug value]" << newenviron[i-1] << ".\n";
+    }
 }
