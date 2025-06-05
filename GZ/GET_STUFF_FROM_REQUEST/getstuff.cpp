@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 09:35:09 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:28:59 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:36:24 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ void string_to_map(std::string& data, std::map<std::string, std::string>& datama
 
 char * const* map_to_chartab(std::map<std::string, std::string>& datamap)
 {
-    size_t i = 0;
-    char **newenviron = new char*[datamap.size() * 4 + 1];
+    size_t i;
+    char **newenviron;
+
+    i = 0;
+    newenviron = new char*[datamap.size() * 4 + 1];
     for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
     {
         newenviron[i++] = strdup(it->first.c_str());
@@ -83,7 +86,7 @@ int main()
 {
     initEnvironMapNULL();
     
-    /*std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
+    std::string request = "GET /cgi-bin/adduser.html/?name=Alice&age=30&height=1.80&width=.8&eye-color=brown";
     std::string data;
     std::map<std::string, std::string> datamap;
     getQueryString(request, data);
@@ -94,6 +97,6 @@ int main()
     {
         std::cout << "[debug]" << newenviron[i++] << "\n";
     }
-    delete[](newenviron);*/
+    delete[](newenviron);
     return (0);
 }
