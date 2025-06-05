@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:36:03 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/05 09:41:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define PARSERSERVERCONFIG_HPP
 
 # include "../lib.hpp"
-# include "../Ressource.hpp"
+# include "../utils/Ressource.hpp"
 # include "../parser/Token.hpp"
 # include "../parser/CheckerTokens.hpp"
 

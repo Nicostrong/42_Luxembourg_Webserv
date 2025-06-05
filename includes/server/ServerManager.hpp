@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 23:25:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:25:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define SERVERMANAGER_HPP
 
 # include "../server/Server.hpp"
-# include "../Ip.hpp"
+# include "../utils/Ip.hpp"
 
 class	Token;
 

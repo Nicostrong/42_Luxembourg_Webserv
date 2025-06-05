@@ -6,18 +6,18 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/04 23:36:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:41:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/server/Server.hpp"
-#include "../includes/EventMonitoring.hpp"
-#include "../includes/server/ServerManager.hpp"
-#include "../includes/parser/ParserServerConfig.hpp"
-#include "../includes/CGI.hpp"
-#include "../includes/SocketManager.hpp"
-#include "../includes/Listener.hpp"
-#include "../includes/ListenerManager.hpp"
+#include "./../includes/parser/ParserServerConfig.hpp"
+#include "./../includes/server/ServerManager.hpp"
+#include "./../includes/server/Server.hpp"
+#include "./../includes/events/EventMonitoring.hpp"
+#include "./../includes/networking/SocketManager.hpp"
+#include "./../includes/networking/Listener.hpp"
+#include "./../includes/networking/ListenerManager.hpp"
+#include "./../includes/handling/CGI.hpp"
 
 bool	g_running = true;
 
