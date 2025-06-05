@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 15:18:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 15:18:20 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 15:44:49 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,24 +184,6 @@ void HandleCGI::string_to_map()
     datamap[key] = value;
 }
 
-char * const* HandleCGI::map_to_chartab()
-{
-    size_t  i;
-    char    **newenviron;
-    
-    i = 0;
-    newenviron = new char*[datamap.size() * 4 + 1];
-    for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
-    {
-        newenviron[i++] = strdup(it->first.c_str());
-        newenviron[i++] = strdup(";");
-        newenviron[i++] = strdup(it->second.c_str());
-        newenviron[i++] = strdup(";");
-    }
-    newenviron[i] = NULL;
-    return (newenviron);
-}
-
 void HandleCGI::initEnvironMapNULL()
 {
     environmap["AUTH_TYPE"] = "NULL";
@@ -222,7 +204,19 @@ void HandleCGI::initEnvironMapNULL()
     environmap["SERVER_SOFTWARE"] = "NULL";
 }
 
-void        HandleCGI::completeEnvironMap( void )
+char * const* HandleCGI::map_to_chartab()
 {
-
+    size_t  i;
+    
+    i = 0;
+    newenviron = new char*[datamap.size() * 4 + 1];
+    for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
+    {
+        newenviron[i++] = strdup(it->first.c_str());
+        newenviron[i++] = strdup(";");
+        newenviron[i++] = strdup(it->second.c_str());
+        newenviron[i++] = strdup(";");
+    }
+    newenviron[i] = NULL;
+    return (newenviron);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:49:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/05 15:44:34 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class HandleCGI: public IEventHandler
 		std::string input;
 		size_t input_sent;
 		std::string data;
+		char    **newenviron;
 		std::map<std::string, std::string> datamap;
 		std::map<std::string, std::string> environmap;
 	public:
