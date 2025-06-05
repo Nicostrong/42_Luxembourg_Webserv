@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/05 09:35:56 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/05 09:44:34 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -147,7 +147,7 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/HandleConfig.cpp \
 					../class/utils/Buffer.cpp \
 					../class/utils/Endpoint.cpp \
-					../class/utils//File.cpp \
+					../class/utils/File.cpp \
 					../class/utils/Ip.cpp \
 					../class/utils/Pipe.cpp \
 					../class/utils/Ressource.cpp \
