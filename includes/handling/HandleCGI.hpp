@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/05 14:31:04 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/05 14:47:06 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include <string>
 #include <map>
 #include <unistd.h>
-#include "../../includes/Pipe.hpp"
-#include "../../includes/BodyParsing.hpp"
+#include "Pipe.hpp"
+#include "BodyParsing.hpp"
 
 class HandleCGI: public IEventHandler
 {
