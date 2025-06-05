@@ -6,16 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 21:34:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/05 09:21:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include "../Ip.hpp"
 # include "../lib.hpp"
-# include "../Ressource.hpp"
+# include "../utils/Ip.hpp"
+# include "../utils/Ressource.hpp"
 # include "../parser/Token.hpp"
 # include "../server/Location.hpp"
 # include "../server/Directive.hpp"

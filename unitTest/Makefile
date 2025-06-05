@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/04 23:36:54 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/05 09:49:43 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -145,30 +145,30 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/server/ServerManager_p.cpp \
 					../class/server/ServerManager.cpp \
 					../class/HandleConfig.cpp \
-					../class/HttpBase.cpp \
-					../class/HttpRequest.cpp \
-					../class/EventMonitoring.cpp \
-					../class/EventData.cpp \
-					../class/HttpResponse.cpp \
-					../class/Socket.cpp \
-					../class/Ressource.cpp \
-					../class/RequestHandling.cpp \
-					../class/CGI.cpp \
-					../class/Uri.cpp \
-					../class/HttpParser.cpp \
-					../class/File.cpp \
-					../class/Buffer.cpp \
-					../class/ResponseHandling.cpp \
-					../class/Pipe.cpp \
-					../class/Ip.cpp \
-					../class/HttpExceptions.cpp \
-					../class/HttpSevereExceptions.cpp \
-					../class/BodyParsing.cpp \
-					../class/Chunk.cpp \
-					../class/SocketManager.cpp \
-					../class/Listener.cpp \
-					../class/Endpoint.cpp \
-					../class/ListenerManager.cpp \
+					../class/utils/Buffer.cpp \
+					../class/utils/Endpoint.cpp \
+					../class/utils/File.cpp \
+					../class/utils/Ip.cpp \
+					../class/utils/Pipe.cpp \
+					../class/utils/Ressource.cpp \
+					../class/utils/Uri.cpp \
+					../class/events/EventData.cpp \
+					../class/events/EventMonitoring.cpp \
+					../class/http/HttpBase.cpp \
+					../class/http/HttpExceptions.cpp \
+					../class/http/HttpParser.cpp \
+					../class/http/HttpRequest.cpp \
+					../class/http/HttpResponse.cpp \
+					../class/http/HttpSevereExceptions.cpp \
+					../class/networking/BodyParsing.cpp \
+					../class/networking/Chunk.cpp \
+					../class/networking/Listener.cpp \
+					../class/networking/ListenerManager.cpp \
+					../class/networking/Socket.cpp \
+					../class/networking/SocketManager.cpp \
+					../class/handling/CGI.cpp \
+					../class/handling/RequestHandling.cpp \
+					../class/handling/ResponseHandling.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)
@@ -352,8 +352,13 @@ deb_par:		parser
 clean:
 	$(call delete_progress, *.o)
 	$(call delete_progress, ../class/*.o)
-	$(call delete_progress, ../class/parsing/*.o)
 	$(call delete_progress, ../class/server/*.o)
+	$(call delete_progress, ../class/parser/*.o)
+	$(call delete_progress, ../class/events/*.o)
+	$(call delete_progress, ../class/handling/*.o)
+	$(call delete_progress, ../class/http/*.o)
+	$(call delete_progress, ../class/networking/*.o)
+	$(call delete_progress, ../class/utils/*.o)
 
 fclean: 	clean
 	$(call delete_file, $(SERVER_NAME))

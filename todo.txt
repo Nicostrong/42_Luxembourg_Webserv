@@ -6,7 +6,7 @@
     prevent aligning each time to be sure to have enough space for data.
 -Make socket NON BLOCKING
 -Implements all status code for CGI handling
--Allocate each socket and fd object related in heap insetad of stack to prevent
+[X]-Allocate each socket and fd object related in heap insetad of stack to prevent
     problem with copy in STL containers
 -Handle connection state / close teh conenction when request malformed to 
     prevent integrity of the data
@@ -16,7 +16,7 @@
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
        modification timestamp in hexa and y teh file content len in hexa.
--Rework base Architecture to listen on each port and redirect request on the 
+[X]-Rework base Architecture to listen on each port and redirect request on the 
     corrrect structure and have all sockets in one list and have servers where 
     the request will be redirected depending on mandatory HOST header
 -Handle upload with diffrents content types not only plain/text
