@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:11:39 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/06 09:15:14 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class HandleCGI: public IEventHandler
 		HandleCGI();
 	public:
 		
-		HandleCGI(*cmd_list[3], EventMonitoring& em, std::string& data, Socket& socket);
+		HandleCGI(*cmd_list[3], EventMonitoring& em, Socket& socket);
 		HandleCGI(HandleCGI& copy);
 		HandleCGI& operator=(HandleCGI& copy);
 		~HandleCGI();
