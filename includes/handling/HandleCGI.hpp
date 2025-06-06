@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:40:34 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 09:51:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class HandleCGI: public IEventHandler
 		std::map<std::string, std::string>		environmap;
 		HandleCGI();
 	public:
-		HandleCGI(*cmd_list[3], EventMonitoring& em, Socket& socket);
+		HandleCGI(std::string data, Socket& socket);
 		HandleCGI(HandleCGI& copy);
 		HandleCGI& operator=(HandleCGI& copy);
 		~HandleCGI();

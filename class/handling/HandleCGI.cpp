@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:40:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 09:52:18 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ HandleCGI::HandleCGI()
 	
 }
 
-HandleCGI::HandleCGI(*cmd_list[3], EventMonitoring& em, Socket& socket)
+HandleCGI::HandleCGI(std::string data, Socket& socket)
 {
+	(void)data;
 	initEnvironMapNULL();
     completeEnvironMap(socket);
 	map_to_chartab();
-	DoCGI(*cmd_list[3], em);
+	//DoCGI(cmd_list, em);
 }
 
 HandleCGI::~HandleCGI()
