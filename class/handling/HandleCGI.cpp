@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/06 08:24:33 by gzenner          ###   ########.fr       */
+=======
+/*   Updated: 2025/06/06 08:22:02 by nfordoxc         ###   Luxembourg.lu     */
+>>>>>>> 948ef73e26b44ca092dbed920661a7e18d746c65
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +23,7 @@ HandleCGI::HandleCGI()
 
 HandleCGI::HandleCGI(std::string& data, Socket& socket)
 {
-	this->data = _data;
+	this->data = data;
 	//string_to_map();
 	//map_to_chartab();
 	initEnvironMapNULL();
@@ -84,13 +88,13 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 void HandleCGI::UpdateNewsLetter(const char *compiler, const char *script, const char *newvalue)
 {
 	const char *cmd_list[] = { compiler, script, newvalue, NULL};
-	std::cout << DoCGI(cmd_list);
+	//std::cout << DoCGI(cmd_list);
 }
 
 void HandleCGI::UpdateShowData(const char *compiler, const char *script, const char *newvalue)
 {
 	const char *cmd_list[] = { compiler, script, newvalue, newvalue, newvalue, newvalue, NULL};
-	std::cout << DoCGI(cmd_list);
+	//std::cout << DoCGI(cmd_list);
 }
 
 void HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
@@ -248,7 +252,7 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 	oss.str("");
 	oss.clear();
 
-	oss << socket.getReq().getSocket();
+	oss << socket.getSocket();
 	environmap["REMOTE_IDENT"] = oss.str();
 	oss.str("");
 	oss.clear();
