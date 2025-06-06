@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:05:29 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:15:00 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/06 09:28:31 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 {
 	Pipe send_data_to_cgi;
 	Pipe receive_data_from_cgi;
+	pid_t pid;
 	
 	em.monitor(send_data_to_cgi.getIn(), POLLIN | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
@@ -52,7 +53,7 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 	em.monitor(receive_data_from_cgi.getOut(), POLLOUT | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
 	
-	pid_t pid = fork(); 
+	pid = fork();
 
 	if (pid == -1) {
 		std::cerr << "fork failed\n"; 
@@ -67,13 +68,8 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 		_exit(1);
 	} 
 	else {
-		//char buffer[1024];
 		send_data_to_cgi.closeOut();
 		receive_data_from_cgi.closeIn();
-		/*ssize_t count;
-		while ((count = read(receive_data_from_cgi.getOut(), buffer, sizeof(buffer))) > 0) {
-			output.append(buffer, count);
-		}*/
 	}
 	return ;
 }
