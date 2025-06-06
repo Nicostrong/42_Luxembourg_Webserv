@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 15:44:06 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 11:55:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ class HttpRequest : public HttpParser
 		const Server*			getServer() const;
 		bool					isTE() const;
 		
-		
-		
-
 	private:
 		// Handling variables
 		std::string		_remoteIp;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:12:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/06 11:46:27 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
 	ServerManager& sm, SocketManager& sockm)
 	: _fd(fd), _sockAddr(sockAddr), _entryAddr(entryAddr), _resp(), 
 	  _rxBuffer(RX_SIZE), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), 
-	  _keepAlive(true), _sm(sm), _sockm(sockm)
+	  _keepAlive(true), _sm(sm), _sockm(sockm), _em(NULL)
 {
 	this->_req 		= HttpRequest(this->_sockAddr.getIp().getIpString());
 	LOG_DEB(this->_sockAddr.getIp().getIpString() + " opened connection");
@@ -71,6 +71,11 @@ ServerManager& Socket::getSM()
 	return (this->_sm);
 }
 
+EventMonitoring&	Socket::getEM( void )
+{
+	return (*_em);
+}
+
 void Socket::reset()
 {
 	this->_reset = true;
@@ -110,8 +115,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 				this->_keepAlive = false;
 				this->_resp.addHeader("Connection", "close");
 			}
-			LOG_ERROR("An error occured while parsing request "
-				"(can be bad request as well)");
+			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
 			LOG_ERROR(e.getCode());
 			
 			this->_resp.setRespType(HttpResponse::ERROR);
@@ -174,6 +178,12 @@ void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
 	(void)fd;
 	(void)em;
 	(void)type;
+}
+
+void	Socket::setEM( EventMonitoring& ev )
+{
+	this->_em = &ev;
+	return ;
 }
 
 // Custom exceptions

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:52:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 14:00:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ HandleCGI::HandleCGI()
 	
 }
 
-HandleCGI::HandleCGI(std::string data, Socket& socket)
+HandleCGI::HandleCGI(Socket& socket)
 {
-	(void)data;
 	initEnvironMapNULL();
     completeEnvironMap(socket);
 	map_to_chartab();
+	createCmdLst(socket);
 	//DoCGI(cmd_list, em);
 }
 
 HandleCGI::~HandleCGI()
 {
-	
+	delete[] newenviron;
 }
 
 HandleCGI::HandleCGI(HandleCGI& copy)
@@ -42,11 +42,12 @@ HandleCGI& HandleCGI::operator=(HandleCGI& copy)
 	return (*this);
 }
 
-void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
+void HandleCGI::DoCGI( Socket& socket )
 {
-	Pipe send_data_to_cgi;
-	Pipe receive_data_from_cgi;
-	pid_t pid;
+	Pipe				send_data_to_cgi;
+	Pipe				receive_data_from_cgi;
+	pid_t				pid;
+	EventMonitoring		em = socket.getEM();
 	
 	em.monitor(send_data_to_cgi.getIn(), POLLIN | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
@@ -65,7 +66,7 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 		dup2(receive_data_from_cgi.getIn(), STDIN_FILENO);
 		send_data_to_cgi.closeIn();
 		receive_data_from_cgi.closeOut();
-		execve(cmd_list[0], (char * const *)cmd_list, newenviron);
+		//execve(cmd_list[0], (char * const *)cmd_list, newenviron);
 		_exit(1);
 	} 
 	else {
@@ -196,29 +197,46 @@ char * const* HandleCGI::map_to_chartab()
 	return (newenviron);
 }
 
+/*
+ *	il faut creer un array pour le exeve du fork
+ */
+void		HandleCGI::createCmdLst( Socket& socket )
+{
+	std::string							pathCGI;
+	std::list<CGIDirective*>			lCGIDir;
+	std::list<CGIDirective*>::iterator	itDirCGI;
+
+	lCGIDir = socket.getReq().getServer()->getLocations("/cgi-bin").getCGIDirectives();
+	pathCGI = Uri::getCgiPath(lCGIDir, socket.getReq().getLoc(), socket.getReq().getUri());
+	
+	this->lCmd = new char*[4];
+	this->lCmd[0] = socket.getReq().getServer()->getLocations(socket.getReq().getUri()).getCGIDirectives()
+}
+
 void HandleCGI::initEnvironMapNULL()
 {
-	environmap["AUTH_TYPE"] = "NULL";
-	environmap["CONTENT_LENGTH"] = "NULL";
-	environmap["CONTENT_TYPE"] = "NULL";
-	environmap["GATEWAY_INTERFACE"] = "NULL";
-	environmap["PATH_INFO"] = "NULL";
-	environmap["PATH_TRANSLATED"] = "NULL";
-	environmap["QUERY_STRING"] = "NULL";
-	environmap["REMOTE_ADDR"] = "NULL";
-	environmap["REMOTE_HOST"] = "NULL";
-	environmap["REMOTE_IDENT"] = "NULL";
-	environmap["REMOTE_USER"] = "NULL";
-	environmap["SCRIPT_NAME"] = "NULL";
-	environmap["SERVER_NAME"] = "NULL";
-	environmap["SERVER_PORT"] = "NULL";
-	environmap["SERVER_PROTOCOL"] = "NULL";
-	environmap["SERVER_SOFTWARE"] = "NULL";
+	environmap["AUTH_TYPE"] = "";
+	environmap["CONTENT_LENGTH"] = "";
+	environmap["CONTENT_TYPE"] = "";
+	environmap["GATEWAY_INTERFACE"] = "";
+	environmap["PATH_INFO"] = "";
+	environmap["PATH_TRANSLATED"] = "";
+	environmap["QUERY_STRING"] = "";
+	environmap["REMOTE_ADDR"] = "";
+	environmap["REMOTE_HOST"] = "";
+	environmap["REMOTE_IDENT"] = "";
+	environmap["REMOTE_USER"] = "";
+	environmap["REQUEST_METHOD"] = "";
+	environmap["SCRIPT_NAME"] = "";
+	environmap["SERVER_NAME"] = "";
+	environmap["SERVER_PORT"] = "";
+	environmap["SERVER_PROTOCOL"] = "";
+	environmap["SERVER_SOFTWARE"] = "";
 }
 
 void		HandleCGI::completeEnvironMap( Socket& socket )
 {
-	//	environmap["AUTH_TYPE"] 			=>	NO
+	//	environmap["AUTH_TYPE"] 			=>	YES
 	//	environmap["CONTENT_LENGTH"] 		=>	YES
 	//	environmap["CONTENT_TYPE"] 			=>	PERHAPS
 	//	environmap["GATEWAY_INTERFACE"] 	=>	NO
@@ -229,12 +247,15 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 	//	environmap["REMOTE_HOST"] 			=>	NO
 	//	environmap["REMOTE_IDENT"] 			=>	YES	(fd of socket)
 	//	environmap["REMOTE_USER"] 			=>	NO
+	//	environmap["REQUEST_METHOD"]		=>	YES
 	//	environmap["SCRIPT_NAME"] 			=>	YES
 	//	environmap["SERVER_NAME"] 			=>	YES
 	//	environmap["SERVER_PORT"] 			=>	YES
 	//	environmap["SERVER_PROTOCOL"] 		=>	YES
-	//	environmap["SERVER_SOFTWARE"] 		=>	NO
+	//	environmap["SERVER_SOFTWARE"] 		=>	YES
 	std::ostringstream		oss;
+
+	environmap["AUTH_TYPE"] = "nfordoxc";
 
 	oss << socket.getReq().getContentLength();
 	this->environmap["CONTENT_LENGTH"] = oss.str();
@@ -255,6 +276,7 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 	oss.str("");
 	oss.clear();
 
+	environmap["REQUEST_METHOD"] = socket.getReq().getMethod();;
 	environmap["SCRIPT_NAME"] = socket.getReq().getCgiScript();
 	if (!socket.getReq().getServer()->getHost().empty())
 		this->environmap["SERVER_NAME"] = socket.getReq().getServer()->getHost().front();
@@ -265,5 +287,12 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 	oss.clear();
 
 	environmap["SERVER_PROTOCOL"] = "HTTP/1.1";
+	environmap["SERVER_SOFTWARE"] = SERVER_VER;
+
+	std::cout << "[DEBUG CGI]" << std::endl;
+	std::map<std::string,std::string>::const_iterator	itMap;
+
+	for(itMap = environmap.begin(); itMap != environmap.end(); ++itMap)
+		std::cout << itMap->first << "\t=>\t" << itMap->second << std::endl;
 	return ;
 }

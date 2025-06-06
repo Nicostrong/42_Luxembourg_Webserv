@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 09:51:09 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 13:57:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,12 @@ bool	RequestHandling::ends_with( const std::string& str, const std::string& suff
 
 bool RequestHandling::isCGI(Socket& sock)
 {
-	const std::list<Directive*> cgiDirectives = 
+	/*const std::list<Directive*> cgiDirectives = 
 			sock.getReq().getLoc()->findDirectives("cgi");
 
 	if (cgiDirectives.size() < 1)
 		return (false);
-
+	*/
 
 	std::string		uri = sock.getReq().getUri();
 
@@ -275,7 +275,6 @@ std::string RequestHandling::getQueryString(const std::string& request)
 
 void RequestHandling::handleGet(Socket& sock)
 {
-	std::string		data;
 
 	if (isRedirect(sock))
 		return ;
@@ -283,8 +282,8 @@ void RequestHandling::handleGet(Socket& sock)
 	if (isCGI(sock))
 	{
 		LOG_DEB("IsCGI dans GET");
-		data = getQueryString(sock.getReq().getUri());
-		HandleCGI hcgi(data, sock);
+		HandleCGI hcgi(sock);
+		hcgi.DoCGI(sock);
 		return ;
 	}
 	
@@ -309,11 +308,8 @@ void RequestHandling::handlePost(Socket& sock)
 	std::string	path = sock.getReq().getPathTranslated();
 	if (isCGI(sock))
 	{
-		LOG_DEB("IsCGI dans POST");
-		std::string		data;
-		
-		data = getQueryString(sock.getReq().getUri());
-		HandleCGI hcgi(data, sock);
+		HandleCGI hcgi(sock);
+		hcgi.DoCGI(sock);
 		return ;
 	}
 	handleBodyLength(sock);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIDirective.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:40:43 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:34:35 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 13:50:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
