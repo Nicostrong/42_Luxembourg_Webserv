@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location_gs.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:52:39 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 14:34:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,22 @@
 const std::string&					Location::getPath( void ) const
 {
 	return (this->_path);
+}
+
+/*
+ *	get the path of CGIDirective of the extension
+ */
+const std::string&					Location::getCGIPath( const std::string& extension ) const
+{
+	std::list<CGIDirective*>					CGILst = getCGIDirectives();
+	std::list<CGIDirective*>::const_iterator	itCGILst;
+
+	if (!isCGICDir(extension))
+		return ("");
+	for (itCGILst = CGILst.begin(); itCGILst != CGILst.end(); ++itCGILst)
+		if ((*itCGILst)->getExtension() == extension)
+			return ((*itCGILst)->getPath());
+	return ("");
 }
 
 /*
@@ -47,28 +63,6 @@ const std::list<Directive*>&		Location::getDirectives( void ) const
 const std::list<CGIDirective*>&		Location::getCGIDirectives( void ) const
 {
 	return (this->_lCGIDirectives);
-}
-/*
- *	Check if the location can match to a requested uri
- */
-bool		Location::isMatching( const std::string& uri ) const
-{
-	if (this->_path.empty() || uri.empty())
-		return (false);
-		
-	if (uri.length() < this->_path.size() || 
-		!std::equal(this->_path.begin(), this->_path.end(), uri.begin()))
-		return (false);
-
-	if (this->_path.at(this->_path.size() - 1) != '/')
-	{
-		size_t s = uri.find('/', this->_path.size());
-		if (s == this->_path.size() || s == std::string::npos)
-			return (true);
-		return (false);
-	}
-	
-	return (true);
 }
 
 /*
