@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/05 09:56:40 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/06 09:32:26 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,25 +76,25 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/server/ServerManager_p.cpp \
 					../class/server/ServerManager.cpp \
 					../class/HandleConfig.cpp \
-					../class/HttpBase.cpp \
-					../class/HttpRequest.cpp \
-					../class/EventMonitoring.cpp \
-					../class/EventData.cpp \
-					../class/HttpResponse.cpp \
-					../class/RequestHandling.cpp \
-					../class/Socket.cpp \
-					../class/Ressource.cpp \
-					../class/Uri.cpp \
-					../class/HttpParser.cpp \
-					../class/File.cpp \
-					../class/Buffer.cpp \
-					../class/ResponseHandling.cpp \
-					../class/Pipe.cpp \
-					../class/Ip.cpp \
-					../class/HttpExceptions.cpp \
-					../class/HttpSevereExceptions.cpp \
-					../class/BodyParsing.cpp \
-					../class/Chunk.cpp \
+					../class/http/HttpBase.cpp \
+					../class/http/HttpRequest.cpp \
+					../class/events/EventData.cpp \
+					../class/events/EventMonitoring.cpp \
+					../class/http/HttpResponse.cpp \
+					../class/handling/RequestHandling.cpp \
+					../class/networking/Socket.cpp \
+					../class/utils/Ressource.cpp \
+					../class/utils/Uri.cpp \
+					../class/http/HttpParser.cpp \
+					../class/utils/File.cpp \
+					../class/utils/Buffer.cpp \
+					../class/handling/ResponseHandling.cpp \
+					../class/utils/Pipe.cpp \
+					../class/utils/Ip.cpp \
+					../class/http/HttpExceptions.cpp \
+					../class/http/HttpSevereExceptions.cpp \
+					../class/networking/BodyParser.cpp \
+					../class/networking/Chunk.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -105,19 +105,19 @@ SERVER_NAME		=	test_classServer
 #	Test networking															   #
 ################################################################################
 
-NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
+NET_SRC			=	../class/parser/CheckerTokens.cpp \
+					../class/parser/CheckerTokens_e.cpp \
 					../class/parser/CheckerTokens_m.cpp \
 					../class/parser/CheckerTokens_p.cpp \
-					../class/parser/CheckerTokens.cpp \
+					../class/parser/ParserServerConfig.cpp \
+					../class/parser/ParserServerConfig_p.cpp \
 					../class/parser/ParserServerConfig_e.cpp \
 					../class/parser/ParserServerConfig_gs.cpp \
-					../class/parser/ParserServerConfig_p.cpp \
-					../class/parser/ParserServerConfig.cpp \
-					../class/parser/Token_e.cpp \
-					../class/parser/Token_gs.cpp \
+					../class/parser/Token.cpp \
 					../class/parser/Token_m.cpp \
 					../class/parser/Token_p.cpp \
-					../class/parser/Token.cpp \
+					../class/parser/Token_e.cpp \
+					../class/parser/Token_gs.cpp \
 					../class/server/CGIDirective_e.cpp \
 					../class/server/CGIDirective_gs.cpp \
 					../class/server/CGIDirective_m.cpp \
@@ -144,7 +144,6 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/server/ServerManager_m.cpp \
 					../class/server/ServerManager_p.cpp \
 					../class/server/ServerManager.cpp \
-					../class/HandleConfig.cpp \
 					../class/utils/Buffer.cpp \
 					../class/utils/Endpoint.cpp \
 					../class/utils/File.cpp \
@@ -167,8 +166,10 @@ NET_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/networking/Socket.cpp \
 					../class/networking/SocketManager.cpp \
 					../class/handling/CGI.cpp \
+					../class/handling/HandleCGI.cpp \
 					../class/handling/RequestHandling.cpp \
 					../class/handling/ResponseHandling.cpp \
+					../class/HandleConfig.cpp \
 					main_networking.cpp
 
 NET_OBJ			=	$(NET_SRC:.cpp=.o)
@@ -196,7 +197,7 @@ PAR_SRC			=	../class/parser/CheckerTokens_e.cpp \
 					../class/server/MethodHTTP_gs.cpp \
 					../class/server/MethodHTTP_m.cpp \
 					../class/server/MethodHTTP.cpp \
-					../class/Ressource.cpp \
+					../class/utils/Ressource.cpp \
 					main_parser.cpp
 
 PAR_OBJ			=	$(PAR_SRC:.cpp=.o)

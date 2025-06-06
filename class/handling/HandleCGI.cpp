@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/06 09:05:29 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:28:31 by gzenner          ###   ########.fr       */
+/*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
+/*   Updated: 2025/06/06 09:40:21 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,19 @@ void HandleCGI::DoCGI(const char *cmd_list[3], EventMonitoring& em)
 
 void HandleCGI::UpdateNewsLetter(const char *compiler, const char *script, const char *newvalue)
 {
-	const char *cmd_list[] = { compiler, script, newvalue, NULL};
+	(void)compiler;
+	(void)script;
+	(void)newvalue;
+	//const char *cmd_list[] = { compiler, script, newvalue, NULL};
 	//std::cout << DoCGI(cmd_list);
 }
 
 void HandleCGI::UpdateShowData(const char *compiler, const char *script, const char *newvalue)
 {
-	const char *cmd_list[] = { compiler, script, newvalue, newvalue, newvalue, newvalue, NULL};
+	(void)compiler;
+	(void)script;
+	(void)newvalue;
+	//const char *cmd_list[] = { compiler, script, newvalue, newvalue, newvalue, newvalue, NULL};
 	//std::cout << DoCGI(cmd_list);
 }
 
@@ -259,21 +265,4 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 
 	environmap["SERVER_PROTOCOL"] = "HTTP/1.1";
 	return ;
-}
-
-char * const* HandleCGI::map_to_chartab()
-{
-    size_t  i;
-    
-    i = 0;
-    newenviron = new char*[datamap.size() * 4 + 1];
-    for (std::map<std::string, std::string>::iterator it = datamap.begin(); it != datamap.end(); ++it)
-    {
-        newenviron[i++] = strdup(it->first.c_str());
-        newenviron[i++] = strdup(";");
-        newenviron[i++] = strdup(it->second.c_str());
-        newenviron[i++] = strdup(";");
-    }
-    newenviron[i] = NULL;
-    return (newenviron);
 }

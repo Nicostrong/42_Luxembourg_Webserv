@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 08:22:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 09:20:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@ void RequestHandling::handleBody(Socket& sock)
 	throw HttpExceptions(CREATED);
 }
 
+bool	RequestHandling::ends_with( const std::string& str, const std::string& suffix )
+{
+	if (str.length() >= suffix.length())
+		return (str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0);
+	return (false);
+}
 
 bool RequestHandling::isCGI(Socket& sock)
 {
@@ -82,11 +88,15 @@ bool RequestHandling::isCGI(Socket& sock)
 	if (cgiDirectives.size() < 1)
 		return (false);
 
+
+	std::string		uri = sock.getReq().getUri();
+
+	return (RequestHandling::ends_with(uri, ".py") || RequestHandling::ends_with(uri, ".php"));
+}
+/*
 	// CGI METHODOLOGY NOT CORRECT
-
-	return (false);
-
-	/*std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
+	
+	std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
 	if (cgiPath.empty())
 	{
 		getErrorResponse(NOT_FOUND, server, req, resp);
@@ -98,8 +108,8 @@ bool RequestHandling::isCGI(Socket& sock)
 	if (!isFileReadable(server, req, resp, realCgiPath))
 		return ;
 	
-	getErrorResponse(OK, server, req, resp);*/
-}
+	getErrorResponse(OK, server, req, resp);
+*/
 
 bool RequestHandling::isStaticFile(Socket& sock)
 {
@@ -272,11 +282,12 @@ void RequestHandling::handleGet(Socket& sock)
 			
 	if (isCGI(sock))
 	{
+		LOG_DEB("IsCGI dans GET");
 		data = getQueryString(sock.getReq().getUri());
 		HandleCGI hcgi(data, sock);
 		return ;
 	}
-		
+	
 	if (isIndexFile(sock))
 		return ;
 			
@@ -296,7 +307,15 @@ void RequestHandling::handlePost(Socket& sock)
 
 	LOG_DEB(sock.getReq().getUri());
 	std::string	path = sock.getReq().getPathTranslated();
-
+	if (isCGI(sock))
+	{
+		LOG_DEB("IsCGI dans POST");
+		std::string		data;
+		
+		data = getQueryString(sock.getReq().getUri());
+		HandleCGI hcgi(data, sock);
+		return ;
+	}
 	handleBodyLength(sock);
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));

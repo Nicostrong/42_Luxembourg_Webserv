@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 16:11:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 09:20:37 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class RequestHandling: public HttpBase
 		static bool			isIndexFile(Socket& sock);
 		static bool			isDirctoryListing(Socket &sock);
 		static bool			isStaticFile(Socket& sock);
+		static bool			ends_with( const std::string& str, const std::string& suffix );
 
 		// Get realated
 		static void			handleGet(Socket& sock);
