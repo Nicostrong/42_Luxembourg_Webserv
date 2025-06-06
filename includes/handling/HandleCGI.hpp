@@ -6,7 +6,7 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 09:05:37 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/06 09:11:39 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ class HandleCGI: public IEventHandler
 		char**									newenviron;
 		std::map<std::string, std::string>		datamap;
 		std::map<std::string, std::string>		environmap;
-	public:
 		HandleCGI();
-		HandleCGI(std::string& data, Socket& socket);
+	public:
+		
+		HandleCGI(*cmd_list[3], EventMonitoring& em, std::string& data, Socket& socket);
 		HandleCGI(HandleCGI& copy);
 		HandleCGI& operator=(HandleCGI& copy);
 		~HandleCGI();
