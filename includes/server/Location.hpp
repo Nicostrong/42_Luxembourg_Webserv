@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:36:48 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 14:34:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class	Location
 
 		/*	GETTER	*/
 		const std::string&					getPath( void ) const;
+		const std::string&					getCGIPath( const std::string& extension ) const;
 		
 		const MethodHTTP*					getMethod( void ) const;
 		
@@ -62,6 +63,7 @@ class	Location
 		
 		/*	CHECKER	*/
 		bool								isMatching( const std::string& uri ) const;
+		bool								isCGICDir( const std::string& extension ) const;
 
 		/*	class Exception	*/
 		class	LocationException : public std::exception

@@ -6,7 +6,11 @@
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/06/06 14:04:53 by gzenner          ###   ########.fr       */
+=======
+/*   Updated: 2025/06/06 14:45:59 by nfordoxc         ###   Luxembourg.lu     */
+>>>>>>> 9404e77bc8c721253b81f583a26179a4e6941847
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,9 +206,9 @@ char * const* HandleCGI::map_to_chartab()
  */
 void		HandleCGI::createCmdLst( Socket& socket )
 {
-	std::string							pathCGI;
-	std::list<CGIDirective*>			lCGIDir;
-	std::list<CGIDirective*>::iterator	itDirCGI;
+	std::string		pathCGI;
+	Location*		loc = socket.getReq().getServer()->getMatchingLoc(socket.getReq().getUri());
+
 
 	lCGIDir = socket.getReq().getServer()->getLocations("/cgi-bin").getCGIDirectives();
 	pathCGI = Uri::getCgiPath(lCGIDir, socket.getReq().getLoc(), socket.getReq().getUri());
@@ -260,6 +264,7 @@ void		HandleCGI::completeEnvironMap( Socket& socket )
 	std::ostringstream		oss;
 
 	environmap["AUTH_TYPE"] = "nfordoxc";
+	environmap["GATEWAY_INTERFACE"] = CGI_REVISION;
 
 	oss << socket.getReq().getContentLength();
 	this->environmap["CONTENT_LENGTH"] = oss.str();

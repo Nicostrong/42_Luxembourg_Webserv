@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 13:54:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 14:43:43 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 # define HandleCGI_HPP
 
 # include "../lib.hpp"
-# include "../utils/Pipe.hpp"
 # include "../utils/Uri.hpp"
-# include "../networking/BodyParser.hpp"
+# include "../utils/Pipe.hpp"
+# include "../server/Location.hpp"
 # include "../networking/Socket.hpp"
-# include "../events/EventMonitoring.hpp"
 # include "../events/IEventHandler.hpp"
+# include "../networking/BodyParser.hpp"
+# include "../events/EventMonitoring.hpp"
 
 class HandleCGI: public IEventHandler
 {
