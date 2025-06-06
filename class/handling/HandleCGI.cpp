@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 14:00:33 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 14:04:53 by gzenner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,11 @@ void		HandleCGI::createCmdLst( Socket& socket )
 	lCGIDir = socket.getReq().getServer()->getLocations("/cgi-bin").getCGIDirectives();
 	pathCGI = Uri::getCgiPath(lCGIDir, socket.getReq().getLoc(), socket.getReq().getUri());
 	
-	this->lCmd = new char*[4];
+	this->lCmd = new char*[3];
+	for(int i=0; i<3; ++i)
+	{
+		lCmd[i] = NULL;
+	}
 	this->lCmd[0] = socket.getReq().getServer()->getLocations(socket.getReq().getUri()).getCGIDirectives()
 }
 
