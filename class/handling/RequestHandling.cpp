@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 16:15:56 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/06 08:22:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,7 +273,7 @@ void RequestHandling::handleGet(Socket& sock)
 	if (isCGI(sock))
 	{
 		data = getQueryString(sock.getReq().getUri());
-		HandleCGI hcgi(data);
+		HandleCGI hcgi(data, sock);
 		return ;
 	}
 		
