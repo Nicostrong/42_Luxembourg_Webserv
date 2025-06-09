@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:13:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/09 23:11:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,12 @@ void Buffer::reset()
 {
 	this->_bufferUsed = 0;
 	this->_bufferRead = 0;
+}
+
+void Buffer::resetIfRead()
+{
+    if (isBufferRead())
+        reset();
 }
 
 std::ostream& operator<<(std::ostream& os, const Buffer& obj)

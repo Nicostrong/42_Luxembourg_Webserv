@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:46:11 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:11:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/09 23:16:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void ResponseHandling::init(Socket& sock)
     {
         case HttpResponse::REDIRECT:
 			sock.getResp().sendHead(sock.getTxBuffer());
-			sock.reset();
+			sock.setReset();
 			this->_state = SENT;
             break;
         case HttpResponse::CGI:
@@ -51,7 +51,7 @@ void ResponseHandling::init(Socket& sock)
         case HttpResponse::DIRECTORY_LISTING:
 			sock.getResp().sendDirectoryListing(sock.getTxBuffer(), 
 				sock.getReq());
-			sock.reset();
+			sock.setReset();
 			this->_state = SENT;
             break;
         case HttpResponse::STATIC_FILE:
@@ -67,7 +67,7 @@ void ResponseHandling::init(Socket& sock)
                 break;
         case HttpResponse::ERROR:
 			sock.getResp().sendDefaultErrorPage(sock.getTxBuffer());
-			sock.reset();
+			sock.setReset();
 			this->_state = SENT;
 			break;
         default:
@@ -88,7 +88,7 @@ void ResponseHandling::send(Socket& sock)
 			this->_state = SENT;
             delete this->_staticFile;
             this->_staticFile = NULL;
-			sock.reset();
+			sock.setReset();
         }
     }
 }

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 20:35:32 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/09 23:36:37 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "./../http/HttpExceptions.hpp"
 # include "./../http/HttpSevereExceptions.hpp"
 # include "./../handling/ResponseHandling.hpp"
+# include "./../http/HttpHandling.hpp"
 
 # define RX_SIZE 1024
 
@@ -55,7 +56,8 @@ class Socket : public IEventHandler
 		ServerManager&		getSM();
 		EventMonitoring&	getEM( void );
 		void 				setSocketClose();
-		void				reset();
+		void				setReset();
+		void				reset(EventMonitoring& em);
 		void				onReadEvent(int fd, int type, EventMonitoring& em);
 		void				onWriteEvent(int fd, int type, EventMonitoring& em);
 		void				onCloseEvent(int fd, int type, EventMonitoring& em);

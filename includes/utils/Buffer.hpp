@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:00:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/09 23:11:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ class Buffer
 											size_t n = std::string::npos);
 		void 						alignData();
 		void 						reset();
+		void						resetIfRead();
     private:
         std::vector<char>	_buffer;
         size_t				_bufferSize;

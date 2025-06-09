@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/06 09:32:26 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/09 23:31:25 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,6 +78,7 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/HandleConfig.cpp \
 					../class/http/HttpBase.cpp \
 					../class/http/HttpRequest.cpp \
+					../class/http/HttpHandling.cpp \
 					../class/events/EventData.cpp \
 					../class/events/EventMonitoring.cpp \
 					../class/http/HttpResponse.cpp \
@@ -159,6 +160,7 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/http/HttpRequest.cpp \
 					../class/http/HttpResponse.cpp \
 					../class/http/HttpSevereExceptions.cpp \
+					../class/http/HttpHandling.cpp \
 					../class/networking/BodyParser.cpp \
 					../class/networking/Chunk.cpp \
 					../class/networking/Listener.cpp \

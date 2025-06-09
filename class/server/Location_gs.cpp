@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location_gs.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/06 14:34:24 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/09 23:41:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ const std::string&					Location::getCGIPath( const std::string& extension ) cons
 		if ((*itCGILst)->getExtension() == extension)
 			return ((*itCGILst)->getPath());
 	return ("");
-}
+}// /!\ The function makes the program not compiling pls fix it
 
 /*
  *	getMethod return the pointer of MethodHTTP for this Location
