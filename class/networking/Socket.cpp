@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 11:46:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/09 20:36:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ HttpResponse& Socket::getResp()
 	return (this->_resp);
 }
 
+Buffer& Socket::getRxBuffer()
+{
+	return (this->_rxBuffer);
+}
+
 Buffer& Socket::getTxBuffer()
 {
 	return (this->_txBuffer);
@@ -74,6 +79,11 @@ ServerManager& Socket::getSM()
 EventMonitoring&	Socket::getEM( void )
 {
 	return (*_em);
+}
+
+void Socket::setSocketClose()
+{
+	this->_keepAlive = false;
 }
 
 void Socket::reset()

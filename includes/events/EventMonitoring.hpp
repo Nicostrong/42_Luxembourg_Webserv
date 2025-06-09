@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:14:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/09 20:41:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ class EventMonitoring
 		size_t getClientsConnected() const;
 		
 		void monitor(int fd, uint32_t events, int type, IEventHandler& ctx);
+		void monitorUpdate(int fd, uint32_t events);
 		void unmonitor(int fd);
 		void updateEvents();
 	private:
