@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventData.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/05/17 11:39:55 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/10 21:52:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class EventData
 		int 					getFd() const;
 		int						getType() const;
 		const IEventHandler&	getCtx() const;
+		bool					getCanceled() const;
+		void					setCanceled();
 
 		//Events
 		void					onRead() const;
@@ -44,6 +46,7 @@ class EventData
 		const int				_type;
 		IEventHandler& 			_ctx;
 		EventMonitoring&		_em;
+		bool					_canceled;
 };
 
 #endif

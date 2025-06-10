@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 18:44:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:57:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,19 @@ void EventMonitoring::monitorUpdate(int fd, uint32_t events)
 
 void EventMonitoring::unmonitor(int fd)
 {
-	this->_closeFds.push_back(fd);
+	std::list<epoll_event>::iterator it = this->_openFds.begin();
+	
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
+	while (it != this->_openFds.end())
+    {
+		EventData *data = static_cast<EventData *>(it->data.ptr);
+		if (data->getFd() == fd)
+		{
+			data->setCanceled();
+			return ;
+		}
+		++it;
+	}
 }
 
 void EventMonitoring::updateEvents()
@@ -106,17 +117,18 @@ void EventMonitoring::updateEvents()
 		EventData *data = static_cast<EventData *>(it->data.ptr);
 		try
 		{
-			if (it->events & (POLLERR | POLLHUP | POLLRDHUP))
+			if (it->events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP) && 
+				!data->getCanceled())
 			{
 				//LOG_DEB("Close epoll event");
 				data->onClose();
 			}
-			else if (it->events & POLLIN)
+			else if (it->events & EPOLLIN && !data->getCanceled())
 			{
 				//LOG_DEB("Read epoll event");
 				data->onRead();
 			}
-			else if (it->events & POLLOUT)
+			else if (it->events & EPOLLOUT && !data->getCanceled())
 			{
 				//LOG_DEB("Write epoll event");
 				data->onWrite();
@@ -135,21 +147,14 @@ void EventMonitoring::remove()
 	while (it != this->_openFds.end())
 	{
 		EventData *data = static_cast<EventData *>(it->data.ptr);
-		std::list<int>::iterator itc = this->_closeFds.begin();
-		while (itc != this->_closeFds.end())
+		if (data->getCanceled())
 		{
-			if (data->getFd() == *itc)
-			{
-				delete data;
-				it = this->_openFds.erase(it);
-				this->_closeFds.erase(itc);
-				break;
-			}
-			++itc;
+			delete data;
+			it = this->_openFds.erase(it);
+			continue;
 		}
 		++it;
 	}
-	this->_closeFds.clear();
 }
 
 // Exceptions

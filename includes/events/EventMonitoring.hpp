@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 20:41:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:48:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include "./EventData.hpp"
 #include "./IEventHandler.hpp"
 
-#define MAX_CONNECTIONS 20
-#define MAX_EVENTS 20
+#define MAX_CONNECTIONS 4096
+#define MAX_EVENTS 4096
 #define TIMEOUT_POLL 5000
 
 class EventMonitoring
@@ -54,7 +54,6 @@ class EventMonitoring
 		void 						remove();
 		std::vector<epoll_event>	_events;
 		std::list<epoll_event>		_openFds;
-		std::list<int>				_closeFds;
 		size_t 						_clientsConnected;
 		int 						_epollFd;
 };

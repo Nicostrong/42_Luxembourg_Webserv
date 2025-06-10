@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 23:37:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:50:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr, 
 	ServerManager& sm, SocketManager& sockm)
-	: _fd(fd), _sockAddr(sockAddr), _entryAddr(entryAddr), _resp(), 
+	: _fd(fd), _sockAddr(sockAddr), _entryAddr(entryAddr), 
 	  _rxBuffer(RX_SIZE), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), 
 	  _keepAlive(true), _sm(sm), _sockm(sockm), _em(NULL)
 {
@@ -76,7 +76,7 @@ ServerManager& Socket::getSM()
 	return (this->_sm);
 }
 
-EventMonitoring&	Socket::getEM( void )
+EventMonitoring& Socket::getEM( void )
 {
 	return (*_em);
 }

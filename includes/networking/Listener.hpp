@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:26:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 21:50:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Listener : public IEventHandler
 		Listener(const Listener& obj);
 		Listener& operator=(const Listener& obj);
 		
-        const Endpoint&             _addr;
+        const Endpoint              _addr;
 		int				            _serverSocket;
 		SocketManager&	            _sockm;
         ServerManager&              _servm;
