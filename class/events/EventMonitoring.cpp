@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 22:53:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 18:44:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void EventMonitoring::monitorUpdate(int fd, uint32_t events)
 			epoll_ctl(this->_epollFd, EPOLL_CTL_MOD, fd, &(*it));
 			return ;
 		}
+		++it;
 	}
 }
 

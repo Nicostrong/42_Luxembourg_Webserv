@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/09 23:41:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 18:34:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ const std::string&					Location::getPath( void ) const
 /*
  *	get the path of CGIDirective of the extension
  */
-const std::string&					Location::getCGIPath( const std::string& extension ) const
+/*const std::string&					Location::getCGIPath( const std::string& extension ) const
 {
 	std::list<CGIDirective*>					CGILst = getCGIDirectives();
 	std::list<CGIDirective*>::const_iterator	itCGILst;
@@ -39,7 +39,7 @@ const std::string&					Location::getCGIPath( const std::string& extension ) cons
 		if ((*itCGILst)->getExtension() == extension)
 			return ((*itCGILst)->getPath());
 	return ("");
-}// /!\ The function makes the program not compiling pls fix it
+}*/
 
 /*
  *	getMethod return the pointer of MethodHTTP for this Location

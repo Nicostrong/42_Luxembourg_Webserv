@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 13:57:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/10 18:40:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/handling/RequestHandling.hpp"
+#include "./../../includes/networking/Socket.hpp"
 
 std::map<std::string, RequestHandling::HandlerFunc> RequestHandling::_handlers =
 	RequestHandling::initHandlers();

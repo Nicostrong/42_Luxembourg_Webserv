@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/06/06 14:04:53 by gzenner          ###   ########.fr       */
-=======
-/*   Updated: 2025/06/06 14:45:59 by nfordoxc         ###   Luxembourg.lu     */
->>>>>>> 9404e77bc8c721253b81f583a26179a4e6941847
+/*   Updated: 2025/06/10 18:38:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/handling/HandleCGI.hpp"
+#include "../../includes/networking/Socket.hpp"
 
 HandleCGI::HandleCGI()
 {
@@ -206,11 +203,11 @@ char * const* HandleCGI::map_to_chartab()
  */
 void		HandleCGI::createCmdLst( Socket& socket )
 {
-	std::string		pathCGI;
-	Location*		loc = socket.getReq().getServer()->getMatchingLoc(socket.getReq().getUri());
+	/*std::string		pathCGI;
+	const Location*		loc = socket.getReq().getServer()->getMatchingLoc(socket.getReq().getUri());
 
 
-	lCGIDir = socket.getReq().getServer()->getLocations("/cgi-bin").getCGIDirectives();
+	const std::list<CGIDirective*>lCGIDir = socket.getReq().getServer()->getLocations("/cgi-bin").getCGIDirectives();
 	pathCGI = Uri::getCgiPath(lCGIDir, socket.getReq().getLoc(), socket.getReq().getUri());
 	
 	this->lCmd = new char*[3];
@@ -218,7 +215,9 @@ void		HandleCGI::createCmdLst( Socket& socket )
 	{
 		lCmd[i] = NULL;
 	}
-	this->lCmd[0] = socket.getReq().getServer()->getLocations(socket.getReq().getUri()).getCGIDirectives()
+	this->lCmd[0] = socket.getReq().getServer()->getLocations(socket.getReq().getUri()).getCGIDirectives()*/
+	(void) socket;
+	return ;
 }
 
 void HandleCGI::initEnvironMapNULL()

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/06 14:43:43 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/10 18:35:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 # include "../utils/Uri.hpp"
 # include "../utils/Pipe.hpp"
 # include "../server/Location.hpp"
-# include "../networking/Socket.hpp"
 # include "../events/IEventHandler.hpp"
 # include "../networking/BodyParser.hpp"
 # include "../events/EventMonitoring.hpp"
+
+class Socket;
 
 class HandleCGI: public IEventHandler
 {

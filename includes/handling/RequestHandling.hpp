@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 09:20:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/10 18:39:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 # include "./../lib.hpp"
 # include "./../utils/Uri.hpp"
+# include "./../utils/Endpoint.hpp"
 # include "./../http/HttpBase.hpp"
 # include "./../http/HttpRequest.hpp"
 # include "./../http/HttpResponse.hpp"
 # include "./../server/Server.hpp"
-# include "./CGI.hpp"
 # include "./HandleCGI.hpp"
 
 class RequestHandling: public HttpBase
