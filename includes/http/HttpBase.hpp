@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:04:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 08:49:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ class HttpBase
 		static std::string	getStrStatusCode(HttpCode statusCode);
 		static std::string	getDirectoryListing(const std::string &dirPath, 
 			const std::string &relativeDir);
-	protected:
-		HttpBase();
 		static bool canBeValidMethod(const std::string& method);
 		static bool canBeValidPath(const std::string& path);
 		static bool canBeValidHttpProtocol(const std::string& httpVersion);
@@ -84,6 +82,8 @@ class HttpBase
 		static bool isHeaderValueValid(const std::string& value);
 		static std::string normalizeHeaderName(const std::string& name);
 		static std::string normalizeUri(const std::string& uri);
+	protected:
+		HttpBase();
 		static void 		formatIndividualFile(std::ostringstream& oss, 
 			const std::string& filePath, std::string fileName);
 		static std::string	formatTime(const time_t& time);

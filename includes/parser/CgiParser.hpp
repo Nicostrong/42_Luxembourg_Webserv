@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:00:57 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 10:41:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 08:42:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class CgiParser
         };
         CgiParser();
         ~CgiParser();
-		void	onData(Buffer &buff);
+		void	onRead(Buffer &buff);
     private:
         CgiParser(const CgiParser& obj);
         CgiParser& operator=(const CgiParser& obj);

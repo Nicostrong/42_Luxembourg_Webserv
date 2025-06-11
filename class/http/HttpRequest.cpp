@@ -3,35 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 15:44:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/11 09:54:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/http/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() {}
+HttpRequest::HttpRequest() : _loc(NULL), _isTE(false), _contentLength(0), 
+	_server(NULL), _body(NULL) {}
 
-HttpRequest::HttpRequest(const std::string& remoteIp) : HttpParser(), 
+HttpRequest::HttpRequest(const std::string& remoteIp) : HttpBase(), 
 	_remoteIp(remoteIp), _loc(NULL), _isTE(false), _contentLength(0), 
-	_server(NULL) {}
+	_server(NULL), _body(NULL) {}
 
-HttpRequest::HttpRequest(const HttpRequest &obj) : HttpParser(obj)
+HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
 	*this = obj;
 }
 
-HttpRequest::~HttpRequest() {}
+HttpRequest::~HttpRequest() 
+{
+	if (this->_body)
+		delete this->_body;
+}
 
 HttpRequest &HttpRequest::operator=(const HttpRequest &obj) 
 {
 	if (this != &obj)
 	{
-		HttpParser::operator=(obj);
+		if (this->_body)
+			delete this->_body;
+		
+		HttpBase::operator=(obj);
 		this->_remoteIp = obj._remoteIp;
-
 		this->_loc = obj._loc;
 		this->_pathTranslated = obj._pathTranslated;
 		this->_pathInfo = obj._pathInfo;
@@ -43,6 +50,7 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_fileSize = obj._fileSize;
 		this->_isTE = obj._isTE;
 		this->_contentLength = obj._contentLength;
+		this->_body = obj._body;
 	}
 	return (*this);
 }
@@ -108,6 +116,11 @@ void HttpRequest::setServer(const Server& server)
 	this->_server = &server;
 }
 
+void HttpRequest::setBody(Body *body)
+{
+	this->_body = body;
+}
+
 const std::string& HttpRequest::getRemotIp( void ) const
 {
 	return (this->_remoteIp);
@@ -166,6 +179,11 @@ size_t HttpRequest::getContentLength() const
 const Server* HttpRequest::getServer() const
 {
 	return (this->_server);
+}
+
+Body* HttpRequest::getBody() const
+{
+	return (this->_body);
 }
 
 bool HttpRequest::isTE() const

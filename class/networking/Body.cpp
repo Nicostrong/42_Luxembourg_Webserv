@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BodyParser.cpp                                     :+:      :+:    :+:   */
+/*   Body.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/BodyParser.hpp"
+#include "./../../includes/networking/Body.hpp"
 #include "./../../includes/networking/Socket.hpp"
 
-BodyParser::BodyParser(size_t bufferSize) : _buff(bufferSize), _size(0) {}
+Body::Body(size_t bufferSize) : _buff(bufferSize), _size(0) {}
 
-BodyParser::~BodyParser() 
+Body::~Body() 
 {
 	if (!this->_fBuff.is_open())
 		return ;
@@ -25,12 +25,12 @@ BodyParser::~BodyParser()
 	std::remove(this->_fName.c_str());
 }
 
-const std::string& BodyParser::getTmpFileName() const
+const std::string& Body::getTmpFileName() const
 {
 	return (this->_fName);
 }
 
-void BodyParser::moveBodyFile(const std::string& name)
+void Body::moveBodyFile(const std::string& name)
 {
 	if (!this->_fBuff.is_open() || this->_fName.empty())
 	{
@@ -67,7 +67,7 @@ void BodyParser::moveBodyFile(const std::string& name)
 	}
 }
 
-bool BodyParser::onBodyReceived(Buffer& buff, Socket& sock)
+bool Body::onBodyReceived(Buffer& buff, Socket& sock)
 {
 	if (sock.getReq().isTE())
 	{
@@ -81,7 +81,7 @@ bool BodyParser::onBodyReceived(Buffer& buff, Socket& sock)
 	}
 }
 
-void BodyParser::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
+void Body::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
 {
 	if (buff.getBufferUnread() < 1)
 		return ;
@@ -99,7 +99,7 @@ void BodyParser::onBodyReceivedLength(Buffer& buff, size_t bodyLen)
 		this->_fBuff.flush();
 }
 
-void BodyParser::onBodyReceivedTE(Buffer& buff)
+void Body::onBodyReceivedTE(Buffer& buff)
 {
 	if (buff.getBufferUnread() < 1 || 
 		this->_chunk.getState() == Chunk::CHUNK_END)
@@ -123,7 +123,7 @@ void BodyParser::onBodyReceivedTE(Buffer& buff)
 		this->_fBuff.flush();
 }
 
-size_t BodyParser::writeInMemory(Buffer& buff, size_t max)
+size_t Body::writeInMemory(Buffer& buff, size_t max)
 {
 	if (this->_size >= buff.getBufferSize())
 		return (0);
@@ -137,7 +137,7 @@ size_t BodyParser::writeInMemory(Buffer& buff, size_t max)
 	return (len);
 }
 
-size_t BodyParser::writeInFile(Buffer& buff, size_t max)
+size_t Body::writeInFile(Buffer& buff, size_t max)
 {
 	this->_fBuff.write(buff.getDataUnread(), max);
 	if (this->_fBuff.fail()) 
@@ -149,7 +149,7 @@ size_t BodyParser::writeInFile(Buffer& buff, size_t max)
 	return (max);
 }
 
-void BodyParser::openTmpFile()
+void Body::openTmpFile()
 {
 	char* tmpname;
 
@@ -170,7 +170,7 @@ void BodyParser::openTmpFile()
 	this->_fName = tmpname;
 }
 
-void	BodyParser::readInFile(std::vector<char>& receivedTxtBuffer)
+void	Body::readInFile(std::vector<char>& receivedTxtBuffer)
 {
     std::string filecontent;
     while(getline(_fBuff, filecontent))

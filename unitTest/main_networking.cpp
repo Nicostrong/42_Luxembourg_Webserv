@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:41:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 19:39:40 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int main()
 	signal(SIGINT, handle_sigint);
 	try
 	{
-		ParserServerConfig		pc("../config/webserv.conf");
+		ParserServerConfig		pc("../config/siege.conf");
 		ServerManager			sm(pc.getAllTokens());
 		EventMonitoring			em;
 		SocketManager			sockm;

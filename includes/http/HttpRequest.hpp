@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 11:55:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/11 09:06:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include "./../lib.hpp"
 #include "./../server/Server.hpp"
 #include "./../server/Location.hpp"
+#include "./../networking/Body.hpp"
 #include "./HttpBase.hpp"
-#include "./HttpParser.hpp"
 
-class HttpRequest : public HttpParser
+class HttpRequest : public HttpBase
 {
 	public:
 
@@ -42,6 +42,7 @@ class HttpRequest : public HttpParser
 		void					setContentLength(size_t length);
 		void					setTE(bool state);
 		void					setServer(const Server& server);
+		void					setBody(Body *body);
 		const std::string&		getRemotIp( void ) const;
 		const Location* 		getLoc() const;
 		const std::string&		getPathTranslated() const;
@@ -54,6 +55,7 @@ class HttpRequest : public HttpParser
 		size_t					getFileSize() const;
 		size_t					getContentLength() const;
 		const Server*			getServer() const;
+		Body*					getBody() const;
 		bool					isTE() const;
 		
 	private:
@@ -78,6 +80,7 @@ class HttpRequest : public HttpParser
 		// Server config
 		const Server*			_server;
 		
+		Body*			_body;
 };
 
 #endif

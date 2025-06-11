@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/10 18:35:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 09:10:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "../utils/Pipe.hpp"
 # include "../server/Location.hpp"
 # include "../events/IEventHandler.hpp"
-# include "../networking/BodyParser.hpp"
+# include "../networking/Body.hpp"
 # include "../events/EventMonitoring.hpp"
 
 class Socket;
@@ -27,7 +27,7 @@ class HandleCGI: public IEventHandler
 {
 	private:
 
-		//BodyParser*								bp;
+		//Body*								bp;
 		std::vector<char>						receivedTxtBuffer;
 		std::string								output;
 		std::string								input;

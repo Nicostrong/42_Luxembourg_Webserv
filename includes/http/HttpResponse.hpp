@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:20:23 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 09:11:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@
 #include "./../utils/Buffer.hpp"
 #include "./../utils/Uri.hpp"
 #include "./HttpBase.hpp"
-#include "./HttpParser.hpp"
 #include "./HttpRequest.hpp"
 
-class HttpResponse: public HttpParser
+class HttpResponse: public HttpBase
 {
 	public:
 		enum ResponseType

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 23:38:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 10:01:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,35 @@ HttpHandling::~HttpHandling() {}
 
 void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 {
-    HttpRequest* req = &sock->getReq();
     HttpResponse* resp = &sock->getResp();
     
     try
     {
-        req->onRequest(sock->getRxBuffer(), *sock);
-    
-        if (req->getState() < HttpParser::HTTP_RECEIVED)
-            return ;
+        this->_parser.onRead(sock->getRxBuffer(), *sock);
+        switch (this->_parser.getState())
+        {
+            case HttpParser::HTTP_HEAD_RECEIVED:
+                RequestHandling::handleHeaders(*sock);
+                break;
+            case HttpParser::HTTP_BODY_RECEIVED:
+                RequestHandling::handleBody(*sock);
+                break;
+            default:
+                return ;
+        }
 
-        this->_resHandling.init(*sock);
-        em.monitorUpdate(sock->getSocket(), POLLOUT | POLLHUP | POLLRDHUP);
+        switch (this->_parser.getState())
+        {
+            case HttpParser::HTTP_HEAD_RECEIVED:
+            // fallthrough
+            case HttpParser::HTTP_BODY_RECEIVED:
+                this->_resHandling.init(*sock);
+                 em.monitorUpdate(sock->getSocket(),
+                    EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+                break;
+            default:
+                return ;
+        }
     }
     catch(const HttpExceptions& e)
     {
@@ -38,6 +55,7 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
             setConnectionClose(*sock);
         if (e.getCode() > 399)
         {
+            LOG_DEB(this->_parser.getState());
 		    LOG_ERROR("An error occured while parsing request (can be bad request as well)");
             LOG_ERROR(e.getCode());
         }
@@ -47,6 +65,12 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 		this->_resHandling.init(*sock);
 		em.monitorUpdate(sock->getSocket(), POLLOUT | POLLHUP | POLLRDHUP);
     }
+}
+
+void HttpHandling::setBodyRequired()
+{
+    if (this->_parser.getState() == HttpParser::HTTP_HEAD_RECEIVED)
+        this->_parser.setState(HttpParser::HTTP_BODY);
 }
 
 void HttpHandling::onWrite(EventMonitoring& em, Socket* sock)
@@ -63,5 +87,6 @@ void HttpHandling::setConnectionClose(Socket& sock)
 
 void HttpHandling::reset()
 {
+    this->_parser.reset();
     this->_resHandling.reset();
 }

@@ -6,16 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:04:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 09:10:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/http/HttpResponse.hpp"
 
-HttpResponse::HttpResponse() : HttpParser(), _respType(UNKNOWN)
+HttpResponse::HttpResponse() : HttpBase(), _respType(UNKNOWN)
 	{}
 
-HttpResponse::HttpResponse(const HttpResponse& obj) : HttpParser(obj)
+HttpResponse::HttpResponse(const HttpResponse& obj) : HttpBase(obj)
 {
 	*this = obj;
 }
@@ -26,7 +26,7 @@ HttpResponse& HttpResponse::operator=(const HttpResponse& obj)
 {
 	if (this != &obj)
 	{
-		HttpParser::operator=(obj);
+		HttpBase::operator=(obj);
 		this->_respType = obj._respType;
 	}
 	return (*this);

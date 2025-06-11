@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 21:50:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 09:34:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,11 @@ ServerManager& Socket::getSM()
 EventMonitoring& Socket::getEM( void )
 {
 	return (*_em);
+}
+
+HttpHandling& Socket::getHandler()
+{
+	return (this->_handler);
 }
 
 void Socket::setSocketClose()

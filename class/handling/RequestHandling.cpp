@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 18:40:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 10:00:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void RequestHandling::handleBody(Socket& sock)
 {
 	//SHould handle everything else than upload
 	HttpRequest* req = &sock.getReq();
-	BodyParser* body = req->getBody();
+	Body* body = req->getBody();
 	HttpResponse* resp = &sock.getResp();
 	std::string	path = req->getPathTranslated();
 	
@@ -303,7 +303,7 @@ void RequestHandling::handleGet(Socket& sock)
 void RequestHandling::handlePost(Socket& sock)
 {
 	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() == '/')
-		throw HttpExceptions(METHOD_NOT_ALLOWED);
+		throw HttpSevereExceptions(METHOD_NOT_ALLOWED);
 
 	LOG_DEB(sock.getReq().getUri());
 	std::string	path = sock.getReq().getPathTranslated();
@@ -316,7 +316,7 @@ void RequestHandling::handlePost(Socket& sock)
 	handleBodyLength(sock);
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
-	sock.getReq().setState(HttpParser::HTTP_BODY);
+	sock.getHandler().setBodyRequired();
 }
 
 void RequestHandling::handleBodyLength(Socket& sock)
@@ -325,14 +325,14 @@ void RequestHandling::handleBodyLength(Socket& sock)
 	bool cl = sock.getReq().findHeader("CONTENT-LENGTH");
 	
 	if (te && cl)
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(BAD_REQUEST);
 	
 	if (te)
 		handleTE(sock);
 	else if (cl)
 		handleContentLength(sock);
 	else
-		throw HttpExceptions(LENGTH_REQUIRED);
+		throw HttpSevereExceptions(LENGTH_REQUIRED);
 }
 
 void RequestHandling::handleTE(Socket& sock)
@@ -375,18 +375,18 @@ void RequestHandling::checkFileExistUpload(const std::string& path)
 			case ENOENT:
 				return ;
 			case EACCES:
-				throw HttpExceptions(FORBIDDEN);
+				throw HttpSevereExceptions(FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpSevereExceptions(INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOTDIR:
 			default:
-				throw HttpExceptions(NOT_FOUND);
+				throw HttpSevereExceptions(NOT_FOUND);
 		}
 	}
-	throw HttpExceptions(CONFLICT);
+	throw HttpSevereExceptions(CONFLICT);
 }
 
 void RequestHandling::checkFolderExistUpload(const std::string& dir)
@@ -398,16 +398,16 @@ void RequestHandling::checkFolderExistUpload(const std::string& dir)
 		switch (errno)
 		{
 			case EACCES:
-				throw HttpExceptions(FORBIDDEN);
+				throw HttpSevereExceptions(FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpSevereExceptions(INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOENT:
 			case ENOTDIR:
 			default:
-				throw HttpExceptions(NOT_FOUND);
+				throw HttpSevereExceptions(NOT_FOUND);
 		}
 	}
 }

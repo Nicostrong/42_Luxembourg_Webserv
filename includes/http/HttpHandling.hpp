@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 23:37:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/11 09:30:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "./../handling/RequestHandling.hpp"
 #include "./../handling/ResponseHandling.hpp"
 #include "./../events/EventMonitoring.hpp"
+#include "./HttpParser.hpp"
 #include "./HttpExceptions.hpp"
 #include "./HttpSevereExceptions.hpp"
 
@@ -29,6 +30,7 @@ class HttpHandling
 		~HttpHandling();
 		void	onRead(EventMonitoring& em, Socket* sock);
 		void	onWrite(EventMonitoring& em, Socket* sock);
+		void	setBodyRequired();
 		void 	reset();
 	private:
 		HttpHandling(HttpHandling& obj);
@@ -36,6 +38,7 @@ class HttpHandling
 
 		void	setConnectionClose(Socket& sock);
 		
+		HttpParser			_parser;
 		ResponseHandling	_resHandling;
 };
 

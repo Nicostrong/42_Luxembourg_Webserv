@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/03 14:02:22 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/10 19:49:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,7 +374,7 @@ void		CheckerTokens::checkValue( void )
  */
 void		CheckerTokens::checkCGI( void )
 {
-	const Token*		current = this->_head;
+	/*const Token*		current = this->_head;
 
 	while (current->getType() != Token::CGI_BLK_S)
 		current = current->getNext();
@@ -385,7 +385,7 @@ void		CheckerTokens::checkCGI( void )
 				throw CheckerError("CGI key must start with '.'");
 		current = current->getNext();
 	}
-	return ;
+	return ;*/
 }
 
 /*
