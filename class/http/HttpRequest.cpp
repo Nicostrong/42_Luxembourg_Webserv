@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 09:54:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:28:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,4 +189,42 @@ Body* HttpRequest::getBody() const
 bool HttpRequest::isTE() const
 {
 	return (this->_isTE);
+}
+
+/*******************************************************************************
+ *								OUTSTREAM									   *
+ ******************************************************************************/
+
+/*
+ *	output stream operator
+ */
+std::ostream&	operator<<( std::ostream &out,  const HttpRequest& src_object )
+{
+	out	<< GREEN << "================= HTTP REQUEST DETAILS =================" << std::endl
+		<< "Remote IP:"
+		<< src_object.getRemotIp() << std::endl
+		<< "Path translated: "
+		<< src_object.getPathTranslated() << std::endl
+		<< "Path info: "
+		<< src_object.getPathInfo() << std::endl
+		<< "CGI script: "
+		<< src_object.getCgiScript() << std::endl
+		<< "CGI path: "
+		<< src_object.getCgiPath() << std::endl
+		<< "Redirect: "
+		<< src_object.getRedirect() << std::endl
+		<< "File path: "
+		<< src_object.getFilePath() << std::endl
+		<< "Query params: "
+		<< src_object.getQueryParams() << std::endl
+		<< "File size: "
+		<< src_object.getFileSize() << std::endl
+		<< "Content lenght: "
+		<< src_object.getContentLength() << std::endl;
+	if (src_object.getLoc())
+		out << *src_object.getLoc() << std::endl;
+	else
+		out << "Location empty" <<std::endl;
+	out	<< GREEN << "=================== END HTTP REQUEST ==================" << RESET << std::endl;
+	return (out);
 }

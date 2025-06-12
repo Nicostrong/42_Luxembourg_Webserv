@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 19:39:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:31:51 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int main()
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
+		return (1);
 	}
 	return (0);
 }

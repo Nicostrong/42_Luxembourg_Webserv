@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:03:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/10 10:58:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 HttpBase::HttpBase() : _raw(""), _method(""), _uri(""), _httpVersion(""), 
 	_body(""), 	_statusCode(BAD_REQUEST), _headers(), _transferEncoding(false) 
-	{}
+{}
 
 HttpBase::HttpBase(const HttpBase& obj) 
 {

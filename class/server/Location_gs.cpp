@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location_gs.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/10 18:34:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:28:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 /*
  *	get _name value
  */
-const std::string&					Location::getPath( void ) const
+const std::string&		Location::getPath( void ) const
 {
 	return (this->_path);
 }
@@ -28,23 +28,47 @@ const std::string&					Location::getPath( void ) const
 /*
  *	get the path of CGIDirective of the extension
  */
-/*const std::string&					Location::getCGIPath( const std::string& extension ) const
+const std::string&		Location::getCGIPathExtension( const std::string& extension ) const
 {
 	std::list<CGIDirective*>					CGILst = getCGIDirectives();
 	std::list<CGIDirective*>::const_iterator	itCGILst;
 
 	if (!isCGICDir(extension))
-		return ("");
+		throw std::runtime_error(extension + " not found !");
 	for (itCGILst = CGILst.begin(); itCGILst != CGILst.end(); ++itCGILst)
 		if ((*itCGILst)->getExtension() == extension)
 			return ((*itCGILst)->getPath());
-	return ("");
-}*/
+	throw std::runtime_error(extension + " not found !");
+}
+
+/*
+ *	get the path of CGIDirective of the uri
+ */
+const std::string&		Location::getCGIPathUri( const std::string& uri ) const
+{
+	std::string		extension;
+
+	extension = uri.substr(uri.find_last_of('.'));
+	return (this->getCGIPathExtension(extension));
+}
+
+/*
+ *	get the value of a Directive
+ */
+const std::string&		Location::getDirectiveValue( const std::string& keyDir ) const
+{
+	const Directive*			dir = findDirective(keyDir);
+	static const std::string	empty = "";
+
+	if (!dir)
+		return (empty);
+	return (dir->getValue());
+}
 
 /*
  *	getMethod return the pointer of MethodHTTP for this Location
  */
-const MethodHTTP*					Location::getMethod( void ) const
+const MethodHTTP*		Location::getMethod( void ) const
 {
 	return (this->_method);
 }

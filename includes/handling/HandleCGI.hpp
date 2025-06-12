@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/11 09:10:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:29:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,31 @@ class HandleCGI: public IEventHandler
 		char**									lCmd;
 		std::map<std::string, std::string>		datamap;
 		std::map<std::string, std::string>		environmap;
-		HandleCGI();
-		void									createCmdLst( Socket& socket );
+
+		HandleCGI( void );
+		HandleCGI( const HandleCGI& copy );
+		
+		HandleCGI&		operator=( const HandleCGI& copy );
+
+		void			createCmdLst( Socket& socket );
+		void 			initEnvironMapNULL( void );
+		void			completeEnvironMap( Socket& socket );
 
 	public:
 	
-		HandleCGI(Socket& socket);
-		HandleCGI(HandleCGI& copy);
-		HandleCGI& operator=(HandleCGI& copy);
-		~HandleCGI();
-		void 			UpdateNewsLetter(const char *compiler, const char *script, const char *newvalue);
-		void 			UpdateShowData(const char *compiler, const char *script, const char *newvalue);
+		HandleCGI( Socket& socket );
+		~HandleCGI( void );
+
+
+		void 			UpdateNewsLetter( const char *compiler, const char *script, const char *newvalue );
+		void 			UpdateShowData( const char *compiler, const char *script, const char *newvalue );
 		void 			DoCGI( Socket& socket );
-		void 			onReadEvent(int fd, int type, EventMonitoring& em);
-		void 			onWriteEvent(int fd, int type, EventMonitoring& em);
-		void 			onCloseEvent(int fd, int type, EventMonitoring& em);
-		void 			string_to_map();
-		char * const*	map_to_chartab();
-		void 			initEnvironMapNULL();
-		void			completeEnvironMap( Socket& socket );
+		void 			onReadEvent( int fd, int type, EventMonitoring& em );
+		void 			onWriteEvent( int fd, int type, EventMonitoring& em );
+		void 			onCloseEvent( int fd, int type, EventMonitoring& em );
+		void 			string_to_map( void );
+		char * const*	map_to_chartab( void );
+
 };
 
 #endif

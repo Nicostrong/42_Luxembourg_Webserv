@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 09:34:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:31:39 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,18 @@ class Socket : public IEventHandler
 				const char* what() const throw();
 		};
 	
-		Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
-				ServerManager& sm, SocketManager& sockm);
-		~Socket();
+		Socket( int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
+				ServerManager& sm, SocketManager& sockm );
+		~Socket( void );
 		
-		bool 				operator==(const Socket& obj);
-		int					getSocket() const;
-		const Endpoint&		getSockAddr() const;
-		const Endpoint&		getEntryAddr() const;
-		HttpRequest&		getReq();
-		HttpResponse&		getResp();
-		Buffer&				getRxBuffer();
-		Buffer&				getTxBuffer();
-		ServerManager&		getSM();
+		bool 				operator==( const Socket& obj );
+		int					getSocket( void ) const;
+		const Endpoint&		getSockAddr( void ) const;
+		const Endpoint&		getEntryAddr( void ) const;
+		HttpRequest&		getReq( void );
+		HttpResponse&		getResp( void );
+		Buffer&				getTxBuffer( void );
+		ServerManager&		getSM( void );
 		EventMonitoring&	getEM( void );
 		HttpHandling&		getHandler();
 		void 				setSocketClose();
@@ -66,23 +65,23 @@ class Socket : public IEventHandler
 
 	private:
 	
-		Socket(const Socket& obj);
-		Socket& 			operator=(const Socket& obj);
+		Socket( const Socket& obj );
+		Socket& 			operator=( const Socket& obj );
 
-		const int					_fd;
-		const Endpoint				_sockAddr;
-		const Endpoint				_entryAddr;
-		HttpRequest 				_req;
-		HttpResponse 				_resp;
-		Buffer						_rxBuffer;
-		Buffer						_txBuffer;
-		bool						_reset;
-		bool						_keepAlive;
+		const int			_fd;
+		const Endpoint		_sockAddr;
+		const Endpoint		_entryAddr;
+		HttpRequest 		_req;
+		HttpResponse 		_resp;
+		Buffer				_rxBuffer;
+		Buffer				_txBuffer;
+		bool				_reset;
+		bool				_keepAlive;
+		ResponseHandling	_rHandler;
+		ServerManager&		_sm;
+		SocketManager&		_sockm;
+		EventMonitoring*	_em;
 
-		ServerManager&				_sm;
-		SocketManager&				_sockm;
-		EventMonitoring*			_em;
-		HttpHandling				_handler;
 };
 
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/11 09:02:24 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/12 08:32:00 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -342,15 +342,15 @@ func:	$(FUNC_OBJ)
 
 deb_serv:		server 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(SERVER_NAME)
+	$(DEB) $(DEB_OPT) ./$(SERVER_NAME) 2> error
 
 deb_net:		networking 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(NET_NAME)
+	$(DEB) $(DEB_OPT) ./$(NET_NAME) 2> error
 
 deb_par:		parser 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(PAR_NAME)
+	$(DEB) $(DEB_OPT) ./$(PAR_NAME) 2> error
 
 clean:
 	$(call delete_progress, *.o)
@@ -362,12 +362,15 @@ clean:
 	$(call delete_progress, ../class/http/*.o)
 	$(call delete_progress, ../class/networking/*.o)
 	$(call delete_progress, ../class/utils/*.o)
+	$(call delete_progress, error)
+	
 
 fclean: 	clean
 	$(call delete_file, $(SERVER_NAME))
 	$(call delete_file, $(NET_NAME))
 	$(call delete_file, $(PAR_NAME))
 	$(call delete_file, $(FUNC_NAME))
+	$(call delete_progress, error)
 
 re : 		fclean all
 

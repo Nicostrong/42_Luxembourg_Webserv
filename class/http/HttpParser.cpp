@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 10:02:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:27:48 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "./../../includes/networking/Socket.hpp"
 #include "./../../includes/handling/RequestHandling.hpp"
 
-HttpParser::HttpParser(): _state(HTTP_STARTLINE)
+HttpParser::HttpParser() : HttpBase(), _state(HTTP_STARTLINE), _reqBody(NULL)
 {
 	this->_slBuffer.reserve(SL_BSIZE);
 	this->_headBuffer.reserve(HEAD_BSIZE);

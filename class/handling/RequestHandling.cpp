@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 10:00:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:26:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,11 @@ bool RequestHandling::isCGI(Socket& sock)
 	*/
 
 	std::string		uri = sock.getReq().getUri();
+	size_t			queryPos = uri.find('?');
+
+	if (queryPos != std::string::npos)
+    	uri = uri.substr(0, queryPos);
+	LOG_DEB(uri);
 
 	return (RequestHandling::ends_with(uri, ".py") || RequestHandling::ends_with(uri, ".php"));
 }
@@ -283,7 +288,10 @@ void RequestHandling::handleGet(Socket& sock)
 	if (isCGI(sock))
 	{
 		LOG_DEB("IsCGI dans GET");
+		setAttributes(sock);
+
 		HandleCGI hcgi(sock);
+
 		hcgi.DoCGI(sock);
 		return ;
 	}
@@ -309,7 +317,11 @@ void RequestHandling::handlePost(Socket& sock)
 	std::string	path = sock.getReq().getPathTranslated();
 	if (isCGI(sock))
 	{
-		HandleCGI hcgi(sock);
+		LOG_DEB("IsCGI dans POST");
+		setAttributes(sock);
+
+		HandleCGI		hcgi(sock);
+
 		hcgi.DoCGI(sock);
 		return ;
 	}
@@ -473,4 +485,22 @@ std::map<std::string, RequestHandling::HandlerFunc>
 	handlers["DELETE"] = &RequestHandling::handleDelete;
 
 	return (handlers);
+}
+
+void	RequestHandling::setAttributes( Socket& socket )
+{
+	HttpRequest*		req = &socket.getReq();
+	const Location*		loc = req->getLoc();
+	size_t				pos = req->getUri().find_last_of('?');
+
+	req->setCgiScript(req->getPathTranslated().substr(req->getPathTranslated().find_last_of('/') + 1));
+	req->setCgiPath(loc->getCGIPathUri(req->getPathTranslated()));
+	req->setPathInfo(loc->getPath());
+	req->setFilePath(req->getPathTranslated());
+	req->setRedirect(loc->getDirectiveValue("return"));
+	if (pos != std::string::npos)
+    	req->setQueryParams(req->getUri().substr(pos + 1));
+	else
+	    req->setQueryParams("");
+	return ;
 }

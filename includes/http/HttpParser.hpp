@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 09:43:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/12 08:30:23 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@
 # define SL_BSIZE 1024
 # define HEAD_BSIZE 8192
 
-class Socket;
+class	Socket;
 
 class HttpParser
 {
 	
 	public:
+
 		enum State
 		{
 			HTTP_STARTLINE = 0,
