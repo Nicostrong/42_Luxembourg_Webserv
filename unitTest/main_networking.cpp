@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:31:51 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/16 10:54:30 by nfordoxc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,16 @@ void	handle_sigint( int signal )
 {
 	if (signal == SIGINT)
 		g_running = false;
+	return ;
 }
 
 int main()
 {
 	signal(SIGINT, handle_sigint);
+	signal(SIGSEGV, handle_sigint);
 	try
 	{
-		ParserServerConfig		pc("../config/siege.conf");
+		ParserServerConfig		pc("../config/webserv.conf");
 		ServerManager			sm(pc.getAllTokens());
 		EventMonitoring			em;
 		SocketManager			sockm;
