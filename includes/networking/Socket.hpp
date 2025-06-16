@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:31:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/16 10:39:15 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ class Socket : public IEventHandler
 		const Endpoint&		getEntryAddr( void ) const;
 		HttpRequest&		getReq( void );
 		HttpResponse&		getResp( void );
+		Buffer&				getRxBuffer( void );
 		Buffer&				getTxBuffer( void );
 		ServerManager&		getSM( void );
 		EventMonitoring&	getEM( void );
@@ -77,7 +78,7 @@ class Socket : public IEventHandler
 		Buffer				_txBuffer;
 		bool				_reset;
 		bool				_keepAlive;
-		ResponseHandling	_rHandler;
+		HttpHandling		_handler;
 		ServerManager&		_sm;
 		SocketManager&		_sockm;
 		EventMonitoring*	_em;

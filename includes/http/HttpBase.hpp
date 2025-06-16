@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 08:49:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 10:32:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ class HttpBase
 		void				setMethod(std::string method);
 		const std::string&	getUri() const;
 		void				setUri(std::string uri);
-		const std::string& 	getBody() const;
-		void 				setBody(const std::string body);
+		const std::string& 	getRawBody() const;
+		void 				setRawBody(const std::string body);
 		const std::string& 	getHttpVersion() const;
 		void 				setHTTP(const std::string html);
 		const std::string& 	getRaw() const;

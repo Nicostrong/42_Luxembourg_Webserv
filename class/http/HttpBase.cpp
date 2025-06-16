@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 10:58:05 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/16 10:32:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ void HttpBase::setUri(const std::string uri)
 	this->_uri = uri;
 }
 
-const std::string& HttpBase::getBody() const
+const std::string& HttpBase::getRawBody() const
 {
 	return (this->_body);
 }
 
-void HttpBase::setBody(const std::string body)
+void HttpBase::setRawBody(const std::string body)
 {
 	this->_body = body;
 }

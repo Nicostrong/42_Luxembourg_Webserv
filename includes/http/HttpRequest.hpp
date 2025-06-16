@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:30:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/16 10:34:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class HttpRequest : public HttpBase
 		void				setContentLength( size_t length );
 		void				setTE( bool state );
 		void				setServer( const Server& server );
+		void				setBody( Body* body );
 		const std::string&	getRemotIp( void ) const;
 		const Location* 	getLoc( void ) const;
 		const std::string&	getPathTranslated( void ) const;
@@ -56,6 +57,7 @@ class HttpRequest : public HttpBase
 		size_t				getContentLength( void ) const;
 		const Server*		getServer( void ) const;
 		bool				isTE( void ) const;
+		Body*				getBody( void ) const;
 		
 	private:
 	
