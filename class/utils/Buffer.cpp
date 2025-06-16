@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 23:11:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:29:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,27 @@ void Buffer::copyFrom(Buffer& buff, size_t pos, size_t n)
         return ;
     
     if (endPos - pos > getBufferUnused())
-        return ;
+        throw NoSpaceAvailable();
     
     std::copy(buff.getVector().begin() + pos, 
                 buff.getVector().begin() + endPos + 1, 
+                    this->beginUnused());
+    
+    setBufferUsed(endPos - pos);
+}
+
+void Buffer::copyFrom(const std::string& buff, size_t pos, size_t n)
+{
+    size_t endPos = std::min(pos + n, buff.size());
+
+    if (pos >= endPos)
+        return ;
+    
+    if (endPos - pos > getBufferUnused())
+        throw NoSpaceAvailable();
+    
+    std::copy(buff.begin() + pos, 
+                buff.begin() + endPos + 1, 
                     this->beginUnused());
     
     setBufferUsed(endPos - pos);
@@ -251,6 +268,13 @@ void Buffer::resetIfRead()
 {
     if (isBufferRead())
         reset();
+}
+
+// Exceptions
+
+const char *Buffer::NoSpaceAvailable::what() const throw()
+{
+	return ("No space available in buffer");
 }
 
 std::ostream& operator<<(std::ostream& os, const Buffer& obj)

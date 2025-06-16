@@ -6,16 +6,17 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 09:10:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:34:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/http/HttpResponse.hpp"
 
-HttpResponse::HttpResponse() : HttpBase(), _respType(UNKNOWN)
+HttpResponse::HttpResponse() : HttpBase(), _respType(UNKNOWN), 
+	_headBuffer(HEAD_BSIZE)
 	{}
 
-HttpResponse::HttpResponse(const HttpResponse& obj) : HttpBase(obj)
+HttpResponse::HttpResponse(const HttpResponse& obj) : HttpBase(obj), _headBuffer(0)
 {
 	*this = obj;
 }
@@ -28,8 +29,45 @@ HttpResponse& HttpResponse::operator=(const HttpResponse& obj)
 	{
 		HttpBase::operator=(obj);
 		this->_respType = obj._respType;
+		this->_headBuffer = obj._headBuffer;
 	}
 	return (*this);
+}
+
+void HttpResponse::encodeHead(const std::string data)
+{
+	try
+	{
+		this->_headBuffer.copyFrom(data);
+	}
+	catch(const Buffer::NoSpaceAvailable& e)
+	{
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+	}
+}
+
+void HttpResponse::encodeHead(const std::string data)
+{
+	try
+	{
+		this->_headBuffer.copyFrom(data);
+	}
+	catch(const Buffer::NoSpaceAvailable& e)
+	{
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+	}
+}
+
+void HttpResponse::encodeHead(const std::string data)
+{
+	try
+	{
+		this->_headBuffer.copyFrom(data);
+	}
+	catch(const Buffer::NoSpaceAvailable& e)
+	{
+		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+	}
 }
 
 void HttpResponse::sendHead(Buffer& buff)

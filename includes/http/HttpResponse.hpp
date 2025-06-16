@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 09:11:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:30:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ class HttpResponse: public HttpBase
 			const HttpRequest& req);
 		void				setRespType(ResponseType type);
 		ResponseType		getRespType() const;
+		void				encodeHead(const std::string data);
 	private:
 		ResponseType	_respType;
+		Buffer			_headBuffer;
 };
 
 # endif

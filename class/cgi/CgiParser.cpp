@@ -6,11 +6,11 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 08:42:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:49:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/parser/CgiParser.hpp"
+#include "./../../includes/cgi/CgiParser.hpp"
 
 CgiParser::CgiParser() 
 {
@@ -19,12 +19,12 @@ CgiParser::CgiParser()
 
 CgiParser::~CgiParser() {}
 
-void	CgiParser::onRead(Buffer &buff)
+void	CgiParser::onRead(Buffer &buff, CgiResponse& cgiResponse)
 {
     switch (this->_state)
 	{
 		case CGI_HEAD:
-			if (!handleHeaders(buff))
+			if (!handleHeaders(buff, cgiResponse))
 				return ;
 		case CGI_HEAD_RECEIVED:
 			//Receiving head
@@ -33,23 +33,23 @@ void	CgiParser::onRead(Buffer &buff)
 	}
 }
 
-void CgiParser::parseHeaders()
+void CgiParser::parseHeaders(CgiResponse& cgiResponse)
 {
 	size_t sPos = 2;
 	size_t ePos = this->_headBuffer.find(CRLF, sPos);
 
 	while (ePos != std::string::npos)
 	{
-		parseHeader(this->_headBuffer.substr(sPos, ePos - sPos));
+		parseHeader(this->_headBuffer.substr(sPos, ePos - sPos), cgiResponse);
 		sPos = ePos + 2;
 		ePos = this->_headBuffer.find(CRLF, sPos);
 	}
 	
 	if (this->_headBuffer.size())
-		parseHeader(this->_headBuffer.substr(sPos));
+		parseHeader(this->_headBuffer.substr(sPos), cgiResponse);
 }
 
-void CgiParser::parseHeader(const std::string& line)
+void CgiParser::parseHeader(const std::string& line, CgiResponse& cgiResponse)
 {
 	size_t sep = line.find(':');
 	
@@ -64,9 +64,10 @@ void CgiParser::parseHeader(const std::string& line)
 	if (!HttpBase::isHeaderNameValid(name))
 		throw HttpExceptions(HttpBase::BAD_GATEWAY);
 	name = HttpBase::normalizeHeaderName(name);
+	cgiResponse.addHeader(name, value);
 }
 
-bool CgiParser::handleHeaders(Buffer& buff)
+bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 {
 	size_t len = std::min(buff.getBufferUnread(), 
 				this->_headBuffer.capacity() - this->_headBuffer.size());
@@ -88,7 +89,7 @@ bool CgiParser::handleHeaders(Buffer& buff)
 	buff.setBufferRead(pos + len - this->_headBuffer.size() + 4);
 	this->_headBuffer.erase(pos);
 
-	parseHeaders();
+	parseHeaders(cgiResponse);
 	if (this->_state == CGI_HEAD)
 		this->_state = CGI_HEAD_RECEIVED;
 	return (true);
