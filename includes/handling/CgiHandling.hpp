@@ -23,6 +23,7 @@ class CgiHandling
         CgiHandling(const CgiHandling& obj);
         ~CgiHandling();
         CgiHandling& operator=(const CgiHandling& obj);
+		void		handleHeaders();
 
         static bool isStatusHeaderValid(const std::string& status);
         static bool isLocationValid(const std::string& loc);

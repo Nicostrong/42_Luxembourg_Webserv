@@ -12,7 +12,12 @@
 
 #include "./../includes/handling/CgiHandling.hpp"
 
-bool isStatusHeaderValid(const std::string& status)
+void CgiHandling::handleHeaders()
+{
+
+}
+
+bool CgiHandling::isStatusHeaderValid(const std::string& status)
 {
     std::string codeStr;
     size_t pos = status.find(" ");
@@ -30,13 +35,11 @@ bool isStatusHeaderValid(const std::string& status)
     return (code >= 100 && code < 600);
 }
 
-bool isLocationValid(const std::string& loc)
+bool CgiHandling::isLocationValid(const std::string& loc)
 {
     if (std::find_if(loc.begin(), loc.end(), std::not1(std::ptr_fun(isprint)))  
         != loc.end())
         return (false);
-    
-    
 }
 
 //https://datatracker.ietf.org/doc/html/rfc3875#section-1.4

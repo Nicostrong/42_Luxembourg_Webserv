@@ -15,6 +15,8 @@
 
 #include "./../lib.hpp"
 #include "./../utils/Buffer.hpp"
+#include "./../http/HttpExceptions.hpp"
+#include "./../http/HttpBase.hpp"
 
 #define CGI_HEAD_BUFF 8192
 
@@ -23,18 +25,24 @@ class CgiParser
     public:
         enum State
         {
-			HEAD_RECEVING = 0,
-			BODY_RECEIVING = 1,
+			CGI_HEAD = 0,
+			CGI_HEAD_RECEIVED = 1,
+			BODY_RECEIVING = 2,
 			ERROR = 2,
         };
         CgiParser();
         ~CgiParser();
+		
 		void	onRead(Buffer &buff);
+        void	parseHeaders();
+		void	parseHeader(const std::string& line);
+		bool	handleHeaders(Buffer& buff);
     private:
         CgiParser(const CgiParser& obj);
         CgiParser& operator=(const CgiParser& obj);
 
         std::string _headBuffer;
+		State		_state;
 };
 
 # endif
