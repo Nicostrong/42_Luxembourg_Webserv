@@ -6,18 +6,20 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/04 07:56:38 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/06 09:01:41 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/17 09:02:39 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
 #!/usr/bin/python3
 import cgi
 import os
+import sys
 
 upload_dir = "../uploads/"
 os.makedirs(upload_dir, exist_ok=True)
 
 form = cgi.FieldStorage()
+uploaded = False
 
 print("Content-Type: text/html\n")
 print("<html><body>")
@@ -37,3 +39,5 @@ if not uploaded:
 	print("<p>Erreur : Aucun fichier reçu.</p>")
 
 print("</body></html>")
+sys.stdout = sys.__stdout__
+sys.stdout.flush()

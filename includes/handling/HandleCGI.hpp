@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/12 08:29:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/17 09:24:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ class HandleCGI: public IEventHandler
 		void 			onCloseEvent( int fd, int type, EventMonitoring& em );
 		void 			string_to_map( void );
 		char * const*	map_to_chartab( void );
+		char**			getLCmd( void );
+		char**			getNewEnv( void );
 
 };
 

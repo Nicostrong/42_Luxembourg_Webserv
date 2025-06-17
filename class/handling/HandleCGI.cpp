@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/12 08:26:34 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/17 09:24:51 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ HandleCGI::HandleCGI(Socket& socket) : newenviron(NULL), lCmd(NULL)
 	completeEnvironMap(socket);
 	map_to_chartab();
 	createCmdLst(socket);
-	//DoCGI(cmd_list, em);
 }
 
 HandleCGI::~HandleCGI( void )
@@ -32,8 +31,8 @@ HandleCGI::~HandleCGI( void )
 		delete[] newenviron;
 	if (lCmd)
 	{
-		//for (int i = 0; i < 4; ++i)
-		//	delete lCmd[i];
+		for (int i = 0; i < 4; ++i)
+			free(lCmd[i]);
 		delete[] lCmd;
 	}
 }
@@ -105,13 +104,13 @@ void	HandleCGI::completeEnvironMap( Socket& socket )
 	environmap["SERVER_PROTOCOL"] = "HTTP/1.1";
 	environmap["SERVER_SOFTWARE"] = SERVER_VER;
 
-	std::cout << "[DEBUG CGI]\t\t========== PRINTING ===========" << std::endl;
+	/*std::cout << "[DEBUG CGI]\t\t========== PRINTING ===========" << std::endl;
 	std::map<std::string,std::string>::const_iterator	itMap;
 
 	for(itMap = environmap.begin(); itMap != environmap.end(); ++itMap)
 		std::cout << itMap->first << "\t=>\t" << itMap->second << std::endl;
 	
-	std::cout << *req << std::endl;
+	std::cout << *req << std::endl;*/
 	return ;
 }
 
@@ -156,19 +155,21 @@ char * const*	HandleCGI::map_to_chartab()
 void		HandleCGI::createCmdLst( Socket& socket )
 {
 	std::string		path = socket.getReq().getCgiPath();
-	std::string		script = socket.getReq().getCgiScript();
+	std::string		script = socket.getReq().getPathTranslated();
 	std::string		query = socket.getReq().getQueryParams();
 
-	this->lCmd = new char*[4];
-	
-	//lCmd[0] = new char[path.length() + 1];
-	//lCmd[1] = new char[script.length() + 1];
-	//lCmd[2] = new char[query.length() + 1];
+	std::cout	<< "[DEBUUUUG]" << std::endl
+				<< "PATH: " << path << std::endl
+				<< "SCRIPT: " << script << std::endl
+				<< "QUERY: " << query << std::endl;
 
-	std::strcpy(lCmd[0], path.c_str());
-	std::strcpy(lCmd[1], script.c_str());
-	std::strcpy(lCmd[2], query.c_str());
+	this->lCmd = new char*[4];
+
+	lCmd[0] = strdup(path.c_str());
+	lCmd[1] = strdup(script.c_str());
+	lCmd[2] = strdup(query.c_str());
 	lCmd[3] = NULL;
+	
 	return;
 }
 
@@ -250,12 +251,24 @@ void	HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
  *								METHOD										   *
 ******************************************************************************/
 
+char**		HandleCGI::getLCmd( void )
+{
+	return (this->lCmd);
+}
+
+char**		HandleCGI::getNewEnv( void )
+{
+	return (this->newenviron);
+}
+
 void	HandleCGI::DoCGI( Socket& socket )
 {
 	Pipe				send_data_to_cgi;
 	Pipe				receive_data_from_cgi;
 	pid_t				pid;
 	EventMonitoring		em = socket.getEM();
+	char**				cmd = getLCmd();
+	char**				env = getNewEnv();
 	
 	em.monitor(send_data_to_cgi.getIn(), POLLIN | POLLHUP | POLLRDHUP,
 				EventData::CLIENT, *this);
@@ -265,19 +278,22 @@ void	HandleCGI::DoCGI( Socket& socket )
 	
 	pid = fork();
 
-	if (pid == -1) {
+	if (pid == -1)
+	{
 		std::cerr << "fork failed\n"; 
 		return ;
 	}
-	else if (pid == 0) {
+	else if (pid == 0)
+	{
 		dup2(send_data_to_cgi.getOut(), STDOUT_FILENO);
 		dup2(receive_data_from_cgi.getIn(), STDIN_FILENO);
 		send_data_to_cgi.closeIn();
 		receive_data_from_cgi.closeOut();
-		//-execve(cmd_list[0], (char * const *)cmd_list, newenviron);
+		execve(cmd[0], cmd, env);
 		_exit(1);
 	} 
-	else {
+	else
+	{
 		send_data_to_cgi.closeOut();
 		receive_data_from_cgi.closeIn();
 	}
