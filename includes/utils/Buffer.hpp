@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 23:11:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:29:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 class Buffer
 {
     public:
+		class NoSpaceAvailable : public std::exception {
+			public:
+				const char * what () const throw();
+		};
+
         Buffer(size_t bufferSize);
         Buffer(const Buffer& obj);
         ~Buffer();
@@ -40,6 +45,7 @@ class Buffer
 		std::vector<char>::iterator	beginUnused();
 		std::vector<char>::iterator	beginUnread();
 		void						copyFrom(Buffer& buff, size_t pos = 0, size_t n = std::string::npos);
+		void						copyFrom(const std::string& buff, size_t pos = 0, size_t n = std::string::npos);
 		size_t						find(const char& c, size_t pos = 0,
 											size_t n = std::string::npos) const;
 		size_t						find(const std::string& str, size_t pos = 0,

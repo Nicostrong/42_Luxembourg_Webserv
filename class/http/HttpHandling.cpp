@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 10:01:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:21:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,16 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
             case HttpParser::HTTP_HEAD_RECEIVED:
             // fallthrough
             case HttpParser::HTTP_BODY_RECEIVED:
+				if (sock->getResp().getRespType() == HttpResponse::CGI)
+				{
+					
+				}
+				else
+				{
                 this->_resHandling.init(*sock);
                  em.monitorUpdate(sock->getSocket(),
                     EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+				}
                 break;
             default:
                 return ;
@@ -89,4 +96,5 @@ void HttpHandling::reset()
 {
     this->_parser.reset();
     this->_resHandling.reset();
+	this->_cgiResp.reset();
 }

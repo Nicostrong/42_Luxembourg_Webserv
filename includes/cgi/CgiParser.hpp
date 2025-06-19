@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:00:57 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 08:42:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:49:22 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "./../utils/Buffer.hpp"
 #include "./../http/HttpExceptions.hpp"
 #include "./../http/HttpBase.hpp"
+#include "./CgiResponse.hpp"
 
 #define CGI_HEAD_BUFF 8192
 
@@ -33,10 +34,10 @@ class CgiParser
         CgiParser();
         ~CgiParser();
 		
-		void	onRead(Buffer &buff);
-        void	parseHeaders();
-		void	parseHeader(const std::string& line);
-		bool	handleHeaders(Buffer& buff);
+		void	onRead(Buffer &buff, CgiResponse& cgiResponse);
+        void	parseHeaders(CgiResponse& cgiResponse);
+		void	parseHeader(const std::string& line, CgiResponse& cgiResponse);
+		bool	handleHeaders(Buffer& buff, CgiResponse& cgiResponse);
     private:
         CgiParser(const CgiParser& obj);
         CgiParser& operator=(const CgiParser& obj);

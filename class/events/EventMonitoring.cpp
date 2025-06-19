@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 21:57:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:50:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ size_t EventMonitoring::getClientsConnected() const
 	return (this->_clientsConnected);
 }
 
-void EventMonitoring::monitor(int fd, uint32_t events, int type, 
+void EventMonitoring::monitor(int fd, uint32_t events, 
 	IEventHandler& ctx)
 {
 	epoll_event event;
@@ -64,7 +64,7 @@ void EventMonitoring::monitor(int fd, uint32_t events, int type,
 		throw PollFullException();
 
 	event.events = events;
-	event.data.ptr = new EventData(fd, type, ctx, *this);
+	event.data.ptr = new EventData(fd, ctx, *this);
 	this->_openFds.push_back(event);
 	epoll_ctl(this->_epollFd, EPOLL_CTL_ADD, fd, &event);
 }

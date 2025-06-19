@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/11 09:34:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:56:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,8 @@ void Socket::reset(EventMonitoring& em)
 	this->_reset = false;
 }
 
-void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
+void Socket::onReadEvent(int fd, EventMonitoring &em)
 {
-	(void)type;
 	try
 	{
 		this->_rxBuffer.resetIfRead();
@@ -129,7 +128,7 @@ void Socket::onReadEvent(int fd, int type, EventMonitoring &em)
 	}
 }
 
-void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
+void Socket::onWriteEvent(int fd, EventMonitoring &em)
 {
 	try
 	{
@@ -159,15 +158,19 @@ void Socket::onWriteEvent(int fd, int type, EventMonitoring &em)
 		LOG_DEB(e.what());
 		this->_sockm.remove(*this, em);
 	}
-	(void)type;
 }
 
-void Socket::onCloseEvent(int fd, int type, EventMonitoring &em)
+void Socket::onCloseEvent(int fd, EventMonitoring &em)
 {
 	this->_sockm.remove(*this, em);
 	(void)fd;
 	(void)em;
-	(void)type;
+}
+
+void Socket::onTickEvent(int fd, EventMonitoring& em)
+{
+	(void)fd;
+	(void)em;
 }
 
 void	Socket::setEM( EventMonitoring& ev )

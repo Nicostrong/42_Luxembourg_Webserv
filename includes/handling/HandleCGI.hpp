@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:42:18 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/17 09:24:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:09:35 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ class HandleCGI: public IEventHandler
 		void 			UpdateNewsLetter( const char *compiler, const char *script, const char *newvalue );
 		void 			UpdateShowData( const char *compiler, const char *script, const char *newvalue );
 		void 			DoCGI( Socket& socket );
-		void 			onReadEvent( int fd, int type, EventMonitoring& em );
-		void 			onWriteEvent( int fd, int type, EventMonitoring& em );
-		void 			onCloseEvent( int fd, int type, EventMonitoring& em );
+		void 			onReadEvent( int fd, EventMonitoring& em );
+		void 			onWriteEvent( int fd, EventMonitoring& em );
+		void 			onCloseEvent( int fd, EventMonitoring& em );
+		void 			onTickEvent( int fd, EventMonitoring& em );
 		void 			string_to_map( void );
 		char * const*	map_to_chartab( void );
 		char**			getLCmd( void );

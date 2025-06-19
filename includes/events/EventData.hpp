@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 21:52:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:51:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,13 @@
 class EventData
 {
 	public:
-		enum ListenerType
-		{
-			SERVER = 0,
-			CLIENT = 1,	
-		};
 
-		EventData(int fd, int type, IEventHandler& ctx, EventMonitoring& em);
+		EventData(int fd, IEventHandler& ctx, EventMonitoring& em);
 		EventData(const EventData &obj);
 		~EventData();
 		EventData& 				operator=(const EventData& obj);
 
 		int 					getFd() const;
-		int						getType() const;
 		const IEventHandler&	getCtx() const;
 		bool					getCanceled() const;
 		void					setCanceled();
@@ -40,10 +34,10 @@ class EventData
 		void					onRead() const;
 		void					onWrite() const;
 		void					onClose() const;
+		void					onTick() const;
 
 	private:
 		const int 				_fd;
-		const int				_type;
 		IEventHandler& 			_ctx;
 		EventMonitoring&		_em;
 		bool					_canceled;

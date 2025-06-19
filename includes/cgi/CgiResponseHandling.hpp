@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CgiHandling.hpp                                    :+:      :+:    :+:   */
+/*   CgiResponseHandling.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/06 09:12:54 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/06 10:02:22 by fdehan           ###   ########.fr       */
+/*   Created: 2025/06/16 21:28:10 by fdehan            #+#    #+#             */
+/*   Updated: 2025/06/19 14:39:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CGIHANDLING_HPP
-# define CGIHANDLING_HPP
+#ifndef CGIRESPONSEHANDLING_HPP
+# define CGIRESPONSEHANDLING_HPP
 
-#include "./lib.hpp"
+#include "./CgiResponse.hpp"
 
-class CgiHandling
+class CgiResponseHandling
 {
     public:
-    private:
-        CgiHandling();
-        CgiHandling(const CgiHandling& obj);
-        ~CgiHandling();
-        CgiHandling& operator=(const CgiHandling& obj);
-		void		handleHeaders();
-
+        
+		void		handleHeaders(Socket& sock);
         static bool isStatusHeaderValid(const std::string& status);
         static bool isLocationValid(const std::string& loc);
+    private:
+		CgiResponseHandling();
+		CgiResponseHandling(const CgiResponseHandling& obj);
+        ~CgiResponseHandling();
+		CgiResponseHandling& operator=(const CgiResponseHandling& obj);
+
 };
 
 #endif

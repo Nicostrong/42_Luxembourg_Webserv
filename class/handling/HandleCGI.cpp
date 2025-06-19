@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandleCGI.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:06:44 by gzenner           #+#    #+#             */
-/*   Updated: 2025/06/17 09:24:51 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:09:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,10 +179,9 @@ void		HandleCGI::createCmdLst( Socket& socket )
  *							SERVER EVENTS									   *
 ******************************************************************************/
 
-void	HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
+void	HandleCGI::onReadEvent(int fd, EventMonitoring& em)
 {
 	(void)fd;
-	(void)type;
 	(void)em;
 
 	char buffer[1024];
@@ -207,10 +206,9 @@ void	HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
 	return ;
 }
 
-void	HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
+void	HandleCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
 	(void)fd;
-	(void)type;
 	(void)em;
 
 	if (input.size() > input_sent) {
@@ -233,10 +231,9 @@ void	HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
 	return ;
 }
 
-void	HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
+void	HandleCGI::onCloseEvent(int fd, EventMonitoring& em)
 {
 	(void)fd;
-	(void)type;
 	(void)em;
 	
 	em.unmonitor(fd);
@@ -245,6 +242,12 @@ void	HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
 	output.clear();
 
 	return ;
+}
+
+void HandleCGI::onTickEvent( int fd, EventMonitoring& em )
+{
+	(void)fd;
+	(void)em;
 }
 
 /*******************************************************************************
@@ -271,10 +274,10 @@ void	HandleCGI::DoCGI( Socket& socket )
 	char**				env = getNewEnv();
 	
 	em.monitor(send_data_to_cgi.getIn(), POLLIN | POLLHUP | POLLRDHUP,
-				EventData::CLIENT, *this);
+				*this);
 
 	em.monitor(receive_data_from_cgi.getOut(), POLLOUT | POLLHUP | POLLRDHUP,
-				EventData::CLIENT, *this);
+				*this);
 	
 	pid = fork();
 

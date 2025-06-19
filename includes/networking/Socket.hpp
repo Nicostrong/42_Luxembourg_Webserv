@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 10:39:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:56:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ class Socket : public IEventHandler
 		void 				setSocketClose();
 		void				setReset();
 		void				reset(EventMonitoring& em);
-		void				onReadEvent(int fd, int type, EventMonitoring& em);
-		void				onWriteEvent(int fd, int type, EventMonitoring& em);
-		void				onCloseEvent(int fd, int type, EventMonitoring& em);
+		void				onReadEvent(int fd, EventMonitoring& em);
+		void				onWriteEvent(int fd, EventMonitoring& em);
+		void				onCloseEvent(int fd, EventMonitoring& em);
+		void				onTickEvent(int fd, EventMonitoring& em);
 		void				setEM( EventMonitoring& ev );
 
 	private:
