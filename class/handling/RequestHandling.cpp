@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:26:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:31:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,7 +285,8 @@ void RequestHandling::handleGet(Socket& sock)
 		setAttributes(sock);
 
 		MyCGI*	cgi = sock.getHandler().getCGI();
-		cgi->execCGI();
+		(void)cgi;
+		//cgi->execCGI();
 		
 		return ;
 	}
