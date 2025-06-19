@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 15:15:28 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:55:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,7 +284,7 @@ void RequestHandling::handleGet(Socket& sock)
 		LOG_DEB("IsCGI dans GET");
 		setAttributes(sock);
 
-		MyCGI	cgi = sock.getHandler().getCGI();
+		MyCGI*	cgi = sock.getHandler().getCGI();
 		cgi->execCGI();
 		
 		return ;
@@ -315,7 +315,7 @@ void RequestHandling::handlePost(Socket& sock)
 		LOG_DEB("IsCGI dans POST");
 		setAttributes(sock);
 
-		MyCGI	cgi = sock.getHandler().getCGI();
+		MyCGI*	cgi = sock.getHandler().getCGI();
 		cgi->execCGI();
 		
 		return ;

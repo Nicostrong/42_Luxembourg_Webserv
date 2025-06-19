@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 14:58:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:59:39 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ Socket&		MyCGI::getSocket( void )
 /*
  *	get the map of environnement variable
  */
-Map&		MyCGI::getMapEnv( void )
+MyCGI::Map&		MyCGI::getMapEnv( void )
 {
 	return (this->_mEnv);
 }

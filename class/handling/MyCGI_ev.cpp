@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 13:27:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:51:13 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@
  *							SERVER EVENTS									   *
 ******************************************************************************/
 
-void		MyCGI::onReadEvent(int fd, int type, EventMonitoring& em)
+void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 {
-	(void)type;
-
 	try
 	{
 		//this->_rxBuffer.resetIfRead();
@@ -53,10 +51,8 @@ void		MyCGI::onReadEvent(int fd, int type, EventMonitoring& em)
 	return ;
 }
 
-void		MyCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
+void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
-	(void)type;
-
 	try
 	{
 		//this->_txBuffer.resetIfRead();
@@ -89,18 +85,21 @@ void		MyCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
 	{
 		em.unmonitor(fd);
 		close(fd);
-		em.monitor(this->_fromCGI.getOut(), POLLOUT | POLLHUP | POLLRDHUP,
-				EventData::CLIENT, *this);
+		em.monitor(this->_fromCGI.getOut(), POLLOUT | POLLHUP | POLLRDHUP, *this);
 	}
 	return ;
 }
 
-void		MyCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
+void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 {
-	(void)type;
-	
 	em.unmonitor(fd);
 	close(fd);
+	return ;
+}
 
+void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
+{
+	(void)fd;
+	(void)em;
 	return ;
 }

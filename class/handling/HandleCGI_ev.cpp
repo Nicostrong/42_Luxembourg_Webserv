@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:40:58 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 15:32:24 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:46:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@
  *							SERVER EVENTS									   *
 ******************************************************************************/
 
-void		HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
+void		HandleCGI::onReadEvent(int fd, EventMonitoring& em)
 {
-	(void)type;
-
 	try
 	{
 		//this->_rxBuffer.resetIfRead();
@@ -53,10 +51,8 @@ void		HandleCGI::onReadEvent(int fd, int type, EventMonitoring& em)
 	return ;
 }
 
-void		HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
+void		HandleCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
-	(void)type;
-
 	try
 	{
 		//this->_txBuffer.resetIfRead();
@@ -96,12 +92,8 @@ void		HandleCGI::onWriteEvent(int fd, int type, EventMonitoring& em)
 	return ;
 }
 
-void		HandleCGI::onCloseEvent(int fd, int type, EventMonitoring& em)
+void		HandleCGI::onCloseEvent(int fd, EventMonitoring& em)
 {
-	(void)fd;
-	(void)type;
-	(void)em;
-	
 	em.unmonitor(fd);
 	close(fd);
 	this->_input.clear();

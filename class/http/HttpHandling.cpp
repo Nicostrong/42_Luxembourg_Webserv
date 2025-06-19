@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 15:28:34 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:43:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void HttpHandling::reset()
 
 void		HttpHandling::setCGI( Socket& socket )
 {
-	this->_cgi = new CGI(socket);
+	this->_cgi = new MyCGI(socket);
 	return ;
 }
 

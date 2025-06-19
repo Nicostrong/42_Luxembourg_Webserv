@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 15:31:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:43:03 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 # include "../lib.hpp"
 # include "HttpParser.hpp"
 # include "HttpExceptions.hpp"
-# include "../handling/CGI.hpp"
+# include "../cgi/CgiParser.hpp"
+# include "../handling/MyCGI.hpp"
+# include "../cgi/CgiResponse.hpp"
 # include "HttpSevereExceptions.hpp"
 # include "../events/EventMonitoring.hpp"
-# include "../cgi/CgiParser.hpp"
 # include "../cgi/CgiResponseHandling.hpp"
-# include "../cgi/CgiResponse.hpp"
 # include "../handling/RequestHandling.hpp"
 # include "../handling/ResponseHandling.hpp"
 

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 15:19:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:02:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ class	Socket;
 class	MyCGI:	public IEventHandler
 {
 
-	typedef std::map<std::string, std::string>	Map;
+	public:
+
+		typedef std::map<std::string, std::string>	Map;
 
 	private:
 
@@ -93,12 +95,13 @@ class	MyCGI:	public IEventHandler
 		void			execCGI( void );
 
 		/*	EVENT	*/
-		void			onReadEvent( int fd, int type, EventMonitoring& em );
-		void			onWriteEvent( int fd, int type, EventMonitoring& em );
-		void			onCloseEvent( int fd, int type, EventMonitoring& em );
+		void			onReadEvent( int fd, EventMonitoring& em );
+		void			onWriteEvent( int fd, EventMonitoring& em );
+		void			onCloseEvent( int fd, EventMonitoring& em );
+		void			onTickEvent( int fd, EventMonitoring& em );
 
 };
 
-//std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object );
+std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object );
 
 #endif

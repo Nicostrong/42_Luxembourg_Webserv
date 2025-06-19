@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/19 15:31:37 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/19 15:47:52 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -168,8 +168,6 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/networking/ListenerManager.cpp \
 					../class/networking/Socket.cpp \
 					../class/networking/SocketManager.cpp \
-					../class/handling/HandleCGI.cpp \
-					../class/handling/HandleCGI_ev.cpp \
 					../class/handling/MyCGI.cpp \
 					../class/handling/MyCGI_ev.cpp \
 					../class/handling/MyCGI_gs.cpp \
