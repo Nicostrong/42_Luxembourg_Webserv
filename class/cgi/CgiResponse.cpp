@@ -6,16 +6,20 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:36:17 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:23:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:15:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/cgi/CgiResponse.hpp"
 
-CgiResponse::CgiResponse() {}
+CgiResponse::CgiResponse() : _body(NULL) {}
 
 
-CgiResponse::~CgiResponse() {}
+CgiResponse::~CgiResponse() 
+{
+	if (this->_body)
+		delete this->_body;
+}
 
 void CgiResponse::setCode(size_t code) 
 {

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:06:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:14:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,37 +63,58 @@ void HttpHandling::onWrite(EventMonitoring& em, Socket* sock)
 
 void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 {
-	switch (this->_parser.getState())
+	HttpResponse* resp = &sock->getResp();
+	
+	try
+    {
+		switch (this->_parser.getState())
+			{
+				case HttpParser::HTTP_HEAD_RECEIVED:
+					RequestHandling::handleHeaders(*sock);
+					break;
+				case HttpParser::HTTP_BODY_RECEIVED:
+					RequestHandling::handleBody(*sock);
+					break;
+				default:
+					return ;
+			}
+
+		switch (this->_parser.getState())
 		{
 			case HttpParser::HTTP_HEAD_RECEIVED:
-				RequestHandling::handleHeaders(*sock);
-				break;
+			// fallthrough
 			case HttpParser::HTTP_BODY_RECEIVED:
-				RequestHandling::handleBody(*sock);
+				if (sock->getResp().getRespType() == HttpResponse::CGI)
+				{
+					
+				}
+				else
+				{
+					this->_resHandling.init(*sock);
+					em.monitorUpdate(sock->getSocket(),
+						EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+				}
 				break;
 			default:
 				return ;
 		}
-
-	switch (this->_parser.getState())
-	{
-		case HttpParser::HTTP_HEAD_RECEIVED:
-		// fallthrough
-		case HttpParser::HTTP_BODY_RECEIVED:
-			if (sock->getResp().getRespType() == HttpResponse::CGI)
-			{
-				
-			}
-			else
-			{
-				this->_resHandling.init(*sock);
-				em.monitorUpdate(sock->getSocket(),
-					EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
-				}
-			break;
-		default:
-			return ;
-		}
+	}
+	catch(const HttpExceptions& e)
+    {
+        if (dynamic_cast<const HttpSevereExceptions*>(&e))
+            setConnectionClose(*sock);
+        if (e.getCode() > 399)
+        {
+            LOG_DEB(this->_parser.getState());
+		    LOG_ERROR("An error occured while parsing request (can be bad request as well)");
+            LOG_ERROR(e.getCode());
+        }
+			
+		resp->setRespType(HttpResponse::ERROR);
+		resp->setStatusCode((HttpBase::HttpCode)e.getCode());
+		this->_resHandling.init(*sock);
+		em.monitorUpdate(sock->getSocket(), POLLOUT | EPOLLTICK | POLLHUP | POLLRDHUP);
+    }
 }
 
 void HttpHandling::setConnectionClose(Socket& sock)
