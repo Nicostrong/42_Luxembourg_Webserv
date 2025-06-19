@@ -6,15 +6,16 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 15:04:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 18:06:34 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/cgi/CgiResponseHandling.hpp"
+#include "./../../includes/networking/Socket.hpp"
 
 void CgiResponseHandling::handleHeaders(Socket& sock)
 {
-	// Should handle cgi response
+	if (sock.get)
 	(void)sock;
 }
 

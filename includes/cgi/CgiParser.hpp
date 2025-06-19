@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:00:57 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 18:49:22 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:37:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ class CgiParser
         {
 			CGI_HEAD = 0,
 			CGI_HEAD_RECEIVED = 1,
-			BODY_RECEIVING = 2,
-			ERROR = 2,
+			CGI_BODY = 2,
+			CGI_BODY_RECEIVED = 3,
+			CGI_ERROR = 4,
         };
         CgiParser();
         ~CgiParser();

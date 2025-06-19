@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:06:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:40:00 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,27 @@ class	HttpHandling
 		~HttpHandling( void );
 
 		/*	METHODS	*/
-		void	onRead( EventMonitoring& em, Socket* sock );
-		void	onWrite( EventMonitoring& em, Socket* sock );
-		void	onTick(EventMonitoring& em, Socket* sock);
-		void	setBodyRequired( void );
-		void	reset( void );
+		void		onRead( EventMonitoring& em, Socket* sock );
+		void		onWrite( EventMonitoring& em, Socket* sock );
+		void		onTick(EventMonitoring& em, Socket* sock);
+		void		setBodyRequired( void );
+		void		reset( void );
+		CgiParser&	getCgiParser();
 
 		/*	SETTER	*/
-		void	setCGI( Socket& socket );
+		void		setCGI( Socket& socket );
 
 		/*	GETTER	*/
-		MyCGI*	getCGI( void );
+		MyCGI*		getCGI( void );
 		
 	private:
 		HttpHandling(HttpHandling& obj);
 		HttpHandling operator=(const HttpHandling& obj);
 
-		void	setConnectionClose(Socket& sock);
+		void		setConnectionClose(Socket& sock);
 		
 		HttpParser			_parser;
-		CgiParser			_cgiHandler;
+		CgiParser			_cgiParser;
 		ResponseHandling	_resHandling;
 		CgiResponse			_cgiResp;
 		MyCGI*				_cgi;

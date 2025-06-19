@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:07:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 17:45:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 		case 508: return "Loop Detected";
 		case 510: return "Not Extended";
 		case 511: return "Network Authentication Required";
-		default: return "Internal Server Error";
+		default: return "Unknown Code";
 	}
 }
 

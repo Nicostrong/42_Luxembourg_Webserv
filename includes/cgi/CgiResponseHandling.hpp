@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:28:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:39:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 17:27:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CGIRESPONSEHANDLING_HPP
 
 #include "./CgiResponse.hpp"
+
+class Socket;
 
 class CgiResponseHandling
 {
