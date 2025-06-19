@@ -1,0 +1,104 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MyCGI.hpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/06/19 15:19:18 by nfordoxc         ###   Luxembourg.lu     */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MYCGI
+# define MYCGI
+
+# include "../lib.hpp"
+# include "../utils/Uri.hpp"
+# include "../utils/Pipe.hpp"
+# include "../utils/Buffer.hpp"
+# include "../server/Location.hpp"
+# include "../networking/Body.hpp"
+# include "../events/IEventHandler.hpp"
+# include "../events/EventMonitoring.hpp"
+
+# define BUFF_SIZE 1024
+
+class	Socket;
+
+class	MyCGI:	public IEventHandler
+{
+
+	typedef std::map<std::string, std::string>	Map;
+
+	private:
+
+		std::string		_scriptPath;	//	path complet of the script to execute
+		std::string		_binaryExec;	//	path of binary to exec the script
+		std::string		_query;			//	querry parameters
+		char**			_params;		//	parameters of execution
+		char**			_aEnv;			//	env variables
+		Pipe			_toCGI;			//	to send data to CGI
+		Pipe			_fromCGI;		//	response from the CGI
+		Buffer			_txBuffer;		//	transmit buffer
+		Buffer			_rxBuffer;		//	receive buffer
+		Socket*			_socket;		//	socket of communication
+		Map				_mEnv;			//	map of environnement variable
+		pid_t			_pid;			//	pid parent
+		bool			_isFinish;		//	if the CGI has finished
+		bool			_endWrite;		//	if the parent has finish to write on the pipe
+
+		MyCGI( void );
+		MyCGI( const MyCGI& );
+
+		MyCGI&			operator=( const MyCGI & );
+
+		void			setMap( void );
+		void			setEnv( void );
+		void			initMap( void );
+		void			setParams( void );
+
+	public:
+
+		MyCGI( Socket& socket );
+		~MyCGI( void );
+
+		/*	GETTER	*/
+		std::string&	getScriptPath( void );
+		std::string&	getbinaryPath( void );
+		std::string&	getQuery( void );
+
+		char**			getParams( void );
+		char**			getEnv( void );
+
+		Pipe&			getPipeToCGI( void );
+		Pipe&			getPipeFromCGI( void );
+
+		Buffer&			getTxBuffer( void );
+		Buffer&			getRxBuffer( void );
+
+		Socket&			getSocket( void );
+
+		Map&			getMapEnv( void );
+
+		pid_t			getPid( void );
+
+		bool			getIsFinish( void );
+		bool			getEndWrite( void );
+
+		/*	SETTER	*/
+		void			setPid( pid_t pid );
+
+		/*	METHODS	*/
+		void			execCGI( void );
+
+		/*	EVENT	*/
+		void			onReadEvent( int fd, int type, EventMonitoring& em );
+		void			onWriteEvent( int fd, int type, EventMonitoring& em );
+		void			onCloseEvent( int fd, int type, EventMonitoring& em );
+
+};
+
+//std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object );
+
+#endif

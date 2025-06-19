@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:29:38 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 14:08:13 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 # include "./../http/HttpRequest.hpp"
 # include "./../http/HttpResponse.hpp"
 # include "./../server/Server.hpp"
-# include "./HandleCGI.hpp"
+//# include "./HandleCGI.hpp"
+# include "./MyCGI.hpp"
 
-class RequestHandling: public HttpBase
+class RequestHandling
 {
 	public:
 

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:26:53 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 15:15:28 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,26 @@ void RequestHandling::handleHeaders(Socket& sock)
 	LOG_DEB(req->getUri());
 
 	if (!ctx)
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 
 	req->setServer(*ctx);
 	resp->addHeader("Content-Length", 0);
 	resp->addHeader("Connection", "keep-alive");
 
 	if (std::strcmp(req->getHttpVersion().c_str(), SUPPORTED_HTTPVER) != 0)
-		throw HttpSevereExceptions(HTTP_VERSION_NOT_SUPPORTED);
+		throw HttpSevereExceptions(HttpBase::HTTP_VERSION_NOT_SUPPORTED);
 	
 	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
-		throw HttpExceptions(NOT_IMPLEMENTED);
+		throw HttpExceptions(HttpBase::NOT_IMPLEMENTED);
 
 	req->setLoc(
 		ctx->getMatchingLoc(req->getUri()));
 
 	if (!req->getLoc())
-		throw HttpExceptions(NOT_FOUND);
+		throw HttpExceptions(HttpBase::NOT_FOUND);
 
 	if (!req->getLoc()->getMethod()->isAllowed(req->getMethod()))
-		throw HttpExceptions(METHOD_NOT_ALLOWED);
+		throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
 
 	req->setPathTranslated(
 			Uri::buildRealAbsolute(*ctx, req->getLoc(), req->getUri()));
@@ -63,7 +63,7 @@ void RequestHandling::handleBody(Socket& sock)
 	std::string	path = req->getPathTranslated();
 	
 	if (!body)
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
+		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 	
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
@@ -71,7 +71,7 @@ void RequestHandling::handleBody(Socket& sock)
 	body->moveBodyFile(path);
 	resp->addHeader("Location", Uri::getPathInfo(req->getLoc(), req->getUri()));
 	
-	throw HttpExceptions(CREATED);
+	throw HttpExceptions(HttpBase::CREATED);
 }
 
 bool	RequestHandling::ends_with( const std::string& str, const std::string& suffix )
@@ -83,13 +83,6 @@ bool	RequestHandling::ends_with( const std::string& str, const std::string& suff
 
 bool RequestHandling::isCGI(Socket& sock)
 {
-	/*const std::list<Directive*> cgiDirectives = 
-			sock.getReq().getLoc()->findDirectives("cgi");
-
-	if (cgiDirectives.size() < 1)
-		return (false);
-	*/
-
 	std::string		uri = sock.getReq().getUri();
 	size_t			queryPos = uri.find('?');
 
@@ -130,16 +123,16 @@ bool RequestHandling::isStaticFile(Socket& sock)
 		switch (errno)
 		{
 			case EACCES:
-				throw HttpExceptions(FORBIDDEN);
+				throw HttpExceptions(HttpBase::FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOENT:
 			case ENOTDIR:
 			default:
-				throw HttpExceptions(NOT_FOUND);
+				throw HttpExceptions(HttpBase::NOT_FOUND);
 		}
 	}
 
@@ -147,20 +140,20 @@ bool RequestHandling::isStaticFile(Socket& sock)
 	{
 		sock.getReq().setRedirect(sock.getReq().getUri() + "/");
 		sock.getResp().addHeader("Location", sock.getReq().getUri() + "/");
-		sock.getResp().setStatusCode(MOVED_PERMANENTLY);
+		sock.getResp().setStatusCode(HttpBase::MOVED_PERMANENTLY);
 		sock.getResp().setRespType(HttpResponse::REDIRECT);
 		return (true);
 	}
 	
 	if (!S_ISREG(infos.st_mode))
-		throw HttpExceptions(NOT_FOUND);
+		throw HttpExceptions(HttpBase::NOT_FOUND);
 
 	if (access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
-		throw HttpExceptions(FORBIDDEN);
+		throw HttpExceptions(HttpBase::FORBIDDEN);
 	
 	sock.getReq().setFilePath(sock.getReq().getPathTranslated());
 	sock.getReq().setFileSize(infos.st_size);
-	sock.getResp().setStatusCode(OK);
+	sock.getResp().setStatusCode(HttpBase::OK);
 	sock.getResp().addHeader("Content-Length", infos.st_size);
 	sock.getResp().setRespType(HttpResponse::STATIC_FILE);
 	return (true);
@@ -175,7 +168,7 @@ bool RequestHandling::isRedirect(Socket& sock)
 		return (false);
 	sock.getReq().setRedirect(redirectDirective->getValue());
 	sock.getResp().addHeader("Location", redirectDirective->getValue() + "/");
-	sock.getResp().setStatusCode(FOUND);
+	sock.getResp().setStatusCode(HttpBase::FOUND);
 	sock.getResp().setRespType(HttpResponse::REDIRECT);
 	return (true);
 }
@@ -200,11 +193,11 @@ bool RequestHandling::isIndexFile(Socket& sock)
 		switch (errno)
 		{
 			case EACCES:
-				throw HttpExceptions(FORBIDDEN);
+				throw HttpExceptions(HttpBase::FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 			default:
 				return (false);
 		}
@@ -214,11 +207,11 @@ bool RequestHandling::isIndexFile(Socket& sock)
 		return (false);
 
 	if (access(indexPath.c_str(), R_OK) == -1)
-		throw HttpExceptions(FORBIDDEN);
+		throw HttpExceptions(HttpBase::FORBIDDEN);
 	
 	req->setFilePath(indexPath);
 	req->setFileSize(infos.st_size);
-	resp->setStatusCode(OK);
+	resp->setStatusCode(HttpBase::OK);
 	resp->addHeader("Content-Length", infos.st_size);
 	resp->setRespType(HttpResponse::STATIC_FILE);
 	return (true);
@@ -237,30 +230,30 @@ bool RequestHandling::isDirctoryListing(Socket &sock)
 		switch (errno)
 		{
 			case EACCES:
-				throw HttpExceptions(FORBIDDEN);
+				throw HttpExceptions(HttpBase::FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOENT:
 			case ENOTDIR:
 			default:
-				throw HttpExceptions(NOT_FOUND);
+				throw HttpExceptions(HttpBase::NOT_FOUND);
 		}
 	}
 
 	if (!S_ISDIR(infos.st_mode))
-		throw HttpExceptions(NOT_FOUND);
+		throw HttpExceptions(HttpBase::NOT_FOUND);
 
 	const Directive* directive = 
 		sock.getReq().getLoc()->findDirective("autoindex");
 
 	if (!directive || directive->getValue() != "on" || 
 		access(sock.getReq().getPathTranslated().c_str(), R_OK) == -1)
-		throw HttpExceptions(FORBIDDEN);
+		throw HttpExceptions(HttpBase::FORBIDDEN);
 	
-	sock.getResp().setStatusCode(OK);
+	sock.getResp().setStatusCode(HttpBase::OK);
 	sock.getResp().setRespType(HttpResponse::DIRECTORY_LISTING);
 	return (true);
 }
@@ -287,12 +280,13 @@ void RequestHandling::handleGet(Socket& sock)
 			
 	if (isCGI(sock))
 	{
+		sock.getResp().setRespType(HttpResponse::CGI);
 		LOG_DEB("IsCGI dans GET");
 		setAttributes(sock);
 
-		HandleCGI hcgi(sock);
-
-		hcgi.DoCGI(sock);
+		MyCGI	cgi = sock.getHandler().getCGI();
+		cgi->execCGI();
+		
 		return ;
 	}
 	
@@ -305,24 +299,25 @@ void RequestHandling::handleGet(Socket& sock)
 	if (isStaticFile(sock))
 		return ;
 		
-	throw HttpExceptions(INTERNAL_SERVER_ERROR);
+	throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 }
 
 void RequestHandling::handlePost(Socket& sock)
 {
 	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() == '/')
-		throw HttpSevereExceptions(METHOD_NOT_ALLOWED);
+		throw HttpSevereExceptions(HttpBase::METHOD_NOT_ALLOWED);
 
 	LOG_DEB(sock.getReq().getUri());
 	std::string	path = sock.getReq().getPathTranslated();
 	if (isCGI(sock))
 	{
+		sock.getResp().setRespType(HttpResponse::CGI);
 		LOG_DEB("IsCGI dans POST");
 		setAttributes(sock);
 
-		HandleCGI		hcgi(sock);
-
-		hcgi.DoCGI(sock);
+		MyCGI	cgi = sock.getHandler().getCGI();
+		cgi->execCGI();
+		
 		return ;
 	}
 	handleBodyLength(sock);
@@ -337,14 +332,14 @@ void RequestHandling::handleBodyLength(Socket& sock)
 	bool cl = sock.getReq().findHeader("CONTENT-LENGTH");
 	
 	if (te && cl)
-		throw HttpSevereExceptions(BAD_REQUEST);
+		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 	
 	if (te)
 		handleTE(sock);
 	else if (cl)
 		handleContentLength(sock);
 	else
-		throw HttpSevereExceptions(LENGTH_REQUIRED);
+		throw HttpSevereExceptions(HttpBase::LENGTH_REQUIRED);
 }
 
 void RequestHandling::handleTE(Socket& sock)
@@ -353,7 +348,7 @@ void RequestHandling::handleTE(Socket& sock)
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
 	if (value != "chunked")
-		throw HttpExceptions(NOT_IMPLEMENTED);
+		throw HttpExceptions(HttpBase::NOT_IMPLEMENTED);
 	
 	sock.getReq().setTE(true);
 }
@@ -364,14 +359,14 @@ void RequestHandling::handleContentLength(Socket& sock)
 
 	if (value.empty() || 
 		value.find_first_not_of("0123456789") != std::string::npos)
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpExceptions(HttpBase::BAD_REQUEST);
 
 	std::istringstream iss(value);
 	size_t cl;
     iss >> cl;
 
 	if (iss.fail())
-		throw HttpExceptions(BAD_REQUEST);
+		throw HttpExceptions(HttpBase::BAD_REQUEST);
 	
 	sock.getReq().setContentLength(cl);
 }
@@ -387,18 +382,18 @@ void RequestHandling::checkFileExistUpload(const std::string& path)
 			case ENOENT:
 				return ;
 			case EACCES:
-				throw HttpSevereExceptions(FORBIDDEN);
+				throw HttpSevereExceptions(HttpBase::FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpSevereExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOTDIR:
 			default:
-				throw HttpSevereExceptions(NOT_FOUND);
+				throw HttpSevereExceptions(HttpBase::NOT_FOUND);
 		}
 	}
-	throw HttpSevereExceptions(CONFLICT);
+	throw HttpSevereExceptions(HttpBase::CONFLICT);
 }
 
 void RequestHandling::checkFolderExistUpload(const std::string& dir)
@@ -410,16 +405,16 @@ void RequestHandling::checkFolderExistUpload(const std::string& dir)
 		switch (errno)
 		{
 			case EACCES:
-				throw HttpSevereExceptions(FORBIDDEN);
+				throw HttpSevereExceptions(HttpBase::FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpSevereExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOENT:
 			case ENOTDIR:
 			default:
-				throw HttpSevereExceptions(NOT_FOUND);
+				throw HttpSevereExceptions(HttpBase::NOT_FOUND);
 		}
 	}
 }
@@ -430,7 +425,7 @@ void RequestHandling::handleDelete(Socket& sock)
 	std::string	path = sock.getReq().getPathTranslated();
 
 	if (req->getUri().size() && *req->getUri().rbegin() == '/')
-		throw HttpExceptions(METHOD_NOT_ALLOWED);
+		throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
 	
 	LOG_DEB(req->getUri());
 
@@ -442,12 +437,12 @@ void RequestHandling::handleDelete(Socket& sock)
 		{
             case EACCES:
             case EPERM:
-                throw HttpExceptions(FORBIDDEN);
+                throw HttpExceptions(HttpBase::FORBIDDEN);
             default:
-                throw HttpExceptions(INTERNAL_SERVER_ERROR);
+                throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
         }
 	}
-	throw HttpExceptions(NO_CONTENT);
+	throw HttpExceptions(HttpBase::NO_CONTENT);
 }
 
 void RequestHandling::checkFileExistDelete(const std::string& path)
@@ -459,20 +454,20 @@ void RequestHandling::checkFileExistDelete(const std::string& path)
 		switch (errno)
 		{
 			case EACCES:
-				throw HttpExceptions(FORBIDDEN);
+				throw HttpExceptions(HttpBase::FORBIDDEN);
 			case EIO:
 			case ELOOP:
 			case EOVERFLOW:
-				throw HttpExceptions(INTERNAL_SERVER_ERROR);
+				throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 			case ENAMETOOLONG:
 			case ENOENT:
 			case ENOTDIR:
 			default:
-				throw HttpExceptions(NOT_FOUND);
+				throw HttpExceptions(HttpBase::NOT_FOUND);
 		}
 	}
 	if (!S_ISREG(infos.st_mode))
-        throw HttpExceptions(METHOD_NOT_ALLOWED);
+        throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
 }
 
 std::map<std::string, RequestHandling::HandlerFunc> 

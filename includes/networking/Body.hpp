@@ -26,27 +26,37 @@ class Socket;
 class Body
 {
 	public:
-		Body(size_t bufferSize);
-		~Body();
-		const std::string&		getTmpFileName() const;
-		void					moveBodyFile(const std::string& name);
-		bool 					onBodyReceived(Buffer& buff, Socket& sock);
+
+		Body( size_t bufferSize );
+		~Body( void );
+
+		const std::string&		getTmpFileName( void ) const;
+
+		void					moveBodyFile( const std::string& name );
+		void					readInFile( std::vector<char>& receivedTxtBuffer );
+
+		bool					onBodyReceived( Buffer& buff, Socket& sock );
+
+		Buffer&					getBuffer( void );
 		
 	private:
-		Body(const Body& obj);
-		Body&			operator=(const Body& obj);
-		void					onBodyReceivedLength(Buffer& buff, size_t bodyLen);
-		void 					onBodyReceivedTE(Buffer& buff);
-		size_t					writeInMemory(Buffer& buff, size_t max);
-		size_t					writeInFile(Buffer& buff, size_t max);
-		void					readInFile(std::vector<char>& receivedTxtBuffer);
-		void					openTmpFile();
 		
-		Buffer	 		_buff;
-		std::fstream	_fBuff;
-		size_t			_size;
-		Chunk			_chunk;
-		std::string		_fName;
+		Buffer	 			_buff;
+		std::fstream		_fBuff;
+		size_t				_size;
+		Chunk				_chunk;
+		std::string			_fName;
+
+		Body(const Body& obj);
+		Body&				operator=( const Body& obj );
+
+		void				openTmpFile( void );
+		void				onBodyReceivedTE( Buffer& buff );
+		void				onBodyReceivedLength( Buffer& buff, size_t bodyLen );
+
+		size_t				writeInMemory( Buffer& buff, size_t max );
+		size_t				writeInFile( Buffer& buff, size_t max );
+
 };
 
 #endif

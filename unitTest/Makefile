@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/19 15:05:58 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/19 15:31:37 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,27 +75,28 @@ SERVER_SRC		=	../class/parser/CheckerTokens_e.cpp \
 					../class/server/ServerManager_m.cpp \
 					../class/server/ServerManager_p.cpp \
 					../class/server/ServerManager.cpp \
-					../class/HandleConfig.cpp \
 					../class/http/HttpBase.cpp \
 					../class/http/HttpRequest.cpp \
 					../class/http/HttpHandling.cpp \
+					../class/http/HttpResponse.cpp \
+					../class/http/HttpParser.cpp \
+					../class/http/HttpExceptions.cpp \
+					../class/http/HttpSevereExceptions.cpp \
 					../class/events/EventData.cpp \
 					../class/events/EventMonitoring.cpp \
 					../class/http/HttpResponse.cpp \
+					../class/handling/ResponseHandling.cpp \
 					../class/handling/RequestHandling.cpp \
 					../class/networking/Socket.cpp \
 					../class/utils/Ressource.cpp \
 					../class/utils/Uri.cpp \
-					../class/http/HttpParser.cpp \
 					../class/utils/File.cpp \
 					../class/utils/Buffer.cpp \
-					../class/handling/ResponseHandling.cpp \
 					../class/utils/Pipe.cpp \
 					../class/utils/Ip.cpp \
-					../class/http/HttpExceptions.cpp \
-					../class/http/HttpSevereExceptions.cpp \
 					../class/networking/Body.cpp \
 					../class/networking/Chunk.cpp \
+					../class/HandleConfig.cpp \
 					main_fullServer.cpp
 
 SERVER_OBJ		=	$(SERVER_SRC:.cpp=.o)
@@ -168,6 +169,11 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/networking/Socket.cpp \
 					../class/networking/SocketManager.cpp \
 					../class/handling/HandleCGI.cpp \
+					../class/handling/HandleCGI_ev.cpp \
+					../class/handling/MyCGI.cpp \
+					../class/handling/MyCGI_ev.cpp \
+					../class/handling/MyCGI_gs.cpp \
+					../class/handling/MyCGI_m.cpp \
 					../class/handling/RequestHandling.cpp \
 					../class/handling/ResponseHandling.cpp \
 					../class/cgi/CgiParser.cpp \

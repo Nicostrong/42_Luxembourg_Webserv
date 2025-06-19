@@ -1,0 +1,53 @@
+Détection de la requête CGI
+
+    Lorsqu'une requête HTTP cible un script CGI (/cgi-bin/script.py, ou .php, etc.), déterminer :
+
+        Le chemin du script sur le disque.
+
+        Le programme à exécuter (ex: python, php-cgi, etc.).
+
+        Les paramètres (QUERY_STRING, POST_DATA, etc.).
+
+Créer un Pipe bidirectionnel
+
+    Un pour envoyer les données au CGI (stdin du processus).
+
+    Un pour lire les données générées par le CGI (stdout du processus).
+
+Créer un processus enfant
+
+    fork()
+
+    Dans l’enfant :
+
+        Rediriger stdin vers le pipe de lecture.
+
+        Rediriger stdout (et stderr optionnellement) vers le pipe d’écriture.
+
+        execve() du binaire (ex: python, php-cgi, etc.) avec les bons arguments et environnement.
+
+Dans le processus parent
+
+    Fermer les extrémités inutiles des pipes.
+
+    Ajouter les descripteurs de lecture/écriture au EventMonitoring pour suivre le moment où tu peux :
+
+        Écrire les données (ex: POST) au CGI via le Pipe.
+
+        Lire la réponse du CGI.
+
+Bufferiser la réponse CGI
+
+    Lire les données depuis le Pipe dans un Buffer.
+
+    Attendre que le CGI ait terminé (gestion SIGCHLD ou waitpid(pid, WNOHANG)).
+
+    Quand la réponse est complète, la formater (s’assurer qu’elle contient des headers HTTP) et l’envoyer au Socket.
+
+Nettoyage
+
+    Fermer les pipes.
+
+    Supprimer les entrées de monitoring.
+
+    Libérer les ressources.
