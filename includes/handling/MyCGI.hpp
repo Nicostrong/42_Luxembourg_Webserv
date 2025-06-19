@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:02:14 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:08:47 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,6 @@ class	MyCGI:	public IEventHandler
 
 };
 
-std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object );
+//std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object );
 
 #endif

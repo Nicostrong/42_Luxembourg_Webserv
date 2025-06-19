@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/16 17:48:18 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 15:57:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@
 # define BODY_BUFFER_SIZE 32768
 # define MAX_CLIENT 1024
 # define HEAD_BSIZE 8192
+# define EPOLLTICK 1u << 27
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"

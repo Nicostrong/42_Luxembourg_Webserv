@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:56:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:00:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void Socket::reset(EventMonitoring& em)
 	this->_resp = HttpResponse();
 	this->_txBuffer.reset();
 	this->_handler.reset();
-	em.monitorUpdate(this->_fd, POLLIN | POLLHUP | POLLRDHUP);
+	em.monitorUpdate(this->_fd, POLLIN | EPOLLTICK | POLLHUP | POLLRDHUP);
 	this->_reset = false;
 }
 
@@ -169,6 +169,7 @@ void Socket::onCloseEvent(int fd, EventMonitoring &em)
 
 void Socket::onTickEvent(int fd, EventMonitoring& em)
 {
+	this->_handler.onTick(em, this);
 	(void)fd;
 	(void)em;
 }

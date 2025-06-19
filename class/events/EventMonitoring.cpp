@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:50:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:02:51 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,14 @@ void EventMonitoring::unmonitor(int fd)
 
 void EventMonitoring::updateEvents()
 {
-	int res = epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, -1);
+	int res = epoll_wait(this->_epollFd, this->_events.data(), MAX_EVENTS, 500);
 	if (res == -1)
 	{
 		if (errno == EINTR)
 			return ;
 		throw EPollFailedWaitException();
 	}
+	
 	std::vector<epoll_event>::const_iterator it = this->_events.begin();
 	while (it != this->_events.begin() + res)
 	{
@@ -136,6 +137,18 @@ void EventMonitoring::updateEvents()
 		}
 		catch(const std::exception& e) {}
 		it++;
+	}
+	
+	std::list<epoll_event>::const_iterator itTick;
+	for (itTick = this->_openFds.begin(); itTick != this->_openFds.end(); ++itTick)
+	{
+		EventData *data = static_cast<EventData *>(itTick->data.ptr);
+		try
+		{
+			if (itTick->events & EPOLLTICK && !data->getCanceled())
+				data->onTick();
+		}
+		catch(const std::exception& e) {}
 	}
 	remove();
 }
