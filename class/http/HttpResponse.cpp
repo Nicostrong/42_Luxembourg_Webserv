@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 18:34:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:52:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,42 +32,6 @@ HttpResponse& HttpResponse::operator=(const HttpResponse& obj)
 		this->_headBuffer = obj._headBuffer;
 	}
 	return (*this);
-}
-
-void HttpResponse::encodeHead(const std::string data)
-{
-	try
-	{
-		this->_headBuffer.copyFrom(data);
-	}
-	catch(const Buffer::NoSpaceAvailable& e)
-	{
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
-	}
-}
-
-void HttpResponse::encodeHead(const std::string data)
-{
-	try
-	{
-		this->_headBuffer.copyFrom(data);
-	}
-	catch(const Buffer::NoSpaceAvailable& e)
-	{
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
-	}
-}
-
-void HttpResponse::encodeHead(const std::string data)
-{
-	try
-	{
-		this->_headBuffer.copyFrom(data);
-	}
-	catch(const Buffer::NoSpaceAvailable& e)
-	{
-		throw HttpExceptions(INTERNAL_SERVER_ERROR);
-	}
 }
 
 void HttpResponse::sendHead(Buffer& buff)

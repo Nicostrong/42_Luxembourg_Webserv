@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:39:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:12:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:57:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ bool Listener::listenSocket(EventMonitoring& em)
 
         std::cout << "Listening to " << this->_addr.getIp().getIpString() 
                 << ":" <<this->_addr.getPort() << std::endl;
-        em.monitor(this->_serverSocket, POLLIN, EventData::SERVER, 
-            *this);
+        em.monitor(this->_serverSocket, POLLIN, *this);
         return (true);
     }
     catch(const std::exception& e)
@@ -67,10 +66,9 @@ bool Listener::listenSocket(EventMonitoring& em)
 
 // Socket events
 
-void Listener::onReadEvent(int fd, int type, EventMonitoring& em)
+void Listener::onReadEvent(int fd, EventMonitoring& em)
 {
 	(void)fd;
-	(void)type;
 	sockaddr_in	clientAddr;
 	socklen_t addrLen = sizeof(clientAddr);
 	Socket* sock = NULL;
@@ -105,16 +103,20 @@ void Listener::onReadEvent(int fd, int type, EventMonitoring& em)
 	}
 }
 
-void Listener::onWriteEvent(int fd, int type, EventMonitoring& em)
+void Listener::onWriteEvent(int fd, EventMonitoring& em)
 {
 	(void)em;
 	(void)fd;
-	(void)type;
 }
 
-void Listener::onCloseEvent(int fd, int type, EventMonitoring& em)
+void Listener::onCloseEvent(int fd, EventMonitoring& em)
 {
 	(void)em;
 	(void)fd;
-	(void)type;
+}
+
+void Listener::onTickEvent(int fd, EventMonitoring& em)
+{
+	(void)em;
+	(void)fd;
 }

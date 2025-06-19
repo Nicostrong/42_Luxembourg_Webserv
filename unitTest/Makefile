@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/12 08:32:00 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/19 15:05:58 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -167,10 +167,12 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/networking/ListenerManager.cpp \
 					../class/networking/Socket.cpp \
 					../class/networking/SocketManager.cpp \
-					../class/handling/CGI.cpp \
 					../class/handling/HandleCGI.cpp \
 					../class/handling/RequestHandling.cpp \
 					../class/handling/ResponseHandling.cpp \
+					../class/cgi/CgiParser.cpp \
+					../class/cgi/CgiResponse.cpp \
+					../class/cgi/CgiResponseHandling.cpp \
 					../class/HandleConfig.cpp \
 					main_networking.cpp
 

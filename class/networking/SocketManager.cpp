@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:25:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:12:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:57:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ SocketManager::~SocketManager()
 
 void SocketManager::add(Socket& sock, EventMonitoring& em)
 {
-	em.monitor(sock.getSocket(), POLLIN | POLLHUP | POLLRDHUP,
-		EventData::CLIENT, sock);
+	em.monitor(sock.getSocket(), POLLIN | POLLHUP | POLLRDHUP, sock);
 	
 	this->_sockets.push_back(&sock);
 }

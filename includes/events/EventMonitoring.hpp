@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 21:48:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:50:56 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class EventMonitoring
 		const std::vector<epoll_event> getEvents() const;
 		size_t getClientsConnected() const;
 		
-		void monitor(int fd, uint32_t events, int type, IEventHandler& ctx);
+		void monitor(int fd, uint32_t events, IEventHandler& ctx);
 		void monitorUpdate(int fd, uint32_t events);
 		void unmonitor(int fd);
 		void updateEvents();

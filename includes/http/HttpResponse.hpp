@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 18:30:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:58:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class HttpResponse: public HttpBase
 	private:
 		ResponseType	_respType;
 		Buffer			_headBuffer;
+		
 };
 
 # endif

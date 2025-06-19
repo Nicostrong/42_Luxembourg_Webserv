@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/10 21:50:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 14:57:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ class Listener : public IEventHandler
         ~Listener();
         bool    		listenSocket(EventMonitoring& em);
 
-		void onReadEvent(int fd, int type, EventMonitoring& em);
-		void onWriteEvent(int fd, int type, EventMonitoring& em);
-		void onCloseEvent(int fd, int type, EventMonitoring& em);
+		void onReadEvent(int fd, EventMonitoring& em);
+		void onWriteEvent(int fd, EventMonitoring& em);
+		void onCloseEvent(int fd, EventMonitoring& em);
+		void onTickEvent(int fd, EventMonitoring& em);
     private:
 		Listener(const Listener& obj);
 		Listener& operator=(const Listener& obj);

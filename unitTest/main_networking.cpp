@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 10:54:30 by nfordoxc         ###   ########.fr       */
+/*   Updated: 2025/06/19 14:35:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "./../includes/networking/SocketManager.hpp"
 #include "./../includes/networking/Listener.hpp"
 #include "./../includes/networking/ListenerManager.hpp"
-#include "./../includes/handling/CGI.hpp"
 
 bool	g_running = true;
 
@@ -42,11 +41,6 @@ int main()
 		
 		while (g_running)
 			em.updateEvents();
-	}
-	catch (const CGI::ForkClean& e)
-	{
-		LOG_DEB("Fork exit");
-		return (1);
 	}
 	catch(const std::exception& e)
 	{
