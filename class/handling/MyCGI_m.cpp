@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:01:28 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:08:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void		MyCGI::execCGI( void )
  *	output stream operator
  */
 
-std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object )
+/*std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object )
 {	
 	out	<< CYAN << "================= MYCGI OGJECT =================" << RESET << std::endl
 		<< CYAN << "script to execute:" << src_object.get<< std::endl;
 		
 	out	<< GREEN << "=================== END SERVER ==================" << RESET << std::endl;
 	return (out);
-}
+}*/

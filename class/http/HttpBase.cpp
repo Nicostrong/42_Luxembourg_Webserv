@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:03:35 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/19 16:07:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ std::string& HttpBase::findHeaderValue(const char* name)
 
 std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
 {
-	switch (status_code)
+	switch (statusCode)
 	{
 		case 100: return "Continue";
 		case 101: return "Switching Protocols";
