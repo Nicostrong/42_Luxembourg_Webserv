@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 15:43:53 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:06:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,42 +25,11 @@ HttpHandling::~HttpHandling()
 
 void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 {
-	HttpResponse* resp = &sock->getResp();
-	
-	try
-	{
-		this->_parser.onRead(sock->getRxBuffer(), *sock);
-		switch (this->_parser.getState())
-		{
-			case HttpParser::HTTP_HEAD_RECEIVED:
-				RequestHandling::handleHeaders(*sock);
-				break;
-			case HttpParser::HTTP_BODY_RECEIVED:
-				RequestHandling::handleBody(*sock);
-				break;
-			default:
-				return ;
-		}
-
-        switch (this->_parser.getState())
-        {
-            case HttpParser::HTTP_HEAD_RECEIVED:
-            // fallthrough
-            case HttpParser::HTTP_BODY_RECEIVED:
-				if (sock->getResp().getRespType() == HttpResponse::CGI)
-				{
-					
-				}
-				else
-				{
-                this->_resHandling.init(*sock);
-                 em.monitorUpdate(sock->getSocket(),
-                    EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
-				}
-                break;
-            default:
-                return ;
-        }
+    HttpResponse* resp = &sock->getResp();
+    
+    try
+    {
+        this->_parser.onRead(sock->getRxBuffer(), *sock);
     }
     catch(const HttpExceptions& e)
     {
@@ -76,8 +45,8 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 		resp->setRespType(HttpResponse::ERROR);
 		resp->setStatusCode((HttpBase::HttpCode)e.getCode());
 		this->_resHandling.init(*sock);
-		em.monitorUpdate(sock->getSocket(), POLLOUT | POLLHUP | POLLRDHUP);
-	}
+		em.monitorUpdate(sock->getSocket(), POLLOUT | EPOLLTICK | POLLHUP | POLLRDHUP);
+    }
 }
 
 void HttpHandling::setBodyRequired()
@@ -90,6 +59,41 @@ void HttpHandling::onWrite(EventMonitoring& em, Socket* sock)
 {
 	(void)em;
 	this->_resHandling.send(*sock);
+}
+
+void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
+{
+	switch (this->_parser.getState())
+		{
+			case HttpParser::HTTP_HEAD_RECEIVED:
+				RequestHandling::handleHeaders(*sock);
+				break;
+			case HttpParser::HTTP_BODY_RECEIVED:
+				RequestHandling::handleBody(*sock);
+				break;
+			default:
+				return ;
+		}
+
+	switch (this->_parser.getState())
+	{
+		case HttpParser::HTTP_HEAD_RECEIVED:
+		// fallthrough
+		case HttpParser::HTTP_BODY_RECEIVED:
+			if (sock->getResp().getRespType() == HttpResponse::CGI)
+			{
+				
+			}
+			else
+			{
+				this->_resHandling.init(*sock);
+				em.monitorUpdate(sock->getSocket(),
+					EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
+				}
+			break;
+		default:
+			return ;
+		}
 }
 
 void HttpHandling::setConnectionClose(Socket& sock)

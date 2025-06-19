@@ -9,10 +9,10 @@
 -Implements all status code for CGI handling
 [X]-Allocate each socket and fd object related in heap insetad of stack to prevent
     problem with copy in STL containers
--Handle connection state / close teh conenction when request malformed to 
+[X]-Handle connection state / close teh conenction when request malformed to 
     prevent integrity of the data
 -Handle range on downloaded files to get a part of file.
--Refacto the way data is sent to allow all others things than just sending 
+[X]-Refacto the way data is sent to allow all others things than just sending 
     static files.
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
