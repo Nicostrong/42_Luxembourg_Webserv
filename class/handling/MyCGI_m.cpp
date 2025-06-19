@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:08:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:20:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,19 @@ void		MyCGI::execCGI( void )
  *	output stream operator
  */
 
-/*std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object )
-{	
+std::ostream	&operator<<( std::ostream &out, MyCGI& src_object )
+{
 	out	<< CYAN << "================= MYCGI OGJECT =================" << RESET << std::endl
-		<< CYAN << "script to execute:" << src_object.get<< std::endl;
-		
-	out	<< GREEN << "=================== END SERVER ==================" << RESET << std::endl;
+		<< CYAN << "script to execute:" << src_object.getScriptPath()<< std::endl
+		<< CYAN << "binary to execute:" << src_object.getBinaryPath()<< std::endl
+		<< CYAN << "query for CGI:" << src_object.getQuery()<< std::endl;
+	
+	char**		params = src_object.getParams();
+	int			i = -1;
+
+	while (*params[++i])
+		out << CYAN << params[i] << std::endl;
+	
+	out	<< CYAN << "=================== END MYCGI ==================" << RESET << std::endl;
 	return (out);
 }*/

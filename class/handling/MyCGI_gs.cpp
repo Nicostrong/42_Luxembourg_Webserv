@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 15:59:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:05:49 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ std::string&		MyCGI::getScriptPath( void )
 /*
  *	get the path of the binary to execute
  */
-std::string&		MyCGI::getbinaryPath( void )
+std::string&		MyCGI::getBinaryPath( void )
 {
 	return (this->_binaryExec);
 }

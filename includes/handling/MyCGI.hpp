@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:08:47 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:20:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class	MyCGI:	public IEventHandler
 
 		/*	GETTER	*/
 		std::string&	getScriptPath( void );
-		std::string&	getbinaryPath( void );
+		std::string&	getBinaryPath( void );
 		std::string&	getQuery( void );
 
 		char**			getParams( void );
@@ -102,6 +102,6 @@ class	MyCGI:	public IEventHandler
 
 };
 
-//std::ostream	&operator<<( std::ostream &out, MyCGI const &src_object );
+std::ostream	&operator<<( std::ostream &out, MyCGI& src_object );
 
 #endif
