@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:20:02 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/19 16:20:37 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,4 @@ std::ostream	&operator<<( std::ostream &out, MyCGI& src_object )
 	
 	out	<< CYAN << "=================== END MYCGI ==================" << RESET << std::endl;
 	return (out);
-}*/
+}
