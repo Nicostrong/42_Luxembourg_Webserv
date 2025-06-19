@@ -6,7 +6,7 @@
 -Modify buffer object to be rotative to optimize space available in buffer and
     prevent aligning each time to be sure to have enough space for data.
 -Make socket NON BLOCKING
--Implements all status code for CGI handling
+[X]-Implements all status code for CGI handling
 [X]-Allocate each socket and fd object related in heap insetad of stack to prevent
     problem with copy in STL containers
 -Handle connection state / close teh conenction when request malformed to 
