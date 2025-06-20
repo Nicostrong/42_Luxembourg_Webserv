@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 17:42:47 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 18:40:55 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			ssize_t		dataSent;
 			
 			dataSent = write(fd,
-							this->_socket->getReq().getBody()->getBuffer().getDataUnused(), 
+							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
 			
 			std::cout << "DEBUG CGI on WRITE" << std::endl;
