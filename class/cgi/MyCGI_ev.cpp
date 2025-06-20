@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 17:39:51 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 17:42:47 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
 	try
 	{
-		if (!this->getEnd Write())
+		if (!this->getEndWrite())
 		{
 			ssize_t		dataSent;
 			
