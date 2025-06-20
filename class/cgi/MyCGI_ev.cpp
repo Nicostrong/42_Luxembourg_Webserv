@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 18:40:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 19:17:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 			throw CGIError("Error reading pipe from GCI");
 			
 		this->_rxBuffer.setBufferUsed(bytes);
+		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 		if (bytes == 0)
 		{
 			this->setIsFinish();
+			this->_socket->getHandler().getCgiResponse().setEofReceived();
 			em.unmonitor(fd);
-			close(fd);
+			this->getPipeFromCGI().closeOut();
 			return ;
 		}
 	}
@@ -44,7 +46,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 	{
 		throw e;
 		em.unmonitor(fd);
-		close(fd);
+		this->getPipeFromCGI().closeOut();
 	}
 	return ;
 }
@@ -70,9 +72,8 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 		if (this->_txBuffer.isBufferRead())
 		{
 			this->setEndWrite();
-			this->getPipeToCGI().closeIn();
 			em.unmonitor(fd);
-			close(fd);
+			this->getPipeToCGI().closeIn();
 			return ;
 		}
 	}
@@ -80,13 +81,15 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 	{
 		throw e;
 		em.unmonitor(fd);
-		close(fd);
+		this->getPipeToCGI().closeIn();
 	}
 	return ;
 }
 
 void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 {
+	this->_socket->getHandler().getCgiResponse().setEofReceived();
+	this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 	em.unmonitor(fd);
 	close(fd);
 	this->setIsFinish();

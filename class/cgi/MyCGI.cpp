@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 17:21:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 19:20:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ MyCGI::~MyCGI( void )
 		delete[] this->_aEnv;
 		this->_aEnv = NULL;
 	}
+	this->_socket->getEM().unmonitor(getPipeToCGI().getIn());
+	this->_socket->getEM().unmonitor(getPipeFromCGI().getOut());
 	return ;
 }
 

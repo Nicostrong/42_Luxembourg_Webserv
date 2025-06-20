@@ -197,6 +197,11 @@ void		Body::readInFile( std::vector<char>& receivedTxtBuffer )
 	return ;
 }
 
+void		Body::read( Buffer& buff )
+{
+	// Should read into the buffer
+}
+
 Buffer&		Body::getBuffer( void )
 {
 	return (this->_buff);

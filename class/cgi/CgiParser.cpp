@@ -6,13 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 15:28:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 19:00:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/cgi/CgiParser.hpp"
+#include "./../../includes/networking/Socket.hpp"
 
-CgiParser::CgiParser() 
+CgiParser::CgiParser() : _state(CGI_HEAD)
 {
     this->_headBuffer.reserve(CGI_HEAD_BUFF);
 }
@@ -29,15 +30,17 @@ void CgiParser::setState(CgiParser::State state)
 	this->_state = state;
 }
 
-void	CgiParser::onRead(Buffer &buff, CgiResponse& cgiResponse, Socket& sock)
+void	CgiParser::onRead(Buffer &buff, Socket& sock)
 {
-    switch (this->_state)
+	CgiResponse* cgiResp = &sock.getHandler().getCgiResponse();
+  
+	switch (this->_state)
 	{
 		case CGI_HEAD:
-			if (!handleHeaders(buff, cgiResponse))
+			if (!handleHeaders(buff, *cgiResp))
 				return ;
 		case CGI_BODY:
-			if (!handleBody(buff, cgiResponse, sock))
+			if (!handleBody(buff, *cgiResp, sock))
 				return ;
 		default:
 			break;

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 18:38:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 19:00:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void HttpHandling::reset()
 	this->_parser.reset();
 	this->_resHandling.reset();
 	this->_cgiResp.reset();
+	this->_cgiParser.setState(CgiParser::CGI_HEAD);
 	if (this->_cgi)
 		delete this->_cgi;
 	this->_cgi = NULL;
