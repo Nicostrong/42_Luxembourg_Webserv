@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:20:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 16:25:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class	MyCGI:	public IEventHandler
 		void			setMap( void );
 		void			setEnv( void );
 		void			initMap( void );
+		void			checkCGI( void );
 		void			setParams( void );
 
 	public:
@@ -90,6 +91,8 @@ class	MyCGI:	public IEventHandler
 
 		/*	SETTER	*/
 		void			setPid( pid_t pid );
+		void			setIsFinish( bool value = true );
+		void			setEndWrite( bool value = true );
 
 		/*	METHODS	*/
 		void			execCGI( void );
@@ -100,6 +103,20 @@ class	MyCGI:	public IEventHandler
 		void			onCloseEvent( int fd, EventMonitoring& em );
 		void			onTickEvent( int fd, EventMonitoring& em );
 
+		class	CGIError: public std::exception
+		{
+
+			private:
+
+				std::string		_msg;
+
+			public:
+
+				CGIError( const std::string &error ) throw();
+				virtual ~CGIError( void ) throw();
+				virtual const char*		what() const throw();
+		
+		};
 };
 
 std::ostream	&operator<<( std::ostream &out, MyCGI& src_object );

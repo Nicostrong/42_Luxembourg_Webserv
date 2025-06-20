@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:56:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 17:17:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ class Socket : public IEventHandler
 		HttpHandling&		getHandler();
 		void 				setSocketClose();
 		void				setReset();
+		void				setEM( EventMonitoring& em );
 		void				reset(EventMonitoring& em);
 		void				onReadEvent(int fd, EventMonitoring& em);
 		void				onWriteEvent(int fd, EventMonitoring& em);
 		void				onCloseEvent(int fd, EventMonitoring& em);
 		void				onTickEvent(int fd, EventMonitoring& em);
-		void				setEM( EventMonitoring& ev );
 
 	private:
 	

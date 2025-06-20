@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketManager.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:25:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:01:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 17:15:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ SocketManager::~SocketManager()
 
 void SocketManager::add(Socket& sock, EventMonitoring& em)
 {
-	em.monitor(sock.getSocket(), POLLIN | EPOLLTICK | POLLHUP | POLLRDHUP, sock);
-	
+	em.monitor(sock.getSocket(), EPOLLIN | EPOLLTICK | EPOLLHUP | EPOLLRDHUP, sock);
+	sock.setEM(em);
 	this->_sockets.push_back(&sock);
 }
 

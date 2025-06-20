@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 09:21:25 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 17:21:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 ******************************************************************************/
 
 MyCGI::MyCGI( Socket& socket )
-	: _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE), _rxBuffer(BUFF_SIZE),
-	_socket(&socket), _isFinish(false), _endWrite(false)
+	: _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
+	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isFinish(false),
+	_endWrite(false)
 {
 	this->_binaryExec = this->_socket->getReq().getCgiPath();
 	this->_scriptPath = this->_socket->getReq().getPathTranslated();
@@ -28,6 +29,7 @@ MyCGI::MyCGI( Socket& socket )
 	setMap();
 	setEnv();
 	setParams();
+	checkCGI();
 	return ;
 }
 
@@ -164,5 +166,32 @@ void		MyCGI::setParams( void )
 	return;
 }
 
+void		MyCGI::checkCGI( void )
+{
+	if (this->_scriptPath.empty() || this->_binaryExec.empty())
+		throw CGIError("empty variable on CGIobject");
+	if (!_params)
+		throw CGIError("array to excve empty");
+	if (!_aEnv)
+		throw CGIError("env array empty");
+	return ;
+}
+/*******************************************************************************
+ *								EXCEPTION 									   *
+ ******************************************************************************/
 
+MyCGI::CGIError::CGIError( const std::string &error ) throw()
+{
+	this->_msg = RED"[ERROR CGI] " + error + RESET;
+	return ;
+}
 
+MyCGI::CGIError::~CGIError( void ) throw()
+{
+	return ;
+}
+
+const char*		MyCGI::CGIError::what() const throw()
+{
+	return (this->_msg.c_str());
+}

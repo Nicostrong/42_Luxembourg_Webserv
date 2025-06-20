@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:05:49 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 16:27:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,5 +139,17 @@ bool		MyCGI::getEndWrite( void )
 void		MyCGI::setPid( pid_t pid )
 {
 	this->_pid = pid;
+	return ;
+}
+
+void		MyCGI::setIsFinish( bool value )
+{
+	this->_isFinish = value;
+	return ;
+}
+
+void		MyCGI::setEndWrite( bool value )
+{
+	this->_endWrite = value;
 	return ;
 }
