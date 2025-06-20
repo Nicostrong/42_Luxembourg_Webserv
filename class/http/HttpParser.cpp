@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 10:29:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 11:05:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ bool HttpParser::handleBody(Buffer& buff, Socket& sock)
 		req->setBody(body);
 	}
 	
-	bool received = body->onBodyReceived(buff, sock);
+	bool received = body->onRead(buff, sock);
 
 	if (received)
 		this->_state = HTTP_BODY_RECEIVED;

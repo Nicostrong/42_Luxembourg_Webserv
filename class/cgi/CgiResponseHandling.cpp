@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 10:03:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:53:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,9 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 			//Should know when data is completly received otherwise if none specified wait for EOF
 		}
 		else if (name == "DATE" || name == "SERVER" || name == "CONNECTION")
-		{
-			// Should ignore those headers
-		}
+			continue;
 		else
-		{
 			resp->addHeader(name, (*it).second);
-		}
 	}
 	(void)sock;
 }

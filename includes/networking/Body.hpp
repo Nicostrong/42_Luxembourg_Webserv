@@ -35,7 +35,7 @@ class Body
 		void					moveBodyFile( const std::string& name );
 		void					readInFile( std::vector<char>& receivedTxtBuffer );
 
-		bool					onBodyReceived( Buffer& buff, Socket& sock );
+		bool					onRead( Buffer& buff, Socket& sock );
 
 		Buffer&					getBuffer( void );
 		

@@ -69,7 +69,7 @@ void		Body::moveBodyFile( const std::string& name )
 	return ;
 }
 
-bool		Body::onBodyReceived( Buffer& buff, Socket& sock )
+bool		Body::onRead( Buffer& buff, Socket& sock )
 {
 	if (sock.getReq().isTE())
 	{
