@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 18:06:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 09:04:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void CgiResponseHandling::handleHeaders(Socket& sock)
 {
-	if (sock.get)
+	//if (sock.get)
 	(void)sock;
 }
 
