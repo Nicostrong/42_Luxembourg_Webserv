@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:08:34 by gzenner          ###   ########.fr       */
+/*   Updated: 2025/06/20 09:47:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ class HttpBase
 		HttpBase(const HttpBase& obj);
 		virtual 			~HttpBase();
 		HttpBase&			operator=(const HttpBase& obj);
-		HttpCode			getStatusCode() const;
-		void				setStatusCode(HttpBase::HttpCode status);
+		size_t				getStatusCode() const;
+		void				setStatusCode(size_t status);
 		const std::string&	getMethod() const;
 		void				setMethod(std::string method);
 		const std::string&	getUri() const;
@@ -118,7 +118,7 @@ class HttpBase
 		bool				findHeader(const char* name);
 		std::string&		findHeaderValue(const char* name);
 		const std::map<std::string, std::string>&	getHeaders() const;
-		static std::string	getStrStatusCode(HttpCode statusCode);
+		static std::string	getStrStatusCode(size_t statusCode);
 		static std::string	getDirectoryListing(const std::string &dirPath, 
 			const std::string &relativeDir);
 		static bool canBeValidMethod(const std::string& method);
@@ -142,7 +142,7 @@ class HttpBase
 		std::string _uri;
 		std::string _httpVersion;
 		std::string _body;
-		HttpCode	_statusCode;
+		size_t		_statusCode;
 		std::map<std::string, std::string> _headers;
 		bool		_transferEncoding;
 		bool 		_isComplete;

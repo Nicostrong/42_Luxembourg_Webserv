@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 17:45:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 09:46:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ HttpBase& HttpBase::operator=(const HttpBase& obj)
 }
 
 
-HttpBase::HttpCode HttpBase::getStatusCode() const
+size_t HttpBase::getStatusCode() const
 {
 	return (this->_statusCode);
 }
 
-void HttpBase::setStatusCode(HttpBase::HttpCode status)
+void HttpBase::setStatusCode(size_t status)
 {
 	this->_statusCode = status;
 }
@@ -119,7 +119,7 @@ std::string& HttpBase::findHeaderValue(const char* name)
 	return (this->_headers.at(name));
 }
 
-std::string	HttpBase::getStrStatusCode(HttpCode statusCode)
+std::string	HttpBase::getStrStatusCode(size_t statusCode)
 {
 	switch (statusCode)
 	{

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:28:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 17:27:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 09:41:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CGIRESPONSEHANDLING_HPP
 
 #include "./CgiResponse.hpp"
+#include "./../http/HttpExceptions.hpp"
 
 class Socket;
 
@@ -22,7 +23,7 @@ class CgiResponseHandling
     public:
         
 		void		handleHeaders(Socket& sock);
-        static bool isStatusHeaderValid(const std::string& status);
+        void 		handleStatusHeader(const std::string& status, Socket& sock);
         static bool isLocationValid(const std::string& loc);
     private:
 		CgiResponseHandling();

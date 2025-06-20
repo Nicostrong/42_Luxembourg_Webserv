@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 15:31:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 09:11:35 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,20 @@ class HttpResponse: public HttpBase
 		HttpResponse(const HttpResponse& obj);
 		virtual ~HttpResponse();
 		HttpResponse&		operator=(const HttpResponse& obj);
+		
 		void				sendHead(Buffer& buff);
 		void 				sendDefaultErrorPage(Buffer& buff);	
 		void				sendDirectoryListing(Buffer& buff, 
 			const HttpRequest& req);
+		void				setStatusStr(const std::string& statusStr);
 		void				setRespType(ResponseType type);
 		ResponseType		getRespType() const;
 		void				encodeHead(const std::string data);
 	private:
 		ResponseType	_respType;
 		Buffer			_headBuffer;
+		
+		std::string		_statusStr;
 		
 };
 

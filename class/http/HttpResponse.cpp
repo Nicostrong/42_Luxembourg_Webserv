@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 13:52:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 09:13:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void HttpResponse::sendHead(Buffer& buff)
 	addHeader("Server", SERVER_VER);
 	addHeader("Date", formatTimeHeader(time(NULL)));
 	ss << "HTTP/1.1 " << this->_statusCode << " " 
-	   << getStrStatusCode(this->_statusCode) << CRLF
+	   << (this->_statusStr.size() ? 
+	   	   this->_statusStr : getStrStatusCode(this->_statusCode)) << CRLF
 	   << getHeaders_raw()
 	   << CRLF;
 
@@ -123,6 +124,10 @@ void	HttpResponse::sendDirectoryListing(Buffer& buff, const HttpRequest& req)
 	buff.setBufferUsed(directoryListingPage.size());
 }
 
+void HttpResponse::setStatusStr(const std::string& statusStr)
+{
+	this->_statusStr = statusStr;
+}
 
 void HttpResponse::setRespType(ResponseType type)
 {

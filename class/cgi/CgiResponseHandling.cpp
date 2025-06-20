@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 09:04:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:03:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,41 @@
 
 void CgiResponseHandling::handleHeaders(Socket& sock)
 {
-	//if (sock.get)
+	CgiResponse* cgiResp = &sock.getHandler().getCgiResponse();
+	HttpResponse* resp = &sock.getResp();
+	
+	const std::map<std::string, std::string> headers = cgiResp->getHeaders();
+	std::map<std::string, std::string>::const_iterator it;
+	bool isStatusFound = false;
+	
+	for (it = headers.begin(); it != headers.end(); ++it)
+	{
+		std::string name = (*it).first;
+		if (name == "STATUS")
+		{
+			if (isStatusFound)
+				continue;
+			isStatusFound = true;
+			handleStatusHeader((*it).second, sock);
+		}
+		else if (name == "TRANSFER-ENCODING" || name == "CONTENT-LENGTH")
+		{
+			//Should know when data is completly received otherwise if none specified wait for EOF
+		}
+		else if (name == "DATE" || name == "SERVER" || name == "CONNECTION")
+		{
+			// Should ignore those headers
+		}
+		else
+		{
+			resp->addHeader(name, (*it).second);
+		}
+	}
 	(void)sock;
 }
 
-bool CgiResponseHandling::isStatusHeaderValid(const std::string& status)
+void CgiResponseHandling::handleStatusHeader(const std::string& status, 
+		Socket& sock)
 {
 	std::string codeStr;
 	size_t pos = status.find(" ");
@@ -27,14 +57,21 @@ bool CgiResponseHandling::isStatusHeaderValid(const std::string& status)
 	codeStr = status.substr(0, pos);
 
 	if (codeStr.size() != 3)
-		return (false);
+		throw HttpExceptions(HttpBase::BAD_GATEWAY);
 
 	if (codeStr.find_last_not_of("0123456789") != std::string::npos)
-		return (false);
+		throw HttpExceptions(HttpBase::BAD_GATEWAY);
 
 	int code = std::atoi(codeStr.c_str());
 
-	return (code >= 100 && code < 600);
+	if (code < 100 || code >= 600)
+		throw HttpExceptions(HttpBase::BAD_GATEWAY);
+	
+	HttpResponse* resp = &sock.getResp();
+
+	resp->setStatusCode(static_cast<size_t>(code));
+	if (pos != std::string::npos)
+		resp->setStatusStr(status.substr(pos + 1));
 }
 
 bool CgiResponseHandling::isLocationValid(const std::string& loc)
