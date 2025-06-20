@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:31:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 09:14:09 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,14 +280,15 @@ void RequestHandling::handleGet(Socket& sock)
 			
 	if (isCGI(sock))
 	{
-		sock.getResp().setRespType(HttpResponse::CGI);
 		LOG_DEB("IsCGI dans GET");
+		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
+		sock.getHandler().setCGI(sock);
 
 		MyCGI*	cgi = sock.getHandler().getCGI();
-		(void)cgi;
-		//cgi->execCGI();
-		
+
+		LOG_DEB(*cgi);
+		cgi->execCGI();
 		return ;
 	}
 	
@@ -312,17 +313,15 @@ void RequestHandling::handlePost(Socket& sock)
 	std::string	path = sock.getReq().getPathTranslated();
 	if (isCGI(sock))
 	{
-		sock.getResp().setRespType(HttpResponse::CGI);
 		LOG_DEB("IsCGI dans POST");
+		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		sock.getHandler().setCGI(sock);
+
 		MyCGI*	cgi = sock.getHandler().getCGI();
-		
-		if (!cgi)
-			std::cerr << "cgi is NULL" << std::endl;
-		std::cerr << *cgi;
-		//cgi->execCGI();
-		
+
+		LOG_DEB(*cgi);
+		cgi->execCGI();
 		return ;
 	}
 	handleBodyLength(sock);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/20 15:34:04 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/20 16:08:01 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -168,15 +168,15 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/networking/ListenerManager.cpp \
 					../class/networking/Socket.cpp \
 					../class/networking/SocketManager.cpp \
-					../class/handling/MyCGI.cpp \
-					../class/handling/MyCGI_ev.cpp \
-					../class/handling/MyCGI_gs.cpp \
-					../class/handling/MyCGI_m.cpp \
 					../class/handling/RequestHandling.cpp \
 					../class/handling/ResponseHandling.cpp \
 					../class/cgi/CgiParser.cpp \
 					../class/cgi/CgiResponse.cpp \
 					../class/cgi/CgiResponseHandling.cpp \
+					../class/cgi/MyCGI.cpp \
+					../class/cgi/MyCGI_ev.cpp \
+					../class/cgi/MyCGI_gs.cpp \
+					../class/cgi/MyCGI_m.cpp \
 					../class/cgi/CgiBody.cpp \
 					../class/HandleConfig.cpp \
 					main_networking.cpp
