@@ -13,7 +13,7 @@
 #include "./../../includes/networking/Body.hpp"
 #include "./../../includes/networking/Socket.hpp"
 
-Body::Body(size_t bufferSize) : _buff(bufferSize), _size(0) {}
+Body::Body(size_t bufferSize) : _buff(bufferSize), _size(0), _isReceived(false) {}
 
 Body::~Body( void ) 
 {
@@ -71,13 +71,14 @@ void		Body::moveBodyFile( const std::string& name )
 
 bool		Body::onRead( Buffer& buff, Socket& sock )
 {
+	if (this->_isReceived)
+		return (true);
+		
 	if (sock.getReq().isTE())
-	{
 		onBodyReceivedTE(buff);
-		return (this->_chunk.getState() == Chunk::CHUNK_END);
-	}
-	onBodyReceivedLength(buff, sock.getReq().getContentLength());
-	return (this->_size >= sock.getReq().getContentLength());
+	else
+		onBodyReceivedLength(buff, sock.getReq().getContentLength());
+	return (this->_isReceived);
 }
 
 void		Body::onBodyReceivedLength( Buffer& buff, size_t bodyLen )
@@ -95,7 +96,10 @@ void		Body::onBodyReceivedLength( Buffer& buff, size_t bodyLen )
 		std::min(bodyLen - this->_size, buff.getBufferUnread()));
 	
 	if (this->_size >= bodyLen)
+	{
 		this->_fBuff.flush();
+		this->_isReceived = true;
+	}
 	return ;
 }
 
@@ -121,7 +125,10 @@ void		Body::onBodyReceivedTE( Buffer& buff )
 	}
 
 	if (this->_chunk.getState() == Chunk::CHUNK_END)
+	{
 		this->_fBuff.flush();
+		this->_isReceived = true;
+	}
 	return ;
 }
 

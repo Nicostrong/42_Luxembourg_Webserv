@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:28:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 09:41:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 15:03:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ class CgiResponseHandling
         
 		void		handleHeaders(Socket& sock);
         void 		handleStatusHeader(const std::string& status, Socket& sock);
+		void 		handleTE(Socket& sock);
+		void		handleContentLength(Socket& sock);
+		
         static bool isLocationValid(const std::string& loc);
     private:
 		CgiResponseHandling();

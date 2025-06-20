@@ -28,24 +28,25 @@ class Body
 	public:
 
 		Body( size_t bufferSize );
-		~Body( void );
+		virtual ~Body( void );
 
 		const std::string&		getTmpFileName( void ) const;
 
 		void					moveBodyFile( const std::string& name );
 		void					readInFile( std::vector<char>& receivedTxtBuffer );
 
-		bool					onRead( Buffer& buff, Socket& sock );
+		virtual bool			onRead( Buffer& buff, Socket& sock );
 
 		Buffer&					getBuffer( void );
 		
-	private:
+	protected:
 		
 		Buffer	 			_buff;
 		std::fstream		_fBuff;
 		size_t				_size;
 		Chunk				_chunk;
 		std::string			_fName;
+		bool				_isReceived;
 
 		Body(const Body& obj);
 		Body&				operator=( const Body& obj );

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 10:53:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 15:27:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 
 void CgiResponseHandling::handleHeaders(Socket& sock)
 {
+	CgiParser* cgiPars = &sock.getHandler().getCgiParser();
 	CgiResponse* cgiResp = &sock.getHandler().getCgiResponse();
 	HttpResponse* resp = &sock.getResp();
 	
 	const std::map<std::string, std::string> headers = cgiResp->getHeaders();
 	std::map<std::string, std::string>::const_iterator it;
 	bool isStatusFound = false;
+	bool isEofDelimiter = true;
 	
 	for (it = headers.begin(); it != headers.end(); ++it)
 	{
@@ -32,16 +34,23 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 			isStatusFound = true;
 			handleStatusHeader((*it).second, sock);
 		}
-		else if (name == "TRANSFER-ENCODING" || name == "CONTENT-LENGTH")
+		else if (name == "TRANSFER-ENCODING")
 		{
-			//Should know when data is completly received otherwise if none specified wait for EOF
+			isEofDelimiter = false;
+			handleTE(sock);
+		}
+		else if (name == "CONTENT-LENGTH")
+		{
+			isEofDelimiter = false;
+			handleContentLength(sock);
 		}
 		else if (name == "DATE" || name == "SERVER" || name == "CONNECTION")
 			continue;
 		else
 			resp->addHeader(name, (*it).second);
 	}
-	(void)sock;
+	cgiResp->setEof(isEofDelimiter);
+	cgiPars->setState(CgiParser::CGI_BODY);
 }
 
 void CgiResponseHandling::handleStatusHeader(const std::string& status, 
@@ -68,6 +77,35 @@ void CgiResponseHandling::handleStatusHeader(const std::string& status,
 	resp->setStatusCode(static_cast<size_t>(code));
 	if (pos != std::string::npos)
 		resp->setStatusStr(status.substr(pos + 1));
+}
+
+void CgiResponseHandling::handleTE(Socket& sock)
+{
+	std::string value = sock.getReq().findHeaderValue("TRANSFER-ENCODING");
+	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+
+	if (value != "chunked")
+		throw HttpExceptions(HttpBase::NOT_IMPLEMENTED);
+	
+	sock.getReq().setTE(true);
+}
+
+void CgiResponseHandling::handleContentLength(Socket& sock)
+{
+	std::string value = sock.getReq().findHeaderValue("CONTENT-LENGTH");
+
+	if (value.empty() || 
+		value.find_first_not_of("0123456789") != std::string::npos)
+		throw HttpExceptions(HttpBase::BAD_GATEWAY);
+
+	std::istringstream iss(value);
+	size_t cl;
+    iss >> cl;
+
+	if (iss.fail())
+		throw HttpExceptions(HttpBase::BAD_GATEWAY);
+	
+	sock.getHandler().getCgiResponse().setContentLenght(cl);
 }
 
 bool CgiResponseHandling::isLocationValid(const std::string& loc)

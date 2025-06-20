@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 18:49:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 15:28:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,26 @@ CgiParser::CgiParser()
 
 CgiParser::~CgiParser() {}
 
-void	CgiParser::onRead(Buffer &buff, CgiResponse& cgiResponse)
+CgiParser::State CgiParser::getState() const
+{
+	return (this->_state);
+}
+
+void CgiParser::setState(CgiParser::State state)
+{
+	this->_state = state;
+}
+
+void	CgiParser::onRead(Buffer &buff, CgiResponse& cgiResponse, Socket& sock)
 {
     switch (this->_state)
 	{
 		case CGI_HEAD:
 			if (!handleHeaders(buff, cgiResponse))
 				return ;
-		case CGI_HEAD_RECEIVED:
-			//Receiving head
+		case CGI_BODY:
+			if (!handleBody(buff, cgiResponse, sock))
+				return ;
 		default:
 			break;
 	}
@@ -93,4 +104,25 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 	if (this->_state == CGI_HEAD)
 		this->_state = CGI_HEAD_RECEIVED;
 	return (true);
+}
+
+bool CgiParser::handleBody(Buffer& buff, CgiResponse& cgiResponse, Socket& sock)
+{
+	CgiBody* body = cgiResponse.getBody();
+
+	if (!body)
+	{
+		body = new CgiBody(0);
+
+		if (!body)
+			throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+
+		cgiResponse.setBody(body);
+	}
+	
+	bool received = body->onRead(buff, sock);
+
+	if (received)
+		this->_state = CGI_BODY_RECEIVED;
+	return (received);
 }
