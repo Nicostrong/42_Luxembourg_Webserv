@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:50:56 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:42:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ class EventMonitoring
 		};
 
 		EventMonitoring();
-		EventMonitoring(const EventMonitoring &obj);
 		~EventMonitoring();
-		EventMonitoring& operator=(const EventMonitoring& obj);
 		const std::vector<epoll_event> getEvents() const;
 		size_t getClientsConnected() const;
 		
@@ -51,6 +49,9 @@ class EventMonitoring
 		void unmonitor(int fd);
 		void updateEvents();
 	private:
+		EventMonitoring(const EventMonitoring &obj);
+		EventMonitoring& operator=(const EventMonitoring& obj);
+
 		void 						remove();
 		std::vector<epoll_event>	_events;
 		std::list<epoll_event>		_openFds;

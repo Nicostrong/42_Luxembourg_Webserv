@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:51:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:47:10 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ class EventData
 
 	private:
 		const int 				_fd;
-		IEventHandler& 			_ctx;
-		EventMonitoring&		_em;
+		IEventHandler* 			_ctx;
+		EventMonitoring*		_em;
 		bool					_canceled;
 };
 

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 16:02:51 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:44:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
 	this->_epollFd = epoll_create(MAX_EVENTS);
 	if (this->_epollFd == -1)
 		throw EPollFailedInitException();
-}
-
-EventMonitoring::EventMonitoring(const EventMonitoring &obj)
-{
-	*this = obj;
 }
 
 EventMonitoring::~EventMonitoring() 
@@ -37,12 +32,6 @@ EventMonitoring::~EventMonitoring()
 	this->_openFds.clear();
 	if (this->_epollFd > 2)
 		close(this->_epollFd);
-}
-
-EventMonitoring &EventMonitoring::operator=(const EventMonitoring &obj)
-{
-	(void)obj;
-	return (*this);
 }
 
 const std::vector<epoll_event> EventMonitoring::getEvents() const

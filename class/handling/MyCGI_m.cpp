@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 16:20:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/20 10:49:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 
 void		MyCGI::execCGI( void )
 {
-	EventMonitoring		em = this->getSocket().getEM();
-	char**				cmd = this->getParams();
+	EventMonitoring*		em = &this->getSocket().getEM();
+	char**					cmd = this->getParams();
 
 	//std::cout << "SOCKET: " << this->getSocket();
 	
-	em.monitor(this->_toCGI.getIn(), POLLIN | POLLHUP | POLLRDHUP, *this);
+	em->monitor(this->_toCGI.getIn(), POLLIN | POLLHUP | POLLRDHUP, *this);
 				
 	this->setPid(fork());
 
