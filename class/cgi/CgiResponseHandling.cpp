@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiResponseHandling.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 16:06:26 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/21 16:23:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,24 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 	for (it = headers.begin(); it != headers.end(); ++it)
 	{
 		std::string name = (*it).first;
-		if (name == "STATUS")
+		if (name == "Status")
 		{
 			if (isStatusFound)
 				continue;
 			isStatusFound = true;
 			handleStatusHeader((*it).second, sock);
 		}
-		else if (name == "TRANSFER-ENCODING")
+		else if (name == "Transfer-Encoding")
 		{
 			isEofDelimiter = false;
 			handleTE(sock);
 		}
-		else if (name == "CONTENT-LENGTH")
+		else if (name == "Content-Length")
 		{
 			isEofDelimiter = false;
 			handleContentLength(sock);
 		}
-		else if (name == "DATE" || name == "SERVER" || name == "CONNECTION")
+		else if (name == "Date" || name == "Server" || name == "Connection")
 			continue;
 		else
 			resp->addHeader(name, (*it).second);
@@ -81,7 +81,7 @@ void CgiResponseHandling::handleStatusHeader(const std::string& status,
 
 void CgiResponseHandling::handleTE(Socket& sock)
 {
-	std::string value = sock.getReq().findHeaderValue("TRANSFER-ENCODING");
+	std::string value = sock.getReq().findHeaderValue("Transfer-Encoding");
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
 	if (value != "chunked")
@@ -92,7 +92,7 @@ void CgiResponseHandling::handleTE(Socket& sock)
 
 void CgiResponseHandling::handleContentLength(Socket& sock)
 {
-	std::string value = sock.getReq().findHeaderValue("CONTENT-LENGTH");
+	std::string value = sock.getReq().findHeaderValue("Content-Length");
 
 	if (value.empty() || 
 		value.find_first_not_of("0123456789") != std::string::npos)

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 09:46:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 15:46:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,10 +291,21 @@ bool HttpBase::isHeaderValueValid(const std::string& value)
 std::string HttpBase::normalizeHeaderName(const std::string& name)
 {
 	std::string normalized;
-
+	bool flag = true;
 	std::string::const_iterator it;
 	for (it = name.begin(); it != name.end(); ++it) 
-		normalized.push_back(std::toupper(*it));
+	{
+		char c = *it;
+		
+		if (c == '-')
+			flag = true;
+		else
+		{
+			c = flag ? std::toupper(c) : std::tolower(c);
+			flag = false;
+		}
+		normalized.push_back(c);
+	}
 	return (normalized);
 }
 

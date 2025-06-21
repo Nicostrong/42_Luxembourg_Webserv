@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 11:05:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 15:59:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void HttpParser::parseHeaders(HttpRequest& req)
 	if (this->_headBuffer.size())
 		parseHeader(this->_headBuffer.substr(sPos), req);
 
-	if (!req.findHeader("HOST"))
+	if (!req.findHeader("Host"))
 		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 }
 
@@ -135,7 +135,7 @@ void HttpParser::parseHeader(const std::string& line, HttpRequest& req)
 		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 	name = HttpBase::normalizeHeaderName(name);
 
-	if (name == "HOST" && req.findHeader("HOST"))
+	if (name == "Host" && req.findHeader("Host"))
 		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 
 	req.addHeader(name, value);

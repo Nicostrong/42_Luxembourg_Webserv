@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 16:55:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/21 16:21:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void RequestHandling::handleHeaders(Socket& sock)
 	HttpRequest* req = &sock.getReq();
 	HttpResponse* resp = &sock.getResp();
 	const Server*	ctx = sock.getSM().getMatchingServer(
-		entryAddr.getIp(), entryAddr.getPort(), req->findHeaderValue("HOST"));
+		entryAddr.getIp(), entryAddr.getPort(), req->findHeaderValue("Host"));
 
 	LOG_DEB(req->getUri());
 
@@ -324,8 +324,8 @@ void RequestHandling::handlePost(Socket& sock)
 
 void RequestHandling::handleBodyLength(Socket& sock)
 {
-	bool te = sock.getReq().findHeader("TRANSFER-ENCODING");
-	bool cl = sock.getReq().findHeader("CONTENT-LENGTH");
+	bool te = sock.getReq().findHeader("Transfer-Encoding");
+	bool cl = sock.getReq().findHeader("Content-Length");
 	
 	if (te && cl)
 		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
@@ -340,7 +340,7 @@ void RequestHandling::handleBodyLength(Socket& sock)
 
 void RequestHandling::handleTE(Socket& sock)
 {
-	std::string value = sock.getReq().findHeaderValue("TRANSFER-ENCODING");
+	std::string value = sock.getReq().findHeaderValue("Transfer-Encoding");
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
 	if (value != "chunked")
@@ -351,7 +351,7 @@ void RequestHandling::handleTE(Socket& sock)
 
 void RequestHandling::handleContentLength(Socket& sock)
 {
-	std::string value = sock.getReq().findHeaderValue("CONTENT-LENGTH");
+	std::string value = sock.getReq().findHeaderValue("Content-Length");
 
 	if (value.empty() || 
 		value.find_first_not_of("0123456789") != std::string::npos)
