@@ -34,16 +34,19 @@ class Body
 
 		void					moveBodyFile( const std::string& name );
 		void					readInFile( std::vector<char>& receivedTxtBuffer );
+		bool					read( Buffer& buff );
 
 		virtual bool			onRead( Buffer& buff, Socket& sock );
 
 		Buffer&					getBuffer( void );
+		size_t					getSize()	const;
 		
 	protected:
 		
 		Buffer	 			_buff;
 		std::fstream		_fBuff;
 		size_t				_size;
+		size_t				_bytesRead;
 		Chunk				_chunk;
 		std::string			_fName;
 		bool				_isReceived;

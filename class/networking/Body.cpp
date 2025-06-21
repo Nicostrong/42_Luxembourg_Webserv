@@ -13,7 +13,8 @@
 #include "./../../includes/networking/Body.hpp"
 #include "./../../includes/networking/Socket.hpp"
 
-Body::Body(size_t bufferSize) : _buff(bufferSize), _size(0), _isReceived(false) {}
+Body::Body(size_t bufferSize) : _buff(bufferSize), _size(0), _bytesRead(0), 
+	_isReceived(false) {}
 
 Body::~Body( void ) 
 {
@@ -197,12 +198,31 @@ void		Body::readInFile( std::vector<char>& receivedTxtBuffer )
 	return ;
 }
 
-void		Body::read( Buffer& buff )
+bool		Body::read( Buffer& buff )
 {
-	// Should read into the buffer
+	size_t freeSpace = buff.getBufferUnused();
+
+	if (!this->_fBuff.is_open() || this->_bytesRead >= this->_size)
+		return (false);
+	
+	buff.resetIfRead();
+	
+	this->_fBuff.seekg(this->_bytesRead);
+	this->_fBuff.read(buff.getDataUnused(), freeSpace);
+	if (!this->_fBuff && !this->_fBuff.eof())
+        throw std::runtime_error("Read failed");
+	this->_bytesRead += this->_fBuff.gcount();
+	buff.setBufferUsed(this->_fBuff.gcount());
+
+	return (this->_fBuff.eof());
 }
 
 Buffer&		Body::getBuffer( void )
 {
 	return (this->_buff);
+}
+
+size_t Body::getSize()	const
+{
+	return (this->_size);
 }

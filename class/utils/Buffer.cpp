@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:04:52 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 18:29:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 11:56:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ std::ostream& operator<<(std::ostream& os, const Buffer& obj)
     for (size_t i = obj.getBufferRead(); i < obj.getBufferUsed(); ++i)
     {
         const char c = obj.at(i);
-        os << (std::isprint(c) ? c : (int)c) << " ";
+        os << (int)c << "(" << (std::isprint(c) ? c : ' ') << ") ";
     }
     os << "\"" << std::endl;
     return (os);

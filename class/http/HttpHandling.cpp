@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 19:00:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 09:50:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,4 +153,9 @@ CgiParser& HttpHandling::getCgiParser()
 CgiResponse& HttpHandling::getCgiResponse()
 {
 	return (this->_cgiResp);
+}
+
+ResponseHandling& HttpHandling::getResponseHandling()
+{
+	return (this->_resHandling);
 }

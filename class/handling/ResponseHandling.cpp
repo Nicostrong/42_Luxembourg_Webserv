@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:46:11 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/09 23:16:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 10:00:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ void ResponseHandling::init(Socket& sock)
 			this->_state = SENT;
             break;
         case HttpResponse::CGI:
+			CgiBody* body;
+
+			body = sock.getHandler().getCgiResponse().getBody();
+			if (body)
+				sock.getResp().addHeader("Content-Length", body->getSize());
+			else
+				sock.getResp().addHeader("Content-Length", "0");
+			sock.getResp().sendHead(sock.getTxBuffer());
             break;
         case HttpResponse::DIRECTORY_LISTING:
 			sock.getResp().sendDirectoryListing(sock.getTxBuffer(), 
@@ -64,7 +72,7 @@ void ResponseHandling::init(Socket& sock)
             {
                 throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
             }
-                break;
+            break;
         case HttpResponse::ERROR:
 			sock.getResp().sendDefaultErrorPage(sock.getTxBuffer());
 			sock.setReset();
@@ -91,6 +99,24 @@ void ResponseHandling::send(Socket& sock)
 			sock.setReset();
         }
     }
+	else if (sock.getResp().getRespType() == HttpResponse::CGI)
+	{
+		CgiBody* body = sock.getHandler().getCgiResponse().getBody();
+
+		if (body)
+		{
+			if (body->read(sock.getTxBuffer()))
+			{
+				this->_state = SENT;
+				sock.setReset();
+			}
+		}
+		else
+		{
+			this->_state = SENT;
+			sock.setReset();
+		}
+	}
 }
 
 void ResponseHandling::reset()

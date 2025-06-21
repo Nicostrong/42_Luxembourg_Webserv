@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 09:17:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 09:50:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class	HttpHandling
 		void			reset( void );
 		CgiParser&		getCgiParser();
 		CgiResponse&	getCgiResponse();
+		ResponseHandling& getResponseHandling();
 
 		/*	SETTER	*/
 		void		setCGI( Socket& socket );

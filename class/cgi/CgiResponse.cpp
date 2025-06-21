@@ -6,13 +6,14 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:36:17 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 15:08:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 12:06:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/cgi/CgiResponse.hpp"
 
-CgiResponse::CgiResponse() : _body(NULL), _isEof(false), _isTe(false), _contentLength(0) {}
+CgiResponse::CgiResponse() : _body(NULL), _isEof(false), _isTe(false), 
+	_contentLength(0), _isEofReceived(false) {}
 
 
 CgiResponse::~CgiResponse() 
@@ -43,6 +44,7 @@ void CgiResponse::reset()
 	this->_body = NULL;
 	this->_isEof = false;
 	this->_isTe = false;
+	this->_isEofReceived = false;
 	this->_contentLength = 0;
 }
 

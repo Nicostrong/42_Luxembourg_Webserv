@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 19:00:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 12:03:06 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,15 @@ void	CgiParser::onRead(Buffer &buff, Socket& sock)
 	switch (this->_state)
 	{
 		case CGI_HEAD:
+			std::cout << buff;
 			if (!handleHeaders(buff, *cgiResp))
 				return ;
+		// fallthrough
+		case CGI_HEAD_RECEIVED:
+			CgiResponseHandling::handleHeaders(sock);
+			if (this->_state != CGI_BODY)
+				return ;
+		// fallthrough
 		case CGI_BODY:
 			if (!handleBody(buff, *cgiResp, sock))
 				return ;
@@ -49,14 +56,14 @@ void	CgiParser::onRead(Buffer &buff, Socket& sock)
 
 void CgiParser::parseHeaders(CgiResponse& cgiResponse)
 {
-	size_t sPos = 2;
-	size_t ePos = this->_headBuffer.find(CRLF, sPos);
+	size_t sPos = 0;
+	size_t ePos = this->_headBuffer.find("\n", sPos);
 
 	while (ePos != std::string::npos)
 	{
 		parseHeader(this->_headBuffer.substr(sPos, ePos - sPos), cgiResponse);
-		sPos = ePos + 2;
-		ePos = this->_headBuffer.find(CRLF, sPos);
+		sPos = ePos + 1;
+		ePos = this->_headBuffer.find("\n", sPos);
 	}
 	
 	if (this->_headBuffer.size())
@@ -88,7 +95,7 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 
 	this->_headBuffer.append(buff.getDataUnread(), len);
 	
-	size_t pos = this->_headBuffer.find(CRLF CRLF);
+	size_t pos = this->_headBuffer.find("\n\n");
 
 	if (pos == std::string::npos)
 	{
@@ -100,7 +107,7 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 		return (false);
 	}
 	
-	buff.setBufferRead(pos + len - this->_headBuffer.size() + 4);
+	buff.setBufferRead(pos + len - this->_headBuffer.size() + 2);
 	this->_headBuffer.erase(pos);
 
 	parseHeaders(cgiResponse);
