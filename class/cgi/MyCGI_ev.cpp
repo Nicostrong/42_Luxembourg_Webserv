@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/21 09:52:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 17:52:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,32 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 		if (!this->getEndWrite())
 		{
 			ssize_t		dataSent;
-			
-			dataSent = write(fd,
+			Body* 		body = this->_socket->getReq().getBody();
+			bool 		eof = false;
+
+			if (body)
+			{
+				eof = body->read(this->_txBuffer);
+				std::cout << this->_txBuffer << std::endl;
+				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
 			
-			std::cout << "DEBUG CGI on WRITE" << std::endl;
-			std::cout << "nb bytes ecrit: " << dataSent << std::endl;
-			if (dataSent == -1)
-				throw CGIError("send data on pipe failed");
-			this->_txBuffer.setBufferRead(dataSent);
-		}
-		if (this->_txBuffer.isBufferRead())
-		{
-			this->setEndWrite();
-			em.unmonitor(fd);
-			this->getPipeToCGI().closeIn();
-			return ;
+				std::cout << "DEBUG CGI on WRITE" << std::endl;
+				std::cout << "nb bytes ecrit: " << dataSent << std::endl;
+				if (dataSent == -1)
+					throw CGIError("send data on pipe failed");
+				this->_txBuffer.setBufferRead(dataSent);
+			}
+			
+			if (!body || (eof && this->_txBuffer.isBufferRead()))
+			{
+				this->setEndWrite();
+				em.unmonitor(fd);
+				this->getPipeToCGI().closeIn();
+				return ;
+			}
+			
 		}
 	}
 	catch(const std::exception& e)

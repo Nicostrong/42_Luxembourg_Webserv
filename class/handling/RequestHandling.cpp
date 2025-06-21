@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 16:21:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/21 17:51:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ void RequestHandling::handleBody(Socket& sock)
 	if (!body)
 		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 	
+	if (sock.getResp().getRespType() == HttpResponse::CGI)
+	{
+		sock.getHandler().setCGI(sock);
+		sock.getHandler().getCGI()->execCGI();
+		return ;
+	}
+
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
 
@@ -312,8 +319,8 @@ void RequestHandling::handlePost(Socket& sock)
 		LOG_DEB("IsCGI dans POST");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
-		sock.getHandler().setCGI(sock);
-		sock.getHandler().getCGI()->execCGI();
+		handleBodyLength(sock);
+		sock.getHandler().setBodyRequired();
 		return ;
 	}
 	handleBodyLength(sock);
