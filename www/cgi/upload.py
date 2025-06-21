@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    upload.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/04 07:56:38 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/17 09:02:39 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/21 16:21:45 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,7 @@ os.makedirs(upload_dir, exist_ok=True)
 form = cgi.FieldStorage()
 uploaded = False
 
-print("Content-Type: text/html\n")
-print("<html><body>")
+
 
 for field in ["file1", "file2"]:
 	if field in form:
@@ -32,12 +31,20 @@ for field in ["file1", "file2"]:
 			file_path = os.path.join(upload_dir, filename)
 			with open(file_path, "wb") as f:
 				f.write(file_item.file.read())
-			print(f"<p>Fichier '{filename}' envoyé avec succès !</p>")
 			uploaded = True
 
-if not uploaded:
+if uploaded:
+	print("Status: 200")
+	print("Content-Type: text/html\n")
+	print("<html><body>")
+	print("<p>Fichier envoyé avec succès !</p>")
+	print("</body></html>")
+else:
+	print("Status: 406")
+	print("Content-Type: text/html\n")
+	print("<html><body>")
 	print("<p>Erreur : Aucun fichier reçu.</p>")
+	print("</body></html>")
 
-print("</body></html>")
 sys.stdout = sys.__stdout__
 sys.stdout.flush()

@@ -6,7 +6,7 @@
 #    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/05/15 13:06:40 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/06/21 16:06:10 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -173,20 +173,6 @@ define compile_c_to_o
 	fi
 	@$(eval CURRENT_FILE=$(if \
 		$(filter $(CURRENT_FILE), $(NUM_FILES)), 0, $(CURRENT_FILE)))
-endef
-
-define optimise_lib
-	@printf "$(BYELLOW)Optimisation of $(LIB_NAME)$(YELLOW)\n"
-	@$(LIB_OPTI) $(LIB_NAME) > /dev/null 2>&1
-	@for i in $$(seq 1 50); do \
-		printf "\r\033[K\033[0K["; \
-		for j in $$(seq 1 $$i); do \
-			printf "=="; \
-		done; \
-		printf " %d%% ]" $$((i * 2)); \
-		sleep $(SLEEP_TIME); \
-	done; \
-	echo $(RESET)
 endef
 
 define delete_progress
