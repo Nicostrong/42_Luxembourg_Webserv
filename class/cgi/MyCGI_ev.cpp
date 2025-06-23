@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/21 17:52:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/22 11:09:34 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			if (body)
 			{
 				eof = body->read(this->_txBuffer);
+				std::cout << "Body of Req" << std::endl;
 				std::cout << this->_txBuffer << std::endl;
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
@@ -117,7 +118,6 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 {
 	int		status;
 
-	std::cout << waitpid(this->getPid(), &status, WNOHANG) << std::endl;
 	(void)fd;
 	(void)em;
 	if (waitpid(this->getPid(), &status, WNOHANG))

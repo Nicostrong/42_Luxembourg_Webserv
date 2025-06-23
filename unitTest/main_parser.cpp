@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_parser.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 09:19:33 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/21 11:17:10 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/22 11:22:58 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 

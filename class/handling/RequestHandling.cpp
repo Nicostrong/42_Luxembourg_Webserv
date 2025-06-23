@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 17:51:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/22 10:49:27 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,7 @@ void RequestHandling::handleGet(Socket& sock)
 		LOG_DEB("IsCGI dans GET");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
+		handleBodyLength(sock);
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
 		return ;
@@ -320,6 +321,7 @@ void RequestHandling::handlePost(Socket& sock)
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		handleBodyLength(sock);
+		sock.getHandler().setCGI(sock);
 		sock.getHandler().setBodyRequired();
 		return ;
 	}
