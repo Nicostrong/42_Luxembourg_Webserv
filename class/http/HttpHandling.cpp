@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 09:44:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 13:15:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 
 void HttpHandling::setBodyRequired()
 {
-	if (this->_parser.getState() == HttpParser::HTTP_HEAD_RECEIVED)
-		this->_parser.setState(HttpParser::HTTP_BODY);
+	this->_parser.setState(HttpParser::HTTP_BODY);
 }
 
 void HttpHandling::onWrite(EventMonitoring& em, Socket* sock)

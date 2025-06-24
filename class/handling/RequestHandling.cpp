@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 11:49:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 13:15:17 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,7 +295,7 @@ void RequestHandling::handleGet(Socket& sock)
 		//	cette methode faill !!!
 		setAttributes(sock);
 		handleBodyLength(sock);
-		sock.getHandler().setCGI(sock);
+		//sock.getHandler().setCGI(sock);
 		sock.getHandler().setBodyRequired();
 		//sock.getHandler().getCGI()->execCGI();
 		return ;
@@ -326,7 +326,7 @@ void RequestHandling::handlePost(Socket& sock)
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		handleBodyLength(sock);
-		sock.getHandler().setCGI(sock);
+		//sock.getHandler().setCGI(sock);
 		sock.getHandler().setBodyRequired();
 		//sock.getHandler().getCGI()->execCGI();
 		return ;
