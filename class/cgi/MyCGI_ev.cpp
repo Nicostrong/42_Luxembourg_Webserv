@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/23 11:00:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:51:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			if (body)
 			{
 				eof = body->read(this->_txBuffer);
-				//std::cout << this->_txBuffer << std::endl;
+				std::cout << "Body of Req" << std::endl;
+				std::cout << this->_txBuffer << std::endl;
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
@@ -113,7 +114,6 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 {
 	int		status;
 
-	//std::cout << waitpid(this->getPid(), &status, WNOHANG) << std::endl;
 	(void)fd;
 	(void)em;
 	if (waitpid(this->getPid(), &status, WNOHANG))

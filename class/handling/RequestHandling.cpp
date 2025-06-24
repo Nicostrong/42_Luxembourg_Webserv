@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/23 10:31:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:51:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,7 @@ void RequestHandling::handleGet(Socket& sock)
 		LOG_DEB("IsCGI dans GET");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
+		handleBodyLength(sock);
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
 		return ;
@@ -323,6 +324,7 @@ void RequestHandling::handlePost(Socket& sock)
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		handleBodyLength(sock);
+		sock.getHandler().setCGI(sock);
 		sock.getHandler().setBodyRequired();
 		return ;
 	}
