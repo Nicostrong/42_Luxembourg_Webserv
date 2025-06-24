@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    upload.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/04 07:56:38 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/22 11:15:50 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/06/24 11:43:01 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ for field in ["file1", "file2"]:
 _query = f'file1="{file_names["file1"]}";file2="{file_names["file2"]}"'
 
 if uploaded_files:
-    print("Code: 200")
+    print("Status: 200")
     print("Content-Type: text/html\n")
     print("<html><body>")
     print("<p>Fichier(s) envoyé(s) avec succès !</p>")
@@ -54,7 +54,7 @@ if uploaded_files:
     print(f"<p>_query = {_query}</p>")
     print("</body></html>")
 else:
-    print("Code: 406")
+    print("Status: 406")
     print("Content-Type: text/html\n")
     print("<html><body>")
     print("<p>Erreur : Aucun fichier reçu.</p>")

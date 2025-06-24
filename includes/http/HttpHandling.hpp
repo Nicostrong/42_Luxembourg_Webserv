@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/23 10:29:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 11:50:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 # define HTTPHANDLING_HPP
 
 # include "../lib.hpp"
-# include "HttpParser.hpp"
-# include "HttpExceptions.hpp"
+# include "../cgi/MyCGI.hpp"
+# include "./HttpParser.hpp"
+# include "./HttpExceptions.hpp"
 # include "../cgi/CgiParser.hpp"
-# include "../handling/MyCGI.hpp"
 # include "../cgi/CgiResponse.hpp"
-# include "HttpSevereExceptions.hpp"
+# include "./HttpSevereExceptions.hpp"
 # include "../events/EventMonitoring.hpp"
 # include "../cgi/CgiResponseHandling.hpp"
 # include "../handling/RequestHandling.hpp"
@@ -35,27 +35,27 @@ class	HttpHandling
 		~HttpHandling( void );
 
 		/*	METHODS	*/
-		void			onRead( EventMonitoring& em, Socket* sock );
-		void			onWrite( EventMonitoring& em, Socket* sock );
-		void			onTick(EventMonitoring& em, Socket* sock);
-		void			setBodyRequired( void );
-		void			reset( void );
+		void				onRead( EventMonitoring& em, Socket* sock );
+		void				onWrite( EventMonitoring& em, Socket* sock );
+		void				onTick( EventMonitoring& em, Socket* sock );
+		void				setBodyRequired( void );
+		void				reset( void );
+		CgiParser&			getCgiParser( void );
+		CgiResponse&		getCgiResponse( void );
+		ResponseHandling&	getResponseHandling( void );
 
-		CgiParser&		getCgiParser();
-		CgiResponse&	getCgiResponse();
-		ResponseHandling& getResponseHandling();
-		HttpParser&		getHttpParser();
 		/*	SETTER	*/
-		void		setCGI( Socket& socket );
+		void				setCGI( Socket& socket );
 
 		/*	GETTER	*/
-		MyCGI*		getCGI( void );
+		MyCGI*				getCGI( void );
 		
 	private:
-		HttpHandling(HttpHandling& obj);
-		HttpHandling operator=(const HttpHandling& obj);
+	
+		HttpHandling( HttpHandling& obj );
+		HttpHandling operator=( const HttpHandling& obj);
 
-		void		setConnectionClose(Socket& sock);
+		void				setConnectionClose( Socket& sock );
 		
 		HttpParser			_parser;
 		CgiParser			_cgiParser;

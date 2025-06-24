@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/05 09:25:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 08:45:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVERMANAGER_HPP
 # define SERVERMANAGER_HPP
 
-# include "../server/Server.hpp"
 # include "../utils/Ip.hpp"
+# include "../server/Server.hpp"
 
 class	Token;
 

@@ -6,11 +6,11 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 17:02:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 08:40:51 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/handling/MyCGI.hpp"
+#include "../../includes/cgi/MyCGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************

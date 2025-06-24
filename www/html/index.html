@@ -2,7 +2,7 @@
 	<head>
 		<title>WEBSERVER - index - WEBSERVER</title>
 		<link rel="stylesheet" href="style.css">
-		<link rel="favicon" href="images/favicon.png" type="png">
+		<link rel="icon" href="./images/favicon.png" type="image/png">
 	</head>
 	<body>
 		<div class="header">
@@ -14,6 +14,11 @@
 			<a	href="./upload.html">Introduction</a>
 			<a	href="./upload.html">Connection</a>
 		</div>
-		<div class="line"></div>
+		<div class="login">
+			<form action="/cgi-bin/login.py" method="get">
+			  <input type="text" name="login" placeholder="Enter your login here :P">
+			  <input type="submit" value="Connexion">
+			</form>
+		</div>
 	</body>
 </html>

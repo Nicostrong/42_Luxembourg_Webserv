@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:08:13 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 08:42:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 #define SUPPORTED_HTTPVER "HTTP/1.1"
 
-# include "./../lib.hpp"
-# include "./../utils/Uri.hpp"
-# include "./../utils/Endpoint.hpp"
-# include "./../http/HttpBase.hpp"
-# include "./../http/HttpRequest.hpp"
-# include "./../http/HttpResponse.hpp"
-# include "./../server/Server.hpp"
+# include "../lib.hpp"
+# include "../utils/Uri.hpp"
+# include "../utils/Endpoint.hpp"
+# include "../http/HttpBase.hpp"
+# include "../http/HttpRequest.hpp"
+# include "../http/HttpResponse.hpp"
+# include "../server/Server.hpp"
 //# include "./HandleCGI.hpp"
-# include "./MyCGI.hpp"
+# include "../cgi/MyCGI.hpp"
 
 class RequestHandling
 {

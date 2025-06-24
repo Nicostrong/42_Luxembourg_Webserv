@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/22 11:13:17 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 10:52:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/handling/MyCGI.hpp"
+#include "../../includes/cgi/MyCGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************
@@ -30,6 +30,21 @@ MyCGI::MyCGI( Socket& socket )
 	setEnv();
 	setParams();
 	checkCGI();
+
+	HttpRequest* req = &socket.getReq();
+	Body* body = req->getBody();
+
+	if (body)
+	{
+		std::cout	<< "body of the request:\n"
+					<< body->getBuffer().getDataUnread()
+					<< std::endl;
+	}
+	else
+	{
+		std::cout << "Body est NULLL" << std::endl;
+	}
+	std::cout << *this << std::endl;
 	return ;
 }
 

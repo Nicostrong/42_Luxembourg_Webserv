@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 09:51:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 11:49:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../../includes/handling/MyCGI.hpp"
+#include "../../includes/cgi/MyCGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/19 15:57:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 08:47:33 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,18 @@
 # include <queue>
 # include <vector>
 
-# define SERVER_VER "WebServ/1.0"
-# define CGI_REVISION "CGI/1.1"
-# define SERVER_IP "127.0.0.1"
-# define CRLF "\r\n"
-# define BUFFER_SIZE 1024
-# define SEND_BUFFER_SIZE 262144
-# define RESPONSE_BUFFER_SIZE 32768
-# define MAX_READ_SIZE 32768
-# define BODY_BUFFER_SIZE 32768
-# define MAX_CLIENT 1024
-# define HEAD_BSIZE 8192
-# define EPOLLTICK 1u << 27
+# define SERVER_VER				"WebServ/1.0"
+# define CGI_REVISION			"CGI/1.1"
+# define SERVER_IP				"127.0.0.1"
+# define CRLF					"\r\n"
+# define BUFFER_SIZE			1024
+# define SEND_BUFFER_SIZE		262144
+# define RESPONSE_BUFFER_SIZE	32768
+# define MAX_READ_SIZE			32768
+# define BODY_BUFFER_SIZE		32768
+# define MAX_CLIENT				1024
+# define HEAD_BSIZE				8192
+# define EPOLLTICK				1u << 27
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"
@@ -73,8 +73,8 @@
 
 struct t_string 
 {
-    size_t pos;
-    size_t len;
+	size_t pos;
+	size_t len;
 };
 
 #define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
@@ -88,11 +88,11 @@ struct t_string
 # define LOG_ERROR(msg)	std::cerr << RED << "[" << getCurrentTimeStr()  << "] [ERROR] " << msg << " in " << PRINT_INFOS() << RESET << std::endl
 
 inline std::string getCurrentTimeStr() {
-    char buffer[9];
-    time_t t = std::time(NULL);
-    struct tm* tm_info = std::localtime(&t);
-    std::strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
-    return std::string(buffer);
+	char buffer[9];
+	time_t t = std::time(NULL);
+	struct tm* tm_info = std::localtime(&t);
+	std::strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
+	return std::string(buffer);
 }
 
 #endif

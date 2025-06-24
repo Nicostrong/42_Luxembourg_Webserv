@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42luxembourg.lu>    +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 10:34:10 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:55:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class HttpRequest : public HttpBase
 		// Server config
 		const Server*		_server;
 		
-		Body*			_body;
+		Body*				_body;
 };
 
 std::ostream	&operator<<( std::ostream &out, const HttpRequest& src_object );

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 09:51:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 11:49:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void RequestHandling::handleBody(Socket& sock)
 	
 	if (!body)
 		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
-	
+		
 	if (sock.getResp().getRespType() == HttpResponse::CGI)
 	{
 		sock.getHandler().setCGI(sock);
@@ -292,10 +292,12 @@ void RequestHandling::handleGet(Socket& sock)
 	{
 		LOG_DEB("IsCGI dans GET");
 		sock.getResp().setRespType(HttpResponse::CGI);
+		//	cette methode faill !!!
 		setAttributes(sock);
 		handleBodyLength(sock);
 		sock.getHandler().setCGI(sock);
-		sock.getHandler().getCGI()->execCGI();
+		sock.getHandler().setBodyRequired();
+		//sock.getHandler().getCGI()->execCGI();
 		return ;
 	}
 	
@@ -326,6 +328,7 @@ void RequestHandling::handlePost(Socket& sock)
 		handleBodyLength(sock);
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().setBodyRequired();
+		//sock.getHandler().getCGI()->execCGI();
 		return ;
 	}
 	handleBodyLength(sock);
@@ -497,6 +500,7 @@ void	RequestHandling::setAttributes( Socket& socket )
 	size_t				pos = req->getUri().find_last_of('?');
 
 	req->setCgiScript(req->getPathTranslated().substr(req->getPathTranslated().find_last_of('/') + 1));
+	//	cette ligne apres fail ???
 	req->setCgiPath(loc->getCGIPathUri(req->getPathTranslated()));
 	req->setPathInfo(loc->getPath());
 	req->setFilePath(req->getPathTranslated());
