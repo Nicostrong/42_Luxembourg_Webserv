@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 13:15:17 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 14:00:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,10 +294,8 @@ void RequestHandling::handleGet(Socket& sock)
 		sock.getResp().setRespType(HttpResponse::CGI);
 		//	cette methode faill !!!
 		setAttributes(sock);
-		handleBodyLength(sock);
-		//sock.getHandler().setCGI(sock);
-		sock.getHandler().setBodyRequired();
-		//sock.getHandler().getCGI()->execCGI();
+		sock.getHandler().setCGI(sock);
+		sock.getHandler().getCGI()->execCGI();
 		return ;
 	}
 	
