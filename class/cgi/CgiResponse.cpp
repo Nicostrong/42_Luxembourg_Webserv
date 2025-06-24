@@ -6,14 +6,15 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:36:17 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 12:06:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 18:26:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/cgi/CgiResponse.hpp"
 
-CgiResponse::CgiResponse() : _body(NULL), _isEof(false), _isTe(false), 
-	_contentLength(0), _isEofReceived(false) {}
+CgiResponse::CgiResponse() : _body(NULL), _contentLength(0), _errorCode(0), 
+	_isEofReceived(false), _isProcessFinished(false), _isError(false), 
+	_isEof(false), _isTe(false) {}
 
 
 CgiResponse::~CgiResponse() 
@@ -36,16 +37,30 @@ const std::map<std::string, std::string>& CgiResponse::getHeaders() const
     return (this->_headers);
 }
 
+bool CgiResponse::isError() const
+{
+	return (this->_isError);
+}
+
+size_t CgiResponse::getErrorCode() const
+{
+	return (this->_errorCode);
+}
+
 void CgiResponse::reset()
 {
 	this->_headers.clear();
 	if (this->_body)
 		delete this->_body;
 	this->_body = NULL;
+	this->_contentLength = 0;
+	this->_errorCode = 0;
+	this->_isEofReceived = false;
+	this->_isProcessFinished = false;
+	this->_isError = false;
 	this->_isEof = false;
 	this->_isTe = false;
-	this->_isEofReceived = false;
-	this->_contentLength = 0;
+	
 }
 
 CgiBody* CgiResponse::getBody()
@@ -106,4 +121,14 @@ void CgiResponse::setEofReceived(bool state)
 void CgiResponse::setProcessFinished(bool state)
 {
 	this->_isProcessFinished = state;
+}
+
+void CgiResponse::setError(bool state)
+{
+	this->_isError = state;
+}
+
+void CgiResponse::setErrorCode(size_t code)
+{
+	this->_errorCode = code;
 }

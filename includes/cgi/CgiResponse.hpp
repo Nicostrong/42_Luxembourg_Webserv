@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:37:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 15:08:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 18:23:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,43 +30,45 @@ class CgiResponse
 			oss << value;
 			this->_headers[name] = oss.str();
 		}
- 
-		void										setCode(size_t code);
-		void										setCodeStr(const std::string& codeStr);
-		bool				                        findHeader(const char* name);
-		std::string&		                        findHeaderValue(const char* name);
-        const std::map<std::string, std::string>&   getHeaders() const;
-		CgiBody*									getBody();
-		void										reset();
-
 
 		bool										isEof() const;
 		bool										isTe()	const;
-		size_t										getContentLenght() const;
 		bool										isEofReceived() const;
 		bool										isProcessFinished() const;
+		bool										findHeader(const char* name);
+		bool										isError() const;
+		size_t										getContentLenght() const;
+		size_t										getErrorCode() const;
+		CgiBody*									getBody();
+		std::string&								findHeaderValue(const char* name);
+		const std::map<std::string, std::string>&	getHeaders() const;
+		
 		void										setBody(CgiBody* body);
 		void										setEof(bool state = true);
 		void										setTe(bool state = true);
-		void										setContentLenght(size_t len);
 		void										setEofReceived(bool state = true);
 		void										setProcessFinished(bool state = true);
+		void										setContentLenght(size_t len);
+		void										setCode(size_t code);
+		void										setCodeStr(const std::string& codeStr);
+		void										setError(bool state = true);
+		void										setErrorCode(size_t code);
+		void										reset();
 
     private:
 		CgiResponse(const CgiResponse& obj);
 		CgiResponse& operator=(const CgiResponse& obj);
 
-		size_t								_code;
-		std::string 						_strCode;
 		std::map<std::string, std::string>	_headers;
 		CgiBody*							_body;
-
-		bool								_isEof;
-		bool								_isTe;
 		size_t								_contentLength;
+		size_t								_errorCode;
 
 		bool								_isEofReceived;
 		bool								_isProcessFinished;
+		bool								_isError;
+		bool								_isEof;
+		bool								_isTe;
 };
 
 #endif

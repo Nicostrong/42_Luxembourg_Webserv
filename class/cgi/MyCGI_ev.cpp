@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 11:49:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 18:29:06 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,12 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 	}
 	catch(const std::exception& e)
 	{
-		throw e;
+		CgiResponse* cgiResp = &this->_socket->getHandler().getCgiResponse();
+
+		this->setIsFinish();
 		em.unmonitor(fd);
+		cgiResp->setError();
+		cgiResp->setErrorCode(HttpBase::INTERNAL_SERVER_ERROR);
 		this->getPipeFromCGI().closeOut();
 	}
 	return ;
@@ -79,7 +83,10 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			
 			if (!body || (eof && this->_txBuffer.isBufferRead()))
 			{
+		
 				this->setEndWrite();
+				this->_socket->getHandler().getCgiResponse().setEofReceived();
+				this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 				em.unmonitor(fd);
 				this->getPipeToCGI().closeIn();
 				return ;
@@ -89,8 +96,11 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 	}
 	catch(const std::exception& e)
 	{
-		throw e;
+		CgiResponse* cgiResp = &this->_socket->getHandler().getCgiResponse();
+
 		em.unmonitor(fd);
+		cgiResp->setError();
+		cgiResp->setErrorCode(HttpBase::INTERNAL_SERVER_ERROR);
 		this->getPipeToCGI().closeIn();
 	}
 	return ;
