@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 14:39:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 16:15:47 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void		CheckerTokens::validateTokens( void )
 	checkMethodHTTP();
 	checkUniqValue();
 	checkListen();
+	checkReturn();
 	assertFinalState();
 	return ;
 }
@@ -595,4 +596,34 @@ void		CheckerTokens::checkListen( void )
 	if (port <= 0 || port > 65535)
 		throw CheckerError("Value of port not valid.");
 	return ;
+}
+
+bool		CheckerTokens::validCode( std::string code )
+{
+	int						intCode = 0;
+	std::istringstream		iss(code);
+
+	if (!(iss >> intCode) || !iss.eof())
+	{
+		LOG_DEB(intCode);
+		return (false);
+	}
+	LOG_DEB(intCode);
+	if (intCode <= 300 || intCode > 310)
+		return (false);
+	return (true);
+}
+
+void		CheckerTokens::checkReturn( void )
+{
+	const Token*		current = this->_head;
+
+	while (current && current->getNext())
+	{
+		if (current->getType() == Token::DIR_K && current->getValue() == "return")
+			if (!validCode(current->getNext()->getValue()))
+				throw CheckerError("Code return not valid.");
+		current = current->getNext();
+	}
+	return ;	
 }

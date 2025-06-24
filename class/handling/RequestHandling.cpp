@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 14:00:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 15:02:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,7 +292,6 @@ void RequestHandling::handleGet(Socket& sock)
 	{
 		LOG_DEB("IsCGI dans GET");
 		sock.getResp().setRespType(HttpResponse::CGI);
-		//	cette methode faill !!!
 		setAttributes(sock);
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
@@ -493,19 +492,14 @@ std::map<std::string, RequestHandling::HandlerFunc>
 
 void	RequestHandling::setAttributes( Socket& socket )
 {
-	HttpRequest*		req = &socket.getReq();
-	const Location*		loc = req->getLoc();
-	size_t				pos = req->getUri().find_last_of('?');
+	HttpRequest*			req = &socket.getReq();
+	const Location*			loc = req->getLoc();
+	const std::string&		pathTranslated = req->getPathTranslated();
 
-	req->setCgiScript(req->getPathTranslated().substr(req->getPathTranslated().find_last_of('/') + 1));
-	//	cette ligne apres fail ???
-	req->setCgiPath(loc->getCGIPathUri(req->getPathTranslated()));
+	req->setCgiScript(pathTranslated.substr(pathTranslated.find_last_of('/') + 1));
+	req->setCgiPath(loc->getCGIPathUri(pathTranslated));
 	req->setPathInfo(loc->getPath());
-	req->setFilePath(req->getPathTranslated());
+	req->setFilePath(pathTranslated);
 	req->setRedirect(loc->getDirectiveValue("return"));
-	if (pos != std::string::npos)
-    	req->setQueryParams(req->getUri().substr(pos + 1));
-	else
-	    req->setQueryParams("");
 	return ;
 }

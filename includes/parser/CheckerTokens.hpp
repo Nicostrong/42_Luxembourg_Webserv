@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/06/24 14:09:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 16:22:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class	CheckerTokens
 		void				checkpath( void );
 		void				checkValue( void );
 		void				checkListen( void );
+		void				checkReturn( void );
 		void				checkUniqValue( void );
 		void				validateTokens( void );
 		void				checkMethodHTTP( void );
@@ -59,7 +60,7 @@ class	CheckerTokens
 		void				checkLocationTokens( const Token* current );
 		void				checkErrorPageTokens( const Token* current );
 
-		/*	CHECK PATH	*/
+		bool				validCode( std::string code );
 		bool				is_valid_dir( const std::string& path );
 		bool				is_valid_file( const std::string& path );
 		bool				is_executable_file( const std::string& path );

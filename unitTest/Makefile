@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/24 14:19:27 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/24 14:50:52 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -353,7 +353,7 @@ deb_serv:		server
 
 deb_net:		networking 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-	$(DEB) $(DEB_OPT) ./$(NET_NAME)
+	$(DEB) $(DEB_OPT) ./$(NET_NAME) 2> error
 
 deb_par:		parser 
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"

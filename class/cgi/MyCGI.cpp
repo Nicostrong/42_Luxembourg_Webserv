@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 10:52:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 15:43:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,7 @@ MyCGI::MyCGI( Socket& socket )
 	setEnv();
 	setParams();
 	checkCGI();
-
-	HttpRequest* req = &socket.getReq();
-	Body* body = req->getBody();
-
-	if (body)
-	{
-		std::cout	<< "body of the request:\n"
-					<< body->getBuffer().getDataUnread()
-					<< std::endl;
-	}
-	else
-	{
-		std::cout << "Body est NULLL" << std::endl;
-	}
-	std::cout << *this << std::endl;
+	LOG_DEB(*this);
 	return ;
 }
 
@@ -124,9 +110,9 @@ void		MyCGI::setMap( void )
 	oss.str("");
 	oss.clear();
 
-	this->_mEnv["PATH_INFO"] = req->getPathInfo();
+	this->_mEnv["PATH_INFO"] = req->getPathInfo();		//	a refaire cat partit apres le script et avant le ?
 	this->_mEnv["PATH_TRANSLATED"] = req->getPathTranslated();
-	this->_mEnv["QUERY_STRING"] = req->getQueryParams();
+	this->_mEnv["QUERY_STRING"] = req->getQueryParams();	//	tout ce qu il y a apres le ?
 	this->_mEnv["REMOTE_ADDR"] = req->getRemotIp();
 
 	oss << this->_socket->getSocket();
