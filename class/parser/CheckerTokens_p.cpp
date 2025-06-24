@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CheckerTokens_p.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/10 19:49:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 14:39:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ void		CheckerTokens::validateTokens( void )
 	checkDuplicatedKeysInScope();
 	checkpath();
 	checkValue();
-	checkCGI();
 	checkMethodHTTP();
+	checkUniqValue();
+	checkListen();
 	assertFinalState();
 	return ;
 }
@@ -363,29 +364,12 @@ void		CheckerTokens::checkValue( void )
 
 			if (val != "on" && val != "off")
 				throw CheckerError("value of \"autoindex\" not correct.");
+			if (current->getNext()->getNext()->getType() != Token::SEMICOLON)
+				throw CheckerError("Only one value on directive \"autoindex\".");
 		}
 		current = current->getNext();
 	}
 	return ;
-}
-
-/*
- *	Check all key of CGI start with a '.'
- */
-void		CheckerTokens::checkCGI( void )
-{
-	/*const Token*		current = this->_head;
-
-	while (current->getType() != Token::CGI_BLK_S)
-		current = current->getNext();
-	while (current->getType() != Token::CGI_BLK_E)
-	{
-		if (current->getType() == Token::CGI_K)
-			if (current->getValue()[0] != '.')
-				throw CheckerError("CGI key must start with '.'");
-		current = current->getNext();
-	}
-	return ;*/
 }
 
 /*
@@ -522,7 +506,7 @@ const Token*		CheckerTokens::validate_error_block( const Token* current )
 /*
  *	Check if the path is valid for all value in token list
  */
-void CheckerTokens::checkpath(void)
+void		CheckerTokens::checkpath(void)
 {
 	const Token*		current = this->_head;
 	char				cwd[PATH_MAX];
@@ -564,5 +548,51 @@ void CheckerTokens::checkpath(void)
 			current = validate_error_block(current->getNext());
 		current = current->getNext();
 	}
+	return ;
+}
+
+void		CheckerTokens::checkUniqValue( void )
+{
+	const Token*		current = this->_head;
+
+	while (current && current->getNext())
+	{
+		if (current->getType() == Token::DIR_K)
+		{
+			if (current->getValue() == "listen" ||
+				current->getValue() == "root" ||
+				current->getValue() == "index" ||
+				current->getValue() == "max_connection_client" ||
+				current->getValue() == "client_max_body_size" ||
+				current->getValue() == "autoindex")
+				if (current->getNext()->getNext()->getType() != Token::SEMICOLON)
+					throw CheckerError("Only one value on directive " + current->getValue());
+		}
+		if (current->getType() == Token::CGI_K)
+			if (current->getNext()->getNext()->getType() != Token::SEMICOLON)
+				throw CheckerError("Only one value on CGI directive " + current->getValue());
+		current = current->getNext();
+	}
+	return ;
+}
+
+void		CheckerTokens::checkListen( void )
+{
+	const Token*		current = this->_head;
+	int					port;
+
+	while (current && current->getNext() && current->getValue() != "listen")
+		current = current->getNext();
+	if (!current || !current->getNext())
+		throw CheckerError("Missing or malformed 'listen' directive.");
+	
+	const std::string&		strPort = current->getNext()->getValue();
+	std::istringstream		iss(strPort); 
+
+	if (!(iss >> port) || !iss.eof())
+		throw CheckerError("Port is not a valid integer.");
+	LOG_DEB(port);
+	if (port <= 0 || port > 65535)
+		throw CheckerError("Value of port not valid.");
 	return ;
 }

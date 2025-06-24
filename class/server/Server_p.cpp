@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_p.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 16:51:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 13:02:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,28 +91,6 @@ void		Server::setAttributs( void )
 }
 
 /*
- *	When a client close the connection, it close the socket and remove its from the list
- */
-/*void		Server::cleanup( void )
-{
-	std::list<Socket>::const_iterator		it = this->_lSockets.begin();
-
-	while (it != this->_lSockets.end())
-	{
-		this->_em.unmonitor(it->getSocket());
-		if (this->_serverSocket > 2)
-			close(it->getSocket());
-		++it;
-	}
-	this->_lSockets.clear();
-	this->_em.unmonitor(this->_serverSocket);
-	if (this->_serverSocket > 2)
-		close(this->_serverSocket);
-	std::cout << "Server closed" << std::endl;
-	return ;
-}*/
-
-/*
  *	Check if the host exist in the list of host of the server
  */
 bool		Server::matchServerName( const std::string& host ) const
@@ -154,4 +132,11 @@ bool		Server::matchServerNameWildcard( const std::string& host ) const
 			return (true);
 	}
 	return (false);
+}
+
+void		Server::checkerServer( void )
+{
+	if (this->_lPorts.empty())
+		throw std::runtime_error("need port value");
+	
 }

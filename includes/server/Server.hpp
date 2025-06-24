@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 08:45:13 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 12:57:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,9 @@ class	Server
 		/*	CHECKER	*/
 		bool		matchServerName( const std::string& host ) const;
 		bool		matchServerNameWildcard( const std::string& host ) const;
-
-		/* Cleanup func to close all sockets(server included)*/
-		//void		cleanup( void );
 		
+		void		checkerServer( void );
+				
 	public:
 
 		Server( Token*& serverTokensConfig );
