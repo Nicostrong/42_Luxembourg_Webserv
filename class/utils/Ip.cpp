@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:49:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:36:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:57:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,7 @@ in_addr_t Ip::ipv4StringToBytes(const std::string& ip)
     while (pos != std::string::npos)
     {
         if (i >= 4)
-        {
-            std::cout << "test" << std::endl;
             throw std::runtime_error("Invalid IP");
-        }
 
         token = ip.substr(prevPos, pos - prevPos);
         ipBytes |= getOctetDecimalValue(token) << (32 - 8 * i);

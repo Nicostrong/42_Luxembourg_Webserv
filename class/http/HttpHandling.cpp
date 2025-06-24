@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 09:50:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:44:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,34 +68,48 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 	try
     {
 		switch (this->_parser.getState())
-			{
-				case HttpParser::HTTP_HEAD_RECEIVED:
-					RequestHandling::handleHeaders(*sock);
-					break;
-				case HttpParser::HTTP_BODY_RECEIVED:
-					RequestHandling::handleBody(*sock);
-					break;
-				default:
-					return ;
-			}
-
-		switch (this->_parser.getState())
 		{
 			case HttpParser::HTTP_HEAD_RECEIVED:
-			// fallthrough
+				RequestHandling::handleHeaders(*sock);
+				break;
 			case HttpParser::HTTP_BODY_RECEIVED:
-				if (sock->getResp().getRespType() == HttpResponse::CGI)
-				{
-					em.monitorUpdate(sock->getSocket(), EPOLLHUP | EPOLLRDHUP);
-				}
-				else
-				{
-				this->_resHandling.init(*sock);
-				em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
-				}
+				RequestHandling::handleBody(*sock);
 				break;
 			default:
-				return ;
+				break;
+		}
+
+		if (this->_parser.getState() == HttpParser::HTTP_HANDLED)
+		{
+			HttpResponse* resp = &sock->getResp();
+
+			if (resp->getRespType() == HttpResponse::CGI)
+			{
+				em.monitorUpdate(sock->getSocket(), EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
+				switch (this->_cgiParser.getState())
+				{
+					case CgiParser::CGI_HEAD_RECEIVED:
+						CgiResponseHandling::handleHeaders(*sock);
+						break;
+					case CgiParser::CGI_BODY_RECEIVED:
+						this->_resHandling.init(*sock);
+						em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+						break;
+					case CgiParser::CGI_HEAD:
+					case CgiParser::CGI_BODY:
+						if (this->_cgiResp.isEofReceived())
+							throw HttpExceptions(HttpBase::BAD_GATEWAY);
+						break;
+					default:
+						break;
+				}
+				// Handle Cgi Logic
+			}
+			else
+			{
+				this->_resHandling.init(*sock);
+				em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+			}
 		}
 	}
 	catch(const HttpExceptions& e)
@@ -112,7 +126,7 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 		resp->setRespType(HttpResponse::ERROR);
 		resp->setStatusCode((HttpBase::HttpCode)e.getCode());
 		this->_resHandling.init(*sock);
-		em.monitorUpdate(sock->getSocket(), POLLOUT | EPOLLTICK | POLLHUP | POLLRDHUP);
+		em.monitorUpdate(sock->getSocket(), POLLOUT | POLLHUP | POLLRDHUP);
     }
 }
 
@@ -158,4 +172,9 @@ CgiResponse& HttpHandling::getCgiResponse()
 ResponseHandling& HttpHandling::getResponseHandling()
 {
 	return (this->_resHandling);
+}
+
+HttpParser& HttpHandling::getHttpParser()
+{
+	return (this->_parser);
 }

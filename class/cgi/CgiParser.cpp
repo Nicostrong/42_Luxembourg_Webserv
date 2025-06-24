@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 12:03:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:39:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,8 @@ void	CgiParser::onRead(Buffer &buff, Socket& sock)
 	switch (this->_state)
 	{
 		case CGI_HEAD:
-			std::cout << buff;
-			if (!handleHeaders(buff, *cgiResp))
-				return ;
-		// fallthrough
-		case CGI_HEAD_RECEIVED:
-			CgiResponseHandling::handleHeaders(sock);
-			if (this->_state != CGI_BODY)
-				return ;
+			handleHeaders(buff, *cgiResp);
+			return ;
 		// fallthrough
 		case CGI_BODY:
 			if (!handleBody(buff, *cgiResp, sock))

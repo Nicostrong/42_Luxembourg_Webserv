@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 16:23:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 09:44:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 	const std::map<std::string, std::string> headers = cgiResp->getHeaders();
 	std::map<std::string, std::string>::const_iterator it;
 	bool isStatusFound = false;
+	bool mandatoryFound = false;
 	bool isEofDelimiter = true;
-	
 	for (it = headers.begin(); it != headers.end(); ++it)
 	{
 		std::string name = (*it).first;
@@ -32,7 +32,20 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 			if (isStatusFound)
 				continue;
 			isStatusFound = true;
+			mandatoryFound = true;
+			
 			handleStatusHeader((*it).second, sock);
+		}
+		else if (name == "Location")
+		{
+			mandatoryFound = true;
+			resp->addHeader(name, (*it).second);
+			resp->setStatusCode(HttpBase::FOUND);
+		}
+		else if (name == "Content-Type")
+		{
+			mandatoryFound = true;
+			resp->addHeader(name, (*it).second);
 		}
 		else if (name == "Transfer-Encoding")
 		{
@@ -49,6 +62,10 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 		else
 			resp->addHeader(name, (*it).second);
 	}
+	
+	if (!mandatoryFound)
+		throw HttpExceptions(HttpBase::BAD_GATEWAY);
+	
 	cgiResp->setEof(isEofDelimiter);
 	cgiPars->setState(CgiParser::CGI_BODY);
 }
@@ -81,23 +98,24 @@ void CgiResponseHandling::handleStatusHeader(const std::string& status,
 
 void CgiResponseHandling::handleTE(Socket& sock)
 {
-	std::string value = sock.getReq().findHeaderValue("Transfer-Encoding");
+	std::string value = sock.getHandler().getCgiResponse().findHeaderValue("Transfer-Encoding");
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
 	if (value != "chunked")
 		throw HttpExceptions(HttpBase::NOT_IMPLEMENTED);
 	
-	sock.getReq().setTE(true);
+	sock.getHandler().getCgiResponse().setTe(true);
 }
 
 void CgiResponseHandling::handleContentLength(Socket& sock)
 {
-	std::string value = sock.getReq().findHeaderValue("Content-Length");
+	std::string value = sock.getHandler().getCgiResponse().findHeaderValue("Content-Length");
 
+	
 	if (value.empty() || 
 		value.find_first_not_of("0123456789") != std::string::npos)
 		throw HttpExceptions(HttpBase::BAD_GATEWAY);
-
+	
 	std::istringstream iss(value);
 	size_t cl;
     iss >> cl;

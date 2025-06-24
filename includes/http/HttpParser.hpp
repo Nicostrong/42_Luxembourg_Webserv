@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 17:48:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:27:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ class HttpParser
 			HTTP_HEADERS = 1,
 			HTTP_HEAD_RECEIVED = 2,
 			HTTP_BODY = 3,
-			HTTP_BODY_RECEIVED = 4
+			HTTP_BODY_RECEIVED = 4,
+			HTTP_HANDLED = 5,
 		};
 		HttpParser();
 		HttpParser(const HttpParser& obj);

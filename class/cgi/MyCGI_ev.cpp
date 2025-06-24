@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/21 17:52:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/23 11:00:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 			this->_socket->getHandler().getCgiResponse().setEofReceived();
 			em.unmonitor(fd);
 			this->getPipeFromCGI().closeOut();
-			this->_socket->getHandler().getResponseHandling().init(*this->_socket);
-			em.monitorUpdate(this->_socket->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
 			return ;
 		}
 	}
@@ -66,7 +64,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			if (body)
 			{
 				eof = body->read(this->_txBuffer);
-				std::cout << this->_txBuffer << std::endl;
+				//std::cout << this->_txBuffer << std::endl;
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
@@ -105,8 +103,6 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 		em.unmonitor(fd);
 		this->getPipeFromCGI().closeOut();
-		this->_socket->getHandler().getResponseHandling().init(*this->_socket);
-		em.monitorUpdate(this->_socket->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
 		this->setIsFinish();
 	}
 	
@@ -117,7 +113,7 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 {
 	int		status;
 
-	std::cout << waitpid(this->getPid(), &status, WNOHANG) << std::endl;
+	//std::cout << waitpid(this->getPid(), &status, WNOHANG) << std::endl;
 	(void)fd;
 	(void)em;
 	if (waitpid(this->getPid(), &status, WNOHANG))

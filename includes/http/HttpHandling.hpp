@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 09:50:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:29:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,11 @@ class	HttpHandling
 		void			onTick(EventMonitoring& em, Socket* sock);
 		void			setBodyRequired( void );
 		void			reset( void );
+
 		CgiParser&		getCgiParser();
 		CgiResponse&	getCgiResponse();
 		ResponseHandling& getResponseHandling();
-
+		HttpParser&		getHttpParser();
 		/*	SETTER	*/
 		void		setCGI( Socket& socket );
 

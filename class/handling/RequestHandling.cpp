@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 17:51:14 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/23 10:31:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void RequestHandling::handleHeaders(Socket& sock)
 	HttpResponse* resp = &sock.getResp();
 	const Server*	ctx = sock.getSM().getMatchingServer(
 		entryAddr.getIp(), entryAddr.getPort(), req->findHeaderValue("Host"));
+
+	sock.getHandler().getHttpParser().setState(HttpParser::HTTP_HANDLED);
 
 	LOG_DEB(req->getUri());
 
@@ -56,6 +58,7 @@ void RequestHandling::handleHeaders(Socket& sock)
 
 void RequestHandling::handleBody(Socket& sock)
 {
+	sock.getHandler().getHttpParser().setState(HttpParser::HTTP_HANDLED);
 	//SHould handle everything else than upload
 	HttpRequest* req = &sock.getReq();
 	Body* body = req->getBody();
