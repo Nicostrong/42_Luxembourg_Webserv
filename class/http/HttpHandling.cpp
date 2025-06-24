@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 13:15:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 13:59:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,16 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 		resp->setRespType(HttpResponse::ERROR);
 		resp->setStatusCode((HttpBase::HttpCode)e.getCode());
 		this->_resHandling.init(*sock);
-		em.monitorUpdate(sock->getSocket(), POLLOUT | POLLHUP | POLLRDHUP);
+		em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
     }
+	catch(const std::exception& e)
+	{
+		resp->setRespType(HttpResponse::ERROR);
+		resp->setStatusCode(HttpBase::INTERNAL_SERVER_ERROR);
+		this->_resHandling.init(*sock);
+		em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+		LOG_ERROR(e.what());
+	}
 }
 
 void HttpHandling::setConnectionClose(Socket& sock)
