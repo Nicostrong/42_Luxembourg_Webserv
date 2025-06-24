@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 11:50:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/24 12:34:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class	HttpHandling
 		void				setBodyRequired( void );
 		void				reset( void );
 		CgiParser&			getCgiParser( void );
+		HttpParser&			getHttpParser( void );
 		CgiResponse&		getCgiResponse( void );
 		ResponseHandling&	getResponseHandling( void );
 
