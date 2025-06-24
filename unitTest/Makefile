@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/20 16:08:01 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/24 12:39:39 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -362,13 +362,7 @@ deb_par:		parser
 clean:
 	$(call delete_progress, *.o)
 	$(call delete_progress, ../class/*.o)
-	$(call delete_progress, ../class/server/*.o)
-	$(call delete_progress, ../class/parser/*.o)
-	$(call delete_progress, ../class/events/*.o)
-	$(call delete_progress, ../class/handling/*.o)
-	$(call delete_progress, ../class/http/*.o)
-	$(call delete_progress, ../class/networking/*.o)
-	$(call delete_progress, ../class/utils/*.o)
+	$(call delete_progress, ../class/*/*.o)
 	$(call delete_progress, error)
 	
 
