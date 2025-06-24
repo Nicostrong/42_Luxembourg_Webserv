@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 15:59:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/24 15:00:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,14 @@ void HttpParser::parseStartLine(HttpRequest& req)
 		!HttpBase::canBeValidHttpProtocol(tokens.at(2)))
 		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 
-	//size_t queryPos = tokens.at(1).find('?');
+	size_t queryPos = tokens.at(1).find('?');
+	
 	req.setMethod(tokens.at(0));
-	req.setUri(tokens.at(1));//.substr(0, queryPos);
-	//if (queryPos != std::string::npos)
-	//	this->_queryParams = tokens.at(1).substr(queryPos + 1);
+	req.setUri(tokens.at(1).substr(0, queryPos));
+
+	if (queryPos != std::string::npos)
+		this->_queryParams = tokens.at(1).substr(queryPos + 1);
+	
 	req.setHTTP(tokens.at(2));
 }
 
