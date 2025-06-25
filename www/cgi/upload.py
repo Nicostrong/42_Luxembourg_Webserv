@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    upload.py                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
+#    Updated: 2025/06/25 10:06:01 by nfordoxc         ###   Luxembourg.lu      #
+#                                                                              #
+# **************************************************************************** #
+
 #!/usr/bin/env python3
 import os
 import sys
@@ -45,13 +57,19 @@ def main():
     content_length = int(os.environ.get('CONTENT_LENGTH', 0))
     content_type = os.environ.get('CONTENT_TYPE', '')
     if not content_length or "multipart/form-data" not in content_type:
-        print("<html><body><h2>Erreur : Pas de fichier uploadé.</h2></body></html>")
+        print("""<html><head><title>WEBSERVER - upload - WEBSERVER</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="./images/favicon.png" type="image/png">
+        </head><body>><h2>Erreur : Pas de fichier uploadé.</h2></body></html>""")
         return
 
     raw_data = sys.stdin.buffer.read(content_length)
     boundary = get_boundary(content_type)
     if not boundary:
-        print("<html><body><h2>Erreur : Boundary manquant.</h2></body></html>")
+        print("""<html><head><title>WEBSERVER - upload - WEBSERVER</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="./images/favicon.png" type="image/png">
+        </head><body>><h2>Erreur : Boundary manquant.</h2></body></html>""")
         return
 
     files = parse_multipart(raw_data, boundary)
@@ -65,7 +83,10 @@ def main():
                     f.write(file_bin)
                 uploaded.append(filename)
 
-    print("<html><body>")
+    print("""<html><head><title>WEBSERVER - upload - WEBSERVER</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./images/favicon.png" type="image/png">
+    </head><body>""")
     if uploaded:
         print("<h2>Fichiers uploadés avec succès:</h2><ul>")
         for fname in uploaded:
