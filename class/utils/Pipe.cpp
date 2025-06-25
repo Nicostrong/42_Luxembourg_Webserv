@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 22:53:03 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:13:34 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:04:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ Pipe::Pipe() : _pipeIn(-1), _pipeOut(-1)
         throw std::runtime_error("Pipes failed");
     this->_pipeIn = p[1];
     this->_pipeOut = p[0];
+
+	int flags = fcntl(this->_pipeIn, F_GETFL, 0);
+
+	fcntl(this->_pipeIn, F_SETFL, flags | O_NONBLOCK);
+
+	flags = fcntl(this->_pipeOut, F_GETFL, 0);
+
+	fcntl(this->_pipeOut, F_SETFL, flags | O_NONBLOCK);
 }
 
 Pipe::~Pipe()

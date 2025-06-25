@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 18:21:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/25 10:50:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,12 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 				em.monitorUpdate(sock->getSocket(), EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
 				switch (this->_cgiParser.getState())
 				{
+					LOG_DEB(this->_cgiResp.isError());
 					if (this->_cgiResp.isError())
+					{
+						LOG_DEB("Entered");
 						throw HttpExceptions(this->_cgiResp.getErrorCode());
+					}
 					case CgiParser::CGI_HEAD_RECEIVED:
 						CgiResponseHandling::handleHeaders(*sock);
 						break;
@@ -99,7 +103,10 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 					case CgiParser::CGI_HEAD:
 					case CgiParser::CGI_BODY:
 						if (this->_cgiResp.isEofReceived())
+						{
+							LOG_DEB("Here");
 							throw HttpExceptions(HttpBase::BAD_GATEWAY);
+						}
 						break;
 					default:
 						break;
@@ -119,7 +126,6 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
             setConnectionClose(*sock);
         if (e.getCode() > 399)
         {
-            LOG_DEB(this->_parser.getState());
 		    LOG_ERROR("An error occured while parsing request (can be bad request as well)");
             LOG_ERROR(e.getCode());
         }

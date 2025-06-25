@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:28:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/25 10:54:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 {
 	if (this != &obj)
 	{
+		HttpBase::operator=(obj);
 		if (this->_body)
 			delete this->_body;
-		
-		HttpBase::operator=(obj);
 		this->_remoteIp = obj._remoteIp;
 		this->_loc = obj._loc;
 		this->_pathTranslated = obj._pathTranslated;
@@ -51,6 +50,7 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_isTE = obj._isTE;
 		this->_contentLength = obj._contentLength;
 		this->_body = obj._body;
+		LOG_DEB(this->_body);
 	}
 	return (*this);
 }

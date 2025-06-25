@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 18:29:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/25 12:34:23 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@
 
 void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 {
+	LOG_DEB("Read ev");
 	try
 	{
 		ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
 			this->_rxBuffer.getBufferUnused());
-		
+		//throw std::exception();
 		std::cout << "DEBUG CGI on READ" << std::endl;
 		std::cout << "nb bytes lu: " << bytes << std::endl;
 		
@@ -33,10 +34,12 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 			
 		this->_rxBuffer.setBufferUsed(bytes);
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
+		std::cout << this->_rxBuffer;
 		if (bytes == 0)
 		{
 			this->setIsFinish();
 			this->_socket->getHandler().getCgiResponse().setEofReceived();
+			this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 			em.unmonitor(fd);
 			this->getPipeFromCGI().closeOut();
 			return ;
@@ -48,6 +51,8 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 
 		this->setIsFinish();
 		em.unmonitor(fd);
+		this->_socket->getHandler().getCgiResponse().setEofReceived();
+		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 		cgiResp->setError();
 		cgiResp->setErrorCode(HttpBase::INTERNAL_SERVER_ERROR);
 		this->getPipeFromCGI().closeOut();
@@ -57,8 +62,11 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 
 void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
+	LOG_DEB("Write ev");
 	try
 	{
+		int status;
+
 		if (!this->getEndWrite())
 		{
 			ssize_t		dataSent;
@@ -70,6 +78,8 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 				eof = body->read(this->_txBuffer);
 				std::cout << "Body of Req" << std::endl;
 				std::cout << this->_txBuffer << std::endl;
+				LOG_DEB("Fd " << this->_toCGI.getIn());
+				LOG_DEB(waitpid(this->getPid(), &status, WNOHANG));
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
@@ -79,11 +89,11 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 				if (dataSent == -1)
 					throw CGIError("send data on pipe failed");
 				this->_txBuffer.setBufferRead(dataSent);
+				LOG_DEB("Is read " << this->_txBuffer.isBufferRead());
 			}
 			
 			if (!body || (eof && this->_txBuffer.isBufferRead()))
 			{
-		
 				this->setEndWrite();
 				this->_socket->getHandler().getCgiResponse().setEofReceived();
 				this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
@@ -108,6 +118,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 
 void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 {
+	LOG_DEB("Close ev");
 	if (this->getPipeFromCGI().getOut() == fd)
 	{
 		this->_socket->getHandler().getCgiResponse().setEofReceived();
@@ -115,6 +126,12 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 		em.unmonitor(fd);
 		this->getPipeFromCGI().closeOut();
 		this->setIsFinish();
+	}
+
+	if (this->getPipeToCGI().getIn() == fd)
+	{
+		em.unmonitor(fd);
+		this->getPipeToCGI().closeIn();
 	}
 	
 	return ;
