@@ -14,7 +14,7 @@
 import os
 import sys
 
-UPLOAD_DIR = "../uploads"
+UPLOAD_DIR = "uploads"
 status = 200
 texte = ""
 
