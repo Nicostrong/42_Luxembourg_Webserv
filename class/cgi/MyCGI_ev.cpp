@@ -20,6 +20,7 @@
 
 void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 {
+	LOG_DEB("Read event");
 	try
 	{
 		ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
@@ -37,6 +38,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		{
 			this->setIsFinish();
 			this->_socket->getHandler().getCgiResponse().setEofReceived();
+			this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 			em.unmonitor(fd);
 			this->getPipeFromCGI().closeOut();
 			return ;
@@ -81,9 +83,6 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
-				/*dataSent = write(fd,
-							body->getBuffer().getDataUnread(), 
-							body->getBuffer().getBufferUnread());*/
 
 				nbByte += dataSent;
 				LOG_DEB("TAILLE DU BODY: " << body->getSize());
@@ -100,8 +99,6 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 				LOG_DEB("EOF of the body");
 				std::cout << "NB TOTAL DE BYTES WRITE: " << nbByte << std::endl;
 				this->setEndWrite();
-				this->_socket->getHandler().getCgiResponse().setEofReceived();
-				this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 				em.unmonitor(fd);
 				this->getPipeToCGI().closeIn();
 				return ;
