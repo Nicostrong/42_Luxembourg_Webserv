@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 18:29:06 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/26 09:39:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 /*******************************************************************************
  *							SERVER EVENTS									   *
-******************************************************************************/
+ ******************************************************************************/
 
 void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 {
@@ -57,6 +57,12 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 
 void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
+	LOG_DEB("ON WRITE");
+	/*
+		on ecrit le buffer dans le pipe et on set la variable _endWrite
+		ce qui permet le children
+	*/
+	static size_t	nbByte = 0;
 	try
 	{
 		if (!this->getEndWrite())
@@ -67,15 +73,20 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 
 			if (body)
 			{
-				eof = body->read(this->_txBuffer);
-				std::cout << "Body of Req" << std::endl;
-				std::cout << this->_txBuffer << std::endl;
+				std::cout << "Request for children" << std::endl;
+				LOG_DEB("BUFFER BODY: " << body->getBuffer().getDataUnread());
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
-			
-				std::cout << "DEBUG CGI on WRITE" << std::endl;
-				std::cout << "nb bytes ecrit: " << dataSent << std::endl;
+				/*dataSent = write(fd,
+							body->getBuffer().getDataUnread(), 
+							body->getBuffer().getBufferUnread());*/
+
+				nbByte += dataSent;
+				LOG_DEB("TAILLE DU BODY: " << body->getSize());
+				LOG_DEB("NUMBER OF BYTE WRITE: " << nbByte);
+				eof = (body->getSize() == nbByte);
+				std::cout << "EOF : " << (eof ? "TRUE" : " FALSE") << std::endl;
 				if (dataSent == -1)
 					throw CGIError("send data on pipe failed");
 				this->_txBuffer.setBufferRead(dataSent);
@@ -83,7 +94,8 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			
 			if (!body || (eof && this->_txBuffer.isBufferRead()))
 			{
-		
+				LOG_DEB("EOF of the body");
+				std::cout << "NB TOTAL DE BYTES WRITE: " << nbByte << std::endl;
 				this->setEndWrite();
 				this->_socket->getHandler().getCgiResponse().setEofReceived();
 				this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
@@ -102,6 +114,8 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 		cgiResp->setError();
 		cgiResp->setErrorCode(HttpBase::INTERNAL_SERVER_ERROR);
 		this->getPipeToCGI().closeIn();
+		std::cerr << e.what() << std::endl;
+		throw e;
 	}
 	return ;
 }

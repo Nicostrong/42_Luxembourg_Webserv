@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 15:43:53 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 09:45:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*******************************************************************************
  *						CONSTRUCTOR / DESTRUCTOR							   *
-******************************************************************************/
+ ******************************************************************************/
 
 MyCGI::MyCGI( Socket& socket )
 	: _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
@@ -30,7 +30,6 @@ MyCGI::MyCGI( Socket& socket )
 	setEnv();
 	setParams();
 	checkCGI();
-	LOG_DEB(*this);
 	return ;
 }
 
@@ -133,6 +132,7 @@ void		MyCGI::setMap( void )
 	this->_mEnv["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_mEnv["SERVER_SOFTWARE"] = SERVER_VER;
 	
+	LOG_DEB("object Request: " << *req);
 	return ;
 }
 

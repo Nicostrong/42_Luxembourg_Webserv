@@ -1,20 +1,22 @@
 <html>
 	<head>
 		<title>WEBSERVER - upload - WEBSERVER</title>
-		<link rel="stylesheet" href="style.css">
-		<link rel="icon" href="./images/favicon.png" type="image/png">
+		<link rel="stylesheet" href="../style/style.css">
+		<link rel="icon" href="../images/favicon.png" type="image/png">
 	</head>
 	<body>
 		<div class="header">
 			<h1>Welcone on the WebServer of GneugneuTeam.</h1>
 		</div>
 		<div class="navbar">
-			<a	href="./index.html">Index</a>
+			<a href="./index.html">Index</a>
 		</div>
 		<div class="container">
-			<form action="cgi-bin/upload.py" method="POST" enctype="multipart/form-data">
-				<p><label for="file">Select file to upload:</label></p>  
-				<p><input type="file" name="file" id="file"></p>
+			<form action="cgi-bin/upload.py/test/toto?name=toto&surname=titi" method="POST" enctype="multipart/form-data">
+				<p><label for="file">Select the file to upload:</label></p>
+				<p><input type="file" name="file1" id="file1"></p>
+				<p></p><label for="file">Select the file to upload:</label></p>
+				<p><input type="file" name="file2" id="file2"></p>
 				<p><input class="buton" type="submit" value="Upload"></p>
 			</form>
 		</div>

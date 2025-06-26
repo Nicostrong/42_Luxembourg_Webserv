@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:02:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 08:32:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/25 16:18:44 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ body {
 }
 
 .header {
-    background-image: url("./images/Dream_Team_42.png");
+    background-image: url("../images/Dream_Team_42.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

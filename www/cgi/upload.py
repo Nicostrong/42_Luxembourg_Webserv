@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/25 10:06:01 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/26 09:58:01 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ import os
 import sys
 
 UPLOAD_DIR = "../uploads"
+status = 200
+texte = ""
 
 def get_boundary(content_type):
     parts = content_type.split(";")
@@ -40,16 +42,30 @@ def parse_multipart(data, boundary):
         if 'filename="' in dispo:
             name = dispo.split('name="')[1].split('"')[0]
             filename = dispo.split('filename="')[1].split('"')[0]
-            # Nettoyage du nom de fichier
             filename = os.path.basename(filename)
-            # Retire les deux derniers caractères (\r\n)
             filedata = body[:-2] if body.endswith(b"\r\n") else body
             files[name] = (filename, filedata)
     return files
 
-def main():
-    # Prépare la réponse HTTP
+def response():
+    print(f"Status: {status} OK")
     print("Content-Type: text/html\n")
+    html = f"""
+<html>
+    <head><title>WEBSERVER - upload - WEBSERVER</title>
+    <link rel="stylesheet" href="/html/style.css">
+    <link rel="icon" href="/html/images/favicon.png" type="image/png">
+    </head>
+    <body>
+        {texte}
+    </body>
+</html>
+"""
+    print(html)
+    sys.exit(0)
+
+def main():
+    global status, texte
 
     if not os.path.exists(UPLOAD_DIR):
         os.makedirs(UPLOAD_DIR)
@@ -57,20 +73,16 @@ def main():
     content_length = int(os.environ.get('CONTENT_LENGTH', 0))
     content_type = os.environ.get('CONTENT_TYPE', '')
     if not content_length or "multipart/form-data" not in content_type:
-        print("""<html><head><title>WEBSERVER - upload - WEBSERVER</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="icon" href="./images/favicon.png" type="image/png">
-        </head><body>><h2>Erreur : Pas de fichier uploadé.</h2></body></html>""")
-        return
+        status = 406
+        texte = "<h2>Erreur : Pas de fichier uploaded.</h2>"
+        response()
 
     raw_data = sys.stdin.buffer.read(content_length)
     boundary = get_boundary(content_type)
     if not boundary:
-        print("""<html><head><title>WEBSERVER - upload - WEBSERVER</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="icon" href="./images/favicon.png" type="image/png">
-        </head><body>><h2>Erreur : Boundary manquant.</h2></body></html>""")
-        return
+        status = 406
+        texte = "<h2>Erreur : Boundary manquant.</h2>"
+        response()
 
     files = parse_multipart(raw_data, boundary)
     uploaded = []
@@ -83,18 +95,15 @@ def main():
                     f.write(file_bin)
                 uploaded.append(filename)
 
-    print("""<html><head><title>WEBSERVER - upload - WEBSERVER</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="./images/favicon.png" type="image/png">
-    </head><body>""")
+    status = 200
     if uploaded:
-        print("<h2>Fichiers uploadés avec succès:</h2><ul>")
+        texte = "<h2>Fichiers uploadés avec succès:</h2>\n\t<ul>\n"
         for fname in uploaded:
-            print(f"<li>{fname}</li>")
-        print("</ul>")
+            texte += f"\t\t<li>{fname}</li>\n"
+        texte += "\t</ul>"
     else:
-        print("<h2>Aucun fichier n'a été uploadé.</h2>")
-    print("</body></html>")
+        texte = "<h2>Aucun fichier n'a été uploadé.</h2>"
+    response()
 
 if __name__ == "__main__":
     main()

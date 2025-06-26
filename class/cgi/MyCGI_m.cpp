@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 08:40:51 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/25 15:45:15 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 /*******************************************************************************
  *								METHOD										   *
-******************************************************************************/
+ ******************************************************************************/
 
 void		MyCGI::execCGI( void )
 {
@@ -33,21 +33,21 @@ void		MyCGI::execCGI( void )
 		throw CGIError("Pipe error");
 	else if (this->getPid() == 0)
 	{
-		this->getPipeToCGI().closeIn();
-		this->getPipeFromCGI().closeOut();
+		this->getPipeToCGI().closeIn();											//	on ferme le pipe=>P d ecriture du parent
+		this->getPipeFromCGI().closeOut();										//	on ferme le pipe=>C de lecture du gosse
 		if (dup2(this->getPipeToCGI().getOut(), STDIN_FILENO) == -1)
 			throw CGIError("dup2 IN");
-		this->getPipeToCGI().closeOut();
+		this->getPipeToCGI().closeOut();										//	on ferme le pipe apres dup2 STDIN
 		if (dup2(this->getPipeFromCGI().getIn(), STDOUT_FILENO) == -1)
 			throw CGIError("dup2 OUT");
-		this->getPipeFromCGI().closeIn();
+		this->getPipeFromCGI().closeIn();										//	on ferme le pipe apres dup2 STDOUT
 		execve(cmd[0], cmd, this->getEnv());
 		throw CGIError("execve error");
 	} 
 	else
 	{
-		this->getPipeToCGI().closeOut();
-		this->getPipeFromCGI().closeIn();
+		this->getPipeToCGI().closeOut();										//	on ferme le pipe=>P de lecture pour le gosse
+		this->getPipeFromCGI().closeIn();										//	on ferme le pipe=>C d ecriture du gosse
 	}	
 	return ;
 }
