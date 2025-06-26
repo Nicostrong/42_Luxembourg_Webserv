@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 09:45:24 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 13:04:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 MyCGI::MyCGI( Socket& socket )
-	: _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
+	: _byteRead(0), _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
 	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isFinish(false),
 	_endWrite(false)
 {
@@ -132,7 +132,6 @@ void		MyCGI::setMap( void )
 	this->_mEnv["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_mEnv["SERVER_SOFTWARE"] = SERVER_VER;
 	
-	LOG_DEB("object Request: " << *req);
 	return ;
 }
 

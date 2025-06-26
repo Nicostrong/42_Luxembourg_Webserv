@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/25 15:45:15 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 11:30:25 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		MyCGI::execCGI( void )
 {
 	char**				cmd = this->getParams();
 	
-	LOG_DEB(*this);
+	//LOG_DEB(*this);
 	this->getSocket().getEM().monitor(this->getPipeToCGI().getIn(), 
 			EPOLLOUT | EPOLLHUP | EPOLLRDHUP, *this);
 	this->getSocket().getEM().monitor(this->getPipeFromCGI().getOut(), 

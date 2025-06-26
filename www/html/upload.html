@@ -1,8 +1,10 @@
 <html>
 	<head>
 		<title>WEBSERVER - upload - WEBSERVER</title>
-		<link rel="stylesheet" href="../style/style.css">
-		<link rel="icon" href="../images/favicon.png" type="image/png">
+		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
+		<link rel="stylesheet" href="http://localhost:8080/styles/form.css">
+		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+		<script src="http://localhost:8080/scripts/form.js"></script>
 	</head>
 	<body>
 		<div class="header">
@@ -11,14 +13,34 @@
 		<div class="navbar">
 			<a href="./index.html">Index</a>
 		</div>
-		<div class="container">
-			<form action="cgi-bin/upload.py/test/toto?name=toto&surname=titi" method="POST" enctype="multipart/form-data">
-				<p><label for="file">Select the file to upload:</label></p>
-				<p><input type="file" name="file1" id="file1"></p>
-				<p></p><label for="file">Select the file to upload:</label></p>
-				<p><input type="file" name="file2" id="file2"></p>
-				<p><input class="buton" type="submit" value="Upload"></p>
-			</form>
+		<div class="upload-container">
+		<h2>Choose your upload method:</h2>
+		<form id="uploadForm" action="/cgi-bin/upload.py" method="post" enctype="multipart/form-data">
+			<div class="upload-methods">
+				<div class="method-section">
+					<div class="method-title">Individual File Selection</div>
+					<div id="fileInputs">
+						<div class="file-input-group">
+							<input type="file" name="file1" id="file1">
+						</div>
+					</div>
+					<button type="button" class="add-file-btn" onclick="addFileInput()">
+						(+) Add Another File
+					</button>
+					<div class="file-info">
+						Click "Add Another File" to select multiple files individually
+					</div>
+				</div>
+			</div>
+			
+			<div class="submit-section">
+				<button type="submit" class="submit-btn">Upload Files</button>
+				<div class="file-info">
+					Maximum file size: 10MB per file<br>
+					All file types are accepted
+				</div>
+			</div>
+		</form>
 		</div>
 	</body>
 </html>

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 08:41:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 10:52:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ std::string&		MyCGI::getBinaryPath( void )
 std::string&	MyCGI::getQuery( void )
 {
 	return (this->_query);
+}
+
+/*
+ *	get the number of byte read on the buffer
+ */
+size_t		MyCGI::getByteRead( void )
+{
+	return (this->_byteRead);
 }
 
 /*
@@ -132,6 +140,15 @@ bool		MyCGI::getEndWrite( void )
 /*******************************************************************************
  *							    SETTER								    	   *
 ******************************************************************************/
+
+/*
+ *	increase the value of byteread
+ */
+void		MyCGI::setByteRead( size_t bytes )
+{
+	this->_byteRead += bytes;
+	return ;
+}
 
 /*
  *	set the pid attribut

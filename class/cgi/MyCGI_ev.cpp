@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 09:39:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 12:42:04 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,37 @@
 
 void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 {
+	static size_t	totalRead = 0;
+
 	LOG_DEB("Read event");
 	try
 	{
-		ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
-			this->_rxBuffer.getBufferUnused());
-		
-		std::cout << "DEBUG CGI on READ" << std::endl;
-		std::cout << "nb bytes lu: " << bytes << std::endl;
-		
-		if (bytes == -1)
-			throw CGIError("Error reading pipe from GCI");
-			
-		this->_rxBuffer.setBufferUsed(bytes);
-		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
-		if (bytes == 0)
+		if (getEndWrite())
 		{
-			this->setIsFinish();
-			this->_socket->getHandler().getCgiResponse().setEofReceived();
+			ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
+										this->_rxBuffer.getBufferUnused());
+			
+			totalRead += bytes;
+
+			std::cout << "DEBUG CGI on READ" << std::endl;
+			std::cout << "nb bytes lu: " << bytes << std::endl;
+			std::cout << "TOTAL READ: " << totalRead << std::endl;
+			
+			if (bytes == -1)
+				throw CGIError("Error reading pipe from GCI");
+				
+			this->_rxBuffer.setBufferUsed(bytes);
 			this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
-			em.unmonitor(fd);
-			this->getPipeFromCGI().closeOut();
-			return ;
+			LOG_DEB("RESPONCE CGI: " << std::endl << this->getRxBuffer().getDataUnread() << std::endl);
+			if (bytes == 0)
+			{
+				this->setIsFinish();
+				this->_socket->getHandler().getCgiResponse().setEofReceived();
+				this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
+				em.unmonitor(fd);
+				this->getPipeFromCGI().closeOut();
+				return ;
+			}
 		}
 	}
 	catch(const std::exception& e)
@@ -60,11 +69,6 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 {
 	LOG_DEB("ON WRITE");
-	/*
-		on ecrit le buffer dans le pipe et on set la variable _endWrite
-		ce qui permet le children
-	*/
-	static size_t	nbByte = 0;
 	try
 	{
 		if (!this->getEndWrite())
@@ -75,19 +79,19 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 
 			if (body)
 			{
-				std::cout << "Request for children" << std::endl;
-				LOG_DEB("BUFFER BODY: " << body->getBuffer().getDataUnread());
-				
 				body->read(this->_txBuffer);
-
+				//LOG_DEB("BUFFER BODY: " << std::endl << this->getTxBuffer().getDataUnread() << std::endl);
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
 
-				nbByte += dataSent;
+				setByteRead(dataSent);
 				LOG_DEB("TAILLE DU BODY: " << body->getSize());
-				LOG_DEB("NUMBER OF BYTE WRITE: " << nbByte);
-				eof = (body->getSize() == nbByte);
+				LOG_DEB("NUMBER OF BYTE WRITE: " << getByteRead());
+				eof = (body->getSize() == getByteRead());
+				std::cout	<< "body size: " << body->getSize()
+							<< "bytes read: " << getByteRead()
+							<< std::endl;
 				std::cout << "EOF : " << (eof ? "TRUE" : " FALSE") << std::endl;
 				if (dataSent == -1)
 					throw CGIError("send data on pipe failed");
@@ -96,8 +100,6 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			
 			if (!body || (eof && this->_txBuffer.isBufferRead()))
 			{
-				LOG_DEB("EOF of the body");
-				std::cout << "NB TOTAL DE BYTES WRITE: " << nbByte << std::endl;
 				this->setEndWrite();
 				em.unmonitor(fd);
 				this->getPipeToCGI().closeIn();

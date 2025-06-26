@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/20 16:25:58 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 10:48:27 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class	MyCGI:	public IEventHandler
 		std::string		_scriptPath;	//	path complet of the script to execute
 		std::string		_binaryExec;	//	path of binary to exec the script
 		std::string		_query;			//	querry parameters
+		size_t			_byteRead;		//	number of bytes read
 		char**			_params;		//	parameters of execution
 		char**			_aEnv;			//	env variables
 		Pipe			_toCGI;			//	to send data to CGI
@@ -71,6 +72,8 @@ class	MyCGI:	public IEventHandler
 		std::string&	getBinaryPath( void );
 		std::string&	getQuery( void );
 
+		size_t			getByteRead( void );
+
 		char**			getParams( void );
 		char**			getEnv( void );
 
@@ -91,6 +94,7 @@ class	MyCGI:	public IEventHandler
 
 		/*	SETTER	*/
 		void			setPid( pid_t pid );
+		void			setByteRead( size_t bytes );
 		void			setIsFinish( bool value = true );
 		void			setEndWrite( bool value = true );
 

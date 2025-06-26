@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 15:02:45 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 14:17:36 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,10 +322,9 @@ void RequestHandling::handlePost(Socket& sock)
 		LOG_DEB("IsCGI dans POST");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
+		std::cout << "cou";
 		handleBodyLength(sock);
-		//sock.getHandler().setCGI(sock);
 		sock.getHandler().setBodyRequired();
-		//sock.getHandler().getCGI()->execCGI();
 		return ;
 	}
 	handleBodyLength(sock);
@@ -498,8 +497,11 @@ void	RequestHandling::setAttributes( Socket& socket )
 
 	req->setCgiScript(pathTranslated.substr(pathTranslated.find_last_of('/') + 1));
 	req->setCgiPath(loc->getCGIPathUri(pathTranslated));
+	std::cout << "\rcou3";
 	req->setPathInfo(loc->getPath());
+	std::cout << "\rcou4";
 	req->setFilePath(pathTranslated);
+	std::cout << "\rcou5";
 	req->setRedirect(loc->getDirectiveValue("return"));
 	return ;
 }
