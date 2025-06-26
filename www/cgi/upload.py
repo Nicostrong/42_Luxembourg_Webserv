@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/26 14:27:20 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/26 14:38:21 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ import sys
 import re
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(SCRIPT_DIR, "..", "uploads")
+UPLOAD_DIR = os.path.join(SCRIPT_DIR, "..", "files")
 
 #ALLOWED_EXTENSIONS = {
 #    '.txt', '.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.gif', 

@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<title>WEBSERVER - delete- WEBSERVER</title>
+		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
+		<link rel="stylesheet" href="http://localhost:8080/styles/delete.css">
+		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+		<script src="http://localhost:8080/scripts/delete.js"></script>
+	</head>
+	<body>
+		<div class="header">
+			<h1>Welcone on the WebServer of GneugneuTeam.</h1>
+		</div>
+		<div class="navbar">
+			<a	href="./upload.html">Upload</a>
+			<a	href="./upload.html">Download</a>
+			<a	href="./delete.html">Delete</a>
+			<a	href="/cgi/hello_world.py">Hello World Python</a>
+			<a	href="./upload.html">Connection</a>
+		</div>
+			<div class="container">
+		<h1>Gestionnaire de fichiers</h1>
+		
+		<div class="directory-info">
+			<strong>Répertoire :</strong> deleteable<br>
+			<strong>Nombre de fichiers :</strong> <span class="file-count" id="fileCount">0</span>
+		</div>
+		
+		<button class="refresh-btn" onclick="loadFiles()"></button>Actualiser la liste</button>
+		
+		<div id="message" class="alert"></div>
+		<div id="loading" class="loading">Chargement en cours...</div>
+		
+		<div id="fileList"></div>
+	</div>
+	</body>
+</html>
