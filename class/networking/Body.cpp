@@ -200,13 +200,15 @@ void		Body::readInFile( std::vector<char>& receivedTxtBuffer )
 
 bool		Body::read( Buffer& buff )
 {
-	size_t freeSpace = buff.getBufferUnused();
+	
 
 	if (!this->_fBuff.is_open() || this->_bytesRead >= this->_size)
 		return (false);
 	
 	buff.resetIfRead();
 	
+	size_t freeSpace = buff.getBufferUnused();
+
 	this->_fBuff.seekg(this->_bytesRead);
 	this->_fBuff.read(buff.getDataUnused(), freeSpace);
 	if (!this->_fBuff && !this->_fBuff.eof())

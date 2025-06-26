@@ -75,6 +75,9 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			{
 				std::cout << "Request for children" << std::endl;
 				LOG_DEB("BUFFER BODY: " << body->getBuffer().getDataUnread());
+				
+				body->read(this->_txBuffer);
+
 				dataSent = write(fd,
 							this->_txBuffer.getDataUnread(), 
 							this->_txBuffer.getBufferUnread());
