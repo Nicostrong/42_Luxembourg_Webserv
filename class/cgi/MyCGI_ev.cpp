@@ -6,10 +6,9 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 12:42:04 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 16:00:02 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../includes/cgi/MyCGI.hpp"
 #include "../../includes/networking/Socket.hpp"
@@ -38,8 +37,9 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 			
 			if (bytes == -1)
 				throw CGIError("Error reading pipe from GCI");
-				
+			
 			this->_rxBuffer.setBufferUsed(bytes);
+			LOG_DEB("RESPONCE CGI: " << std::endl << this->getRxBuffer().getDataUnread() << std::endl);
 			this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 			LOG_DEB("RESPONCE CGI: " << std::endl << this->getRxBuffer().getDataUnread() << std::endl);
 			if (bytes == 0)
@@ -49,6 +49,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 				this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 				em.unmonitor(fd);
 				this->getPipeFromCGI().closeOut();
+				resetByteRead();
 				return ;
 			}
 		}
@@ -71,6 +72,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 	LOG_DEB("ON WRITE");
 	try
 	{
+		LOG_DEB(*this);
 		if (!this->getEndWrite())
 		{
 			ssize_t		dataSent;

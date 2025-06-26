@@ -1,10 +1,13 @@
 <?php
+
+$_SERVER['REDIRECT_STATUS'] = '200';
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-$directory = 'deleteable';
+$directory = 'files';
 
 try {
     // Créer le répertoire s'il n'existe pas

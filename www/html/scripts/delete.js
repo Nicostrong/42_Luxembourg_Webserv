@@ -8,7 +8,7 @@ function loadFiles() {
 	showLoading(true);
 	hideMessage();
 	
-	fetch('../cgi/get_files.php')
+	fetch('/cgi/get_files.php')
 		.then(response => response.json())
 		.then(data => {
 			showLoading(false);
@@ -33,7 +33,7 @@ function displayFiles(files) {
 	if (files.length === 0) {
 		fileListDiv.innerHTML = `
 			<div class="empty-directory">
-				Le répertoire est vide<br>
+				📂 Le répertoire est vide<br>
 				<small>Aucun fichier à afficher</small>
 			</div>
 		`;
@@ -58,12 +58,12 @@ function displayFiles(files) {
 			<tr>
 				<td>
 					<span class="file-icon">${getFileIcon(file.extension)}</span>
-					${file.name}
+					${escapeHtml(file.name)}
 				</td>
 				<td>${formatBytes(file.size)}</td>
 				<td>${formatDate(file.modified)}</td>
 				<td>
-					<button class="btn-danger" onclick="deleteFile('${file.name}')">
+					<button class="btn-danger" onclick="deleteFile('${escapeForAttribute(file.name)}')">
 						🗑️ Supprimer
 					</button>
 				</td>
@@ -91,7 +91,7 @@ function deleteFile(filename) {
 	const formData = new FormData();
 	formData.append('filename', filename);
 
-	fetch('../cgi/delete_file.php', {
+	fetch('/cgi/delete_file.php', {
 		method: 'POST',
 		body: formData
 	})
@@ -169,4 +169,21 @@ function getFileIcon(extension) {
 		case 'txt': return '📋';
 		default: return '📄';
 	}
+}
+
+// Fonction pour échapper le HTML
+function escapeHtml(text) {
+	const map = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#039;'
+	};
+	return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+// Fonction pour échapper les attributs
+function escapeForAttribute(text) {
+	return text.replace(/'/g, "\\'").replace(/"/g, '\\"');
 }

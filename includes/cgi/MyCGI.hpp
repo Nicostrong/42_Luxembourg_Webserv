@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 10:48:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 15:43:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ class	MyCGI:	public IEventHandler
 
 		/*	SETTER	*/
 		void			setPid( pid_t pid );
+		void			resetByteRead( void );
 		void			setByteRead( size_t bytes );
 		void			setIsFinish( bool value = true );
 		void			setEndWrite( bool value = true );

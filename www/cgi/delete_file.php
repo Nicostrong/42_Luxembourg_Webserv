@@ -1,4 +1,7 @@
 <?php
+
+$_SERVER['REDIRECT_STATUS'] = '200';
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
@@ -13,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$directory = 'deleteable';
+$directory = 'files';
 $response = ['success' => false, 'message' => ''];
 
 try {

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 10:52:19 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 15:43:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,14 @@ bool		MyCGI::getEndWrite( void )
  *							    SETTER								    	   *
 ******************************************************************************/
 
+/*
+ *	reset the value of bytes read
+ */
+void		MyCGI::resetByteRead( void )
+{
+	this->_byteRead = 0;
+	return ;
+}
 /*
  *	increase the value of byteread
  */

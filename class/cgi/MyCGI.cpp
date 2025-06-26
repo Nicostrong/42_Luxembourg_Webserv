@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 13:04:40 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/26 16:17:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void		MyCGI::initMap( void )
 	this->_mEnv["SERVER_PORT"] = "";
 	this->_mEnv["SERVER_PROTOCOL"] = "";
 	this->_mEnv["SERVER_SOFTWARE"] = "";
+	this->_mEnv["REDIRECT_STATUS"] = "200";
 
 	return ;
 }
