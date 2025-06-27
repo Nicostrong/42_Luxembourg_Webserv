@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 16:17:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/28 00:17:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ MyCGI::~MyCGI( void )
  */
 void		MyCGI::initMap( void )
 {
+	this->_mEnv["REDIRECT_STATUS"] = "";
+	this->_mEnv["SCRIPT_FILENAME"] = "";
+	this->_mEnv["DOCUMENT_ROOT"] = "";
 	this->_mEnv["AUTH_TYPE"] = "";
 	this->_mEnv["CONTENT_LENGTH"] = "";
 	this->_mEnv["CONTENT_TYPE"] = "";
@@ -101,6 +104,14 @@ void		MyCGI::setMap( void )
 {
 	std::ostringstream		oss;
 	HttpRequest*			req = &this->_socket->getReq();
+
+	// Only for php to valdiate it comes form web server
+	this->_mEnv["REDIRECT_STATUS"] = "200";
+	this->_mEnv["SCRIPT_FILENAME"] = req->getPathTranslated();
+	this->_mEnv["DOCUMENT_ROOT"] = req->getCgiScript();
+	LOG_DEB("SCRIPT_FILENAME: " << this->_mEnv["SCRIPT_FILENAME"]);
+	LOG_DEB("DOCUMENT_ROOT: " << this->_mEnv["DOCUMENT_ROOT"]);
+	std::();
 
 	this->_mEnv["AUTH_TYPE"] = "nfordoxc";
 	this->_mEnv["GATEWAY_INTERFACE"] = CGI_REVISION;
