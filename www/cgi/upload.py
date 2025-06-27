@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    upload.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/26 14:38:21 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/27 18:24:49 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -128,8 +128,8 @@ def parse_multipart_binary(data, boundary):
     return files
 
 def response():
-    print(f"Status: {status} OK")
-    print("Content-Type: text/html\n")
+    print(f"Status: {status} OK", end='\r\n')
+    print("Content-Type: text/html\r\n", end='\r\n')
     html = f"""
 <html>
     <head><title>WEBSERVER - upload result - WEBSERVER</title>

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/23 10:39:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/27 18:31:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	CgiParser::onRead(Buffer &buff, Socket& sock)
 void CgiParser::parseHeaders(CgiResponse& cgiResponse)
 {
 	size_t sPos = 0;
-	size_t ePos = this->_headBuffer.find("\n", sPos);
+	size_t ePos = this->_headBuffer.find(CRLF, sPos);
 
 	while (ePos != std::string::npos)
 	{
 		parseHeader(this->_headBuffer.substr(sPos, ePos - sPos), cgiResponse);
-		sPos = ePos + 1;
-		ePos = this->_headBuffer.find("\n", sPos);
+		sPos = ePos + 2;
+		ePos = this->_headBuffer.find(CRLF, sPos);
 	}
 	
 	if (this->_headBuffer.size())
@@ -89,7 +89,7 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 
 	this->_headBuffer.append(buff.getDataUnread(), len);
 	
-	size_t pos = this->_headBuffer.find("\n\n");
+	size_t pos = this->_headBuffer.find(CRLF CRLF);
 
 	if (pos == std::string::npos)
 	{
@@ -101,7 +101,7 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 		return (false);
 	}
 	
-	buff.setBufferRead(pos + len - this->_headBuffer.size() + 2);
+	buff.setBufferRead(pos + len - this->_headBuffer.size() + 4);
 	this->_headBuffer.erase(pos);
 
 	parseHeaders(cgiResponse);
@@ -113,7 +113,6 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 bool CgiParser::handleBody(Buffer& buff, CgiResponse& cgiResponse, Socket& sock)
 {
 	CgiBody* body = cgiResponse.getBody();
-
 	if (!body)
 	{
 		body = new CgiBody(0);
@@ -123,9 +122,8 @@ bool CgiParser::handleBody(Buffer& buff, CgiResponse& cgiResponse, Socket& sock)
 
 		cgiResponse.setBody(body);
 	}
-	
 	bool received = body->onRead(buff, sock);
-
+	
 	if (received)
 		this->_state = CGI_BODY_RECEIVED;
 	return (received);

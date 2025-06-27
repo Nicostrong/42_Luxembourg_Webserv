@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    hello_world.py                                     :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 09:18:27 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/26 13:54:16 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/27 18:23:21 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #!/usr/bin/env python3
 
-print("Status: 200")
-print("Content-Type: text/html; charset=utf-8")
+print("Status: 200", end='\r\n')
+print("Content-Type: text/html; charset=utf-8\r\n", end='\r\n')
 print()
 
 html = """

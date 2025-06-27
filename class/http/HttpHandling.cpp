@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 18:21:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/27 18:30:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 			if (resp->getRespType() == HttpResponse::CGI)
 			{
 				em.monitorUpdate(sock->getSocket(), EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
+				if (this->_cgiResp.isError())
+						throw HttpExceptions(this->_cgiResp.getErrorCode());
 				switch (this->_cgiParser.getState())
 				{
-					if (this->_cgiResp.isError())
-						throw HttpExceptions(this->_cgiResp.getErrorCode());
 					case CgiParser::CGI_HEAD_RECEIVED:
 						CgiResponseHandling::handleHeaders(*sock);
 						break;

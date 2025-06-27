@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    login.py                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/24 09:06:20 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/24 09:07:45 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/27 18:23:41 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ form = cgi.FieldStorage()
 login = form.getvalue("login", "")
 
 if login:
-    print(f"Set-Cookie: login={login}; Path=/")
-print("Content-Type: text/html\n")
+    print(f"Set-Cookie: login={login}; Path=/", end='\r\n')
+print("Content-Type: text/html\r\n", end='\r\n')
 print("<html><body>")
 if login:
     print(f"Hello {login}, you're now connected !")
