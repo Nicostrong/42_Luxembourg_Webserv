@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 17:17:33 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 09:55:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class Socket : public IEventHandler
 		Buffer				_txBuffer;
 		bool				_reset;
 		bool				_keepAlive;
+		bool				_isDataSent;
 		HttpHandling		_handler;
 		ServerManager&		_sm;
 		SocketManager&		_sockm;

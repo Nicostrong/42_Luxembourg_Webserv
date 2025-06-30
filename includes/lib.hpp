@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/25 16:05:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 09:45:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@
 # define MAX_CLIENT				1024
 # define HEAD_BSIZE				8192
 # define EPOLLTICK				1u << 27
+# define CGI_TIMEOUT			10000
+
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[90m"

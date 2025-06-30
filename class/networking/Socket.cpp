@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 17:17:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 09:56:07 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
 	ServerManager& sm, SocketManager& sockm)
 	: _fd(fd), _sockAddr(sockAddr), _entryAddr(entryAddr), 
 	  _rxBuffer(RX_SIZE), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), 
-	  _keepAlive(true), _sm(sm), _sockm(sockm), _em(NULL)
+	  _keepAlive(true), _isDataSent(false), _sm(sm), _sockm(sockm), _em(NULL)
 {
 	this->_req 		= HttpRequest(this->_sockAddr.getIp().getIpString());
 	LOG_DEB(this->_sockAddr.getIp().getIpString() + " opened connection");
@@ -104,6 +104,7 @@ void Socket::reset(EventMonitoring& em)
 	this->_handler.reset();
 	em.monitorUpdate(this->_fd, POLLIN | EPOLLTICK | POLLHUP | POLLRDHUP);
 	this->_reset = false;
+	this->_isDataSent = false;
 }
 
 void Socket::onReadEvent(int fd, EventMonitoring &em)
@@ -114,9 +115,11 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 			
 		ssize_t bytes = recv(fd, this->_rxBuffer.getDataUnused(), 
 			this->_rxBuffer.getBufferUnused(), 0);
-				
+	
 		if (bytes == -1)
 			throw SocketReadException();
+
+		this->_isDataSent = true;
 			
 		this->_rxBuffer.setBufferUsed(bytes);
 		this->_handler.onRead(em, this);
