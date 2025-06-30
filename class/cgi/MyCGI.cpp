@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/28 00:17:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/30 09:13:07 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,14 @@ void		MyCGI::initMap( void )
 /*
  *	complete the environnement map withh all value
  */
+/*
+	env["SCRIPT_FILENAME"] = "/chemin/absolu/vers/script.php";  // Chemin absolu du fichier
+	env["DOCUMENT_ROOT"] = "/chemin/vers/www";                  // PAS le nom du fichier !
+	env["SCRIPT_NAME"] = "/cgi/get_files.php";                 // Chemin relatif depuis DOCUMENT_ROOT
+	env["REQUEST_URI"] = "/cgi/get_files.php";                 // URI complète
+	env["REDIRECT_STATUS"] = "200";                            // Important pour PHP-CGI
+
+*/
 void		MyCGI::setMap( void )
 {
 	std::ostringstream		oss;
@@ -108,10 +116,9 @@ void		MyCGI::setMap( void )
 	// Only for php to valdiate it comes form web server
 	this->_mEnv["REDIRECT_STATUS"] = "200";
 	this->_mEnv["SCRIPT_FILENAME"] = req->getPathTranslated();
-	this->_mEnv["DOCUMENT_ROOT"] = req->getCgiScript();
+	this->_mEnv["DOCUMENT_ROOT"] = req->getPathTranslated();	//	req->getCgiScript();
 	LOG_DEB("SCRIPT_FILENAME: " << this->_mEnv["SCRIPT_FILENAME"]);
 	LOG_DEB("DOCUMENT_ROOT: " << this->_mEnv["DOCUMENT_ROOT"]);
-	std::();
 
 	this->_mEnv["AUTH_TYPE"] = "nfordoxc";
 	this->_mEnv["GATEWAY_INTERFACE"] = CGI_REVISION;

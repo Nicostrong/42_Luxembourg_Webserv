@@ -33,7 +33,7 @@ function displayFiles(files) {
 	if (files.length === 0) {
 		fileListDiv.innerHTML = `
 			<div class="empty-directory">
-				📂 Le répertoire est vide<br>
+				Le repertoire est vide<br>
 				<small>Aucun fichier à afficher</small>
 			</div>
 		`;
@@ -100,7 +100,7 @@ function deleteFile(filename) {
 		showLoading(false);
 		if (data.success) {
 			showMessage(`Fichier "${filename}" supprimé avec succès`, 'success');
-			loadFiles(); // Recharger la liste
+			loadFiles();
 		} else {
 			showMessage('Erreur lors de la suppression: ' + data.message, 'error');
 		}

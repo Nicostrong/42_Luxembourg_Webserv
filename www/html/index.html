@@ -5,17 +5,19 @@
 		<link rel="icon" href="images/favicon.png" type="image/png">
 	</head>
 	<body>
-		<div class="header">
-			<h1>Welcone on the WebServer of GneugneuTeam.</h1>
-		</div>
-		<div class="navbar">
+		<header class="header">
+			<a href="./index.html" class="banner-link">
+				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
+			</a>
+		</header>
+		<nav class="navbar">
 			<a	href="./upload.html">Upload</a>
 			<a	href="./upload.html">Download</a>
 			<a	href="./delete.html">Delete</a>
 			<a	href="/cgi/hello_world.py">Hello World Python</a>
 			<a	href="/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="/cgi/debug.php">DEBUG PHP</a>
-		</div>
+		</nav>
 		<div class="login">
 			<form action="/cgi-bin/login.py" method="get">
 			  <input type="text" name="login" placeholder="Enter your login here :P">

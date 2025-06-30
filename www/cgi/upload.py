@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    upload.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/27 18:24:49 by fdehan           ###   ########.fr        #
+#    Updated: 2025/06/30 08:47:18 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -132,28 +132,34 @@ def response():
     print("Content-Type: text/html\r\n", end='\r\n')
     html = f"""
 <html>
-    <head><title>WEBSERVER - upload result - WEBSERVER</title>
-    <link rel="stylesheet" href="http://localhost:8080/styles/style.css">
-    <link rel="stylesheet" href="http://localhost:8080/styles/form.css">
-    <link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
-    </head>
-    <body>
-        <div class="header">
-			<h1>Upload Result - WebServer of GneugneuTeam</h1>
+	<head><title>WEBSERVER - upload result - WEBSERVER</title>
+	<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
+	<link rel="stylesheet" href="http://localhost:8080/styles/form.css">
+	<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+	</head>
+	<body>
+		<header class="header">
+			<a href="./index.html" class="banner-link">
+				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
+			</a>
+		</header>
+		<nav class="navbar">
+			<a	href="./upload.html">Upload</a>
+			<a	href="./upload.html">Download</a>
+			<a	href="./delete.html">Delete</a>
+			<a	href="/cgi/hello_world.py">Hello World Python</a>
+			<a	href="/cgi/hello_world.php">Hello World PHP</a>
+			<a	href="/cgi/debug.php">DEBUG PHP</a>
+		</nav>
+		<div class="upload-container">
+			{texte}
+			<div class="info">
+				<h3>Upload Information:</h3>
+				<p>All file types are accepted</p>
+				<p>Maximum file size: {MAX_FILE_SIZE // (1024*1024)}MB</p>
+			</div>
 		</div>
-        <div class="navbar">
-            <a href="/upload.html">Back to Upload</a>
-            <a href="/index.html">Index</a>
-        </div>
-        <div class="upload-container">
-            {texte}
-            <div class="info">
-                <h3>Upload Information:</h3>
-                <p>All file types are accepted</p>
-                <p>Maximum file size: {MAX_FILE_SIZE // (1024*1024)}MB</p>
-            </div>
-        </div>
-    </body>
+	</body>
 </html>
 """
     print(html)
