@@ -1,10 +1,14 @@
-body {
-	font-family: Arial, sans-serif;
-	max-width: 1200px;
-	margin: 20px auto;
-	padding: 20px;
-	background-color: #f5f5f5;
-}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   delete.css                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 11:40:25 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/06/30 11:44:37 by nfordoxc         ###   Luxembourg.lu     */
+/*                                                                            */
+/* ************************************************************************** */
 
 .container {
 	background: white;
@@ -20,13 +24,13 @@ h1 {
 }
 
 .refresh-btn {
-	background-color: #28a745;
-	color: white;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	margin-bottom: 20px;
+	background-color:		#28a745;
+	color:					white;
+	padding:				10px 20px;
+	border:					none;
+	border-radius:			4px;
+	cursor:					pointer;
+	margin-bottom:			20px;
 }
 
 .refresh-btn:hover {
@@ -34,25 +38,26 @@ h1 {
 }
 
 table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
+	width:					100%;
+	border-collapse:		collapse;
+	margin-top:				20px;
+	background:				white;
 }
 
 th, td {
-	padding: 12px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
+	padding:				12px;
+	text-align:				left;
+	border-bottom:			1px solid #ddd;
 }
 
 th {
-	background-color: #007cba;
-	color: white;
-	font-weight: bold;
+	background-color:		#007cba;
+	color:					white;
+	font-weight:			bold;
 }
 
 tr:hover {
-	background-color: #f8f9fa;
+	background-color:		#f8f9fa;
 }
 
 .btn-danger {

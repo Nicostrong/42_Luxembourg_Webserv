@@ -1,48 +1,48 @@
 .upload-container {
-	max-width: 800px;
-	margin: 20px auto;
-	padding: 20px;
-	border: 2px dashed #ccc;
-	border-radius: 10px;
-	background-color: #f9f9f9;
+	max-width:			800px;
+	margin:				20px auto;
+	padding:			20px;
+	border:				2px dashed #ccc;
+	border-radius:		10px;
+	background-color:	#f9f9f9;
 }
 
 .upload-methods {
-	display: flex;
-	gap: 20px;
-	margin: 20px 0;
+	display:			flex;
+	gap:				20px;
+	margin:				20px 0;
 }
 
 .method-section {
-	flex: 1;
-	padding: 20px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	background-color: white;
+	flex:				1;
+	padding:			20px;
+	border:				1px solid #ddd;
+	border-radius:		8px;
+	background-color:	white;
 }
 
 .method-title {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 15px;
-	color: #333;
-	text-align: center;
+	font-size:			18px;
+	font-weight:		bold;
+	margin-bottom:		15px;
+	color:				#333;
+	text-align:			center;
 }
 
 .file-input-group {
-	margin-bottom: 10px;
+	margin-bottom:		10px;
 }
 
 .file-input-group input[type="file"] {
-	width: 100%;
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
+	width:				100%;
+	padding:			8px;
+	border:				1px solid #ccc;
+	border-radius:		4px;
 }
 
 .add-file-btn {
-	background-color: #4CAF50;
-	color: white;
+	background-color:		#4CAF50;
+	color:					white;
 	border: none;
 	padding: 8px 15px;
 	cursor: pointer;

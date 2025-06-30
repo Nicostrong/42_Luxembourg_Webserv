@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 11:30:25 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 10:09:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ std::ostream	&operator<<( std::ostream &out, MyCGI& src_object )
 		<< "binary to execute:" << src_object.getBinaryPath() << std::endl
 		<< "query params for CGI:" << (query.empty() ? "NULL" : query) << std::endl
 		<< "arguments for execve:" << std::endl;
-	while (*params[++i])
-		out << "\t" << params[i] << std::endl;
+	while (++i < 4)
+		out << "\t" << (params[i] != NULL ? params[i] : "NULL") << std::endl;
 	i = -1;
 	out << "env for execve:" << std::endl;
 	while (env[++i])

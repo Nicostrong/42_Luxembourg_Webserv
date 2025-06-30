@@ -179,18 +179,18 @@ function formatBytes($size, $precision = 2) {
 </head>
 <body>
 	<header class="header">
-		<a href="./index.html" class="banner-link">
-			<h1>Welcome on the WebServer of GneugneuTeam.</h1>
-		</a>
-	</header>
-	<nav class="navbar">
-		<a	href="./upload.html">Upload</a>
-		<a	href="./upload.html">Download</a>
-		<a	href="./delete.html">Delete</a>
-		<a	href="/cgi/hello_world.py">Hello World Python</a>
-		<a	href="/cgi/hello_world.php">Hello World PHP</a>
-		<a	href="/cgi/debug.php">DEBUG PHP</a>
-	</nav>
+			<a href="http://localhost:8080/index.html" class="banner-link">
+				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
+			</a>
+		</header>
+		<nav class="navbar">
+			<a	href="http://localhost:8080/upload.html">Upload</a>
+			<a	href="http://localhost:8080/upload.html">Download</a>
+			<a	href="http://localhost:8080/delete.html">Delete</a>
+            <a  href="http://localhost:8080/new.html">New</a>
+			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
+			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
+		</nav>
 	<div class="container">
 		<h1>📁 Gestionnaire de fichiers</h1>
 		

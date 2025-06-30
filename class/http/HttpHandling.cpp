@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/27 18:30:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/30 15:15:17 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,6 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 						throw HttpExceptions(this->_cgiResp.getErrorCode());
 				switch (this->_cgiParser.getState())
 				{
-					case CgiParser::CGI_HEAD_RECEIVED:
-						CgiResponseHandling::handleHeaders(*sock);
-						break;
 					case CgiParser::CGI_BODY_RECEIVED:
 						this->_resHandling.init(*sock);
 						em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);

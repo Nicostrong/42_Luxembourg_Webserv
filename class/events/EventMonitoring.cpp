@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 10:44:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/30 15:29:56 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,12 @@ void EventMonitoring::updateEvents()
 				//LOG_DEB("Close epoll event");
 				data->onClose();
 			}
-			else if (it->events & EPOLLIN && !data->getCanceled())
+			if (it->events & EPOLLIN && !data->getCanceled())
 			{
 				//LOG_DEB("Read epoll event");
 				data->onRead();
 			}
-			else if (it->events & EPOLLOUT && !data->getCanceled())
+			if (it->events & EPOLLOUT && !data->getCanceled())
 			{
 				//LOG_DEB("Write epoll event");
 				data->onWrite();

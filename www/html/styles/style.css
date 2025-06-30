@@ -6,19 +6,17 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:02:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 08:42:31 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 11:44:37 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 body {
 	font-family:			Arial, sans-serif;
-	background:				linear-gradient(135deg, #6e8efb, #a777e3);
-	display:				flex;
-	flex-direction:			column;
-	justify-content:		center;
-	align-items:			center;
-	height:					100vh;
-	margin-top:				100px;
+	background:				linear-gradient(135deg, #4d3ceb, #a777e3);
+	margin:					0;
+	padding: 				0;
+	padding-top: 			220px;
+	min-height:				100vh;
 }
 
 .header {
@@ -33,6 +31,7 @@ body {
 	height:					120px;;
 	top:					0;
 	left:					0;
+	z-index:				1000;
 }
 
 .banner-link {
@@ -62,6 +61,8 @@ body {
 	border:					2px dashed black;
 	border-radius:			10px;
 	padding:				5px;
+	z-index:				999;
+	box-sizing:				border-box;
 }
 
 .navbar a {
@@ -76,12 +77,26 @@ body {
 	padding:				20px;
 	border-radius:			10px;
 	box-shadow:				0 4px 8px rgba(0, 0, 0, 0.2);
-	width:					300px;
+	width:					90%;
+	max-width:				1200px;
+	min-width:				300px;
+	margin:					220px auto;
+	text-align:				left;
+}
+
+.upload-container {
+	background:				white;
+	padding:				20px;
+	border-radius:			10px;
+	box-shadow:				0 4px 8px rgba(0, 0, 0, 0.2);
+	width:					90%;
+	max-width:				600px;
+	margin:					20px auto;
 	text-align:				left;
 }
 
 h1 {
-	color:					#333;
+	color:					#0a6922;
 	text-align:				center;
 	font-size:				24px;
 	margin-bottom:			20px;

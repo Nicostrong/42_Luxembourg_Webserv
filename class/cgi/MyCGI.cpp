@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 09:13:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 13:54:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 MyCGI::MyCGI( Socket& socket )
-	: _byteRead(0), _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
+	: _byteRead(0), _byteSend(0), _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
 	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isFinish(false),
 	_endWrite(false)
 {
@@ -40,9 +40,10 @@ MyCGI::~MyCGI( void )
 
 	if (this->_params)
 	{
-		while (this->_params[++i])
+		while (++i < 4)
 		{
-			free(this->_params[i]);
+			if (_params[i])
+				free(this->_params[i]);
 			this->_params[i] = NULL;
 		}
 		delete[] this->_params;
@@ -69,8 +70,8 @@ MyCGI::~MyCGI( void )
  ******************************************************************************/
 
 /*
- *	initialise all key environnement map with empty string value
- */
+*	initialise all key environnement map with empty string value
+*/
 void		MyCGI::initMap( void )
 {
 	this->_mEnv["REDIRECT_STATUS"] = "";
@@ -98,49 +99,80 @@ void		MyCGI::initMap( void )
 	return ;
 }
 
-/*
- *	complete the environnement map withh all value
- */
-/*
-	env["SCRIPT_FILENAME"] = "/chemin/absolu/vers/script.php";  // Chemin absolu du fichier
-	env["DOCUMENT_ROOT"] = "/chemin/vers/www";                  // PAS le nom du fichier !
-	env["SCRIPT_NAME"] = "/cgi/get_files.php";                 // Chemin relatif depuis DOCUMENT_ROOT
-	env["REQUEST_URI"] = "/cgi/get_files.php";                 // URI complète
-	env["REDIRECT_STATUS"] = "200";                            // Important pour PHP-CGI
 
+/*
+*	normalize the path to remove the "/../"
+*/
+std::string		MyCGI::normalizePath( const std::string& path )
+{
+	std::vector<std::string>		parts;
+	std::stringstream				ss(path);
+	std::string						part;
+	bool							isAbsolute = (!path.empty() && path[0] == '/');
+
+	while (std::getline(ss, part, '/'))
+	{
+		if (part.empty() || part == ".")
+			continue;
+		else if (part == "..")
+		{
+			if (!parts.empty() && parts.back() != "..")
+				parts.pop_back();
+			else if (!isAbsolute)
+				parts.push_back(part);
+		}
+		else
+			parts.push_back(part);
+	}
+	
+	std::string		result;
+
+	if (isAbsolute)
+		result = "/";
+	
+	for (size_t i = 0; i < parts.size(); ++i)
+	{
+		if (i > 0 || isAbsolute)
+			result += "/";
+		result += parts[i];
+	}
+	
+	if (result.empty())
+		result = ".";
+	
+	return (result);
+}
+
+/*
+*	complete the environnement map withh all value
 */
 void		MyCGI::setMap( void )
 {
 	std::ostringstream		oss;
 	HttpRequest*			req = &this->_socket->getReq();
+	std::string				scriptPath = req->getPathTranslated();
+	std::string				documentRoot = scriptPath;
+	size_t					cgiPos = documentRoot.find("/cgi/");
+	char*					pwd = getenv("PWD");
 
-	// Only for php to valdiate it comes form web server
 	this->_mEnv["REDIRECT_STATUS"] = "200";
-	this->_mEnv["SCRIPT_FILENAME"] = req->getPathTranslated();
-	this->_mEnv["DOCUMENT_ROOT"] = req->getPathTranslated();	//	req->getCgiScript();
-	LOG_DEB("SCRIPT_FILENAME: " << this->_mEnv["SCRIPT_FILENAME"]);
-	LOG_DEB("DOCUMENT_ROOT: " << this->_mEnv["DOCUMENT_ROOT"]);
-
-	this->_mEnv["AUTH_TYPE"] = "nfordoxc";
+	this->_mEnv["DOCUMENT_ROOT"] = normalizePath(std::string(pwd) + "/../www");
+	this->_mEnv["SCRIPT_FILENAME"] = normalizePath(std::string(pwd) + "/" + scriptPath);
+	this->_mEnv["SCRIPT_NAME"] = documentRoot.substr(cgiPos);
 	this->_mEnv["GATEWAY_INTERFACE"] = CGI_REVISION;
+	this->_mEnv["SERVER_PROTOCOL"] = "HTTP/1.1";
+	this->_mEnv["SERVER_SOFTWARE"] = SERVER_VER;
+	this->_mEnv["PATH_INFO"] = req->getPathInfo();		//	a refaire cat partit apres le script et avant le ?
+	this->_mEnv["PATH_TRANSLATED"] = req->getPathTranslated();
+	this->_mEnv["QUERY_STRING"] = req->getQueryParams();	//	tout ce qu il y a apres le ?
+	this->_mEnv["REMOTE_ADDR"] = req->getRemotIp();
+	this->_mEnv["REQUEST_METHOD"] = req->getMethod();
 
 	oss << req->getContentLength();
 	this->_mEnv["CONTENT_LENGTH"] = oss.str();
 	oss.str("");
 	oss.clear();
 
-	this->_mEnv["PATH_INFO"] = req->getPathInfo();		//	a refaire cat partit apres le script et avant le ?
-	this->_mEnv["PATH_TRANSLATED"] = req->getPathTranslated();
-	this->_mEnv["QUERY_STRING"] = req->getQueryParams();	//	tout ce qu il y a apres le ?
-	this->_mEnv["REMOTE_ADDR"] = req->getRemotIp();
-
-	oss << this->_socket->getSocket();
-	this->_mEnv["REMOTE_IDENT"] = oss.str();
-	oss.str("");
-	oss.clear();
-
-	this->_mEnv["REQUEST_METHOD"] = req->getMethod();
-	this->_mEnv["SCRIPT_NAME"] = req->getCgiScript();
 	if (req->getServer() && !req->getServer()->getHost().empty())
 		this->_mEnv["SERVER_NAME"] = req->getServer()->getHost().front();
 	
@@ -148,16 +180,13 @@ void		MyCGI::setMap( void )
 	this->_mEnv["SERVER_PORT"] = oss.str();
 	oss.str("");
 	oss.clear();
-
-	this->_mEnv["SERVER_PROTOCOL"] = "HTTP/1.1";
-	this->_mEnv["SERVER_SOFTWARE"] = SERVER_VER;
 	
 	return ;
 }
 
 /*
- *	create a new environnement array
- */
+*	create a new environnement array
+*/
 void		MyCGI::setEnv( void )
 {
 	Map::iterator		it;
@@ -176,11 +205,28 @@ void		MyCGI::setEnv( void )
 	return ;
 }
 
+/*
+*	SetParams check if the script is a php script and complete the array with
+*	all values, for php we need just the path of the binary to execute without
+*	the script php to execute
+*/
 void		MyCGI::setParams( void )
 {
+	const std::string&		scriptName = getMapEnv()["SCRIPT_NAME"];
+	const std::string		suffix = ".php";
+	
 	this->_params = new char*[4];
 
 	this->_params[0] = strdup(this->_binaryExec.c_str());
+	if (scriptName.length() >= suffix.length() &&
+		scriptName.compare(scriptName.length() - suffix.length(),
+							suffix.length(), suffix) == 0)
+	{
+		this->_params[1] = NULL;
+		this->_params[2] = NULL;
+		this->_params[3] = NULL;
+		return ;
+	}
 	this->_params[1] = strdup(this->_scriptPath.c_str());
 	this->_params[2] = strdup(this->_query.c_str());
 	this->_params[3] = NULL;
@@ -198,6 +244,7 @@ void		MyCGI::checkCGI( void )
 		throw CGIError("env array empty");
 	return ;
 }
+
 /*******************************************************************************
  *								EXCEPTION 									   *
  ******************************************************************************/

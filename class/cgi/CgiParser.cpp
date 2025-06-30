@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiParser.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/27 18:31:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/06/30 15:18:21 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,11 @@ void	CgiParser::onRead(Buffer &buff, Socket& sock)
 	switch (this->_state)
 	{
 		case CGI_HEAD:
-			handleHeaders(buff, *cgiResp);
-			return ;
+			if (!handleHeaders(buff, *cgiResp))
+				return ;
+		// fallthrough
+		case CGI_HEAD_RECEIVED:
+			CgiResponseHandling::handleHeaders(sock);
 		// fallthrough
 		case CGI_BODY:
 			if (!handleBody(buff, *cgiResp, sock))

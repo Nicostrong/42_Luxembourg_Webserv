@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/26 14:39:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 14:44:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,6 @@ void RequestHandling::handlePost(Socket& sock)
 		LOG_DEB("IsCGI dans POST");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
-		std::cout << "cou";
 		handleBodyLength(sock);
 		sock.getHandler().setBodyRequired();
 		return ;

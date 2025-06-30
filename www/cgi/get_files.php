@@ -11,18 +11,6 @@ $directory = __DIR__ . '/../files';
 
 try {
 	$directory = realpath($directory);
-	
-	if ($directory === false) {
-		$directory = __DIR__ . '/../files';
-		
-		if (!file_exists($directory)) {
-			if (!mkdir($directory, 0755, true)) {
-				throw new Exception("Impossible de créer le répertoire : $directory");
-			}
-		}
-		
-		$directory = realpath($directory);
-	}
 
 	$files = [];
 	
@@ -30,7 +18,7 @@ try {
 		$items = scandir($directory);
 		
 		if ($items === false) {
-			throw new Exception("Impossible de lire le répertoire : $directory");
+			throw new Exception("Impossible de lire le repertoire : $directory");
 		}
 		
 		foreach ($items as $item) {
@@ -67,7 +55,6 @@ try {
 		'files' => $files,
 		'directory' => basename($directory),
 		'count' => count($files),
-		'debug_path' => $directory // TEMPORAIRE : pour debug, à supprimer après
 	]);
 	
 } catch (Exception $e) {

@@ -1,25 +1,25 @@
 <html>
 	<head>
 		<title>WEBSERVER - index - WEBSERVER</title>
-		<link rel="stylesheet" href="styles/style.css">
-		<link rel="icon" href="images/favicon.png" type="image/png">
+		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
+		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
 	</head>
 	<body>
 		<header class="header">
-			<a href="./index.html" class="banner-link">
+			<a href="http://localhost:8080/index.html" class="banner-link">
 				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
 			</a>
 		</header>
 		<nav class="navbar">
-			<a	href="./upload.html">Upload</a>
-			<a	href="./upload.html">Download</a>
-			<a	href="./delete.html">Delete</a>
-			<a	href="/cgi/hello_world.py">Hello World Python</a>
-			<a	href="/cgi/hello_world.php">Hello World PHP</a>
-			<a	href="/cgi/debug.php">DEBUG PHP</a>
+			<a	href="http://localhost:8080/upload.html">Upload</a>
+			<a	href="http://localhost:8080/download.html">Download</a>
+			<a	href="http://localhost:8080/delete.html">Delete</a>
+			<a  href="http://localhost:8080/new.html">New</a>
+			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
+			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
 		</nav>
 		<div class="login">
-			<form action="/cgi-bin/login.py" method="get">
+			<form action="http://localhost:8080/cgi-bin/login.py" method="get">
 			  <input type="text" name="login" placeholder="Enter your login here :P">
 			  <input type="submit" value="Connexion">
 			</form>

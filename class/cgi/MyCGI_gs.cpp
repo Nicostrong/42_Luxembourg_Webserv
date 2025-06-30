@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 15:43:57 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 11:01:08 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ std::string&	MyCGI::getQuery( void )
 size_t		MyCGI::getByteRead( void )
 {
 	return (this->_byteRead);
+}
+
+/*
+ *	get the number of byte sended on the buffer
+ */
+size_t		MyCGI::getByteSend( void )
+{
+	return (this->_byteSend);
 }
 
 /*
@@ -155,6 +163,23 @@ void		MyCGI::resetByteRead( void )
 void		MyCGI::setByteRead( size_t bytes )
 {
 	this->_byteRead += bytes;
+	return ;
+}
+
+/*
+ *	reset the value of bytes send
+ */
+void		MyCGI::resetByteSend( void )
+{
+	this->_byteSend = 0;
+	return ;
+}
+/*
+ *	increase the value of bytesend
+ */
+void		MyCGI::setByteSend( size_t bytes )
+{
+	this->_byteSend += bytes;
 	return ;
 }
 
