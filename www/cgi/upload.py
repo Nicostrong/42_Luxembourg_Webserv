@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/30 15:38:42 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/06/30 15:55:42 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@
 import os
 import sys
 import re
-import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(SCRIPT_DIR, "..", "files")
@@ -218,7 +217,6 @@ def response():
 </html>
 """
 	print(html)
-	time.sleep(5)
 	sys.exit(0)
 
 def main():

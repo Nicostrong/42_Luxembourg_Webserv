@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 15:15:17 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/06/30 15:54:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,12 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 					throw HttpSevereExceptions(HttpBase::SERVICE_UNAVAILABLE);
 				break;
 			case CGI_SENDING:
-				LOG_DEB("Checking sending");
+				//LOG_DEB("Checking sending");
 				if (curr - this->_ts > CGI_SENDING_TIMEOUT)
 					throw HttpExceptions(HttpBase::GATEWAY_TIMEOUT);
 				break;
 			case CGI_RECEIVING:
-				LOG_DEB("Checking receiving");
+				//LOG_DEB("Checking receiving");
 				if (curr - this->_ts > CGI_RECEIVING_TIMEOUT)
 					throw HttpExceptions(HttpBase::GATEWAY_TIMEOUT);
 				break;
