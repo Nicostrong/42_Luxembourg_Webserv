@@ -51,6 +51,8 @@ class	MyCGI:	public IEventHandler
 		pid_t			_pid;			//	pid parent
 		bool			_isFinish;		//	if the CGI has finished
 		bool			_endWrite;		//	if the parent has finish to write on the pipe
+		bool			_isCloseEvent;
+		bool			_isReadEvent;
 
 		MyCGI( void );
 		MyCGI( const MyCGI& );

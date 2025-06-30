@@ -19,6 +19,7 @@
 
 void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 {
+	this->_isReadEvent = true;
 	LOG_DEB("Read event");
 
 	try
@@ -128,7 +129,11 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 
 void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 {
-	LOG_DEB("CLOSE");
+	if (this->getPipeFromCGI().getOut() == fd)
+		this->_isCloseEvent = true;
+	(void)em;
+	(void)fd;
+	/*LOG_DEB("CLOSE");
 	(void)fd;
 	(void)em;
 	if (this->getPipeFromCGI().getOut() == fd)
@@ -138,7 +143,7 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 		em.unmonitor(fd);
 		this->getPipeFromCGI().closeOut();
 		this->setIsFinish();
-	}
+	}*/
 	
 	return ;
 }
@@ -151,5 +156,20 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 	(void)em;
 	if (waitpid(this->getPid(), &status, WNOHANG))
 		this->setIsFinish();
+
+	// Check if data completely received
+
+	if (this->_isCloseEvent && !this->_isReadEvent)
+	{
+		this->_socket->getHandler().getCgiResponse().setEofReceived();
+		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
+		em.unmonitor(fd);
+		this->getPipeFromCGI().closeOut();
+		this->setIsFinish();
+		return ;
+	}
+
+	this->_isCloseEvent = false;
+	this->_isReadEvent = false;
 	return ;
 }

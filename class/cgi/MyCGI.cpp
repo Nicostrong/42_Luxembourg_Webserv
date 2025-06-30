@@ -20,7 +20,7 @@
 MyCGI::MyCGI( Socket& socket )
 	: _byteRead(0), _byteSend(0), _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
 	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isFinish(false),
-	_endWrite(false)
+	_endWrite(false), _isCloseEvent(false), _isReadEvent(false)
 {
 	socket.getHandler().setState(HttpHandling::CGI_SENDING);
 	this->_binaryExec = this->_socket->getReq().getCgiPath();
