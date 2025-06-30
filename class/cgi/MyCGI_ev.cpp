@@ -25,6 +25,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 	{
 		if (getEndWrite())
 		{
+			this->_rxBuffer.resetIfRead();
 			ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
 										this->_rxBuffer.getBufferUnused());
 
@@ -130,14 +131,14 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 	LOG_DEB("CLOSE");
 	(void)fd;
 	(void)em;
-	/*if (this->getPipeFromCGI().getOut() == fd)
+	if (this->getPipeFromCGI().getOut() == fd)
 	{
 		this->_socket->getHandler().getCgiResponse().setEofReceived();
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 		em.unmonitor(fd);
 		this->getPipeFromCGI().closeOut();
 		this->setIsFinish();
-	}*/
+	}
 	
 	return ;
 }
