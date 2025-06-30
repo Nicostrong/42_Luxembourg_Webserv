@@ -74,6 +74,8 @@ void  HttpResponse::sendDefaultErrorPage(Buffer& buff)
 	addHeader("Content-Length", errorPage.size());
 	addHeader("Content-Type", "text/html");
 	sendHead(buff);
+	std::cout << getHeaders_raw() << std::endl;
+	std::cout << errorPage << std::endl;
 	if (buff.getBufferUnused() < errorPage.size())
 		throw HttpExceptions(INTERNAL_SERVER_ERROR);
 	std::copy(errorPage.begin(), errorPage.end(), buff.beginUnused());

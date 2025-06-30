@@ -20,17 +20,19 @@ class Socket;
 
 class ResponseHandling
 {
-	enum State
-	{
-		NONE = 0,
-		INIT = 1,
-		SENT = 2,
-	};
     public:
+        enum State
+        {
+            NONE = 0,
+            INIT = 1,
+            SENT = 2,
+        };
         ResponseHandling();
         ResponseHandling(const ResponseHandling& obj);
         ~ResponseHandling();
         ResponseHandling& operator=(const ResponseHandling& obj);
+
+        State   getState() const;
         void    init(Socket& sock);
 		void	send(Socket& sock);
 		void	reset();

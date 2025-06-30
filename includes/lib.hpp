@@ -49,29 +49,33 @@
 # include <queue>
 # include <vector>
 
-# define SERVER_VER				"WebServ/1.0"
-# define CGI_REVISION			"CGI/1.1"
-# define SERVER_IP				"127.0.0.1"
-# define CRLF					"\r\n"
-# define BUFFER_SIZE			1024
-# define SEND_BUFFER_SIZE		262144
-# define RESPONSE_BUFFER_SIZE	32768
-# define MAX_READ_SIZE			32768
-# define BODY_BUFFER_SIZE		32768
-# define MAX_CLIENT				1024
-# define HEAD_BSIZE				8192
-# define EPOLLTICK				1u << 27
-# define CGI_TIMEOUT			10000
+# define SERVER_VER						"WebServ/1.0"
+# define CGI_REVISION					"CGI/1.1"
+# define SERVER_IP						"127.0.0.1"
+# define CRLF							"\r\n"
+# define BUFFER_SIZE					1024
+# define SEND_BUFFER_SIZE				262144
+# define RESPONSE_BUFFER_SIZE			32768
+# define MAX_READ_SIZE					32768
+# define BODY_BUFFER_SIZE				32768
+# define MAX_CLIENT						1024
+# define HEAD_BSIZE						8192
+# define EPOLLTICK						1u << 27
+# define IDLE_TIMEOUT					75
+# define CLIENT_RECEIVING_HEAD_TIMEOUT	60
+# define CLIENT_RECEIVING_BODY_TIMEOUT	60
+# define CLIENT_SENDING_TIMEOUT			60
+# define CGI_SENDING_TIMEOUT 			60
+# define CGI_RECEIVING_TIMEOUT			60
 
-
-# define RESET		"\033[0m"
-# define BLACK		"\033[90m"
-# define RED		"\033[91m"		//	error log
-# define GREEN		"\033[92m"		//	Server log
-# define YELLOW		"\033[93m"		//	Location log
-# define BLUE		"\033[94m"		//	Directive log
-# define MAGENTA	"\033[95m"		//	Method log
-# define CYAN		"\033[96m"		//	Debug log
+# define RESET							"\033[0m"
+# define BLACK							"\033[90m"
+# define RED							"\033[91m"		//	error log
+# define GREEN							"\033[92m"		//	Server log
+# define YELLOW							"\033[93m"		//	Location log
+# define BLUE							"\033[94m"		//	Directive log
+# define MAGENTA						"\033[95m"		//	Method log
+# define CYAN							"\033[96m"		//	Debug log
 
 struct t_string 
 {

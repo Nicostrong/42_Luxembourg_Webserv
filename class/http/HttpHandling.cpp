@@ -13,7 +13,7 @@
 #include "./../../includes/http/HttpHandling.hpp"
 #include "./../../includes/networking/Socket.hpp"
 
-HttpHandling::HttpHandling() : _cgi(NULL) {}
+HttpHandling::HttpHandling() : _cgi(NULL), _ts(time(NULL)), _state(CLIENT_RECEIVING_HEAD) {}
 
 HttpHandling::~HttpHandling()
 {
@@ -29,6 +29,13 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
     
     try
     {
+		if (this->_parser.getState() == HttpParser::HTTP_HEADERS && 
+			sock->getRxBuffer().getBufferUnread() > 0)
+		{
+			if (this->_state != CLIENT_RECEIVING_HEAD)
+				setState(CLIENT_RECEIVING_HEAD);
+		}
+
         this->_parser.onRead(sock->getRxBuffer(), *sock);
     }
     catch(const HttpExceptions& e)
@@ -52,6 +59,7 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 void HttpHandling::setBodyRequired()
 {
 	this->_parser.setState(HttpParser::HTTP_BODY);
+	setState(CLIENT_RECEIVING_BODY);
 }
 
 void HttpHandling::onWrite(EventMonitoring& em, Socket* sock)
@@ -66,6 +74,43 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 	
 	try
     {
+		time_t curr = time(NULL);
+
+		switch (this->_state)
+		{
+			case IDLE:
+				if (curr - this->_ts > IDLE_TIMEOUT)
+					throw HttpSevereExceptions(HttpBase::REQUEST_TIMEOUT);
+				break;
+			case CLIENT_RECEIVING_HEAD:
+				if (curr - this->_ts > CLIENT_RECEIVING_HEAD_TIMEOUT)
+					throw HttpSevereExceptions(HttpBase::REQUEST_TIMEOUT);
+				break;
+			case CLIENT_RECEIVING_BODY:
+				if (curr - this->_ts > CLIENT_RECEIVING_BODY_TIMEOUT)
+					throw HttpSevereExceptions(HttpBase::REQUEST_TIMEOUT);
+				break;
+			case CLIENT_SENDING:
+				if (curr - this->_ts > CLIENT_SENDING_TIMEOUT)
+					throw HttpSevereExceptions(HttpBase::SERVICE_UNAVAILABLE);
+				break;
+			case CGI_SENDING:
+				LOG_DEB("Checking sending");
+				if (curr - this->_ts > CGI_SENDING_TIMEOUT)
+					throw HttpExceptions(HttpBase::GATEWAY_TIMEOUT);
+				break;
+			case CGI_RECEIVING:
+				LOG_DEB("Checking receiving");
+				if (curr - this->_ts > CGI_RECEIVING_TIMEOUT)
+					throw HttpExceptions(HttpBase::GATEWAY_TIMEOUT);
+				break;
+			default:
+				break;
+		}
+
+		if (this->_resHandling.getState() != ResponseHandling::NONE)
+			return ;
+
 		switch (this->_parser.getState())
 		{
 			case HttpParser::HTTP_HEAD_RECEIVED:
@@ -94,7 +139,7 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 						break;
 					case CgiParser::CGI_BODY_RECEIVED:
 						this->_resHandling.init(*sock);
-						em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+						em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
 						break;
 					case CgiParser::CGI_HEAD:
 					case CgiParser::CGI_BODY:
@@ -109,7 +154,7 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 			else
 			{
 				this->_resHandling.init(*sock);
-				em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLHUP | EPOLLRDHUP);
+				em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
 			}
 		}
 	}
@@ -145,6 +190,12 @@ void HttpHandling::setConnectionClose(Socket& sock)
 	sock.getResp().addHeader("Connection", "close");
 }
 
+void HttpHandling::setState(State state)
+{
+	this->_ts = time(NULL);
+	this->_state = state;
+}
+
 void HttpHandling::reset()
 {
 	this->_parser.reset();
@@ -154,6 +205,7 @@ void HttpHandling::reset()
 	if (this->_cgi)
 		delete this->_cgi;
 	this->_cgi = NULL;
+	setState(IDLE);
 	return ;
 }
 

@@ -165,6 +165,7 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 
 void Socket::onCloseEvent(int fd, EventMonitoring &em)
 {
+	LOG_DEB("Connection closed by remote");
 	this->_sockm.remove(*this, em);
 	(void)fd;
 	(void)em;

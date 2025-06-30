@@ -31,6 +31,16 @@ class	HttpHandling
 {
 	public:
 
+		enum State
+		{
+			IDLE,
+			CLIENT_RECEIVING_HEAD,
+			CLIENT_RECEIVING_BODY,
+			CLIENT_SENDING,
+			CGI_SENDING,
+			CGI_RECEIVING,
+		};
+
 		HttpHandling( void );
 		~HttpHandling( void );
 
@@ -50,6 +60,8 @@ class	HttpHandling
 
 		/*	GETTER	*/
 		MyCGI*				getCGI( void );
+
+		void				setState(State state);
 		
 	private:
 	
@@ -63,6 +75,8 @@ class	HttpHandling
 		ResponseHandling	_resHandling;
 		CgiResponse			_cgiResp;
 		MyCGI*				_cgi;
+		time_t				_ts;
+		State				_state;
 };
 
 #endif

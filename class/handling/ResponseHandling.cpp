@@ -34,10 +34,17 @@ ResponseHandling& ResponseHandling::operator=(const ResponseHandling& obj)
     return (*this);
 }
 
+ResponseHandling::State ResponseHandling::getState() const
+{
+	return (this->_state);
+}
+
 void ResponseHandling::init(Socket& sock)
 {
     if (this->_state != NONE)
 		return ;
+	
+	sock.getHandler().setState(HttpHandling::CLIENT_SENDING);
 	
     switch (sock.getResp().getRespType())
     {

@@ -75,6 +75,8 @@ void Listener::onReadEvent(int fd, EventMonitoring& em)
 		
 	int clientSocket = accept(this->_serverSocket, 
 		(struct sockaddr*)&clientAddr, &addrLen);
+
+	LOG_DEB("New incoming socket");
 	
 	try
 	{

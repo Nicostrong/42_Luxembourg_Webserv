@@ -105,6 +105,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 				this->setEndWrite();
 				em.unmonitor(fd);
 				this->getPipeToCGI().closeIn();
+				this->_socket->getHandler().setState(HttpHandling::CGI_RECEIVING);
 				return ;
 			}
 			

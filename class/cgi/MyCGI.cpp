@@ -22,6 +22,7 @@ MyCGI::MyCGI( Socket& socket )
 	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isFinish(false),
 	_endWrite(false)
 {
+	socket.getHandler().setState(HttpHandling::CGI_SENDING);
 	this->_binaryExec = this->_socket->getReq().getCgiPath();
 	this->_scriptPath = this->_socket->getReq().getPathTranslated();
 	this->_query = this->_socket->getReq().getQueryParams();
