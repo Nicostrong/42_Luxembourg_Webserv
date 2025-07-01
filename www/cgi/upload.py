@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/01 08:26:06 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/01 11:40:04 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -200,10 +200,11 @@ def response():
 			<a	href="http://localhost:8080/upload.html">Upload</a>
 			<a	href="http://localhost:8080/download.html">Download</a>
 			<a	href="http://localhost:8080/delete.html">Delete</a>
-			<a  href="http://localhost:8080/new.html">New</a>
+			<a	href="http://localhost:8080/new.html">New</a>
 			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
 			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
+			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="upload-container">
 			{texte}

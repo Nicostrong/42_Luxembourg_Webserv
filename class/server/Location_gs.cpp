@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/26 14:33:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 13:36:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,11 @@ const std::string&		Location::getCGIPathExtension( const std::string& extension 
 const std::string&		Location::getCGIPathUri( const std::string& uri ) const
 {
 	std::string		extension;
+	size_t			queryPos;
 	
-	extension = uri.substr(uri.find_last_of('.'));
+	extension = uri.substr(uri.find(getPath()));
+	queryPos = extension.find('?');
+	extension = extension.substr(extension.find('.'), queryPos);
 	return (this->getCGIPathExtension(extension));
 }
 

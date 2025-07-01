@@ -16,10 +16,11 @@
 			<a	href="http://localhost:8080/upload.html">Upload</a>
 			<a	href="http://localhost:8080/download.html">Download</a>
 			<a	href="http://localhost:8080/delete.html">Delete</a>
-			<a  href="http://localhost:8080/new.html">New</a>
+			<a	href="http://localhost:8080/new.html">New</a>
 			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
 			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
+			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="upload-container">
 		<h2>Choose your upload method:</h2>
@@ -29,7 +30,7 @@
 					<div class="method-title">Individual File Selection</div>
 					<div id="fileInputs">
 						<div class="file-input-group">
-							<input type="file" name="file1" id="file1">
+							<input type="file" name="file1" id="file1" required>
 						</div>
 					</div>
 					<button type="button" class="add-file-btn" onclick="addFileInput()">

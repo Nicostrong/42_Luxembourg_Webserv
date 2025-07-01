@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 14:59:36 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 15:04:20 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ MyCGI::MyCGI( Socket& socket )
 	setEnv();
 	setParams();
 	checkCGI();
+	LOG_DEB(*this);
 	return ;
 }
 
@@ -158,6 +159,7 @@ void		MyCGI::setMap( void )
 	std::ostringstream		oss;
 	HttpRequest*			req = &this->_socket->getReq();
 	std::string				scriptPath = req->getPathTranslated();
+	std::string				pathInfo = req->getPathInfo();
 	std::string				documentRoot = scriptPath;
 	size_t					cgiPos = documentRoot.find("/cgi/");
 	char*					pwd = getenv("PWD");
@@ -169,9 +171,9 @@ void		MyCGI::setMap( void )
 	this->_mEnv["GATEWAY_INTERFACE"] = CGI_REVISION;
 	this->_mEnv["SERVER_PROTOCOL"] = "HTTP/1.1";
 	this->_mEnv["SERVER_SOFTWARE"] = SERVER_VER;
-	this->_mEnv["PATH_INFO"] = req->getPathInfo();		//	a refaire cat partit apres le script et avant le ?
+	this->_mEnv["PATH_INFO"] = req->getUri();
 	this->_mEnv["PATH_TRANSLATED"] = req->getPathTranslated();
-	this->_mEnv["QUERY_STRING"] = req->getQueryParams();	//	tout ce qu il y a apres le ?
+	this->_mEnv["QUERY_STRING"] = req->getQueryParams();
 	this->_mEnv["REMOTE_ADDR"] = req->getRemotIp();
 	this->_mEnv["REQUEST_METHOD"] = req->getMethod();
 

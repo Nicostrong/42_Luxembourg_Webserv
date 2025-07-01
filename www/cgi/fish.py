@@ -1,18 +1,18 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    hello_world.py                                     :+:      :+:    :+:    #
+#    fish.py                                            :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/06/17 09:18:27 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/01 11:39:52 by nfordoxc         ###   Luxembourg.lu      #
+#    Created: 2025/07/01 11:37:13 by nfordoxc          #+#    #+#              #
+#    Updated: 2025/07/01 11:37:54 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
 #!/usr/bin/env python3
 
-print("Status: 200", end='\r\n')
+print("Status: 418", end='\r\n')
 print("Content-Type: text/html; charset=utf-8\r\n", end='\r\n')
 print()
 
@@ -20,7 +20,7 @@ html = """
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>WEBSERVER - Hello World PYTHON - WEBSERVER</title>
+		<title>WEBSERVER - Fish - WEBSERVER</title>
 		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
 	</head>
@@ -40,7 +40,7 @@ html = """
 			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
 			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
-		<h1>Hello World in Python !</h1>
+		<h1>Fish in Python !</h1>
 	</body>
 </html>
 """

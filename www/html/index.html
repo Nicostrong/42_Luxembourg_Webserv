@@ -3,6 +3,7 @@
 		<title>WEBSERVER - index - WEBSERVER</title>
 		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+		<script src="http://localhost:8080/scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -14,15 +15,17 @@
 			<a	href="http://localhost:8080/upload.html">Upload</a>
 			<a	href="http://localhost:8080/download.html">Download</a>
 			<a	href="http://localhost:8080/delete.html">Delete</a>
-			<a  href="http://localhost:8080/new.html">New</a>
+			<a	href="http://localhost:8080/new.html">New</a>
 			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
 			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
+			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
-		<div class="login">
-			<form action="http://localhost:8080/cgi-bin/login.py" method="get">
-			  <input type="text" name="login" placeholder="Enter your login here :P">
-			  <input type="submit" value="Connexion">
+		<div class="container">
+			<form method="GET" action=http://localhost:8080/cgi/cookie.py>
+				<label for="pseudo">Choose your pseudo :</label>
+				<input type="text" name="pseudo" id="pseudo" required>
+				<button type="submit">Validate</button>
 			</form>
 		</div>
 	</body>
