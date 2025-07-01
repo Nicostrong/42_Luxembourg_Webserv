@@ -5,6 +5,7 @@
 		<link rel="stylesheet" href="http://localhost:8080/styles/form.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
 		<script src="http://localhost:8080/scripts/form.js"></script>
+		<script src="http://localhost:8080/scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -23,33 +24,38 @@
 			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="upload-container">
-		<h2>Choose your upload method:</h2>
-		<form id="uploadForm" action="http://localhost:8080/cgi/upload.py" method="post" enctype="multipart/form-data">
-			<div class="upload-methods">
-				<div class="method-section">
-					<div class="method-title">Individual File Selection</div>
-					<div id="fileInputs">
-						<div class="file-input-group">
-							<input type="file" name="file1" id="file1" required>
+			<h2>Choose your upload method:</h2>
+			<form id="uploadForm" action="http://localhost:8080/cgi/upload.py" method="post" enctype="multipart/form-data">
+				<div class="upload-methods">
+					<div class="method-section">
+						<div class="method-title">Individual File Selection</div>
+						<div id="fileInputs">
+							<div class="file-input-group">
+								<input type="file" name="file1" id="file1" required>
+							</div>
+						</div>
+						<button type="button" class="add-file-btn" onclick="addFileInput()">
+							(+) Add Another File
+						</button>
+						<div class="file-info">
+							Click "Add Another File" to select multiple files individually
 						</div>
 					</div>
-					<button type="button" class="add-file-btn" onclick="addFileInput()">
-						(+) Add Another File
-					</button>
+				</div>
+				
+				<div class="submit-section">
+					<button type="submit" class="submit-btn">Upload Files</button>
 					<div class="file-info">
-						Click "Add Another File" to select multiple files individually
+						Maximum file size: 10MB per file<br>
+						All file types are accepted
 					</div>
 				</div>
-			</div>
-			
-			<div class="submit-section">
-				<button type="submit" class="submit-btn">Upload Files</button>
-				<div class="file-info">
-					Maximum file size: 10MB per file<br>
-					All file types are accepted
+			</form>
+			<div id="status-section" class="user-status">
+				<div class="info">
+					<span id="status-message">Chargement...</span>
 				</div>
 			</div>
-		</form>
-		</div>
+		</div>S
 	</body>
 </html>

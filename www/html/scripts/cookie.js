@@ -1,112 +1,75 @@
-// Function pour obtenir la valeur d'un cookie
+// Fonction pour lire un cookie spécifique
 function getCookie(name)
 {
-	const value = `; ${document.cookie}`;
-	const parts = value.split(`; ${name}=`);
-	if (parts.length === 2) return parts.pop().split(';').shift();
-	return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2)
+		{
+        return decodeURIComponent(parts.pop().split(';').shift());
+    }
+    return null;
 }
 
-// Function pour définir un cookie
-function setCookie(name, value, days = 30)
+// Fonction pour mettre à jour l'affichage du statut
+function updateStatusDisplay()
 {
-	const date = new Date();
-	date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-	const expires = `expires=${date.toUTCString()}`;
-	document.cookie = `${name}=${value};${expires};path=/`;
-}
-
-// Function pour supprimer un cookie
-function deleteCookie(name)
-{
-	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-}
-
-// Function pour afficher le formulaire de saisie du pseudo
-function showPseudoForm()
-{
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = `
-		<p>Veuillez entrer votre pseudo pour continuer :</p>
-		<div class="form-container">
-			<input type="text" id="pseudoInput" placeholder="Votre pseudo" maxlength="50">
-			<button onclick="savePseudo()">Valider</button>
-		</div>
-		<div id="errorMessage" class="error"></div>
-	`;
-	
-	// Focus sur le champ de saisie
-	document.getElementById('pseudoInput').focus();
-	
-	// Permettre la validation avec Enter
-	document.getElementById('pseudoInput').addEventListener('keypress', function(e) {
-		if (e.key === 'Enter') {
-			savePseudo();
-		}
-	});
-}
-
-// Function pour afficher le message de bienvenue
-function showWelcomeMessage(pseudo)
-{
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = `
-		<div class="welcome-message">
-			Bienvenu "${pseudo}" sur le site
-		</div>
-		<p>Vous êtes maintenant connecté avec le pseudo : <strong>${pseudo}</strong></p>
-		<button class="logout-btn" onclick="logout()">Changer de pseudo</button>
-	`;
-}
-
-// Function pour sauvegarder le pseudo
-function savePseudo()
-{
-	const pseudoInput = document.getElementById('pseudoInput');
-	const pseudo = pseudoInput.value.trim();
-	const errorDiv = document.getElementById('errorMessage');
-	
-	// Validation du pseudo
-	if (pseudo === '') {
-		errorDiv.textContent = 'Veuillez entrer un pseudo valide.';
-		pseudoInput.focus();
-		return;
-	}
-	
-	if (pseudo.length < 2) {
-		errorDiv.textContent = 'Le pseudo doit contenir au moins 2 caractères.';
-		pseudoInput.focus();
-		return;
-	}
-	
-	setCookie('pseudo', pseudo);
-	
-	showWelcomeMessage(pseudo);
-}
-
-// Function pour se déconnecter (supprimer le cookie)
-function logout()
-{
-	deleteCookie('pseudo');
-	showPseudoForm();
-}
-
-// Function principale pour initialiser la page
-function initializePage()
-{
-	const pseudo = getCookie('pseudo');
-	
-	if (pseudo && pseudo.trim() !== '')
+    const pseudo = getCookie('pseudo') || 'Unknown';
+    const statusMessage = document.getElementById('status-message');
+    
+    if (statusMessage)
 	{
-		// Le cookie pseudo existe, afficher le message de bienvenue
-		showWelcomeMessage(pseudo);
-	}
-	else
-	{
-		// Le cookie pseudo n'existe pas, afficher le formulaire
-		showPseudoForm();
-	}
+        if (pseudo === 'Unknown')
+		{
+            statusMessage.textContent = 'Vous naviguez en mode anonyme';
+        }
+		else
+		{
+            statusMessage.textContent = `Connecte en tant que: ${pseudo}`;
+        }
+    }
 }
 
-// Initialiser la page au chargement
-document.addEventListener('DOMContentLoaded', initializePage);
+// Fonction pour mettre à jour tous les éléments avec le pseudo
+function updateAllPseudoElements()
+{
+    const pseudo = getCookie('pseudo') || 'Unknown';
+    
+    // Liste des IDs d'éléments à mettre à jour
+    const pseudoElements =
+	[
+        'pseudo-display',
+        'pseudo-guest', 
+        'pseudo-user',
+        'pseudo-welcome',
+        'pseudo-footer',
+        'current-user',
+        'user-name'
+    ];
+    
+    pseudoElements.forEach(id =>
+	{
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = pseudo;
+        }
+    });
+    
+    // Mettre à jour le statut
+    updateStatusDisplay();
+}
+
+// Initialiser au chargement de la page
+document.addEventListener('DOMContentLoaded', function()
+{
+    updateAllPseudoElements();
+});
+
+// Vérifier les changements de cookies périodiquement
+setInterval(updateAllPseudoElements, 1000);
+
+// Fonction utilitaire pour débugger les cookies
+function debugCookies()
+{
+    console.log('Tous les cookies:', document.cookie);
+    console.log('Cookie pseudo:', getCookie('pseudo'));
+}

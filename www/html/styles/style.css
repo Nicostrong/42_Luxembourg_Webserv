@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:02:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 13:06:41 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 15:53:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ body {
 }
 
 h1 {
-	color:					#ffff00;
+	color:					#0a0064;
 	text-align:				center;
 	font-size:				24px;
 	margin-bottom:			20px;
@@ -141,4 +141,32 @@ button:hover {
 
 a:hover {
 	cursor:					help;
+}
+.info {
+	color:					#666;
+	font-style:				italic;
+	margin-top:				15px;
+}
+
+.user-status {
+	background-color:		#e9ecef;
+	padding:				15px;
+	border-radius:			5px;
+	margin-top:				20px;
+}
+
+.anonymous {
+	border-left:			4px solid #ffc107;
+}
+
+.authenticated {
+	border-left:			4px solid #28a745;
+}
+
+.hidden {
+	display:				none;
+}
+
+.visible {
+	display:				block;
 }

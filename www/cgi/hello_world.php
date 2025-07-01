@@ -4,13 +4,14 @@ header("Content-Type: text/html; charset=utf-8");
 
 $html = '
 <html>
-<head>
-	<title>WEBSERVER - Hello World PHP - WEBSERVER</title>
-	<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
-	<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
-</head>
-<body>
-	<header class="header">
+	<head>
+		<title>WEBSERVER - Hello World PHP - WEBSERVER</title>
+		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
+		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+		<script src="http://localhost:8080/scripts/cookie.js"></script>
+	</head>
+	<body>
+		<header class="header">
 			<a href="http://localhost:8080/index.html" class="banner-link">
 				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
 			</a>
@@ -25,8 +26,15 @@ $html = '
 			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
 			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
-	<h1>Hello World in PHP !</h1>
-</body>
+		<div class="container">
+			<h1>Hello World in PHP !</h1>
+			<div id="status-section" class="user-status">
+				<div class="info">
+					<span id="status-message">Chargement...</span>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
 ';
 

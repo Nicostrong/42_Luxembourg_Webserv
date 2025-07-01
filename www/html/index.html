@@ -22,11 +22,46 @@
 			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="container">
-			<form method="GET" action=http://localhost:8080/cgi/cookie.py>
-				<label for="pseudo">Choose your pseudo :</label>
-				<input type="text" name="pseudo" id="pseudo" required>
-				<button type="submit">Validate</button>
-			</form>
+			<div class="welcome-message">
+				Bienvenu "<span id="pseudo-display">Unknown</span>" sur le site
+			</div>
+			<div id="login-section" class="form-container">
+				<p><strong>Bonjour <span id="pseudo-guest">Unknown</span> !</strong></p>
+				<p>Connectez-vous pour personnaliser votre experience</p>
+				<form method="GET" action="/cgi/set_cookie.py">
+					<div>
+						<input type="text" name="pseudo" placeholder="Entrez votre pseudo" required maxlength="50" minlength="2">
+					</div>
+					<div>
+						<button type="submit">Se connecter</button>
+					</div>
+				</form>
+				<div class="info">
+					Votre pseudo sera sauvegarde pour les prochaines visites.
+				</div>
+			</div>
+			<div id="user-section" class="hidden">
+				<div class="user-status authenticated">
+					<p>Bonjour <span id="pseudo-user">Unknown</span> !</p>
+					<p>Vous etes connecte et votre session est active.</p>
+					<div class="info">
+						Profitez de votre visite personnalisee, <span id="pseudo-welcome">Unknown</span> !
+					</div>
+				</div>
+				
+				<form method="GET" action="/cgi/clear_cookie.py">
+					<button type="submit" class="logout-btn">Changer de pseudo</button>
+				</form>
+			</div>
+			<div id="status-section" class="user-status">
+				<div class="info">
+					<span id="status-message">Chargement...</span>
+				</div>
+			</div>
+			<div style="margin-top: 30px; font-size: 14px; color: #888;">
+				<p>Ce site utilise des cookies pour memoriser votre pseudo</p>
+				<p>Bonjour <span id="pseudo-footer">Unknown</span>, aucune donnee personnelle n'est collectee</p>
+			</div>
 		</div>
 	</body>
 </html>

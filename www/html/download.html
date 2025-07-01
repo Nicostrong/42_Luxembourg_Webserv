@@ -3,6 +3,7 @@
 		<title>WEBSERVER - download - WEBSERVER</title>
 		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+		<script src="http://localhost:8080/scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -20,7 +21,14 @@
 			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
 			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
-		<h1>DOWNLOAD</h1>
-        <br>
+		<div class="container">
+			<h1>DOWNLOAD</h1>
+			<br>
+			<div id="status-section" class="user-status">
+				<div class="info">
+					<span id="status-message">Chargement...</span>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
