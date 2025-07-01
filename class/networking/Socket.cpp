@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 09:43:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:50:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr, 
 	ServerManager& sm, SocketManager& sockm)
 	: _fd(fd), _sockAddr(sockAddr), _entryAddr(entryAddr), 
-	  _rxBuffer(RX_SIZE), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), 
-	  _keepAlive(true), _isDataSent(false), _sm(sm), _sockm(sockm), _em(NULL)
+	_rxBuffer(RX_SIZE), _txBuffer(RESPONSE_BUFFER_SIZE), _reset(false), 
+	_keepAlive(true), _isDataSent(false), _sm(sm), _sockm(sockm), _em(NULL)
 {
 	this->_req 		= HttpRequest(this->_sockAddr.getIp().getIpString());
 	LOG_DEB(this->_sockAddr.getIp().getIpString() + " opened connection");
@@ -132,10 +132,21 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 		this->_rxBuffer.setBufferUsed(bytes);
 		this->_handler.onRead(em, this);
 	}
+	catch(const HttpExceptions& e)
+	{
+		if (dynamic_cast<const HttpSevereExceptions*>(&e))
+			this->_handler.setConnectionClose(*this);
+		if (e.getCode() > 399)
+		{
+			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
+			LOG_ERROR(e.getCode());
+		}
+		setError((HttpBase::HttpCode)e.getCode(), em);
+	}
 	catch(const std::exception& e)
 	{
 		LOG_DEB(e.what());
-		this->_sockm.remove(*this, em);
+		setError(HttpBase::INTERNAL_SERVER_ERROR, em);
 	}
 }
 
@@ -169,10 +180,21 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 				reset(em);
 		}
 	}
+	catch(const HttpExceptions& e)
+	{
+		if (dynamic_cast<const HttpSevereExceptions*>(&e))
+			this->_handler.setConnectionClose(*this);
+		if (e.getCode() > 399)
+		{
+			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
+			LOG_ERROR(e.getCode());
+		}
+		setError((HttpBase::HttpCode)e.getCode(), em);
+	}
 	catch(const std::exception& e)
 	{
 		LOG_DEB(e.what());
-		this->_sockm.remove(*this, em);
+		setError(HttpBase::INTERNAL_SERVER_ERROR, em);
 	}
 }
 
@@ -186,15 +208,47 @@ void Socket::onCloseEvent(int fd, EventMonitoring &em)
 
 void Socket::onTickEvent(int fd, EventMonitoring& em)
 {
-	this->_handler.onTick(em, this);
+	try
+	{
+		this->_handler.onTick(em, this);
+	}
+	catch(const HttpExceptions& e)
+	{
+		if (dynamic_cast<const HttpSevereExceptions*>(&e))
+			this->_handler.setConnectionClose(*this);
+		if (e.getCode() > 399)
+		{
+			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
+			LOG_ERROR(e.getCode());
+		}
+		setError((HttpBase::HttpCode)e.getCode(), em);
+	}
+	catch(const std::exception& e)
+	{
+		LOG_DEB(e.what());
+		setError(HttpBase::INTERNAL_SERVER_ERROR, em);
+	}
 	(void)fd;
-	(void)em;
 }
 
 void	Socket::setEM( EventMonitoring& ev )
 {
 	this->_em = &ev;
 	return ;
+}
+
+void Socket::setError(HttpBase::HttpCode code, EventMonitoring& em)
+{
+	if (!this->_isDataSent)
+	{
+		this->_txBuffer.reset();
+		this->_resp.setRespType(HttpResponse::ERROR);
+		this->_resp.setStatusCode(code);
+		this->getHandler().getResponseHandling().init(*this);
+		em.monitorUpdate(this->_fd, POLLOUT | EPOLLTICK | POLLHUP | POLLRDHUP);
+	}
+	else
+		this->_sockm.remove(*this, em);
 }
 
 // Custom exceptions

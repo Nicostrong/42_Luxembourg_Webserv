@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 12:34:59 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 10:11:14 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,16 @@ class	HttpHandling
 
 		/*	SETTER	*/
 		void				setCGI( Socket& socket );
+		void				setState(State state);
+		void				setConnectionClose( Socket& sock );
 
 		/*	GETTER	*/
 		MyCGI*				getCGI( void );
-
-		void				setState(State state);
 		
 	private:
 	
 		HttpHandling( HttpHandling& obj );
 		HttpHandling operator=( const HttpHandling& obj);
-
-		void				setConnectionClose( Socket& sock );
 		
 		HttpParser			_parser;
 		CgiParser			_cgiParser;

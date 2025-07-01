@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 09:35:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 10:15:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ class Socket : public IEventHandler
 	
 		Socket( const Socket& obj );
 		Socket& 			operator=( const Socket& obj );
+
+		void				setError(HttpBase::HttpCode code, EventMonitoring& em);
 
 		const int			_fd;
 		const Endpoint		_sockAddr;
