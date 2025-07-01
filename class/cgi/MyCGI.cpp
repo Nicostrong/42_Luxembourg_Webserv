@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 13:54:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 08:16:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,15 @@ MyCGI::MyCGI( Socket& socket )
 MyCGI::~MyCGI( void )
 {
 	int		i = -1;
+	int		status = 0;
 
+	if (this->_pid > 0 && waitpid(this->_pid, &status, WNOHANG) == 0)
+		kill(this->_pid, SIGKILL);
 	if (this->_params)
 	{
 		while (++i < 4)
 		{
-			if (_params[i])
+			if (this->_params[i])
 				free(this->_params[i]);
 			this->_params[i] = NULL;
 		}

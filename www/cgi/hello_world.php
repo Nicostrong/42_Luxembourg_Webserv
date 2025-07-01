@@ -22,6 +22,7 @@ $html = '
 			<a  href="http://localhost:8080/new.html">New</a>
 			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
 			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
+			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
 		</nav>
 	<h1>Hello World in PHP !</h1>
 </body>

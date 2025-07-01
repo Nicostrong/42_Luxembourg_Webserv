@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 09:18:27 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/30 10:48:40 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/01 08:26:05 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ html = """
 			<a  href="http://localhost:8080/new.html">New</a>
 			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
 			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
+			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
 		</nav>
 		<h1>Hello World in Python !</h1>
 	</body>

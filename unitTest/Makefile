@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/24 14:50:52 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/01 08:21:11 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ DEB_OPT			=	--tool=memcheck \
 					--leak-check=full \
 					--show-leak-kinds=all \
 					--track-origins=yes \
-					--track-fds=yes
+					--track-fds=yes \
+					--trace-children=yes
 
 ARG0			=	"../config/webserver.conf"
 

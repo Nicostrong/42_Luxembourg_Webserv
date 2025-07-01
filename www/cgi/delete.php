@@ -185,11 +185,12 @@ function formatBytes($size, $precision = 2) {
 		</header>
 		<nav class="navbar">
 			<a	href="http://localhost:8080/upload.html">Upload</a>
-			<a	href="http://localhost:8080/upload.html">Download</a>
+			<a	href="http://localhost:8080/download.html">Download</a>
 			<a	href="http://localhost:8080/delete.html">Delete</a>
-            <a  href="http://localhost:8080/new.html">New</a>
+			<a  href="http://localhost:8080/new.html">New</a>
 			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
 			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
+			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
 		</nav>
 	<div class="container">
 		<h1>📁 Gestionnaire de fichiers</h1>

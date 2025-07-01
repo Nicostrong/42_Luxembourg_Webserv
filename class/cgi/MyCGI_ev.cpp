@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 15:43:13 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 08:14:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,17 +133,6 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 		this->_isCloseEvent = true;
 	(void)em;
 	(void)fd;
-	/*LOG_DEB("CLOSE");
-	(void)fd;
-	(void)em;
-	if (this->getPipeFromCGI().getOut() == fd)
-	{
-		this->_socket->getHandler().getCgiResponse().setEofReceived();
-		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
-		em.unmonitor(fd);
-		this->getPipeFromCGI().closeOut();
-		this->setIsFinish();
-	}*/
 	
 	return ;
 }
@@ -156,8 +145,6 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 	(void)em;
 	if (waitpid(this->getPid(), &status, WNOHANG))
 		this->setIsFinish();
-
-	// Check if data completely received
 
 	if (this->_isCloseEvent && !this->_isReadEvent)
 	{
