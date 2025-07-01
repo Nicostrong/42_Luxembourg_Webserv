@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 08:45:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:11:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ class EventMonitoring
 		class EPollFailedWaitException : public std::exception {
 			public:
 				const char * what () const throw();
+		};
+
+		class	EPollCatchBypass: public std::exception
+		{
+			private:
+				std::string		_msg;
+			public:
+				EPollCatchBypass() throw();
+				virtual ~EPollCatchBypass( void ) throw();
+				const char*		what() const throw();
 		};
 
 		EventMonitoring();

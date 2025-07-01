@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 16:38:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:01:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,16 @@ class	MyCGI:	public IEventHandler
 				virtual ~CGIError( void ) throw();
 				virtual const char*		what() const throw();
 		
+		};
+
+		class	CGIExit: public std::exception
+		{
+			private:
+				std::string		_msg;
+			public:
+				CGIExit() throw();
+				virtual ~CGIExit( void ) throw();
+				const char*		what() const throw();
 		};
 };
 

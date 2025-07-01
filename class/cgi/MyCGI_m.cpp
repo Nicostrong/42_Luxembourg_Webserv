@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 16:11:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:51:21 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,20 @@ void		MyCGI::execCGI( void )
 	this->setPid(fork());
 
 	if (this->getPid() == -1)
-		throw CGIError("Pipe error");
+		throw CGIError("Fork error");
 	else if (this->getPid() == 0)
 	{
+		this->getPipeToCGI().closeIn();
+		this->getPipeFromCGI().closeOut();
 		if (dup2(this->getPipeToCGI().getOut(), STDIN_FILENO) == -1)
-			throw CGIError("dup2 IN");
+			throw CGIExit();
 		this->getPipeToCGI().closeOut();										//	on ferme le pipe apres dup2 STDIN
 		if (dup2(this->getPipeFromCGI().getIn(), STDOUT_FILENO) == -1)
-			throw CGIError("dup2 OUT");
+			throw CGIExit();
 		this->getPipeFromCGI().closeIn();										//	on ferme le pipe apres dup2 STDOUT
 		execve(cmd[0], cmd, this->getEnv());
-		throw CGIError("execve error");
+		LOG_DEB("EXit");
+		throw CGIExit();
 	} 
 	else
 	{

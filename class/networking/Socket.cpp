@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 14:20:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:52:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,11 @@ void Socket::onTickEvent(int fd, EventMonitoring& em)
 	try
 	{
 		this->_handler.onTick(em, this);
+	}
+	catch(const MyCGI::CGIExit& e)
+	{
+		LOG_DEB("EXit 2");
+		throw EventMonitoring::EPollCatchBypass();
 	}
 	catch(const HttpExceptions& e)
 	{

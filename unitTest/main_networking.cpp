@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_networking.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/25 11:29:09 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 17:49:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ int main()
 		
 		while (g_running)
 			em.updateEvents();
+	}
+	catch(const EventMonitoring::EPollCatchBypass& e)
+	{
+		return (1);
 	}
 	catch(const std::exception& e)
 	{

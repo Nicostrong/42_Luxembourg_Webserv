@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 16:33:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:47:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
 	this->_epollFd = epoll_create(MAX_EVENTS);
 	if (this->_epollFd == -1)
 		throw EPollFailedInitException();
-	Fd::setNoInheritance(this->_epollFd);
+	//Fd::setNoInheritance(this->_epollFd);
 }
 
 EventMonitoring::~EventMonitoring() 
@@ -178,4 +178,13 @@ const char *EventMonitoring::EPollFailedInitException::what() const throw()
 const char *EventMonitoring::EPollFailedWaitException::what() const throw()
 {
 	return ("EPoll failed wait exception");
+}
+
+EventMonitoring::EPollCatchBypass::EPollCatchBypass() throw() : _msg("Epoll catch bypass") {}
+
+EventMonitoring::EPollCatchBypass::~EPollCatchBypass( void ) throw() {}
+
+const char*		EventMonitoring::EPollCatchBypass::what() const throw()
+{
+	return (this->_msg.c_str());
 }

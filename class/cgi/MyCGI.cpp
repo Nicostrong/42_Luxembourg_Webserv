@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 16:52:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 17:01:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ MyCGI::MyCGI( Socket& socket )
 	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isCloseEvent(false), _isReadEvent(false)
 {
 	socket.getHandler().setState(HttpHandling::CGI_SENDING);
-	Fd::setNoInheritance(getPipeToCGI().getIn());
-	Fd::setNoInheritance(getPipeFromCGI().getOut());
 	Fd::setNonBlocking(getPipeToCGI().getIn());
 	Fd::setNonBlocking(getPipeFromCGI().getOut());
 	this->_binaryExec = this->_socket->getReq().getCgiPath();
@@ -269,6 +267,15 @@ MyCGI::CGIError::~CGIError( void ) throw()
 }
 
 const char*		MyCGI::CGIError::what() const throw()
+{
+	return (this->_msg.c_str());
+}
+
+MyCGI::CGIExit::CGIExit() throw() : _msg("Cgi exit") {}
+
+MyCGI::CGIExit::~CGIExit( void ) throw() {}
+
+const char*		MyCGI::CGIExit::what() const throw()
 {
 	return (this->_msg.c_str());
 }
