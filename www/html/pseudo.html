@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Système de Pseudo avec Cookies</title>
+    <link rel="stylesheet" href="http://localhost:8080/styles/style.css">
+    <link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+    <style>
+        .pseudo-section {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .pseudo-section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .pseudo-link {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .pseudo-link:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="http://localhost:8080/index.html" class="banner-link">
+            <h1>Welcome on the WebServer of GneugneuTeam.</h1>
+        </a>
+    </header>
+    <nav class="navbar">
+        <a href="http://localhost:8080/upload.html">Upload</a>
+        <a href="http://localhost:8080/download.html">Download</a>
+        <a href="http://localhost:8080/delete.html">Delete</a>
+        <a href="http://localhost:8080/new.html">New</a>
+        <a href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
+        <a href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
+        <a href="http://localhost:8080/cgi/timeout.py">Timeout</a>
+        <a href="http://localhost:8080/pseudo.html">Système Pseudo</a>
+    </nav>
+    
+    <div class="pseudo-section">
+        <h2>Système de Pseudo avec Cookies</h2>
+        <p>Cette page démontre le système de pseudo basé sur les cookies, géré entièrement côté serveur en C++.</p>
+        
+        <h3>Fonctionnalités:</h3>
+        <ul>
+            <li>Vérification de l'existence du cookie "pseudo" côté serveur</li>
+            <li>Affichage d'un formulaire si le cookie n'existe pas</li>
+            <li>Affichage du message de bienvenue si le cookie existe</li>
+            <li>Traitement des paramètres GET pour définir le cookie</li>
+            <li>Redirection après définition du cookie</li>
+        </ul>
+        
+        <h3>Test du système:</h3>
+        <a href="http://localhost:8080/cgi/pseudo.py" class="pseudo-link">
+            Accéder au Système de Pseudo
+        </a>
+        
+        <h3>Comment ça marche:</h3>
+        <ol>
+            <li>Cliquez sur le lien ci-dessus</li>
+            <li>Si vous n'avez pas de cookie "pseudo", vous verrez un formulaire</li>
+            <li>Entrez votre pseudo et soumettez le formulaire</li>
+            <li>Le serveur définira le cookie et vous redirigera</li>
+            <li>Vous verrez alors le message de bienvenue avec votre pseudo</li>
+            <li>Utilisez le lien "Se déconnecter" pour supprimer le cookie</li>
+        </ol>
+    </div>
+</body>
+</html>
