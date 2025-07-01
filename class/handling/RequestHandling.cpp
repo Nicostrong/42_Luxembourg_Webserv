@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 14:44:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 14:27:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,12 @@ void RequestHandling::handleHeaders(Socket& sock)
 void RequestHandling::handleBody(Socket& sock)
 {
 	sock.getHandler().getHttpParser().setState(HttpParser::HTTP_HANDLED);
-	//SHould handle everything else than upload
+	
 	HttpRequest* req = &sock.getReq();
 	Body* body = req->getBody();
 	HttpResponse* resp = &sock.getResp();
 	std::string	path = req->getPathTranslated();
-	
-	if (!body)
-		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+
 		
 	if (sock.getResp().getRespType() == HttpResponse::CGI)
 	{
@@ -79,6 +77,7 @@ void RequestHandling::handleBody(Socket& sock)
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
 
 	body->moveBodyFile(path);
+	
 	resp->addHeader("Location", Uri::getPathInfo(req->getLoc(), req->getUri()));
 	
 	throw HttpExceptions(HttpBase::CREATED);
@@ -312,24 +311,40 @@ void RequestHandling::handleGet(Socket& sock)
 
 void RequestHandling::handlePost(Socket& sock)
 {
-	if (sock.getReq().getUri().size() && *sock.getReq().getUri().rbegin() == '/')
+	HttpRequest* req = &sock.getReq();
+
+	if (req->getUri().size() && *req->getUri().rbegin() == '/')
 		throw HttpSevereExceptions(HttpBase::METHOD_NOT_ALLOWED);
 
-	LOG_DEB(sock.getReq().getUri());
-	std::string	path = sock.getReq().getPathTranslated();
+	LOG_DEB(req->getUri());
+	std::string	path = req->getPathTranslated();
 	if (isCGI(sock))
 	{
 		LOG_DEB("IsCGI dans POST");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		handleBodyLength(sock);
-		sock.getHandler().setBodyRequired();
+		sock.getHandler().setBodyRequired(sock);
 		return ;
 	}
+
+	if (req->findHeader("Content-Type"))
+	{
+		std::string value = req->findHeaderValue("Content-Type");
+		std::string mimetype = value.substr(0, value.find(';'));
+
+		mimetype = HttpBase::normalizeHeaderValue(mimetype);
+		
+		if (mimetype != "text/plain")
+			throw HttpSevereExceptions(HttpBase::UNSUPPORTED_MEDIA_TYPE);
+	}
+
 	handleBodyLength(sock);
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
-	sock.getHandler().setBodyRequired();
+	sock.getHandler().setBodyRequired(sock);
+	if (!req->isTE() && req->getContentLength() < 1)
+		handleBody(sock);
 }
 
 void RequestHandling::handleBodyLength(Socket& sock)

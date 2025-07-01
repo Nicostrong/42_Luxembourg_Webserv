@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 15:01:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 14:14:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,18 +202,7 @@ bool HttpParser::handleHeaders(Buffer& buff, HttpRequest& req)
 
 bool HttpParser::handleBody(Buffer& buff, Socket& sock)
 {
-	HttpRequest* req = &sock.getReq();
-	Body* body = req->getBody();
-
-	if (!body)
-	{
-		body = new Body(0);
-
-		if (!body)
-			throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
-
-		req->setBody(body);
-	}
+	Body* body = sock.getReq().getBody();
 	
 	bool received = body->onRead(buff, sock);
 

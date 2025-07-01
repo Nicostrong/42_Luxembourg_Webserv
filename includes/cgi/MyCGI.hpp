@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 13:51:23 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 14:53:49 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../utils/Uri.hpp"
 # include "../utils/Pipe.hpp"
 # include "../utils/Buffer.hpp"
+# include "../utils/Fd.hpp"
 # include "../server/Location.hpp"
 # include "../networking/Body.hpp"
 # include "../events/IEventHandler.hpp"

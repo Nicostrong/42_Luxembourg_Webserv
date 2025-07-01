@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 15:46:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 13:25:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,17 @@ std::string HttpBase::normalizeUri(const std::string& uri)
 		normalized.push_back(std::tolower(*it));
 
 	//Should treat % things
+	return (normalized);
+}
+
+std::string HttpBase::normalizeHeaderValue(const std::string& uri)
+{
+	std::string normalized;
+	
+	std::string::const_iterator it;
+	for (it = uri.begin(); it != uri.end(); ++it) 
+		normalized.push_back(std::tolower(*it));
+
 	return (normalized);
 }
 

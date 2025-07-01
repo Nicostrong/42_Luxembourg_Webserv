@@ -13,6 +13,9 @@
 [X]-Refacto the way data is sent to allow all others things than just sending 
     static files.
 [X]-Fix Idle should just close socket and error during response should close immediately
+[X]-Body with content length of 0
+[X]-Handle upload with diffrents content types not only plain/text
+[X]-Make socket NON BLOCKING
 
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.
@@ -22,10 +25,12 @@
 -Catch error in cgi pipes
 
 // Prioritary
+-Handle redirection for POST/DELETE 
+    -> In the config file ask for the redirection codes
+
+-Set-Cookie issue
+-Problem with chunked response from cgi // Maybe fixed ?
+
+//Nico
 
 -isCgi not working correctly
--Handle upload with diffrents content types not only plain/text
--Handle redirection for POST/DELETE 
-    -> In the config file ask for the redirection code
--Problem with chunked response from cgi // Maybe fixed ?
--Make socket NON BLOCKING

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 08:16:46 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 14:59:36 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ MyCGI::MyCGI( Socket& socket )
 	_endWrite(false), _isCloseEvent(false), _isReadEvent(false)
 {
 	socket.getHandler().setState(HttpHandling::CGI_SENDING);
+	Fd::setNoInheritance(getPipeToCGI().getIn());
+	Fd::setNoInheritance(getPipeFromCGI().getOut());
+	Fd::setNonBlocking(getPipeToCGI().getIn());
+	Fd::setNonBlocking(getPipeFromCGI().getOut());
 	this->_binaryExec = this->_socket->getReq().getCgiPath();
 	this->_scriptPath = this->_socket->getReq().getPathTranslated();
 	this->_query = this->_socket->getReq().getQueryParams();

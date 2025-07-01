@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 10:22:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 14:13:29 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,23 @@ void HttpHandling::onRead(EventMonitoring& em, Socket* sock)
 	this->_parser.onRead(sock->getRxBuffer(), *sock);
 }
 
-void HttpHandling::setBodyRequired()
+void HttpHandling::setBodyRequired(Socket& sock)
 {
+	HttpRequest* req = &sock.getReq();
+	Body* body = req->getBody();
+	
 	this->_parser.setState(HttpParser::HTTP_BODY);
+	
+	if (!body)
+	{
+		body = new Body(0);
+
+		if (!body)
+			throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+
+		req->setBody(body);
+	}
+	
 	setState(CLIENT_RECEIVING_BODY);
 }
 

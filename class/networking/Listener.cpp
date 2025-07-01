@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:39:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 09:01:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 15:01:52 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,10 @@ bool Listener::listenSocket(EventMonitoring& em)
 
 	try
 	{
-		this->_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+		this->_serverSocket = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
 
 		if (this->_serverSocket == -1)
 			throw std::runtime_error("Failed to listen");
-
-		Fd::setNoInheritance(this->_serverSocket);
 		
 		int opt = 1;
 		if (setsockopt(this->_serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) 
@@ -86,7 +84,8 @@ void Listener::onReadEvent(int fd, EventMonitoring& em)
 			throw std::runtime_error("Failed to accept client");
 		
 		Fd::setNoInheritance(clientSocket);
-
+		Fd::setNonBlocking(clientSocket);
+		
 		sock = new Socket(clientSocket, 
 			Endpoint::getEndpoint(clientAddr),
 			Endpoint::getEntryAddress(clientSocket),

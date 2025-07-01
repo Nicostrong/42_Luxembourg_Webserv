@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 09:30:03 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 13:25:24 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ class HttpBase
 		static bool isHeaderNameValid(const std::string& name);
 		static bool isHeaderValueValid(const std::string& value);
 		static std::string normalizeHeaderName(const std::string& name);
+		static std::string normalizeHeaderValue(const std::string& uri);
 		static std::string normalizeUri(const std::string& uri);
 	protected:
 		HttpBase();
