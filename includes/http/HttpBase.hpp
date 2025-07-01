@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 15:09:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:30:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class HttpBase
 	public:
 		enum HttpCode
 		{
+			NONE = 0,
 			CONTINUE = 100,
 			SWITCHING_PROTOCOLS = 101,
 			PROCESSING = 102,

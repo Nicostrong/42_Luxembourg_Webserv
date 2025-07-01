@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 09:56:07 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:43:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,11 @@ ServerManager& Socket::getSM()
 	return (this->_sm);
 }
 
+SocketManager& Socket::getSockM()
+{
+	return (this->_sockm);
+}
+
 EventMonitoring& Socket::getEM( void )
 {
 	return (*_em);
@@ -84,6 +89,11 @@ EventMonitoring& Socket::getEM( void )
 HttpHandling& Socket::getHandler()
 {
 	return (this->_handler);
+}
+
+bool Socket::getDataSent() const
+{
+	return (this->_isDataSent);
 }
 
 void Socket::setSocketClose()
@@ -118,8 +128,6 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 	
 		if (bytes == -1)
 			throw SocketReadException();
-
-		this->_isDataSent = true;
 			
 		this->_rxBuffer.setBufferUsed(bytes);
 		this->_handler.onRead(em, this);
@@ -143,8 +151,13 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 		{
 			int dataSent = send(fd, this->_txBuffer.getDataUnread(), 
 				this->_txBuffer.getBufferUnread(), 0);
+
 			if (dataSent == -1)
 				throw std::runtime_error("send failed");
+
+			if (dataSent > 0)
+				this->_isDataSent = true;
+			
 			this->_txBuffer.setBufferRead(dataSent);
 		}
 		

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 15:54:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 09:38:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/http/HttpHandling.hpp"
 #include "./../../includes/networking/Socket.hpp"
+#include "./../../includes/networking/SocketManager.hpp"
 
 HttpHandling::HttpHandling() : _cgi(NULL), _ts(time(NULL)), _state(CLIENT_RECEIVING_HEAD) {}
 
@@ -80,7 +81,11 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 		{
 			case IDLE:
 				if (curr - this->_ts > IDLE_TIMEOUT)
-					throw HttpSevereExceptions(HttpBase::REQUEST_TIMEOUT);
+				{
+					LOG_DEB("IDLE limit reached");
+					sock->getSockM().remove(*sock, em);
+					return ;
+				}
 				break;
 			case CLIENT_RECEIVING_HEAD:
 				if (curr - this->_ts > CLIENT_RECEIVING_HEAD_TIMEOUT)

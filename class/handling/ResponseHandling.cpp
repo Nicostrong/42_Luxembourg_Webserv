@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:46:11 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/21 10:00:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:28:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ ResponseHandling::State ResponseHandling::getState() const
 
 void ResponseHandling::init(Socket& sock)
 {
+	if (sock.getDataSent())
+	{
+		this->_state = SENT;
+		return ;
+	}
+
     if (this->_state != NONE)
 		return ;
 	
@@ -95,6 +101,7 @@ void ResponseHandling::send(Socket& sock)
 {
 	if (this->_state != INIT)
         return ;
+	
     if (this->_staticFile)
     {
         this->_staticFile->read(sock.getTxBuffer(), MAX_READ_SIZE);

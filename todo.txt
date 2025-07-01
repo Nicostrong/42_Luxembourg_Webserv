@@ -12,17 +12,20 @@
     prevent integrity of the data
 [X]-Refacto the way data is sent to allow all others things than just sending 
     static files.
+[X]-Fix Idle should just close socket and error during response should close immediately
 
--Add timeouts to prevent having persistents sockte that can be closed
--Make socket NON BLOCKING
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
        modification timestamp in hexa and y teh file content len in hexa.
+
+-Catch error in cgi pipes
+
+// Prioritary
+
+-isCgi not working correctly
 -Handle upload with diffrents content types not only plain/text
 -Handle redirection for POST/DELETE 
     -> In the config file ask for the redirection code
--isCgi not working correctly
--Upload cgi script not working
--Problem with chunked response from cgi
--Catch error in cgi pipes
+-Problem with chunked response from cgi // Maybe fixed ?
+-Make socket NON BLOCKING

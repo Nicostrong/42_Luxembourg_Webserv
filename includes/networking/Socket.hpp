@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 09:55:05 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 09:35:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ class Socket : public IEventHandler
 		Buffer&				getRxBuffer( void );
 		Buffer&				getTxBuffer( void );
 		ServerManager&		getSM( void );
+		SocketManager&		getSockM();
 		EventMonitoring&	getEM( void );
 		HttpHandling&		getHandler();
+		bool				getDataSent() const;
 		void 				setSocketClose();
 		void				setReset();
 		void				setEM( EventMonitoring& em );
