@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 10:42:50 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 08:45:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "./../lib.hpp"
 #include "./EventData.hpp"
 #include "./IEventHandler.hpp"
+#include "./../utils/Fd.hpp"
 
 #define MAX_CONNECTIONS 4096
 #define MAX_EVENTS 4096

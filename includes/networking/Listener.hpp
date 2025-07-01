@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/19 14:57:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 08:50:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "./../lib.hpp"
 #include "./../utils/Ip.hpp"
 #include "./../utils/Endpoint.hpp"
+#include "./../utils/Fd.hpp"
 #include "./../events/EventMonitoring.hpp"
 #include "./../events/IEventHandler.hpp"
 #include "./../server/ServerManager.hpp"

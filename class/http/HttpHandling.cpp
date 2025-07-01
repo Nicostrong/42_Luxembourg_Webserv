@@ -95,12 +95,10 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 					throw HttpSevereExceptions(HttpBase::SERVICE_UNAVAILABLE);
 				break;
 			case CGI_SENDING:
-				//LOG_DEB("Checking sending");
 				if (curr - this->_ts > CGI_SENDING_TIMEOUT)
 					throw HttpExceptions(HttpBase::GATEWAY_TIMEOUT);
 				break;
 			case CGI_RECEIVING:
-				//LOG_DEB("Checking receiving");
 				if (curr - this->_ts > CGI_RECEIVING_TIMEOUT)
 					throw HttpExceptions(HttpBase::GATEWAY_TIMEOUT);
 				break;
@@ -146,7 +144,6 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 					default:
 						break;
 				}
-				// Handle Cgi Logic
 			}
 			else
 			{

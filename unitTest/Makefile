@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/01 08:21:11 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/01 09:03:50 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -154,6 +154,7 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/utils/Pipe.cpp \
 					../class/utils/Ressource.cpp \
 					../class/utils/Uri.cpp \
+					../class/utils/Fd.cpp \
 					../class/events/EventData.cpp \
 					../class/events/EventMonitoring.cpp \
 					../class/http/HttpBase.cpp \

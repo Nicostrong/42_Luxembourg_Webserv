@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 15:54:39 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 08:59:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
 	this->_epollFd = epoll_create(MAX_EVENTS);
 	if (this->_epollFd == -1)
 		throw EPollFailedInitException();
+	Fd::setNoInheritance(this->_epollFd);
 }
 
 EventMonitoring::~EventMonitoring() 
