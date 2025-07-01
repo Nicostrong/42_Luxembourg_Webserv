@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 16:15:47 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 10:18:01 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -600,16 +600,18 @@ void		CheckerTokens::checkListen( void )
 
 bool		CheckerTokens::validCode( std::string code )
 {
-	int						intCode = 0;
+	size_t					intCode = 0;
 	std::istringstream		iss(code);
 
+	if (!code.empty() && code.size() != 3)
+		return (false);
 	if (!(iss >> intCode) || !iss.eof())
 	{
 		LOG_DEB(intCode);
 		return (false);
 	}
 	LOG_DEB(intCode);
-	if (intCode <= 300 || intCode > 310)
+	if (intCode < 300 || intCode >= 400)
 		return (false);
 	return (true);
 }
@@ -621,8 +623,14 @@ void		CheckerTokens::checkReturn( void )
 	while (current && current->getNext())
 	{
 		if (current->getType() == Token::DIR_K && current->getValue() == "return")
-			if (!validCode(current->getNext()->getValue()))
-				throw CheckerError("Code return not valid.");
+		{
+			current = current->getNext();
+			if (!validCode(current->getValue()))
+				throw CheckerError("Code return not valid: " + current->getValue());
+			current = current->getNext();
+			if (current->getNext() && current->getNext()->getType() != Token::SEMICOLON)
+				throw CheckerError("Extra value on return directive: " + current->getNext()->getValue());
+		}
 		current = current->getNext();
 	}
 	return ;	

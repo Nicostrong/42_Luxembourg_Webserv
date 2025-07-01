@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:34:46 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 09:39:13 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ class	Directive
 		const std::string&					getKey( void ) const;
 		const std::string&					getValue( void ) const;
 		const std::list<std::string>&		getValues( void ) const;
+		
+		size_t								getCodeReturn( void );
+
+		const std::string&					getUriReturn( void ) const;
 
 		/*	class Exception	*/
 		/*	fields empty	*/

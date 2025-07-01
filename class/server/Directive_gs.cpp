@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive_gs.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:22 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:49:49 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 10:27:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,26 @@ const std::list<std::string>&		Directive::getValues( void ) const
 	if (this->_lValue.empty())
 		throw FieldsEmpty();
 	return (this->_lValue);
+}
+
+/*
+ *	get the code of return directive
+ */
+size_t		Directive::getCodeReturn( void )
+{
+	std::stringstream	ss(getValue());
+	size_t				code;
+
+	ss >> code;	
+	return (code);
+}
+
+/*
+ *	get the uri of return
+ */
+const std::string&		Directive::getUriReturn( void ) const
+{
+	const std::list<std::string>&		lValues = getValues();
+
+	return (lValues.back());
 }

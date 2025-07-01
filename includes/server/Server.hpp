@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 12:57:58 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 09:35:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ class	Server
 
 		const Location&		getLocations( std::string path ) const;
 		const Location*		getMatchingLoc( const std::string& uri ) const;
+
 		const std::string&	getLocIndex( const Location* loc ) const;
 
 		/*	CHECKER	*/
