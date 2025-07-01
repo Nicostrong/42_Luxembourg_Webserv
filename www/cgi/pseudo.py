@@ -14,6 +14,7 @@
 import os
 import cgi
 import urllib.parse
+import html
 
 def parse_cookies():
     """Parse cookies from HTTP_COOKIE environment variable"""
@@ -81,9 +82,10 @@ def main():
     
     if existing_pseudo:
         # Cookie exists, show welcome message
+        escaped_pseudo = html.escape(existing_pseudo)
         print(f"<div class='welcome'>")
-        print(f"<h1>Bienvenu {existing_pseudo} sur le site</h1>")
-        print(f"<p>Vous êtes connecté avec le pseudo: <strong>{existing_pseudo}</strong></p>")
+        print(f"<h1>Bienvenu {escaped_pseudo} sur le site</h1>")
+        print(f"<p>Vous êtes connecté avec le pseudo: <strong>{escaped_pseudo}</strong></p>")
         print(f"<a href='/cgi/logout.py'>Se déconnecter</a>")
         print("</div>")
     else:
