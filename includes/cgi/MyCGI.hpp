@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 14:53:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 16:38:03 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ class	MyCGI:	public IEventHandler
 		Socket*			_socket;		//	socket of communication
 		Map				_mEnv;			//	map of environnement variable
 		pid_t			_pid;			//	pid parent
-		bool			_isFinish;		//	if the CGI has finished
-		bool			_endWrite;		//	if the parent has finish to write on the pipe
 		bool			_isCloseEvent;
 		bool			_isReadEvent;
 
@@ -67,6 +65,10 @@ class	MyCGI:	public IEventHandler
 		void			setParams( void );
 
 		std::string		normalizePath( const std::string& path );
+
+		void			onCgiError(int fd, EventMonitoring& em);
+		void			onEndOutput(int fd, EventMonitoring& em);
+		void			onEndInput(int fd, EventMonitoring& em);
 
 	public:
 
@@ -96,17 +98,12 @@ class	MyCGI:	public IEventHandler
 
 		pid_t			getPid( void );
 
-		bool			getIsFinish( void );
-		bool			getEndWrite( void );
-
 		/*	SETTER	*/
 		void			setPid( pid_t pid );
 		void			resetByteRead( void );
 		void			resetByteSend( void );
 		void			setByteRead( size_t bytes );
 		void			setByteSend( size_t bytes );
-		void			setIsFinish( bool value = true );
-		void			setEndWrite( bool value = true );
 
 		/*	METHODS	*/
 		void			execCGI( void );

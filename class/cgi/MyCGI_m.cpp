@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 08:31:25 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 16:11:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void		MyCGI::execCGI( void )
 		throw CGIError("Pipe error");
 	else if (this->getPid() == 0)
 	{
-		this->getPipeToCGI().closeIn();											//	on ferme le pipe=>P d ecriture du parent
-		this->getPipeFromCGI().closeOut();										//	on ferme le pipe=>C de lecture du gosse
 		if (dup2(this->getPipeToCGI().getOut(), STDIN_FILENO) == -1)
 			throw CGIError("dup2 IN");
 		this->getPipeToCGI().closeOut();										//	on ferme le pipe apres dup2 STDIN

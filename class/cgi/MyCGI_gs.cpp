@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_gs.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 11:01:08 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/01 16:15:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,22 +129,6 @@ pid_t		MyCGI::getPid( void )
 	return (this->_pid);
 }
 
-/*
- *	get the checker if the CGI is finish
- */
-bool		MyCGI::getIsFinish( void )
-{
-	return (this->_isFinish);
-}
-
-/*
- *	get the checker if all data are sending to the CGI
- */
-bool		MyCGI::getEndWrite( void )
-{
-	return (this->_endWrite);
-}
-
 /*******************************************************************************
  *							    SETTER								    	   *
 ******************************************************************************/
@@ -189,17 +173,5 @@ void		MyCGI::setByteSend( size_t bytes )
 void		MyCGI::setPid( pid_t pid )
 {
 	this->_pid = pid;
-	return ;
-}
-
-void		MyCGI::setIsFinish( bool value )
-{
-	this->_isFinish = value;
-	return ;
-}
-
-void		MyCGI::setEndWrite( bool value )
-{
-	this->_endWrite = value;
 	return ;
 }

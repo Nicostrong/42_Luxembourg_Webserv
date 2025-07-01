@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 08:59:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/01 16:33:01 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@ void EventMonitoring::monitorUpdate(int fd, uint32_t events)
 
 void EventMonitoring::unmonitor(int fd)
 {
+	if (fd <= 2)
+		return ;
+	
 	std::list<epoll_event>::iterator it = this->_openFds.begin();
 	
 	epoll_ctl(this->_epollFd, EPOLL_CTL_DEL, fd, NULL);
