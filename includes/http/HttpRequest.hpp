@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 09:55:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 09:46:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class HttpRequest : public HttpBase
 		void				setRedirect( const std::string& redirect );
 		void				setFilePath( const std::string& filePath );
 		void				setQueryParams( const std::string& queryParams );
+		void				setExtension( const std::string& extension );
 		void				setFileSize( size_t fileSize );
 		void				setContentLength( size_t length );
 		void				setTE( bool state );
@@ -53,6 +54,7 @@ class HttpRequest : public HttpBase
 		const std::string&	getRedirect( void ) const;
 		const std::string&	getFilePath( void ) const;
 		const std::string&	getQueryParams( void ) const;
+		const std::string&	getExtension( void ) const;
 		size_t				getFileSize( void ) const;
 		size_t				getContentLength( void ) const;
 		const Server*		getServer( void ) const;
@@ -73,6 +75,7 @@ class HttpRequest : public HttpBase
 		std::string			_redirect;
 		std::string			_filePath;
 		std::string			_queryParams;
+		std::string			_extension;
 		size_t				_fileSize;
 
 		//Request Body

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/12 08:28:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 09:45:52 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,11 @@ void HttpRequest::setQueryParams(const std::string& queryParams)
 	this->_queryParams = queryParams;
 }
 
+void HttpRequest::setExtension( const std::string& extension )
+{
+	this->_extension = extension;
+}
+
 void HttpRequest::setFileSize(size_t fileSize)
 {
 	this->_fileSize = fileSize;
@@ -164,6 +169,11 @@ const std::string& HttpRequest::getFilePath() const
 const std::string& HttpRequest::getQueryParams() const
 {
 	return (this->_queryParams);
+}
+
+const std::string& HttpRequest::getExtension() const
+{
+	return (this->_extension);
 }
 
 size_t HttpRequest::getFileSize() const

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 14:27:01 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 10:22:06 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,23 @@ bool	RequestHandling::ends_with( const std::string& str, const std::string& suff
 	return (false);
 }
 
+/*
+ *	CHECK CORRECTLY THE EXTENSION
+ */
 bool RequestHandling::isCGI(Socket& sock)
 {
-	std::string		uri = sock.getReq().getUri();
+	std::string		ext = sock.getReq().getExtension();
+
+	return (ext == ".py" || ext == ".php");
+	//return (RequestHandling::ends_with(extension, ".py") || RequestHandling::ends_with(extension, ".php"));
+	/*std::string		uri = sock.getReq().getUri();
 	size_t			queryPos = uri.find('?');
 
 	if (queryPos != std::string::npos)
     	uri = uri.substr(0, queryPos);
 	LOG_DEB(uri);
 
-	return (RequestHandling::ends_with(uri, ".py") || RequestHandling::ends_with(uri, ".php"));
+	return (RequestHandling::ends_with(uri, ".py") || RequestHandling::ends_with(uri, ".php"));*/
 }
 /*
 	// CGI METHODOLOGY NOT CORRECT
@@ -510,7 +517,8 @@ void	RequestHandling::setAttributes( Socket& socket )
 	const std::string&		pathTranslated = req->getPathTranslated();
 
 	req->setCgiScript(pathTranslated.substr(pathTranslated.find_last_of('/') + 1));
-	req->setCgiPath(loc->getCGIPathUri(pathTranslated));
+	//req->setCgiPath(loc->getCGIPathUri(pathTranslated));
+	req->setCgiPath(loc->getCGIPathUri(req->getExtension()));
 	req->setPathInfo(loc->getPath());
 	req->setFilePath(pathTranslated);
 	req->setRedirect(loc->getDirectiveValue("return"));

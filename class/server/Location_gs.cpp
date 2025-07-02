@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 13:36:22 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 10:26:53 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,18 @@ const std::string&		Location::getCGIPathExtension( const std::string& extension 
 }
 
 /*
- *	get the path of CGIDirective of the uri
+ *	get the path of CGIDirective of the uri	//!\\ CHECK EXTENSION
  */
 const std::string&		Location::getCGIPathUri( const std::string& uri ) const
 {
-	std::string		extension;
-	size_t			queryPos;
-	
-	extension = uri.substr(uri.find(getPath()));
-	queryPos = extension.find('?');
-	extension = extension.substr(extension.find('.'), queryPos);
-	return (this->getCGIPathExtension(extension));
+	size_t			dotPos = uri.find('.');
+	std::string		ext = uri.substr(dotPos);
+	size_t			slashPos = ext.find('/');
+
+	if (slashPos == ext.npos)
+		ext = ext.substr(0, slashPos);
+	LOG_DEB("EXTENSION LOCATION : " << ext);
+	return (this->getCGIPathExtension(ext));
 }
 
 /*

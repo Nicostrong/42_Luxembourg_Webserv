@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 14:14:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 10:26:50 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,8 @@ void HttpParser::parseStartLine(HttpRequest& req)
     std::istringstream iss(this->_slBuffer);
     std::string token;
 
-	while (iss >> token) {
+	while (iss >> token)
         tokens.push_back(token);
-    }
 	
 	if (tokens.size() != 3 || !HttpBase::canBeValidMethod(tokens.at(0)) || 
 		!HttpBase::canBeValidPath(tokens.at(1)) ||
@@ -100,6 +99,17 @@ void HttpParser::parseStartLine(HttpRequest& req)
 	if (queryPos != std::string::npos)
 		this->_queryParams = tokens.at(1).substr(queryPos + 1);
 	
+	/* add extension attribute */
+	size_t			dotPos = req.getUri().find('.');
+	std::string		ext = req.getUri().substr(dotPos);
+	size_t			slashPos = ext.find('/');
+
+	if (slashPos == ext.npos)
+		req.setExtension(ext);
+	else
+		req.setExtension(ext.substr(0, slashPos));
+
+	LOG_DEB("EXTENSION HTTPPARSER : " << req.getExtension());
 	req.setHTTP(tokens.at(2));
 }
 
