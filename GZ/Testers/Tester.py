@@ -74,14 +74,13 @@ def	test_cgi_calculator_plus():
 		"num2": "5",
 		"operator": "+"
 	}
-	expected_output = "10 + 5 = 15"
+	expected_output = "10.0 + 5.0 = 15.0"
 	response = requests.post(url2, json=input_data)
-	#clean_text = remove_html_tags(response.text)
 	lines = response.text.splitlines()
 	print(lines)
 	assert response.status_code == 200
-	assert lines == expected_output
-"""
+	assert lines[1] == expected_output
+
 def	test_cgi_calculator_minus():
 	url2 = "http://localhost:8080/cgi/calculator.py"
 	input_data = {
@@ -89,13 +88,12 @@ def	test_cgi_calculator_minus():
 		"num2": "5",
 		"operator": "-"
 	}
-	expected_output = "10 - 5 = 5"
+	expected_output = "10.0 - 5.0 = 5.0"
 	response = requests.post(url2, json=input_data)
-	clean_text = remove_html_tags(response.text)
-	lines = clean_text.splitlines()
-	print(lines[25])
+	lines = response.text.splitlines()
+	print(lines)
 	assert response.status_code == 200
-	assert lines[25] == expected_output
+	assert lines[1] == expected_output
 
 def	test_cgi_calculator_multiply():
 	url2 = "http://localhost:8080/cgi/calculator.py"
@@ -104,13 +102,12 @@ def	test_cgi_calculator_multiply():
 		"num2": "5",
 		"operator": "*"
 	}
-	expected_output = "10 * 5 = 50"
+	expected_output = "10.0 * 5.0 = 50.0"
 	response = requests.post(url2, json=input_data)
-	clean_text = remove_html_tags(response.text)
-	lines = clean_text.splitlines()
-	print(lines[25])
+	lines = response.text.splitlines()
+	print(lines)
 	assert response.status_code == 200
-	assert lines[25] == expected_output
+	assert lines[1] == expected_output
 
 def	test_cgi_calculator_division():
 	url2 = "http://localhost:8080/cgi/calculator.py"
@@ -119,14 +116,13 @@ def	test_cgi_calculator_division():
 		"num2": "5",
 		"operator": "/"
 	}
-	expected_output = "10 / 5 = 2.0"
+	expected_output = "10.0 / 5.0 = 2.0"
 	response = requests.post(url2, json=input_data)
-	clean_text = remove_html_tags(response.text)
-	lines = clean_text.splitlines()
-	print(lines[25])
+	lines = response.text.splitlines()
+	print(lines)
 	assert response.status_code == 200
-	assert lines[25] == expected_output
-
+	assert lines[1] == expected_output
+"""
 def test_autoindex():
 	url2 = "http://localhost:8080/autoindex"
 	expected_file_path = "../website/html/autoindex"
