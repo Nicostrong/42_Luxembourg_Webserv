@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 10:32:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 11:15:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ MyCGI::MyCGI( Socket& socket )
 	setEnv();
 	setParams();
 	checkCGI();
+	LOG_DEB(*this);
 	return ;
 }
 
