@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive_gs.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:22 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 10:27:00 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 09:18:09 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ const std::list<std::string>&		Directive::getValues( void ) const
 /*
  *	get the code of return directive
  */
-size_t		Directive::getCodeReturn( void )
+size_t		Directive::getCodeReturn( void ) const
 {
 	std::stringstream	ss(getValue());
 	size_t				code;

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 14:13:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 10:39:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 	{
 		case HttpParser::HTTP_HEAD_RECEIVED:
 			RequestHandling::handleHeaders(*sock);
+			if (this->_parser.getState() == HttpParser::HTTP_BODY)
+				onRead(em, sock);
 			break;
 		case HttpParser::HTTP_BODY_RECEIVED:
 			RequestHandling::handleBody(*sock);

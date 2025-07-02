@@ -17,6 +17,7 @@
 [X]-Handle upload with diffrents content types not only plain/text
 [X]-Make socket NON BLOCKING
 [X]-Catch error in cgi pipes
+[X]-Leaks on fork failed
 
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.

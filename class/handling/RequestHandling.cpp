@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 10:22:06 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 10:43:58 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ void RequestHandling::handleBody(Socket& sock)
 	HttpResponse* resp = &sock.getResp();
 	std::string	path = req->getPathTranslated();
 
-		
-	if (sock.getResp().getRespType() == HttpResponse::CGI)
+	if (resp->getRespType() == HttpResponse::REDIRECT)
+		return ;
+	
+	if (resp->getRespType() == HttpResponse::CGI)
 	{
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
@@ -181,10 +183,14 @@ bool RequestHandling::isRedirect(Socket& sock)
 		sock.getReq().getLoc()->findDirective("return");
 
 	if (!redirectDirective)
+	{
+		LOG_ERROR("here");
 		return (false);
+	}
 	sock.getReq().setRedirect(redirectDirective->getValue());
-	sock.getResp().addHeader("Location", redirectDirective->getValue() + "/");
-	sock.getResp().setStatusCode(HttpBase::FOUND);
+	sock.getResp().addHeader("Location", redirectDirective->getUriReturn());
+	LOG_DEB(redirectDirective->getCodeReturn());
+	sock.getResp().setStatusCode((HttpBase::HttpCode)redirectDirective->getCodeReturn());
 	sock.getResp().setRespType(HttpResponse::REDIRECT);
 	return (true);
 }
@@ -319,19 +325,30 @@ void RequestHandling::handleGet(Socket& sock)
 void RequestHandling::handlePost(Socket& sock)
 {
 	HttpRequest* req = &sock.getReq();
-
+	std::string	path = req->getPathTranslated();
+	
+	if (isRedirect(sock))
+	{
+		sock.getHandler().setBodyRequired(sock);
+		if (!req->isTE() && req->getContentLength() < 1)
+			handleBody(sock);
+		return ;
+	}
+	
 	if (req->getUri().size() && *req->getUri().rbegin() == '/')
 		throw HttpSevereExceptions(HttpBase::METHOD_NOT_ALLOWED);
-
-	LOG_DEB(req->getUri());
-	std::string	path = req->getPathTranslated();
+	
 	if (isCGI(sock))
 	{
+		handleBodyLength(sock);
 		LOG_DEB("IsCGI dans POST");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
-		handleBodyLength(sock);
+		
 		sock.getHandler().setBodyRequired(sock);
+		LOG_DEB(req->getContentLength());
+		if (!req->isTE() && req->getContentLength() < 1)
+			handleBody(sock);
 		return ;
 	}
 
@@ -346,7 +363,6 @@ void RequestHandling::handlePost(Socket& sock)
 			throw HttpSevereExceptions(HttpBase::UNSUPPORTED_MEDIA_TYPE);
 	}
 
-	handleBodyLength(sock);
 	checkFileExistUpload(path);
 	checkFolderExistUpload(path.substr(0, path.find_last_of('/')));
 	sock.getHandler().setBodyRequired(sock);
