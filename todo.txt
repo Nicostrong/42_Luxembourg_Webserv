@@ -18,17 +18,16 @@
 [X]-Make socket NON BLOCKING
 [X]-Catch error in cgi pipes
 [X]-Leaks on fork failed
+[X]-Handle redirection for POST/DELETE 
+    [X]-> In the config file ask for the redirection codes
 
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
        modification timestamp in hexa and y teh file content len in hexa.
 
-
-
 // Prioritary
--Handle redirection for POST/DELETE 
-    -> In the config file ask for the redirection codes
+
 -Set-Cookie issue
 -Problem with chunked response from cgi // Maybe fixed ?
 -Add custom responses errors

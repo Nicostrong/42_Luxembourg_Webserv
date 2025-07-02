@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 10:43:58 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 16:35:30 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,6 +329,7 @@ void RequestHandling::handlePost(Socket& sock)
 	
 	if (isRedirect(sock))
 	{
+		handleBodyLength(sock);
 		sock.getHandler().setBodyRequired(sock);
 		if (!req->isTE() && req->getContentLength() < 1)
 			handleBody(sock);
@@ -467,6 +468,9 @@ void RequestHandling::handleDelete(Socket& sock)
 {
 	HttpRequest* req = &sock.getReq();
 	std::string	path = sock.getReq().getPathTranslated();
+
+	if (isRedirect(sock))
+		return ;
 
 	if (req->getUri().size() && *req->getUri().rbegin() == '/')
 		throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
