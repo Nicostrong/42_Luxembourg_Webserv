@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/24 09:06:53 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/01 15:50:40 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/02 10:49:01 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 import os
 from datetime import datetime, timedelta
 
-expire_date = (datetime.utcnow() + timedelta(days=1)).strftime('%a, %d %b %Y %H:%M:%S GMT')
+expire_date = (datetime.utcnow() + timedelta(minutes=2)).strftime('%a, %d %b %Y %H:%M:%S GMT')
 
 cookies = os.environ.get('HTTP_COOKIE', '')
 

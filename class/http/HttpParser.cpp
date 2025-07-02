@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 10:26:50 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 10:59:12 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,21 @@ void HttpParser::parseStartLine(HttpRequest& req)
 	
 	/* add extension attribute */
 	size_t			dotPos = req.getUri().find('.');
-	std::string		ext = req.getUri().substr(dotPos);
-	size_t			slashPos = ext.find('/');
 
-	if (slashPos == ext.npos)
-		req.setExtension(ext);
+	if (dotPos == req.getUri().npos)
+		req.setExtension("");
 	else
-		req.setExtension(ext.substr(0, slashPos));
+	{
+		std::string		ext = req.getUri().substr(dotPos);
+		size_t			slashPos = ext.find('/');
 
-	LOG_DEB("EXTENSION HTTPPARSER : " << req.getExtension());
+		if (slashPos == ext.npos)
+			req.setExtension(ext);
+		else
+			req.setExtension(ext.substr(0, slashPos));
+
+		LOG_DEB("EXTENSION HTTPPARSER : " << req.getExtension());
+	}
 	req.setHTTP(tokens.at(2));
 }
 
