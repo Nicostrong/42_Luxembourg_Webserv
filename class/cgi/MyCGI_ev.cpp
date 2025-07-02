@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 16:45:55 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 08:53:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		std::cout << "DEBUG CGI on READ" << std::endl;
 		std::cout << "nb bytes lu: " << bytes << std::endl;
 		std::cout << "size du buff " << getRxBuffer().getBufferSize() << std::endl;
-		std::cout << "nb bytes dans le buff " << getRxBuffer().getBufferUnread() << std::endl;
-		LOG_DEB("BUFF:\n" << getRxBuffer().getDataUnread());
+		
 		std::cout << "TOTAL READ: " << getByteRead() << std::endl;
 		
 		if (bytes == -1)
@@ -44,8 +43,12 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		}
 
 		setByteRead(bytes);
+		std::cout << "nb bytes dans le buff " << getRxBuffer().getBufferUnread() << std::endl;
+		LOG_DEB("BUFF:\n" << getRxBuffer().getDataUnread());
+		
 
 		this->_rxBuffer.setBufferUsed(bytes);
+		std::cout << getRxBuffer();
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 		
 		LOG_DEB("EOF " << (getByteRead() == getRxBuffer().getBufferUnread() ? "YES" : "NOOOO"));
@@ -76,7 +79,6 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 			setByteSend(bytes);
 			this->_txBuffer.setBufferRead(bytes);
 			eof &= this->_txBuffer.isBufferRead();
-			
 		}
 		
 		if (!body || eof)

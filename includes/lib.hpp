@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 09:45:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 08:57:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ struct t_string
 #define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
 
 # if DEBUG
-#  define LOG_DEB(msg)	std::cout << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
+#  define LOG_DEB(msg)	std::cerr << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
 # else
 #  define LOG_DEB(msg)
 # endif

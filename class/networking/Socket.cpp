@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 17:52:38 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 09:04:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ Socket::~Socket()
 {
 	if (this->_fd > 2)
 		close(this->_fd);
-	LOG_DEB(this->_sockAddr.getIp().getIpString() + " closed connection");
+	
+	if (this->_handler.getCGI() && this->_handler.getCGI()->getPid() != 0)
+		LOG_DEB(this->_sockAddr.getIp().getIpString() + " closed connection");
 }
 
 bool Socket::operator==(const Socket& obj)
@@ -214,7 +216,6 @@ void Socket::onTickEvent(int fd, EventMonitoring& em)
 	}
 	catch(const MyCGI::CGIExit& e)
 	{
-		LOG_DEB("EXit 2");
 		throw EventMonitoring::EPollCatchBypass();
 	}
 	catch(const HttpExceptions& e)

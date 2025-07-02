@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 17:51:21 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 09:03:31 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void		MyCGI::execCGI( void )
 {
 	char**				cmd = this->getParams();
 	
-	LOG_DEB(*this);
 	this->getSocket().getEM().monitor(this->getPipeToCGI().getIn(), 
 			EPOLLOUT | EPOLLHUP | EPOLLRDHUP, *this);
 	this->getSocket().getEM().monitor(this->getPipeFromCGI().getOut(), 
@@ -42,7 +41,6 @@ void		MyCGI::execCGI( void )
 			throw CGIExit();
 		this->getPipeFromCGI().closeIn();										//	on ferme le pipe apres dup2 STDOUT
 		execve(cmd[0], cmd, this->getEnv());
-		LOG_DEB("EXit");
 		throw CGIExit();
 	} 
 	else

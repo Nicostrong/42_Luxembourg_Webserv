@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 17:47:29 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 08:06:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
 	this->_epollFd = epoll_create(MAX_EVENTS);
 	if (this->_epollFd == -1)
 		throw EPollFailedInitException();
-	//Fd::setNoInheritance(this->_epollFd);
+	Fd::setNoInheritance(this->_epollFd);
 }
 
 EventMonitoring::~EventMonitoring() 
-{
+{	
 	std::list<epoll_event>::const_iterator it = this->_openFds.begin();
 	while (it != _openFds.end())
 	{
@@ -128,6 +128,10 @@ void EventMonitoring::updateEvents()
 				data->onWrite();
 			}
 		}
+		catch(const EPollCatchBypass& e) 
+		{
+			throw e;
+		}
 		catch(const std::exception& e) {}
 		it++;
 	}
@@ -140,6 +144,10 @@ void EventMonitoring::updateEvents()
 		{
 			if (itTick->events & EPOLLTICK && !data->getCanceled())
 				data->onTick();
+		}
+		catch(const EPollCatchBypass& e) 
+		{
+			throw e;
 		}
 		catch(const std::exception& e) {}
 	}
