@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:55:36 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 10:59:12 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/02 11:18:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void HttpParser::parseStartLine(HttpRequest& req)
 	req.setUri(tokens.at(1).substr(0, queryPos));
 
 	if (queryPos != std::string::npos)
-		this->_queryParams = tokens.at(1).substr(queryPos + 1);
+		req.setQueryParams(tokens.at(1).substr(queryPos + 1));
 	
 	/* add extension attribute */
 	size_t			dotPos = req.getUri().find('.');
