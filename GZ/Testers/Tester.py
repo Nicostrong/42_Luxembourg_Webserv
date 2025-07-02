@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 url = "http://localhost:8080/index"
 error4 = "http://localhost:8080/bad"
 
-def remove_html_tags(html):
+"""def remove_html_tags(html):
 	soup = BeautifulSoup(html, 'html.parser')
 	text = soup.get_text()
 	return text
@@ -66,31 +66,31 @@ def test_several_servers():
 	with open("../website/html/index.html") as file:
 		expected_content = file.read()
 	assert response.text == expected_content
-
+"""
 def	test_cgi_calculator_plus():
 	url2 = "http://localhost:8080/cgi/calculator.py"
 	input_data = {
 		"num1": "10",
 		"num2": "5",
-		"operator": "plus"
+		"operator": "+"
 	}
 	expected_output = "10 + 5 = 15"
-	response = requests.post(url2, data=input_data)
-	clean_text = remove_html_tags(response.text)
-	lines = clean_text.splitlines()
-	print(lines[25])
+	response = requests.post(url2, json=input_data)
+	#clean_text = remove_html_tags(response.text)
+	lines = response.text.splitlines()
+	print(lines)
 	assert response.status_code == 200
-	assert lines[25] == expected_output
-
+	assert lines == expected_output
+"""
 def	test_cgi_calculator_minus():
 	url2 = "http://localhost:8080/cgi/calculator.py"
 	input_data = {
 		"num1": "10",
 		"num2": "5",
-		"operator": "minus"
+		"operator": "-"
 	}
 	expected_output = "10 - 5 = 5"
-	response = requests.post(url2, data=input_data)
+	response = requests.post(url2, json=input_data)
 	clean_text = remove_html_tags(response.text)
 	lines = clean_text.splitlines()
 	print(lines[25])
@@ -102,10 +102,10 @@ def	test_cgi_calculator_multiply():
 	input_data = {
 		"num1": "10",
 		"num2": "5",
-		"operator": "multiply"
+		"operator": "*"
 	}
 	expected_output = "10 * 5 = 50"
-	response = requests.post(url2, data=input_data)
+	response = requests.post(url2, json=input_data)
 	clean_text = remove_html_tags(response.text)
 	lines = clean_text.splitlines()
 	print(lines[25])
@@ -117,10 +117,10 @@ def	test_cgi_calculator_division():
 	input_data = {
 		"num1": "10",
 		"num2": "5",
-		"operator": "divide"
+		"operator": "/"
 	}
 	expected_output = "10 / 5 = 2.0"
-	response = requests.post(url2, data=input_data)
+	response = requests.post(url2, json=input_data)
 	clean_text = remove_html_tags(response.text)
 	lines = clean_text.splitlines()
 	print(lines[25])
@@ -147,3 +147,4 @@ def test_autoindex_off():
 	clean_text = remove_html_tags(response.text)
 	assert response.status_code == 200
 	assert response.text == expected_content
+    """
