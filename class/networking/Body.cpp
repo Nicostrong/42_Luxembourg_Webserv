@@ -21,8 +21,8 @@ Body::~Body( void )
 	if (!this->_fBuff.is_open())
 		return ;
 	
-    this->_fBuff.flush();
-    this->_fBuff.close();
+	this->_fBuff.flush();
+	this->_fBuff.close();
 	std::remove(this->_fName.c_str());
 	return ;
 }
@@ -227,4 +227,9 @@ Buffer&		Body::getBuffer( void )
 size_t Body::getSize()	const
 {
 	return (this->_size);
+}
+
+std::fstream& Body::getFstream()
+{
+	return (this->_fBuff);
 }

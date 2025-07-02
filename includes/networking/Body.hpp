@@ -40,6 +40,7 @@ class Body
 
 		Buffer&					getBuffer( void );
 		size_t					getSize()	const;
+		std::fstream&			getFstream();
 		
 	protected:
 		

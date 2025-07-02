@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 09:03:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/02 13:20:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ void		MyCGI::execCGI( void )
 		throw CGIError("Fork error");
 	else if (this->getPid() == 0)
 	{
+		Body* body = this->_socket->getReq().getBody();
+
+		if (body)
+			body->getFstream().close();
 		this->getPipeToCGI().closeIn();
 		this->getPipeFromCGI().closeOut();
 		if (dup2(this->getPipeToCGI().getOut(), STDIN_FILENO) == -1)
