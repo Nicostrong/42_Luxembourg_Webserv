@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 11:37:13 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/01 11:37:54 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/02 16:15:29 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ html = """
 		<title>WEBSERVER - Fish - WEBSERVER</title>
 		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
+		<script src="http://localhost:8080/scripts/cookie.js"></script>
+		<script src="http://localhost:8080/scripts/session.js"></script>
 	</head>
 	<body>
 		<header class="header">

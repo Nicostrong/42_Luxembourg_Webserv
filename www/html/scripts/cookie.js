@@ -1,75 +1,165 @@
-// Fonction pour lire un cookie spécifique
-function getCookie(name)
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cookie.js                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/02 15:21:07 by nfordoxc          #+#    #+#             */
+/*   Updated: 2025/07/02 15:43:19 by nfordoxc         ###   Luxembourg.lu     */
+/*                                                                            */
+/* ************************************************************************** */
+
+// === GESTION DES COOKIES ===
+class CookieManager
 {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2)
-		{
-        return decodeURIComponent(parts.pop().split(';').shift());
+    static getCookie(name)
+    {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2)
+            return decodeURIComponent(parts.pop().split(';').shift());
+        return null;
     }
-    return null;
-}
-
-// Fonction pour mettre à jour l'affichage du statut
-function updateStatusDisplay()
-{
-    const pseudo = getCookie('pseudo') || 'Unknown';
-    const statusMessage = document.getElementById('status-message');
     
-    if (statusMessage)
-	{
-        if (pseudo === 'Unknown')
-		{
-            statusMessage.textContent = 'Vous naviguez en mode anonyme';
-        }
-		else
-		{
-            statusMessage.textContent = `Connecte en tant que: ${pseudo}`;
-        }
+    static setCookie(name, value, maxAge = 1800)
+    {
+        document.cookie = `${name}=${encodeURIComponent(value)}; Path=/; Max-Age=${maxAge}`;
+    }
+    
+    static deleteCookie(name)
+    {
+        document.cookie = `${name}=; Path=/; Max-Age=0`;
+    }
+    
+    static getAllCookies()
+    {
+        const cookies = {};
+        document.cookie.split(';').forEach(cookie =>
+        {
+            const [key, value] = cookie.trim().split('=');
+            if (key && value)
+                cookies[key] = decodeURIComponent(value);
+        });
+        return cookies;
+    }
+    
+    static debugCookies()
+    {
+        console.log('=== DEBUG COOKIES ===');
+        console.log('Document.cookie:', document.cookie);
+        console.log('Tous les cookies:', this.getAllCookies());
+        console.log('Cookie pseudo:', this.getCookie('pseudo'));
+        console.log('Cookie session_id:', this.getCookie('session_id'));
     }
 }
 
-// Fonction pour mettre à jour tous les éléments avec le pseudo
-function updateAllPseudoElements()
+// === GESTION DE L'INTERFACE UTILISATEUR ===
+class UIManager
 {
-    const pseudo = getCookie('pseudo') || 'Unknown';
-    
-    // Liste des IDs d'éléments à mettre à jour
-    const pseudoElements =
-	[
-        'pseudo-display',
-        'pseudo-guest', 
-        'pseudo-user',
-        'pseudo-welcome',
-        'pseudo-footer',
-        'current-user',
-        'user-name'
-    ];
-    
-    pseudoElements.forEach(id =>
-	{
-        const element = document.getElementById(id);
-        if (element) {
-            element.textContent = pseudo;
+    static updateStatusDisplay()
+    {
+        const pseudo = CookieManager.getCookie('pseudo') || 'Unknown';
+        const statusMessage = document.getElementById('status-message');
+        
+        if (statusMessage)
+        {
+            if (pseudo === 'Unknown')
+                statusMessage.textContent = 'Vous naviguez en mode anonyme';
+            else
+                statusMessage.textContent = `Connecte en tant que: ${pseudo}`;
         }
-    });
+    }
     
-    // Mettre à jour le statut
-    updateStatusDisplay();
+    static updateSectionVisibility()
+    {
+        const pseudo = CookieManager.getCookie('pseudo');
+        const loginSection = document.getElementById('login-section');
+        const userSection = document.getElementById('user-section');
+        
+        if (pseudo && pseudo !== 'Unknown')
+        {
+            if (loginSection)
+                    loginSection.style.display = 'none';
+            if (userSection)
+            {
+                userSection.style.display = 'block';
+                userSection.classList.remove('hidden');
+            }
+        }
+        else
+        {
+            if (loginSection)
+                loginSection.style.display = 'block';
+            if (userSection)
+            {
+                userSection.style.display = 'none';
+                userSection.classList.add('hidden');
+            }
+        }
+    }
+    
+    static updateAllPseudoElements()
+    {
+        const pseudo = CookieManager.getCookie('pseudo') || 'Unknown';
+        
+        const pseudoElements = [
+            'pseudo-display',
+            'pseudo-guest', 
+            'pseudo-user',
+            'pseudo-welcome',
+            'pseudo-footer',
+            'current-user',
+            'user-name'
+        ];
+        
+        pseudoElements.forEach(id =>
+        {
+            const element = document.getElementById(id);
+            if (element)
+                element.textContent = pseudo;
+        });
+        
+        this.updateStatusDisplay();
+        this.updateSectionVisibility();
+        
+        window.dispatchEvent(new CustomEvent('pseudoChanged', { 
+            detail: { pseudo: pseudo } 
+        }));
+    }
+    
+    static init()
+    {
+        this.updateAllPseudoElements();
+        
+        setInterval(() =>
+        {
+            this.updateAllPseudoElements();
+        }, 1000);
+        
+        console.log('CookieManager et UIManager initialises');
+    }
 }
 
-// Initialiser au chargement de la page
+// === INITIALISATION ===
 document.addEventListener('DOMContentLoaded', function()
 {
-    updateAllPseudoElements();
+    UIManager.init();
+    CookieManager.debugCookies();
 });
 
-// Vérifier les changements de cookies périodiquement
-setInterval(updateAllPseudoElements, 1000);
+// === FONCTIONS GLOBALES POUR COMPATIBILITÉ ===
+function getCookie(name)
+{
+    return CookieManager.getCookie(name);
+}
 
-// Fonction utilitaire pour débugger les cookies
+function updateAllPseudoElements()
+{
+    UIManager.updateAllPseudoElements();
+}
+
 function debugCookies()
 {
-    console.log('Tous les cookies:', document.cookie);
-    console.log('Cookie pseudo:', getCookie('pseudo'));
+    CookieManager.debugCookies();
 }

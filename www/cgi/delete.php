@@ -63,6 +63,8 @@ function formatBytes($size, $precision = 2) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Gestionnaire de fichiers - Répertoire <?php echo htmlspecialchars($directory); ?></title>
+	<script src="http://localhost:8080/scripts/cookie.js"></script>
+	<script src="http://localhost:8080/scripts/session.js"></script>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
