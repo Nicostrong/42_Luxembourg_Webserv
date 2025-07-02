@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 url = "http://localhost:8080/index"
 error4 = "http://localhost:8080/bad"
 
-"""def remove_html_tags(html):
+def remove_html_tags(html):
 	soup = BeautifulSoup(html, 'html.parser')
 	text = soup.get_text()
 	return text
@@ -143,4 +143,3 @@ def test_autoindex_off():
 	clean_text = remove_html_tags(response.text)
 	assert response.status_code == 200
 	assert response.text == expected_content
-    """
