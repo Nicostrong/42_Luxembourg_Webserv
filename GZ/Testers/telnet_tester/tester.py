@@ -7,8 +7,8 @@ PORT = 2121
 if len(sys.argv) < 2:
     request = "GET / HTTP/1.1\r\nHost: localhost\r\n\r\n"
 else:
-    request = f"GET {sys.argv[1]} HTTP/1.1\r\nHost: {sys.argv[3]}\r\n\r\n"
-    PORT = int(sys.argv[2])
+    request = f"GET {sys.argv[3]} HTTP/1.1\r\nHost: {sys.argv[2]}\r\n\r\n"
+    PORT = int(sys.argv[1])
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
