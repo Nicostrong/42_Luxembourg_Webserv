@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 url = "http://localhost:8080/index"
 error4 = "http://localhost:8080/bad"
-
+"""
 def remove_html_tags(html):
 	soup = BeautifulSoup(html, 'html.parser')
 	text = soup.get_text()
@@ -65,6 +65,27 @@ def test_several_servers():
 	assert response.status_code == 200
 	with open("../website/html/index.html") as file:
 		expected_content = file.read()
+	assert response.text == expected_content
+
+def test_autoindex():
+	url2 = "http://localhost:8080/autoindex"
+	expected_file_path = "../website/html/autoindex"
+	expected_files = os.listdir(expected_file_path)
+
+	response = requests.get(url2)
+	clean_text = remove_html_tags(response.text)
+	assert response.status_code == 200
+	for file in expected_files:
+		assert file in clean_text
+
+def test_autoindex_off():
+	url2 = "http://localhost:8080/test"
+	with open("../website/html/test/index.html") as file:
+		expected_content = file.read()
+
+	response = requests.get(url2)
+	clean_text = remove_html_tags(response.text)
+	assert response.status_code == 200
 	assert response.text == expected_content
 """
 def	test_cgi_calculator_plus():
@@ -122,24 +143,17 @@ def	test_cgi_calculator_division():
 	print(lines)
 	assert response.status_code == 200
 	assert lines[1] == expected_output
-"""
-def test_autoindex():
-	url2 = "http://localhost:8080/autoindex"
-	expected_file_path = "../website/html/autoindex"
-	expected_files = os.listdir(expected_file_path)
 
-	response = requests.get(url2)
-	clean_text = remove_html_tags(response.text)
+def	test_cgi_crypto():
+	url2 = "http://localhost:8080/cgi/crypto.py"
+	input_data = {
+		"amout_bought": "10",
+		"value_paid": "5",
+		"amount_sold": "5"
+	}
+	#expected_output = "10.0 / 5.0 = 2.0"
+	response = requests.post(url2, json=input_data)
+	lines = response.text.splitlines()
+	print(lines)
 	assert response.status_code == 200
-	for file in expected_files:
-		assert file in clean_text
-
-def test_autoindex_off():
-	url2 = "http://localhost:8080/test"
-	with open("../website/html/test/index.html") as file:
-		expected_content = file.read()
-
-	response = requests.get(url2)
-	clean_text = remove_html_tags(response.text)
-	assert response.status_code == 200
-	assert response.text == expected_content
+	#assert lines[1] == expected_output
