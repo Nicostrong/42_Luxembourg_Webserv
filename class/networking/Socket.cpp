@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/03 09:12:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:05:26 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void Socket::setError(HttpBase::HttpCode code, EventMonitoring& em)
 		this->_resp.setStatusCode(code);
 		try
 		{
-			if (this->_req.getCustomErrorPage())
+			if (this->_req.getCustomErrorPage() || !this->_req.getServer())
 				this->_req.setCustomErrorPage(false);
 			else
 			{
