@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 13:17:26 by gzenner           #+#    #+#              #
-#    Updated: 2025/07/03 13:24:40 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/03 13:46:17 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,6 @@ day = int(birthday[0])
 month = int(birthday[1])
 year = int(birthday[2])
 
-days_left = (65 - (2025 - year - 20))*365
+days_left = (40 - (2025 - year - 20))*365
 
 print(f"You got {days_left} days left to work before retirement.:(")
