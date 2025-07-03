@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 08:53:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:58:04 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,10 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 		if (this->getPipeFromCGI().getOut() == fd)
 			this->_isCloseEvent = true;
 		else
+		{
+			em.unmonitor(this->getPipeToCGI().getIn());
 			this->getPipeToCGI().closeIn();
+		}
 	}
 	catch(const std::exception& e)
 	{
