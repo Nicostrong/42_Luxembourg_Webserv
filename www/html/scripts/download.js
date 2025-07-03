@@ -67,9 +67,9 @@ function displayFiles(files)
 				<td>${formatBytes(file.size)}</td>
 				<td>${formatDate(file.modified)}</td>
 				<td>
-					<button class="btn-danger" onclick="deleteFile('${escapeForAttribute(file.name)}')">
-						Supprimer
-					</button>
+					<a class="btn-primary" href="/cgi/download.php?filename=${encodeURIComponent(file.name)}">
+						Download
+					</a>
 				</td>
 			</tr>
 		`;

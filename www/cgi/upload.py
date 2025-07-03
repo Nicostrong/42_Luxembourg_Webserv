@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/03 10:13:29 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/03 16:07:24 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -186,26 +186,26 @@ def response():
 	html = f"""
 <html>
 	<head><title>WEBSERVER - upload result - WEBSERVER</title>
-		<link rel="stylesheet" href="/styles/style.css">
-		<link rel="stylesheet" href="/styles/form.css">
-		<link rel="icon" href="/images/favicon.png" type="image/png">
-		<script src="/scripts/cookie.js"></script>
+		<link rel="stylesheet" href="../styles/style.css">
+		<link rel="stylesheet" href="../styles/form.css">
+		<link rel="icon" href="../images/favicon.png" type="image/png">
+		<script src="../scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">
-			<a href="index.html" class="banner-link">
+			<a href="../index.html" class="banner-link">
 				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
 			</a>
 		</header>
 		<nav class="navbar">
-			<a	href="upload.html">Upload</a>
-			<a	href="download.html">Download</a>
-			<a	href="delete.html">Delete</a>
-			<a	href="new.html">New</a>
-			<a	href="../cgi/hello_world.py">Hello World Python</a>
-			<a	href="../cgi/hello_world.php">Hello World PHP</a>
-			<a	href="../cgi/timeout.py">Timeout</a>
-			<a	href="../cgi/fish.py">Fish</a>
+			<a	href="../upload.html">Upload</a>
+			<a	href="../download.html">Download</a>
+			<a	href="../delete.html">Delete</a>
+			<a	href="../new.html">New</a>
+			<a	href="/cgi/hello_world.py">Hello World Python</a>
+			<a	href="/cgi/hello_world.php">Hello World PHP</a>
+			<a	href="/cgi/timeout.py">Timeout</a>
+			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="upload-container">
 			{texte}
@@ -213,7 +213,6 @@ def response():
 			<div class="info">
 				<h3>Upload Information:</h3>
 				<p>All file types are accepted</p>
-				<p>Maximum file size: {MAX_FILE_SIZE // (1024*1024)}MB</p>
 			</div>
 		</div>
 	</body>

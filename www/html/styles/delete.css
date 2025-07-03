@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 11:40:25 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/30 11:44:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/03 15:14:34 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 	padding: 30px;
 	border-radius: 8px;
 	box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-h1 {
-	color: #333;
-	border-bottom: 2px solid #007cba;
-	padding-bottom: 10px;
 }
 
 .refresh-btn {

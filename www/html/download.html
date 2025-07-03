@@ -2,7 +2,9 @@
 	<head>
 		<title>WEBSERVER - download - WEBSERVER</title>
 		<link rel="stylesheet" href="/styles/style.css">
+		<link rel="stylesheet" href="/styles/delete.css">
 		<link rel="icon" href="/images/favicon.png" type="image/png">
+		<script src="/scripts/download.js"></script>
 		<script src="/scripts/cookie.js"></script>
 	</head>
 	<body>
@@ -22,13 +24,25 @@
 			<a	href="../cgi/fish.py">Fish</a>
 		</nav>
 		<div class="container">
-			<h1>DOWNLOAD</h1>
-			<br>
+			<h1>Gestionnaire de fichiers</h1>
+			
+			<div class="directory-info">
+				<strong>Directory :</strong> files<br>
+				<strong>Number of files :</strong> <span class="file-count" id="fileCount">0</span>
+			</div>
+			
+			<button class="refresh-btn" onclick="loadFiles()">Refreshing</button>
+			
+			<div id="message" class="alert"></div>
+			<div id="loading" class="loading">Loading ...</div>
+			
+			<div id="fileList"></div>
 			<div id="status-section" class="user-status">
 				<div class="info">
 					<span id="status-message">Chargement...</span>
 				</div>
 			</div>
+		</div>
 		</div>
 	</body>
 </html>

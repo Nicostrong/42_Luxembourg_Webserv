@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/03 10:58:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 15:45:35 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
 									this->_rxBuffer.getBufferUnused());
 
-		std::cout << "DEBUG CGI on READ" << std::endl;
-		std::cout << "nb bytes lu: " << bytes << std::endl;
-		std::cout << "size du buff " << getRxBuffer().getBufferSize() << std::endl;
+		//std::cout << "DEBUG CGI on READ" << std::endl;
+		//std::cout << "nb bytes lu: " << bytes << std::endl;
+		//std::cout << "size du buff " << getRxBuffer().getBufferSize() << std::endl;
 		
-		std::cout << "TOTAL READ: " << getByteRead() << std::endl;
+		//std::cout << "TOTAL READ: " << getByteRead() << std::endl;
 		
 		if (bytes == -1)
 			throw CGIError("Error reading pipe from GCI");
@@ -43,16 +43,12 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		}
 
 		setByteRead(bytes);
-		std::cout << "nb bytes dans le buff " << getRxBuffer().getBufferUnread() << std::endl;
-		LOG_DEB("BUFF:\n" << getRxBuffer().getDataUnread());
+		//LOG_DEB("BUFF:\n" << getRxBuffer().getDataUnread());
 		
 
 		this->_rxBuffer.setBufferUsed(bytes);
-		std::cout << getRxBuffer();
+		//std::cout << getRxBuffer();
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
-		
-		LOG_DEB("EOF " << (getByteRead() == getRxBuffer().getBufferUnread() ? "YES" : "NOOOO"));
-		LOG_DEB("buff unread: " << getRxBuffer().getBufferUnread());
 	}
 	catch(const std::exception& e)
 	{

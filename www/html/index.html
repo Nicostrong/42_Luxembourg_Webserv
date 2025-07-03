@@ -4,6 +4,7 @@
 		<link rel="stylesheet" href="/styles/style.css">
 		<link rel="icon" href="/images/favicon.png" type="image/png">
 		<script src="/scripts/cookie.js"></script>
+		<script src="/scripts/validation_time_cookie.js"></script>
 		<script src="../cgi/create_session.php"></script>
 	</head>
 	<body>
@@ -29,16 +30,19 @@
 			<div id="login-section" class="form-container">
 				<p><strong>Bonjour <span id="pseudo-guest">Unknown</span> !</strong></p>
 				<p>Connectez-vous pour personnaliser votre experience</p>
-				<form method="GET" action="/cgi/set_cookie.py">
+				<form method="GET" action="/cgi/set_cookie.py" onsubmit="return validateDuration()">
 					<div>
 						<input type="text" name="pseudo" placeholder="Entrez votre pseudo" required maxlength="50" minlength="2">
+					</div>
+					<div>
+						<input type="number" name="duration" id="duration" placeholder="Duree (en secondes)" min="60" required>
 					</div>
 					<div>
 						<button type="submit">Se connecter</button>
 					</div>
 				</form>
 				<div class="info">
-					Votre pseudo sera sauvegarde pour les prochaines visites.
+					Le pseudo sera sauvegarde avec un cookie valide pendant la duree specifiee (minimum 60s).
 				</div>
 			</div>
 			<div id="user-section" class="hidden">
