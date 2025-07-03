@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/03 08:30:18 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/03 08:33:23 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ Server::~Server( void )
 	std::list<Directive *>::iterator				itDir;
 	std::map<std::string, Location *>::iterator		itLoc;
 
-	//cleanup();
 	for ( itDir = this->_lDirectives.begin(); itDir != this->_lDirectives.end(); ++itDir)
 		delete *itDir;
 	this->_lDirectives.clear();

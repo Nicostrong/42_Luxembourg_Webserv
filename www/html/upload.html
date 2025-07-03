@@ -1,32 +1,31 @@
 <html>
 	<head>
 		<title>WEBSERVER - upload - WEBSERVER</title>
-		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
-		<link rel="stylesheet" href="http://localhost:8080/styles/form.css">
-		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
-		<script src="http://localhost:8080/scripts/form.js"></script>
-		<script src="http://localhost:8080/scripts/cookie.js"></script>
-		<script src="http://localhost:8080/scripts/session.js"></script>
+		<link rel="stylesheet" href="/styles/style.css">
+		<link rel="stylesheet" href="/styles/form.css">
+		<link rel="icon" href="/images/favicon.png" type="image/png">
+		<script src="/scripts/form.js"></script>
+		<script src="/scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">
-			<a href="http://localhost:8080/index.html" class="banner-link">
+			<a href="/index.html" class="banner-link">
 				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
 			</a>
 		</header>
 		<nav class="navbar">
-			<a	href="http://localhost:8080/upload.html">Upload</a>
-			<a	href="http://localhost:8080/download.html">Download</a>
-			<a	href="http://localhost:8080/delete.html">Delete</a>
-			<a	href="http://localhost:8080/new.html">New</a>
-			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
-			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
-			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
-			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
+			<a	href="/upload.html">Upload</a>
+			<a	href="/download.html">Download</a>
+			<a	href="/delete.html">Delete</a>
+			<a	href="/new.html">New</a>
+			<a	href="../cgi/hello_world.py">Hello World Python</a>
+			<a	href="../cgi/hello_world.php">Hello World PHP</a>
+			<a	href="../cgi/timeout.py">Timeout</a>
+			<a	href="../cgi/fish.py">Fish</a>
 		</nav>
 		<div class="upload-container">
 			<h2>Choose your upload method:</h2>
-			<form id="uploadForm" action="http://localhost:8080/cgi/upload.py" method="post" enctype="multipart/form-data">
+			<form id="uploadForm" action="../cgi/upload.py" method="post" enctype="multipart/form-data">
 				<div class="upload-methods">
 					<div class="method-section">
 						<div class="method-title">Individual File Selection</div>

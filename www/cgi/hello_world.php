@@ -8,8 +8,7 @@ $html = '
 		<title>WEBSERVER - Hello World PHP - WEBSERVER</title>
 		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
-		<script src="http://localhost:8080/scripts/cookie.js"></script>
-		<script src="http://localhost:8080/scripts/session.js"></script>
+		<script src="/scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">

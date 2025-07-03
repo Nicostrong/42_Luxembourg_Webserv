@@ -63,8 +63,7 @@ function formatBytes($size, $precision = 2) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Gestionnaire de fichiers - Répertoire <?php echo htmlspecialchars($directory); ?></title>
-	<script src="http://localhost:8080/scripts/cookie.js"></script>
-	<script src="http://localhost:8080/scripts/session.js"></script>
+	<script src="/scripts/cookie.js"></script>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -181,18 +180,18 @@ function formatBytes($size, $precision = 2) {
 </head>
 <body>
 	<header class="header">
-			<a href="http://localhost:8080/index.html" class="banner-link">
+			<a href="/index.html" class="banner-link">
 				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
 			</a>
 		</header>
 		<nav class="navbar">
-			<a	href="http://localhost:8080/upload.html">Upload</a>
-			<a	href="http://localhost:8080/download.html">Download</a>
-			<a	href="http://localhost:8080/delete.html">Delete</a>
-			<a  href="http://localhost:8080/new.html">New</a>
-			<a	href="http://localhost:8080/cgi/hello_world.py">Hello World Python</a>
-			<a	href="http://localhost:8080/cgi/hello_world.php">Hello World PHP</a>
-			<a	href="http://localhost:8080/cgi/timeout.py">Timeout</a>
+			<a	href="/upload.html">Upload</a>
+			<a	href="/download.html">Download</a>
+			<a	href="/delete.html">Delete</a>
+			<a  href="/new.html">New</a>
+			<a	href="../cgi/hello_world.py">Hello World Python</a>
+			<a	href="../cgi/hello_world.php">Hello World PHP</a>
+			<a	href="../cgi/timeout.py">Timeout</a>
 		</nav>
 	<div class="container">
 		<h1>📁 Gestionnaire de fichiers</h1>

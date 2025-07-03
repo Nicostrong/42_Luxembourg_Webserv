@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 11:37:13 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/02 16:15:29 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/03 10:14:19 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,8 +23,7 @@ html = """
 		<title>WEBSERVER - Fish - WEBSERVER</title>
 		<link rel="stylesheet" href="http://localhost:8080/styles/style.css">
 		<link rel="icon" href="http://localhost:8080/images/favicon.png" type="image/png">
-		<script src="http://localhost:8080/scripts/cookie.js"></script>
-		<script src="http://localhost:8080/scripts/session.js"></script>
+		<script src="/scripts/cookie.js"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -43,6 +42,7 @@ html = """
 			<a	href="http://localhost:8080/cgi/fish.py">Fish</a>
 		</nav>
 		<h1>Fish in Python !</h1>
+		<div class="container></div>
 	</body>
 </html>
 """
