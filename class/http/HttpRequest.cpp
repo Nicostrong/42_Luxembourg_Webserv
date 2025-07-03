@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:23:39 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 09:45:52 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/03 09:16:57 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/http/HttpRequest.hpp"
 
-HttpRequest::HttpRequest() : _loc(NULL), _isTE(false), _contentLength(0), 
-	_server(NULL), _body(NULL) {}
+HttpRequest::HttpRequest() : _loc(NULL), _customErrorPage(false), _isTE(false), 
+	_contentLength(0), _server(NULL), _body(NULL) {}
 
 HttpRequest::HttpRequest(const std::string& remoteIp) : HttpBase(), 
-	_remoteIp(remoteIp), _loc(NULL), _isTE(false), _contentLength(0), 
-	_server(NULL), _body(NULL) {}
+	_remoteIp(remoteIp), _loc(NULL), _customErrorPage(false), _isTE(false), 
+	_contentLength(0), _server(NULL), _body(NULL) {}
 
 HttpRequest::HttpRequest(const HttpRequest &obj) : HttpBase(obj)
 {
@@ -48,6 +48,8 @@ HttpRequest &HttpRequest::operator=(const HttpRequest &obj)
 		this->_filePath = obj._filePath;
 		this->_queryParams = obj._queryParams;
 		this->_fileSize = obj._fileSize;
+		this->_customErrorPage = obj._customErrorPage;
+		this->_customErrorPagePath = obj._customErrorPagePath;
 		this->_isTE = obj._isTE;
 		this->_contentLength = obj._contentLength;
 		this->_body = obj._body;
@@ -126,6 +128,16 @@ void HttpRequest::setBody(Body *body)
 	this->_body = body;
 }
 
+void HttpRequest::setCustomErrorPage(bool state)
+{
+	this->_customErrorPage = state;
+}
+
+void HttpRequest::setCustomErrroPagePath(const std::string& path)
+{
+	this->_customErrorPagePath = path;
+}
+
 const std::string& HttpRequest::getRemotIp( void ) const
 {
 	return (this->_remoteIp);
@@ -199,6 +211,16 @@ Body* HttpRequest::getBody() const
 bool HttpRequest::isTE() const
 {
 	return (this->_isTE);
+}
+
+bool HttpRequest::getCustomErrorPage() const
+{
+	return (this->_customErrorPage);
+}
+
+const std::string& HttpRequest::getCustomErrroPagePath() const
+{
+	return (this->_customErrorPagePath);
 }
 
 /*******************************************************************************

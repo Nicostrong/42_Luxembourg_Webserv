@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 09:04:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 09:12:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,26 @@ void Socket::setError(HttpBase::HttpCode code, EventMonitoring& em)
 		this->_txBuffer.reset();
 		this->_resp.setRespType(HttpResponse::ERROR);
 		this->_resp.setStatusCode(code);
+		try
+		{
+			if (this->_req.getCustomErrorPage())
+				this->_req.setCustomErrorPage(false);
+			else
+			{
+				struct stat infos;
+				std::string path = this->_req.getServer()->getPathError(code);
+				this->_req.setCustomErrroPagePath(path);
+				this->_req.setCustomErrorPage(true);
+
+				if (stat(path.c_str(), &infos) == -1 || !S_ISREG(infos.st_mode) ||
+					access(path.c_str(), R_OK) == -1)
+					this->_req.setCustomErrorPage(false);
+				else
+					this->_resp.addHeader("Content-Length", infos.st_size);
+			}
+		}
+		catch (const std::exception& ex) {}
+
 		this->getHandler().getResponseHandling().init(*this);
 		em.monitorUpdate(this->_fd, POLLOUT | EPOLLTICK | POLLHUP | POLLRDHUP);
 	}

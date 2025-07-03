@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 16:35:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 08:32:46 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,10 +183,8 @@ bool RequestHandling::isRedirect(Socket& sock)
 		sock.getReq().getLoc()->findDirective("return");
 
 	if (!redirectDirective)
-	{
-		LOG_ERROR("here");
 		return (false);
-	}
+	
 	sock.getReq().setRedirect(redirectDirective->getValue());
 	sock.getResp().addHeader("Location", redirectDirective->getUriReturn());
 	LOG_DEB(redirectDirective->getCodeReturn());

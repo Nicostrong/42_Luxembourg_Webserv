@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 09:46:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/03 09:16:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ class HttpRequest : public HttpBase
 		void				setTE( bool state );
 		void				setServer( const Server& server );
 		void				setBody( Body* body );
+		void				setCustomErrorPage(bool state);
+		void				setCustomErrroPagePath(const std::string& path);
 		const std::string&	getRemotIp( void ) const;
 		const Location* 	getLoc( void ) const;
 		const std::string&	getPathTranslated( void ) const;
@@ -60,6 +62,8 @@ class HttpRequest : public HttpBase
 		const Server*		getServer( void ) const;
 		bool				isTE( void ) const;
 		Body*				getBody( void ) const;
+		bool				getCustomErrorPage() const;
+		const std::string&	getCustomErrroPagePath() const;
 		
 	private:
 	
@@ -77,7 +81,9 @@ class HttpRequest : public HttpBase
 		std::string			_queryParams;
 		std::string			_extension;
 		size_t				_fileSize;
-
+		std::string			_customErrorPagePath;
+		bool				_customErrorPage;
+		
 		//Request Body
 		bool				_isTE;
 		size_t				_contentLength;

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:46:11 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 10:48:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 09:14:19 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,24 @@ void ResponseHandling::init(Socket& sock)
             }
             break;
         case HttpResponse::ERROR:
-			sock.getResp().sendDefaultErrorPage(sock.getTxBuffer());
-			sock.setReset();
-			this->_state = SENT;
+			if (sock.getReq().getCustomErrorPage())
+			{
+				try
+            	{
+					this->_staticFile = new File(sock.getReq().getCustomErrroPagePath());
+					sock.getResp().sendHead(sock.getTxBuffer());
+				}
+				catch(const std::exception& e)
+				{
+					throw HttpExceptions(sock.getReq().getStatusCode());
+				}
+			}
+			else
+			{
+				sock.getResp().sendDefaultErrorPage(sock.getTxBuffer());
+				sock.setReset();
+				this->_state = SENT;
+			}
 			break;
         default:
 			break;

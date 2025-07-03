@@ -20,7 +20,7 @@
 [X]-Leaks on fork failed
 [X]-Handle redirection for POST/DELETE 
     [X]-> In the config file ask for the redirection codes
-
+[X]-Add custom responses errors
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
@@ -29,8 +29,8 @@
 // Prioritary
 
 -Set-Cookie issue
+-Set body size limit
 -Problem with chunked response from cgi // Maybe fixed ?
--Add custom responses errors
 
 //Nico
 
