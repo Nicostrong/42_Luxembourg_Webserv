@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 09:44:20 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:17:43 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 	bool isStatusFound = false;
 	bool mandatoryFound = false;
 	bool isEofDelimiter = true;
+
+	resp->setStatusCode(HttpBase::OK);
 	for (it = headers.begin(); it != headers.end(); ++it)
 	{
 		std::string name = (*it).first;
