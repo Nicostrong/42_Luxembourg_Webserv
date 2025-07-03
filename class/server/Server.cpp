@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:19 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 12:56:37 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/03 08:30:18 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  *	Server constructor with tokens in argument
  */
 Server::Server( Token*& serverTokensConfig) 
-	: _maxClient(1), _maxSizeBody(1024), _path("/www/html"),
+	: _maxClient(256), _maxSizeBody(1048576), _path("/www/html"),
 	_index("index.html"), _serverIp(Ip(SERVER_IP))
 {
 	try
