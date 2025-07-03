@@ -1,6 +1,11 @@
 <?php
+
 session_start();
-$_SESSION["username"] = "testuser";
-echo "Hello " . $_SESSION["username"] . " your session_id = " . session_id();
-session_destroy();
+if (!isset($_SESSION['PHPSESSID']))
+{
+    $_SESSION['PHPSESSID'] = session_id();
+}
+http_response_code(200);
+header("Content-Type: text/html; charset=utf-8");
+
 ?>

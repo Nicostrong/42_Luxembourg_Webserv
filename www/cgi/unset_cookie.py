@@ -6,30 +6,30 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 15:22:48 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/03 10:13:37 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/03 11:01:31 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
 #!/usr/bin/env python3
 import os
-from urllib.parse import unquote
-
-http_cookie = os.environ.get('HTTP_COOKIE', '')
-
-if http_cookie:
-	for cookie in http_cookie.split(';'):
-		cookie = cookie.strip()
-		if cookie.startswith('pseudo='):
-		current_pseudo = cookie.split('=', 1)[1]
-		pseudo = unquote(current_pseudo)
-		break
+#from urllib.parse import unquote
+#
+#http_cookie = os.environ.get('HTTP_COOKIE', '')
+#
+#if http_cookie:
+#	for cookie in http_cookie.split(';'):
+#		cookie = cookie.strip()
+#		if cookie.startswith('pseudo='):
+#		current_pseudo = cookie.split('=', 1)[1]
+#		pseudo = unquote(current_pseudo)
+#		break
 
 print("Status: 200", end='\r\n')
 print("Content-Type: text/html; charset=utf-8", end='\r\n')
 print("Set-Cookie: pseudo=; Path=/; max-age=0", end='\r\n')
 print("\r\n")
 
-html = f"""
+html = """
 <html>
 	<head><title>WEBSERVER - unset cookie - WEBSERVER</title>
 		<link rel="stylesheet" href="/styles/style.css">
@@ -54,12 +54,12 @@ html = f"""
 			<a	href="../cgi/fish.py">Fish</a>
 		</nav>
 		<div class="container">
-			<h1>Cookie unset with pseudo {pseudo}</h1>
+			<h1>Cookie unset</h1>
 			<h10>redirection to index in 10 secondes ...</h10>
 			<script>
-				setTimeout(function() {{
+				setTimeout(function() {
 				window.location.href = '/index.html';
-				}}, 10000);
+				}, 10000);
 
 				console.log('Redirection programmée dans 10 secondes...');
 			</script>
