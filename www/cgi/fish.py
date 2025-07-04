@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 11:37:13 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/04 09:57:17 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/04 11:17:42 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,17 +33,17 @@ html = """
 			</a>
 		</header>
 		<nav class="navbar">
-			<a	href="/upload.html">Upload</a>
-			<a	href="/download.html">Download</a>
-			<a	href="/delete.html">Delete</a>
-			<a	href="/new.html">New</a>
+			<a	href="/html/upload.html">Upload</a>
+			<a	href="/html/download.html">Download</a>
+			<a	href="/html/delete.html">Delete</a>
+			<a	href="/html/new.html">New</a>
 			<a	href="/cgi/hello_world.py">Hello World Python</a>
 			<a	href="/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="/cgi/timeout.py">Timeout</a>
 			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
-		<h1>Fish in Python !</h1>
-		<div class="container>
+		<div class="container">
+			<h1>April Fish in Python ! (looking the response code ;) )</h1>
 			<div id="status-section" class="user-status">
 				<div class="info">
 					<span id="status-message">Chargement...</span>

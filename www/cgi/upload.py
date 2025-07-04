@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/04 09:58:15 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/04 11:18:07 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -199,10 +199,10 @@ def response():
 			</a>
 		</header>
 		<nav class="navbar">
-			<a	href="/upload.html">Upload</a>
-			<a	href="/download.html">Download</a>
-			<a	href="/delete.html">Delete</a>
-			<a	href="/new.html">New</a>
+			<a	href="/html/upload.html">Upload</a>
+			<a	href="/html/download.html">Download</a>
+			<a	href="/html/delete.html">Delete</a>
+			<a	href="/html/new.html">New</a>
 			<a	href="/cgi/hello_world.py">Hello World Python</a>
 			<a	href="/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="/cgi/timeout.py">Timeout</a>

@@ -9,26 +9,28 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 $directory = __DIR__ . '/../files';
 
-try {
+try
+{
 	$directory = realpath($directory);
 
 	$files = [];
 	
-	if (is_dir($directory)) {
+	if (is_dir($directory))
+	{
 		$items = scandir($directory);
 		
-		if ($items === false) {
+		if ($items === false)
 			throw new Exception("Impossible de lire le repertoire : $directory");
-		}
 		
-		foreach ($items as $item) {
-			if ($item != '.' && $item != '..' && is_file($directory . '/' . $item)) {
+		foreach ($items as $item)
+		{
+			if ($item != '.' && $item != '..' && is_file($directory . '/' . $item))
+			{
 				$filePath = $directory . '/' . $item;
 				$pathInfo = pathinfo($item);
 				
-				if (!is_readable($filePath)) {
+				if (!is_readable($filePath))
 					continue;
-				}
 				
 				$files[] = [
 					'name' => $item,
@@ -43,11 +45,14 @@ try {
 		}
 		
 		// Trier par nom
-		usort($files, function($a, $b) {
+		usort($files, function($a, $b)
+		{
 			return strcasecmp($a['name'], $b['name']);
 		});
-	} else {
-		throw new Exception("Le répertoire n'existe pas ou n'est pas accessible : $directory");
+	}
+	else
+	{
+		throw new Exception("Le repertoire n'existe pas ou n'est pas accessible : $directory");
 	}
 	
 	echo json_encode([
@@ -56,8 +61,10 @@ try {
 		'directory' => basename($directory),
 		'count' => count($files),
 	]);
-	
-} catch (Exception $e) {
+	echo "";
+}
+catch (Exception $e)
+{
 	echo json_encode([
 		'success' => false,
 		'message' => $e->getMessage(),
