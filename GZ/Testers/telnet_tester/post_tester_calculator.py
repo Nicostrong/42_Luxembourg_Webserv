@@ -6,9 +6,9 @@ HOST = 'localhost'
 PORT = 2121
 
 input_data = {
-    "num1": "10",
-    "num2": "5",
-    "operator": "+"
+    "num1": sys.argv[4],
+    "num2": sys.argv[5],
+    "operator": sys.argv[6]
 }
 
 # Properly stringify as JSON

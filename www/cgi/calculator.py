@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    calculator.py                                      :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/02 14:44:23 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/04 10:00:58 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
