@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 13:17:26 by gzenner           #+#    #+#              #
-#    Updated: 2025/07/04 10:27:48 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/04 10:35:06 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,4 +33,9 @@ year = int(birthday[2])
 
 days_left = (40 - (2025 - year - 20))*365
 
-print(f"You got {days_left} days left to work before retirement.:(")
+if days_left > 0:
+    print(f"You got {days_left} days ({days_left / 365} years) left to work before retirement.:(")
+elif days_left == 0:
+    print(f"You retire today!!! SUCCESS")
+else:
+    print(f"You have retired {-days_left} ({days_left / 365} years) days ago!!!")
