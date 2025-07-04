@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:36:17 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 18:26:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 16:19:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ bool CgiResponse::isEof() const
 	return (this->_isEof);
 }
 
-bool CgiResponse::isTe() const
+bool CgiResponse::isTE() const
 {
 	return (this->_isTe);
 }
 
-size_t CgiResponse::getContentLenght() const
+size_t CgiResponse::getContentLength() const
 {
 	return (this->_contentLength);
 }

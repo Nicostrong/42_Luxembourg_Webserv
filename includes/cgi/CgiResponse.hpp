@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:37:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 18:23:30 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 16:19:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ class CgiResponse
 		}
 
 		bool										isEof() const;
-		bool										isTe()	const;
+		bool										isTE()	const;
 		bool										isEofReceived() const;
 		bool										isProcessFinished() const;
 		bool										findHeader(const char* name);
 		bool										isError() const;
-		size_t										getContentLenght() const;
+		size_t										getContentLength() const;
 		size_t										getErrorCode() const;
 		CgiBody*									getBody();
 		std::string&								findHeaderValue(const char* name);
