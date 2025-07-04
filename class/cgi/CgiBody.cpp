@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:56:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 09:50:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 14:18:54 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ bool CgiBody::onRead( Buffer& buff, Socket& sock )
 {		
 	if (sock.getHandler().getCgiResponse().isEof())
 	{
-		if (buff.isBufferRead())
+		onBodyReceivedEof(buff);
+		if (sock.getHandler().getCGI()->isOutputFinished())
 		{
 			this->_isReceived = true;
 			return (true);
 		}
-		onBodyReceivedEof(buff);
 	}
 	else
 		Body::onRead(buff, sock);

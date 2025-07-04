@@ -24,6 +24,7 @@ Body::~Body( void )
 	this->_fBuff.flush();
 	this->_fBuff.close();
 	std::remove(this->_fName.c_str());
+	
 	return ;
 }
 
@@ -200,11 +201,9 @@ void		Body::readInFile( std::vector<char>& receivedTxtBuffer )
 
 bool		Body::read( Buffer& buff )
 {
-	
-
 	if (!this->_fBuff.is_open() || this->_bytesRead >= this->_size)
-		return (false);
-	
+		return (true);
+
 	buff.resetIfRead();
 	
 	size_t freeSpace = buff.getBufferUnused();

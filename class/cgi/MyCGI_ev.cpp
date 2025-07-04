@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 14:08:35 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/04 14:21:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		
 
 		this->_rxBuffer.setBufferUsed(bytes);
-		//std::cout << getRxBuffer();
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 	}
 	catch(const std::exception& e)
@@ -155,13 +154,12 @@ void MyCGI::onCgiError(EventMonitoring& em)
 void MyCGI::onEndOutput(EventMonitoring& em)
 {
 	em.unmonitor(this->getPipeToCGI().getIn());
-	em.unmonitor(this->getPipeFromCGI().getOut());
-	this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
-	this->getPipeToCGI().closeIn();
+	em.unmonitor(this->getPipeFromCGI().getOut());	this->getPipeToCGI().closeIn();
 	this->getPipeFromCGI().closeOut();
 	resetByteSend();
 	resetByteRead();
 	this->_isTransferFinished = true;
+	this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 }
 
 void MyCGI::onEndInput(EventMonitoring& em)

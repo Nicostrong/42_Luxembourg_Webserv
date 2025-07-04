@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CgiParser.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:01:42 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/30 15:18:21 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/04 14:18:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 				HttpBase::BAD_GATEWAY);
 		return (false);
 	}
-	
 	buff.setBufferRead(pos + len - this->_headBuffer.size() + 4);
 	this->_headBuffer.erase(pos);
 
@@ -115,6 +114,7 @@ bool CgiParser::handleHeaders(Buffer& buff, CgiResponse& cgiResponse)
 
 bool CgiParser::handleBody(Buffer& buff, CgiResponse& cgiResponse, Socket& sock)
 {
+	
 	CgiBody* body = cgiResponse.getBody();
 	if (!body)
 	{
@@ -125,9 +125,15 @@ bool CgiParser::handleBody(Buffer& buff, CgiResponse& cgiResponse, Socket& sock)
 
 		cgiResponse.setBody(body);
 	}
-	bool received = body->onRead(buff, sock);
 	
+	bool received = body->onRead(buff, sock);
 	if (received)
 		this->_state = CGI_BODY_RECEIVED;
 	return (received);
+}
+
+void CgiParser::reset()
+{
+	this->_state = CGI_HEAD;
+	this->_headBuffer.clear();
 }

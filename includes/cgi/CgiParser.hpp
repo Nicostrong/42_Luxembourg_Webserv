@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:00:57 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 16:19:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 14:20:45 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class CgiParser
 		void				parseHeader(const std::string& line, CgiResponse& cgiResponse);
 		bool				handleHeaders(Buffer& buff, CgiResponse& cgiResponse);
 		bool				handleBody(Buffer& buff, CgiResponse& cgiResponse, Socket& sock);
+        void                reset();
 		
     private:
         CgiParser(const CgiParser& obj);

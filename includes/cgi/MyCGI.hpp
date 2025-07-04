@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 10:01:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 11:22:27 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ class	MyCGI:	public IEventHandler
 
 		pid_t			getPid( void );
 		bool			isCgiFinished() const;
+		bool			isOutputFinished() const;
 
 		/*	SETTER	*/
 		void			setPid( pid_t pid );
