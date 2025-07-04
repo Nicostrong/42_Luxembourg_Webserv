@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_m.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 09:01:33 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 14:08:03 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@ void		MyCGI::execCGI( void )
 		this->getPipeFromCGI().closeOut();
 		if (dup2(this->getPipeToCGI().getOut(), STDIN_FILENO) == -1)
 			throw CGIExit();
-		this->getPipeToCGI().closeOut();										//	on ferme le pipe apres dup2 STDIN
+		this->getPipeToCGI().closeOut();
 		if (dup2(this->getPipeFromCGI().getIn(), STDOUT_FILENO) == -1)
 			throw CGIExit();
-		this->getPipeFromCGI().closeIn();										//	on ferme le pipe apres dup2 STDOUT
+		this->getPipeFromCGI().closeIn();
 		execve(cmd[0], cmd, this->getEnv());
 		throw CGIExit();
 	} 
 	else
 	{
-		this->getPipeToCGI().closeOut();										//	on ferme le pipe=>P de lecture pour le gosse
-		this->getPipeFromCGI().closeIn();										//	on ferme le pipe=>C d ecriture du gosse
+		this->getPipeToCGI().closeOut();
+		this->getPipeFromCGI().closeIn();
 	}	
 	return ;
 }

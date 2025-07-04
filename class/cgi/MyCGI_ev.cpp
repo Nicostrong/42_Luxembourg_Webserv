@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 10:09:39 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 14:08:35 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,6 @@ void MyCGI::onCgiError(EventMonitoring& em)
 
 void MyCGI::onEndOutput(EventMonitoring& em)
 {
-	//CgiResponse* cgiResp = &this->_socket->getHandler().getCgiResponse();
-
 	em.unmonitor(this->getPipeToCGI().getIn());
 	em.unmonitor(this->getPipeFromCGI().getOut());
 	this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
