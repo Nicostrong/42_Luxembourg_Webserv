@@ -147,7 +147,7 @@ def	test_cgi_calculator_division():
 def	test_cgi_crypto():
 	url2 = "http://localhost:8080/cgi/crypto.py"
 	input_data = {
-		"amout_bought": "10",
+		"amount_bought": "10",
 		"value_paid": "5",
 		"amount_sold": "5"
 	}

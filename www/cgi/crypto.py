@@ -10,7 +10,7 @@ print()
 content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
-amount_bought = float(data.get('amout_bought', 0))
+amount_bought = float(data.get('amount_bought', 0))
 value_paid = float(data.get('value_paid', 0))
 amount_sold = float(data.get('amount_sold', 0))
 value_received = -1000 + r.random()*2000
