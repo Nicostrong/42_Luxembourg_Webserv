@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 11:37:13 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/04 11:17:42 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/04 14:20:11 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ html = """
 			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="container">
+			<img src="/images/418.png" alt="Error 418" width="800" height="400" style="display:block;" />
 			<h1>April Fish in Python ! (looking the response code ;) )</h1>
 			<div id="status-section" class="user-status">
 				<div class="info">
