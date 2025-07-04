@@ -116,3 +116,4 @@ dkms.conf
 *.json
 
 env
+venv
