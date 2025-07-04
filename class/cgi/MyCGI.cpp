@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 07:20:42 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/04 10:12:15 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 MyCGI::MyCGI( Socket& socket )
 	: _byteRead(0), _byteSend(0), _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
-	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _isCloseEvent(false), _isReadEvent(false)
+	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _exitCode(0), 
+	_isCloseEvent(false), _isReadEvent(false), _isTransferFinished(false), _isExited(false)
 {
 	socket.getHandler().setState(HttpHandling::CGI_SENDING);
 	Fd::setNonBlocking(getPipeToCGI().getIn());

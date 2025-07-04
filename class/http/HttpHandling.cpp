@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 10:39:44 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 10:08:18 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,21 +126,18 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 		if (resp->getRespType() == HttpResponse::CGI)
 		{
 			em.monitorUpdate(sock->getSocket(), EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
+			this->_cgi->onTickEvent(0, em);
+
 			if (this->_cgiResp.isError())
 					throw HttpExceptions(this->_cgiResp.getErrorCode());
-			switch (this->_cgiParser.getState())
+			
+			if (!this->_cgi->isCgiFinished())
+				return ;
+			
+			if (this->_cgiParser.getState() == CgiParser::CGI_BODY_RECEIVED)
 			{
-				case CgiParser::CGI_BODY_RECEIVED:
-					this->_resHandling.init(*sock);
-					em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
-					break;
-				case CgiParser::CGI_HEAD:
-				case CgiParser::CGI_BODY:
-					if (this->_cgiResp.isEofReceived())
-						throw HttpExceptions(HttpBase::BAD_GATEWAY);
-					break;
-				default:
-					break;
+				this->_resHandling.init(*sock);
+				em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
 			}
 		}
 		else
@@ -161,6 +158,11 @@ void HttpHandling::setState(State state)
 {
 	this->_ts = time(NULL);
 	this->_state = state;
+}
+
+void HttpHandling::onCgiComplete()
+{
+	
 }
 
 void HttpHandling::reset()

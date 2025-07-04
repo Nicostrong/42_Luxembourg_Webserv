@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 08:07:48 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 10:01:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,14 @@ class	MyCGI:	public IEventHandler
 		Socket*			_socket;		//	socket of communication
 		Map				_mEnv;			//	map of environnement variable
 		pid_t			_pid;			//	pid parent
+		int				_exitCode;		//	Exit code
+		
+		// To know if CGI execution is finished
 		bool			_isCloseEvent;
 		bool			_isReadEvent;
+		bool			_isTransferFinished;
+		bool			_isExited;		//	Does the cgi is finished
+
 
 		MyCGI( void );
 		MyCGI( const MyCGI& );
@@ -66,9 +72,9 @@ class	MyCGI:	public IEventHandler
 
 		std::string		normalizePath( const std::string& path );
 
-		void			onCgiError(int fd, EventMonitoring& em);
-		void			onEndOutput(int fd, EventMonitoring& em);
-		void			onEndInput(int fd, EventMonitoring& em);
+		void			onCgiError(EventMonitoring& em);
+		void			onEndOutput(EventMonitoring& em);
+		void			onEndInput(EventMonitoring& em);
 
 	public:
 
@@ -97,6 +103,7 @@ class	MyCGI:	public IEventHandler
 		Map&			getMapEnv( void );
 
 		pid_t			getPid( void );
+		bool			isCgiFinished() const;
 
 		/*	SETTER	*/
 		void			setPid( pid_t pid );

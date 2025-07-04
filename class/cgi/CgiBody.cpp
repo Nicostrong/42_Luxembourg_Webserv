@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:56:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 14:57:09 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 09:50:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ CgiBody::CgiBody( size_t bufferSize ) : Body(bufferSize) {}
 CgiBody::~CgiBody() {}
 
 bool CgiBody::onRead( Buffer& buff, Socket& sock )
-{
-	if (this->_isReceived)
-		return (true);
-		
+{		
 	if (sock.getHandler().getCgiResponse().isEof())
 	{
-		onBodyReceivedEof(buff);
-		if (sock.getHandler().getCgiResponse().isEofReceived())
+		if (buff.isBufferRead())
+		{
 			this->_isReceived = true;
+			return (true);
+		}
+		onBodyReceivedEof(buff);
 	}
 	else
 		Body::onRead(buff, sock);
