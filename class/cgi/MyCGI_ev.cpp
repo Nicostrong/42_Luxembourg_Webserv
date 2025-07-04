@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 07:20:34 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/04 10:09:39 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 
 		if (bytes == 0)
 		{
-			onEndOutput(fd, em);
+			onEndOutput(em);
 			return ;
 		}
 
@@ -52,7 +52,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 	}
 	catch(const std::exception& e)
 	{
-		onCgiError(fd, em);
+		onCgiError(em);
 	}
 }
 
@@ -79,14 +79,14 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 		
 		if (!body || eof)
 		{
-			onEndInput(fd, em);
+			onEndInput(em);
 			return ;
 		}
 			
 	}
 	catch(const std::exception& e)
 	{
-		onCgiError(fd, em);
+		onCgiError(em);
 	}
 }
 
@@ -104,57 +104,70 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 	}
 	catch(const std::exception& e)
 	{
-		onCgiError(fd, em);
+		onCgiError(em);
 	}
 }
 
 void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 {
-	if (this->_isCloseEvent && !this->_isReadEvent)
+	(void)fd;
+	int status = 0;
+
+	if (!this->_isExited && this->_pid > 0)
 	{
-		onEndOutput(fd, em);
-		return ;
+		int pState = waitpid(this->_pid, &status, WNOHANG);
+
+		if (pState == -1 || status != 0)
+		{
+			onCgiError(em);
+			return ;
+		}
+		else if (pState > 0)
+			this->_isExited = true;
 	}
+
+	if (!this->_isTransferFinished && this->_isCloseEvent && !this->_isReadEvent)
+		onEndOutput(em);
 
 	this->_isCloseEvent = false;
 	this->_isReadEvent = false;
 	return ;
 }
 
-void MyCGI::onCgiError(int fd, EventMonitoring& em)
+void MyCGI::onCgiError(EventMonitoring& em)
 {
-	(void)fd;
+	int status = 0;
+	
 	CgiResponse* cgiResp = &this->_socket->getHandler().getCgiResponse();
 
 	em.unmonitor(this->getPipeToCGI().getIn());
 	em.unmonitor(this->getPipeFromCGI().getOut());
 	cgiResp->setError();
-	cgiResp->setErrorCode(HttpBase::INTERNAL_SERVER_ERROR);
+	cgiResp->setErrorCode(HttpBase::BAD_GATEWAY);
 	this->getPipeToCGI().closeIn();
 	this->getPipeFromCGI().closeOut();
 	resetByteSend();
 	resetByteRead();
+	if (this->_pid > 0 && waitpid(this->_pid, &status, WNOHANG) == 0)
+		kill(this->_pid, SIGKILL);
 }
 
-void MyCGI::onEndOutput(int fd, EventMonitoring& em)
+void MyCGI::onEndOutput(EventMonitoring& em)
 {
-	(void)fd;
-	CgiResponse* cgiResp = &this->_socket->getHandler().getCgiResponse();
+	//CgiResponse* cgiResp = &this->_socket->getHandler().getCgiResponse();
 
 	em.unmonitor(this->getPipeToCGI().getIn());
 	em.unmonitor(this->getPipeFromCGI().getOut());
-	cgiResp->setEofReceived();
 	this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 	this->getPipeToCGI().closeIn();
 	this->getPipeFromCGI().closeOut();
 	resetByteSend();
 	resetByteRead();
+	this->_isTransferFinished = true;
 }
 
-void MyCGI::onEndInput(int fd, EventMonitoring& em)
+void MyCGI::onEndInput(EventMonitoring& em)
 {
-	(void)fd;
-
 	em.unmonitor(this->getPipeToCGI().getIn());
 	this->getPipeToCGI().closeIn();
 	this->_socket->getHandler().setState(HttpHandling::CGI_RECEIVING);

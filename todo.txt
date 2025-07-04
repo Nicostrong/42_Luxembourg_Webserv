@@ -21,6 +21,7 @@
 [X]-Handle redirection for POST/DELETE 
     [X]-> In the config file ask for the redirection codes
 [X]-Add custom responses errors
+[X]-Wait for the cgi to close to send the resposne even if received
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 

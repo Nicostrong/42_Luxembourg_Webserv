@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 13:20:54 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 09:01:33 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		MyCGI::execCGI( void )
 	this->getSocket().getEM().monitor(this->getPipeToCGI().getIn(), 
 			EPOLLOUT | EPOLLHUP | EPOLLRDHUP, *this);
 	this->getSocket().getEM().monitor(this->getPipeFromCGI().getOut(), 
-			EPOLLIN | EPOLLTICK | EPOLLHUP | EPOLLRDHUP, *this);
+			EPOLLIN | EPOLLHUP | EPOLLRDHUP, *this);
 				
 	this->setPid(fork());
 

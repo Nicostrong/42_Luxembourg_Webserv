@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 16:15:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 09:13:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,11 @@ MyCGI::Map&		MyCGI::getMapEnv( void )
 pid_t		MyCGI::getPid( void )
 {
 	return (this->_pid);
+}
+
+bool	MyCGI::isCgiFinished() const
+{
+	return (this->_isExited && this->_isTransferFinished);
 }
 
 /*******************************************************************************
