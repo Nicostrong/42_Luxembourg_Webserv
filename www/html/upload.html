@@ -6,10 +6,11 @@
 		<link rel="icon" href="/images/favicon.png" type="image/png">
 		<script src="/scripts/form.js"></script>
 		<script src="/scripts/cookie.js"></script>
+		<script src="/scripts/session.js"></script>
 	</head>
 	<body>
 		<header class="header">
-			<a href="/index.html" class="banner-link">
+			<a href="/" class="banner-link">
 				<h1>Welcome on the WebServer of GneugneuTeam.</h1>
 			</a>
 		</header>
@@ -18,14 +19,14 @@
 			<a	href="/download.html">Download</a>
 			<a	href="/delete.html">Delete</a>
 			<a	href="/new.html">New</a>
-			<a	href="../cgi/hello_world.py">Hello World Python</a>
-			<a	href="../cgi/hello_world.php">Hello World PHP</a>
-			<a	href="../cgi/timeout.py">Timeout</a>
-			<a	href="../cgi/fish.py">Fish</a>
+			<a	href="/cgi/hello_world.py">Hello World Python</a>
+			<a	href="/cgi/hello_world.php">Hello World PHP</a>
+			<a	href="/cgi/timeout.py">Timeout</a>
+			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="upload-container">
 			<h2>Choose your upload method:</h2>
-			<form id="uploadForm" action="../cgi/upload.py" method="post" enctype="multipart/form-data">
+			<form id="uploadForm" action="/cgi/upload.py" method="post" enctype="multipart/form-data">
 				<div class="upload-methods">
 					<div class="method-section">
 						<div class="method-title">Individual File Selection</div>

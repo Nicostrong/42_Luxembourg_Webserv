@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/24 09:06:53 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/03 15:58:28 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/04 09:33:04 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,13 +24,17 @@ if pseudo:
     pseudo_encoded = quote(pseudo)
 else:
     pseudo_encoded = "Unknown"
-
-duration_int = int(duration)
-if duration_int < 60:
-    duration_int = 60
+    
+duration_int = 60
+try:
+    duration_int = int(duration)
+    if duration_int <= 59:
+        duration_int = 60
+except (TypeError, ValueError):
+    pass 
 
 print("Status: 302", end='\r\n')
 print("Location: /", end='\r\n')
 print("Content-Type: text/html; charset=utf-8", end='\r\n')
-print(f"Set-Cookie: pseudo={pseudo_encoded}; Path=/; Max-age={duration_int}", end='\r\n')
+print(f"Set-Cookie: pseudo={pseudo_encoded}; Path=/; Max-age={duration_int};", end='\r\n')
 print("\r\n")
