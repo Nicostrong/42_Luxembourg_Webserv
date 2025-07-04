@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 13:17:26 by gzenner           #+#    #+#              #
-#    Updated: 2025/07/04 10:35:06 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/04 11:08:10 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,10 @@ content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
 birthday = (data.get('birthday', 0)).split('.')
+
+if len(birthday) != 3 or len(birthday[2]) != 4:
+    print("Error: Bad Input")
+    exit()
 
 day = int(birthday[0])
 month = int(birthday[1])
