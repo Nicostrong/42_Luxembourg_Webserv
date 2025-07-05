@@ -22,6 +22,9 @@
     [X]-> In the config file ask for the redirection codes
 [X]-Add custom responses errors
 [X]-Wait for the cgi to close to send the resposne even if received
+[X]-Set-Cookie issue
+[X]-Problem with chunked response from cgi
+
 -Handle range on downloaded files to get a part of file.
 -Handle caching through ETAG to make client cache static files.
     -> Should look like ETag: "xxxxxxxx-yyyyyyyy" where x is the last 
@@ -29,9 +32,8 @@
 
 // Prioritary
 
--Set-Cookie issue
--Set body size limit
--Problem with chunked response from cgi // Maybe fixed ?
+-Handle body size limit on request parsing
+-Check if cgi file requested exist and if not return 404
 
 //Nico
 
