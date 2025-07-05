@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:24:11 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/04 16:37:44 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ class Chunk
         Chunk(size_t len);
         Chunk(const Chunk& obj);
         ~Chunk();
-        Chunk& operator=(const Chunk& obj);
-        void    setReceived(size_t received);
-        size_t  getReceived() const;
-        size_t  getLen() const;
-        State   getState() const;
-		size_t	handleChunk(Buffer& buff);
+        Chunk&          operator=(const Chunk& obj);
+        void            setReceived(size_t received);
+        size_t          getReceived() const;
+        size_t          getLen() const;
+        State           getState() const;
+		size_t	        handleChunk(Buffer& buff);
+        static bool     isHexaValid(const std::string& hex);
     private:
         void    handleChunkHead(Buffer& buff);
         size_t  handleChunkData(Buffer& buff);

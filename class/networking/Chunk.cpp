@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:27:27 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:12:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:07:59 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,12 @@ void Chunk::handleChunkHead(Buffer& buff)
 		return ;
 	}
 
+	if (!isHexaValid(std::string(buff.getDataUnread(), std::min(pos, buff.find(';')))))
+		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
+
 	this->_len = convertHexa(
 		std::string(buff.getDataUnread(), std::min(pos, buff.find(';'))));
-	
+	LOG_DEB(this->_len);
 	buff.setBufferRead(pos - buff.getBufferRead() + 2);
 	this->_state = CHUNK_DATA;
 }
@@ -134,4 +137,12 @@ size_t Chunk::convertHexa(const std::string& str)
     if (iss.fail()) 
         throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
     return (res);
+}
+
+bool Chunk::isHexaValid(const std::string& hex)
+{
+	if (hex.size() > sizeof(size_t) * 2 || hex.empty() || 
+		hex.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)
+		return (false);
+	return (true);
 }
