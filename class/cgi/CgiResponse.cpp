@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:36:17 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 16:19:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:49:20 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ const std::map<std::string, std::string>& CgiResponse::getHeaders() const
     return (this->_headers);
 }
 
+const std::list<std::string>& CgiResponse::getCookies() const
+{
+	return (this->_cookies);
+}
+
 bool CgiResponse::isError() const
 {
 	return (this->_isError);
@@ -50,6 +55,7 @@ size_t CgiResponse::getErrorCode() const
 void CgiResponse::reset()
 {
 	this->_headers.clear();
+	this->_cookies.clear();
 	if (this->_body)
 		delete this->_body;
 	this->_body = NULL;

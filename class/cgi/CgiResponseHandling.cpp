@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 21:27:09 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/03 10:17:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:52:38 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,14 @@ void CgiResponseHandling::handleHeaders(Socket& sock)
 	
 	if (!mandatoryFound)
 		throw HttpExceptions(HttpBase::BAD_GATEWAY);
+
+	std::list<std::string>::const_iterator itCookie;
+
+	for (itCookie = cgiResp->getCookies().begin(); 
+			itCookie != cgiResp->getCookies().end(); ++itCookie)
+	{
+		resp->addHeader("Set-Cookie", *itCookie);
+	}
 	
 	cgiResp->setEof(isEofDelimiter);
 	cgiPars->setState(CgiParser::CGI_BODY);

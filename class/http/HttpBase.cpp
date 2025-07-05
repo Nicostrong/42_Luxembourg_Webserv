@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 13:25:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:49:42 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ HttpBase& HttpBase::operator=(const HttpBase& obj)
 		this->_body = obj._body;
 		this->_statusCode = obj._statusCode;
 		this->_headers = obj._headers;
+		this->_cookies = obj._cookies;
 		this->_transferEncoding = obj._transferEncoding;
 	}
 	return (*this);
@@ -206,7 +207,12 @@ std::string 	HttpBase::getHeaders_raw() const
 
 const std::map<std::string, std::string>&	HttpBase::getHeaders() const
 {
-	return _headers;
+	return this->_headers;
+}
+
+const std::list<std::string>& HttpBase::getCookies() const
+{
+	return (this->_cookies);
 }
 
 bool HttpBase::canBeValidMethod(const std::string& method)

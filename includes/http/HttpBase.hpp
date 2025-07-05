@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 13:25:24 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:46:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,15 @@ class HttpBase
 			std::ostringstream oss;
 
 			oss << value;
-			this->_headers[name] = oss.str();
+			if (normalizeHeaderName(name) == "Set-Cookie")
+				this->_cookies.push_back(oss.str());
+			else
+				this->_headers[name] = oss.str();
 		}
 		bool				findHeader(const char* name);
 		std::string&		findHeaderValue(const char* name);
 		const std::map<std::string, std::string>&	getHeaders() const;
+		const std::list<std::string>& getCookies() const;
 		static std::string	getStrStatusCode(size_t statusCode);
 		static std::string	getDirectoryListing(const std::string &dirPath, 
 			const std::string &relativeDir);
@@ -146,6 +150,7 @@ class HttpBase
 		std::string _body;
 		size_t		_statusCode;
 		std::map<std::string, std::string> _headers;
+		std::list<std::string> _cookies;
 		bool		_transferEncoding;
 		bool 		_isComplete;
 	private:

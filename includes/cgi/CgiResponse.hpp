@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:37:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 16:19:12 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:48:28 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "./../lib.hpp"
 #include "./CgiBody.hpp"
+#include "./../http/HttpBase.hpp"
 
 class CgiResponse
 {
@@ -28,7 +29,10 @@ class CgiResponse
 			std::ostringstream oss;
 
 			oss << value;
-			this->_headers[name] = oss.str();
+			if (HttpBase::normalizeHeaderName(name) == "Set-Cookie")
+				this->_cookies.push_back(oss.str());
+			else
+				this->_headers[name] = oss.str();
 		}
 
 		bool										isEof() const;
@@ -42,6 +46,7 @@ class CgiResponse
 		CgiBody*									getBody();
 		std::string&								findHeaderValue(const char* name);
 		const std::map<std::string, std::string>&	getHeaders() const;
+		const std::list<std::string>&				getCookies() const;
 		
 		void										setBody(CgiBody* body);
 		void										setEof(bool state = true);
@@ -60,6 +65,7 @@ class CgiResponse
 		CgiResponse& operator=(const CgiResponse& obj);
 
 		std::map<std::string, std::string>	_headers;
+		std::list<std::string>				_cookies;
 		CgiBody*							_body;
 		size_t								_contentLength;
 		size_t								_errorCode;

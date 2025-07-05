@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 09:13:31 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 09:35:50 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ void HttpResponse::sendHead(Buffer& buff)
 	addHeader("Date", formatTimeHeader(time(NULL)));
 	ss << "HTTP/1.1 " << this->_statusCode << " " 
 	   << (this->_statusStr.size() ? 
-	   	   this->_statusStr : getStrStatusCode(this->_statusCode)) << CRLF
-	   << getHeaders_raw()
-	   << CRLF;
+	   	   this->_statusStr : getStrStatusCode(this->_statusCode)) << CRLF;
+	streamHeaders(ss);
 
 	head = ss.str();
 	if (head.size() > buff.getBufferUnused())
@@ -139,4 +138,20 @@ void HttpResponse::setRespType(ResponseType type)
 HttpResponse::ResponseType HttpResponse::getRespType() const
 {
 	return (this->_respType);
+}
+
+void HttpResponse::streamHeaders(std::stringstream& ss) const
+{
+	std::map<std::string, std::string>::const_iterator headIt;
+	std::list<std::string>::const_iterator cookieIt;
+
+	for (headIt = this->_headers.begin(); headIt != this->_headers.end(); ++headIt)
+	{
+		ss << headIt->first << ": " << headIt->second << CRLF;
+	}
+	for (cookieIt = this->_cookies.begin(); cookieIt != this->_cookies.end(); ++cookieIt)
+	{
+		ss << "Set-Cookie: " << *cookieIt << CRLF;
+	}
+	ss << CRLF;
 }
