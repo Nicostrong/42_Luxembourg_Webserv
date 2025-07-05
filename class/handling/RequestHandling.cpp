@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/03 08:32:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/05 16:00:31 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,36 +97,16 @@ bool	RequestHandling::ends_with( const std::string& str, const std::string& suff
  */
 bool RequestHandling::isCGI(Socket& sock)
 {
-	std::string		ext = sock.getReq().getExtension();
+	std::string								ext = sock.getReq().getExtension();
+	const Location*							loc = sock.getReq().getLoc();
+	std::list<std::string>					extensions = loc->getAllCGIExtension();
+	std::list<std::string>::const_iterator	it;
 
-	return (ext == ".py" || ext == ".php");
-	//return (RequestHandling::ends_with(extension, ".py") || RequestHandling::ends_with(extension, ".php"));
-	/*std::string		uri = sock.getReq().getUri();
-	size_t			queryPos = uri.find('?');
-
-	if (queryPos != std::string::npos)
-    	uri = uri.substr(0, queryPos);
-	LOG_DEB(uri);
-
-	return (RequestHandling::ends_with(uri, ".py") || RequestHandling::ends_with(uri, ".php"));*/
+	for (it = extensions.begin(); it != extensions.end(); ++it)
+		if (ext == *it)
+			return (true);
+	return (false);
 }
-/*
-	// CGI METHODOLOGY NOT CORRECT
-	
-	std::string cgiPath = Uri::getCgiPath(cgiDirectives, req.getLocation(), req.getUri());
-	if (cgiPath.empty())
-	{
-		getErrorResponse(NOT_FOUND, server, req, resp);
-		return ;
-	}
-	std::string realCgiPath = Uri::buildRealRelative(server, req.getLocation(), cgiPath);
-	LOG_DEB("CGI script: " + realCgiPath);
-
-	if (!isFileReadable(server, req, resp, realCgiPath))
-		return ;
-	
-	getErrorResponse(OK, server, req, resp);
-*/
 
 bool RequestHandling::isStaticFile(Socket& sock)
 {

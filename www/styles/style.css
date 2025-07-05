@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   style.css                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:02:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 10:57:14 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/05 16:38:08 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ body {
 	background:				linear-gradient(135deg, #10047a, #ebe727);
 	margin:					0;
 	padding: 				0;
-	padding-top: 			220px;
+	padding-top: 			10px;
 	min-height:				100vh;
 }
 
@@ -60,7 +60,7 @@ body {
 	background:				rgba(0, 0, 0, 0.3);
 	border:					2px dashed black;
 	border-radius:			10px;
-	padding:				5px;
+	padding:				25px;
 	z-index:				999;
 	box-sizing:				border-box;
 }
@@ -122,6 +122,14 @@ input[type="file"] {
 	border:					1px solid #ddd;
 	border-radius:			5px;
 	cursor:					pointer;
+}
+
+input[type="number"] {
+	padding:				10px;
+	border:					1px solid #ddd;
+	border-radius:			5px;
+	cursor:					pointer;
+	width: 					400px;
 }
 
 button {

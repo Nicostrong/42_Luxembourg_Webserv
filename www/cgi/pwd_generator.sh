@@ -2,4 +2,10 @@
 
 lenght=$1
 
-cat /dev/urandom | base92 $lenght | head -n 1
+# to uncomment at school42
+#pwd=$(base92 $lenght < /dev/urandom | head -n 1)
+
+pwd=$(base32 < /dev/urandom | head -c 50)
+echo "Status: 300"
+echo "Location: /html/pwd_generator.html?pwd=\"$pwd\""
+echo ""

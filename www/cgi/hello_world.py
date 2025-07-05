@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    hello_world.py                                     :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
+#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 09:18:27 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/04 11:17:53 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/05 16:23:22 by nicostrong       ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ html = """
 			<a	href="/html/download.html">Download</a>
 			<a	href="/html/delete.html">Delete</a>
 			<a	href="/html/new.html">New</a>
+			<a	href="/html/pwd_generator.html">PWD generator</a>
 			<a	href="/cgi/hello_world.py">Hello World Python</a>
 			<a	href="/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="/cgi/timeout.py">Timeout</a>

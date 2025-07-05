@@ -22,6 +22,7 @@ $html = '
 			<a	href="/html/download.html">Download</a>
 			<a	href="/html/delete.html">Delete</a>
 			<a	href="/html/new.html">New</a>
+			<a	href="/html/pwd_generator.html">PWD generator</a>
 			<a	href="/cgi/hello_world.py">Hello World Python</a>
 			<a	href="/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="/cgi/timeout.py">Timeout</a>

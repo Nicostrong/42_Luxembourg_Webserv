@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location_gs.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:35 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 10:44:25 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/05 15:55:09 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,22 @@ const std::string&		Location::getDirectiveValue( const std::string& keyDir ) con
 const MethodHTTP*		Location::getMethod( void ) const
 {
 	return (this->_method);
+}
+
+/*
+ *	getAllCGIExtension return all extension allow for the CGI location
+ */
+const std::list<std::string>		Location::getAllCGIExtension( void ) const
+{
+	std::list<std::string>							extensions;
+	std::list<CGIDirective*>						CGILst = getCGIDirectives();
+	std::list<CGIDirective*>::const_iterator		it;
+
+	for (it = CGILst.begin(); it != CGILst.end(); ++it)
+		if (*it)
+			extensions.push_back((*it)->getExtension());
+
+	return (extensions);
 }
 
 /*

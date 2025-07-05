@@ -6,6 +6,7 @@
 		<script src="/scripts/validation_lenght_pwd.js"></script>
 		<script src="/scripts/cookie.js"></script>
 		<script src="/scripts/session.js"></script>
+		<script src="/scripts/pwd.js"></script>
 	</head>
 	<body>
 		<header class="header">
@@ -25,9 +26,9 @@
 			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
 		<div class="container">
-			<div id="login-section" class="form-container">
+			<div class="form-container">
 				<p>Password generator</p>
-				<form method="POST" action="/cgi/set_cookie.py" onsubmit="return validateLenght()">
+				<form method="POST" action="/cgi/pwd_generator.sh" onsubmit="return validateLenght()">
 					<div>
 						<input type="number" name="lenght" id="lenght" placeholder="Entrez le nombre de caractere de votre future passeword :" min="4" max="500" required>
 					</div>
@@ -35,6 +36,11 @@
 						<button type="submit">Generate PWD</button>
 					</div>
 				</form>
+			</div>
+			<div id="pwd" class="user-status">
+				<div class="info">
+					<span id="pwd"></span>
+				</div>
 			</div>
     		<div id="status-section" class="user-status">
 				<div class="info">

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_gs.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:45 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/05 07:41:38 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/05 16:09:50 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ const Server*		ServerManager::getServer( size_t port, std::string host ) const
 	std::map<size_t, std::vector<Server*> >::const_iterator		it;
 	
 	if (!isValidPort(port))
-		return (NULL);		//	Avoir si on jete pas une exception ici
+		return (NULL);
 	it = this->_mServers.find(port);
 	if (it == this->_mServers.end())
 	{

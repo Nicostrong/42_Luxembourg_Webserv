@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:26:10 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 10:23:30 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/05 15:51:24 by nicostrong       ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ class	Location
 		const std::string&					getDirectiveValue( const std::string& keyDir ) const;
 		
 		const MethodHTTP*					getMethod( void ) const;
+
+		const std::list<std::string>		getAllCGIExtension( void ) const;
 		
 		const std::list<Directive*>&		getDirectives( void ) const;
 
