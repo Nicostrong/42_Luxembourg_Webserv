@@ -35,7 +35,8 @@
 -Handle body size limit on request parsing
 -Check if cgi file requested exist and if not return 404
 -Make a list of duplicates headers if possible
--Remove hardcoded extension that makes no sens
+-Remove hardcoded extension that makes no sense
+-Check uri .. is still valid
 
 //Nico
 
