@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 11:05:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/07 15:38:08 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ void HttpHandling::onTick(EventMonitoring& em, Socket* sock)
 				this->_resHandling.init(*sock);
 				em.monitorUpdate(sock->getSocket(), EPOLLOUT | EPOLLTICK | EPOLLHUP | EPOLLRDHUP);
 			}
+			else
+				throw HttpExceptions(HttpBase::BAD_GATEWAY);
 		}
 		else
 		{
