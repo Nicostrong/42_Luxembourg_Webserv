@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/07 12:54:39 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/07 12:56:58 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,5 @@ content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
 problem = (data.get('problem', ''))
-#problem = "Pointers"
 
 print(f"Cheer up!\n{problem} really sucks! Everybody hates it!")
