@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/07 14:04:18 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/07 14:18:01 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,4 +42,6 @@ def compress(data:str) -> str:
     compressed_text += str(count)
     return (compressed_text)
 
-print(compress(text))
+compressed_text = compress(text)
+saved_bytes = len(text) - len(compressed_text)
+print(f"{compressed_text}\nSpace saved:\n{saved_bytes} Bytes")
