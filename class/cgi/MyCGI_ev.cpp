@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 14:21:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/07 14:00:16 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		
 		//std::cout << "TOTAL READ: " << getByteRead() << std::endl;
 		
+		std::cerr << "Bytes read: " << bytes << std::endl; 
 		if (bytes == -1)
 			throw CGIError("Error reading pipe from GCI");
 
@@ -43,10 +44,10 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		}
 
 		setByteRead(bytes);
-		LOG_DEB("BUFF:\n" << getRxBuffer().getDataUnread());
-		
-
 		this->_rxBuffer.setBufferUsed(bytes);
+		
+		LOG_DEB("BUFF:\n" << getRxBuffer());
+		
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 	}
 	catch(const std::exception& e)
@@ -115,7 +116,6 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 	if (!this->_isExited && this->_pid > 0)
 	{
 		int pState = waitpid(this->_pid, &status, WNOHANG);
-
 		if (pState == -1 || status != 0)
 		{
 			onCgiError(em);
