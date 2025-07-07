@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/07 14:02:11 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/07 14:04:18 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,12 +25,10 @@ content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
 text = (data.get('text', ''))
-#text = "tttttt"
 
-def my_compress(data:str) -> str:
-    compressed_text = ""
+def compress(data:str) -> str:
     count = 0
-    compressed_text += text[0]
+    compressed_text = text[0]
     currentchar = text[0]
     for i, c in enumerate(text):
         if c == currentchar:
@@ -44,4 +42,4 @@ def my_compress(data:str) -> str:
     compressed_text += str(count)
     return (compressed_text)
 
-print(my_compress(text))
+print(compress(text))
