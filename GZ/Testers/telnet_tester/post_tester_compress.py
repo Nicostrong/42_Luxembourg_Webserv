@@ -2,14 +2,12 @@ import sys
 import socket
 import json
 
-if len(sys.argv) != 7:
-    print(f"Usage:{sys.argv[0]} PORT HOST TARGETSCRIPT Num1 Num2 Operator")
+if len(sys.argv) != 5:
+    print(f"Usage:{sys.argv[0]} PORT HOST TARGETSCRIPT text")
     exit()
 else:
     input_data = {
-        "num1": sys.argv[4],
-        "num2": sys.argv[5],
-        "operator": sys.argv[6]
+        "text": sys.argv[4],
     }
 
     # Properly stringify as JSON

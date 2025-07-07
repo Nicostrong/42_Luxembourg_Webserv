@@ -1,36 +1,42 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    days_left_to_retirement.py                         :+:      :+:    :+:    #
+#    compress.py                                        :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/07/03 13:17:26 by gzenner           #+#    #+#              #
-#    Updated: 2025/07/03 13:46:17 by gzenner          ###   ########.fr        #
+#    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
+#    Updated: 2025/07/07 13:35:15 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 import sys
 import os
 import json
+import string
+from string import ascii_lowercase, ascii_uppercase
+import random
 
 print("Status: 200", end='\r\n')
 print("Content-Type: text/html; charset=utf-8\r\n", end='\r\n')
 print()
 
-""" user enters his birthday like 13.12.1988 and the program calculates the days left to retirement (1rst day of 65 years old)
-"""
-
 content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
-birthday = (data.get('birthday', 0)).split('.')
+text = (data.get('text', ''))
 
-day = int(birthday[0])
-month = int(birthday[1])
-year = int(birthday[2])
+def rle_encode(data: str) -> str:
+    if not data:                       # "aaaab" -> "4a1b"
+        return ''
+    enc, prev, count = [], data[0], 1
+    for ch in data[1:]:
+        if ch == prev:
+            count += 1
+        else:
+            enc.append(f'{count}{prev}')
+            prev, count = ch, 1
+    enc.append(f'{count}{prev}')
+    return ''.join(enc)
 
-days_left = (40 - (2025 - year - 20))*365
-
-print(f"You got {days_left} days left to work before retirement.:(")
+print(rle_encode(text))
