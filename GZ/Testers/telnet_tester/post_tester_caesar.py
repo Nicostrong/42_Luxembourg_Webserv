@@ -16,7 +16,7 @@ else:
     print(f"[debug len]{len(input_str)}")
     # Add Content-Type header for JSON
     request = (
-        f"POST {sys.argv[3]} HTTP/1.1\r\n"
+        f"POST /cgi/{sys.argv[3]} HTTP/1.1\r\n"
         f"Host: {sys.argv[2]}\r\n"
         f"Content-Type: application/json\r\n"
         f"Content-Length: {len(input_str)}\r\n"
