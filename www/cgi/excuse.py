@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    compress.py                                        :+:      :+:    :+:    #
+#    excuse.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/07 14:23:24 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/07 14:29:16 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,24 +24,9 @@ print()
 content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
-text = (data.get('text', ''))
+friend = (data.get('friend', ''))
+task = (data.get('task', ''))
+animal = (data.get('animal', ''))
+bad_action = (data.get('bad_action', ''))
 
-def compress(data:str) -> str:
-    count = 0
-    compressed_text = text[0]
-    currentchar = text[0]
-    for i, c in enumerate(text):
-        if c == currentchar:
-            count += 1
-        else:
-            compressed_text += str(count)
-            count = 0
-            currentchar = c
-            compressed_text += currentchar
-            count += 1
-    compressed_text += str(count)
-    return (compressed_text)
-
-compressed_text = compress(text)
-saved_bytes = len(text) - len(compressed_text)
-print(f"{compressed_text}\nSpace saved:\n{saved_bytes} Bytes")
+print(f"I am deeply sorry {friend}.\nI really wanted to {task} but my {animal} has {bad_action}")
