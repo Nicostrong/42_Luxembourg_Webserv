@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/07 13:35:15 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/07 14:02:11 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,18 +25,23 @@ content_length = int(os.environ.get('CONTENT_LENGTH', 0))
 line = sys.stdin.read(content_length)
 data = json.loads(line)
 text = (data.get('text', ''))
+#text = "tttttt"
 
-def rle_encode(data: str) -> str:
-    if not data:                       # "aaaab" -> "4a1b"
-        return ''
-    enc, prev, count = [], data[0], 1
-    for ch in data[1:]:
-        if ch == prev:
+def my_compress(data:str) -> str:
+    compressed_text = ""
+    count = 0
+    compressed_text += text[0]
+    currentchar = text[0]
+    for i, c in enumerate(text):
+        if c == currentchar:
             count += 1
         else:
-            enc.append(f'{count}{prev}')
-            prev, count = ch, 1
-    enc.append(f'{count}{prev}')
-    return ''.join(enc)
+            compressed_text += str(count)
+            count = 0
+            currentchar = c
+            compressed_text += currentchar
+            count += 1
+    compressed_text += str(count)
+    return (compressed_text)
 
-print(rle_encode(text))
+print(my_compress(text))
