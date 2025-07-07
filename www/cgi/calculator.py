@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/04 14:19:01 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/07 10:36:11 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,8 @@ elif operator == '-':
     result = num1 - num2
 elif operator == '*':
     result = num1 * num2
+elif operator == "**":
+    result = num1 ** num2
 elif operator == '/' and num2 != 0:
     result = num1 / num2
 else:
