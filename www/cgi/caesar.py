@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/02 14:44:21 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/07 12:27:20 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/08 10:17:21 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,5 +33,5 @@ for c in text:
     newvalue += 32
     encrypted_text += chr(newvalue)
 
-print(f"Original Text{text}")
-print(f"Encryped Text{encrypted_text}")
+print(f"Original Text\n{text}")
+print(f"Encryped Text\n{encrypted_text}")
