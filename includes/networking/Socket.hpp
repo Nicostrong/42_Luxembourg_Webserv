@@ -36,12 +36,6 @@ class	Socket : public	IEventHandler
 {
 	public:
 	
-		class SocketReadException : public std::exception
-		{
-			public:
-				const char* what() const throw();
-		};
-	
 		Socket( int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
 				ServerManager& sm, SocketManager& sockm );
 		~Socket( void );

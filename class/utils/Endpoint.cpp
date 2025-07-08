@@ -56,3 +56,9 @@ Endpoint Endpoint::getEndpoint(sockaddr_in endpoint)
 {
     return (Endpoint(Ip(endpoint.sin_addr.s_addr), htons(endpoint.sin_port)));
 }
+
+std::ostream& operator<<(std::ostream& os, const Endpoint& obj)
+{
+	os << obj.getIp().getIpString() << ":" << obj.getPort();
+	return (os);
+}

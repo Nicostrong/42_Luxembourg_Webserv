@@ -85,7 +85,10 @@ struct t_string
 	size_t len;
 };
 
-# define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
+# define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__
+
+
+# define LOG_INFO(msg)	std::cerr << GREEN << "[" << getCurrentTimeStr()  << "] [INFO] " << msg << RESET << std::endl
 
 # if DEBUG
 #  define LOG_DEB(msg)	std::cerr << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl

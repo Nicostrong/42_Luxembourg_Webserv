@@ -83,7 +83,6 @@ std::string Uri::buildRealAbsolute(const Server& serv, const Location* loc,
 	rootPath = trimSlashEnd(rootPath);
 	
 	uri = uri.replace(0, location.size(), rootPath);
-	LOG_DEB("Path constructed: " + uri);
 	return (uri);
 }
 

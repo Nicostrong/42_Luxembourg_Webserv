@@ -38,9 +38,6 @@ void		CGI::onReadEvent(int fd, EventMonitoring& em)
 
 		setByteRead(bytes);
 		this->_rxBuffer.setBufferUsed(bytes);
-		
-		LOG_DEB("BUFF:\n" << getRxBuffer());
-		
 		this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 	}
 	catch(const std::exception& e)

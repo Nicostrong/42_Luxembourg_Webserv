@@ -47,15 +47,15 @@ bool Listener::listenSocket(EventMonitoring& em)
 		if (listen(this->_serverSocket, 16) == -1)
 			throw std::runtime_error("Failed to listen");
 
-		std::cout << "Listening to " << this->_addr.getIp().getIpString() 
-				<< ":" <<this->_addr.getPort() << std::endl;
+		LOG_INFO("Listening to " << this->_addr.getIp().getIpString() 
+				<< ":" <<this->_addr.getPort());
 		em.monitor(this->_serverSocket, POLLIN, *this);
 		return (true);
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << "Failed to listen to " << this->_addr.getIp().getIpString() 
-					<< ":" << this->_addr.getPort() << std::endl;
+		LOG_ERROR("Failed to listen to " << this->_addr.getIp().getIpString() 
+					<< ":" << this->_addr.getPort());
 
 		if (this->_serverSocket > 2)
 			close(this->_serverSocket);
@@ -74,8 +74,6 @@ void Listener::onReadEvent(int fd, EventMonitoring& em)
 		
 	int clientSocket = accept(this->_serverSocket, 
 		(struct sockaddr*)&clientAddr, &addrLen);
-
-	LOG_DEB("New incoming socket");
 	
 	try
 	{
@@ -103,7 +101,7 @@ void Listener::onReadEvent(int fd, EventMonitoring& em)
 		else if (clientSocket > 2)
 			close(clientSocket);
 		
-		std::cerr << "Failed to accept client" << std::endl;
+		LOG_ERROR("Failed to accept client");
 	}
 }
 

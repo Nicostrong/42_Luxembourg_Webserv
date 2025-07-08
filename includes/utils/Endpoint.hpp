@@ -39,4 +39,6 @@ class   Endpoint
         
 };
 
+std::ostream& operator<<(std::ostream& os, const Endpoint& obj);
+
 #endif

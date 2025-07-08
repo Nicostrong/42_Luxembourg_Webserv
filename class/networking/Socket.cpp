@@ -21,7 +21,7 @@ Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr,
 	_keepAlive(true), _isDataSent(false), _sm(sm), _sockm(sockm), _em(NULL)
 {
 	this->_req 		= HttpRequest(this->_sockAddr.getIp().getIpString());
-	LOG_DEB(this->_sockAddr.getIp().getIpString() + " opened connection");
+	LOG_INFO("Socket opened on " << this->_sockAddr);
 }
 
 Socket::~Socket() 
@@ -30,7 +30,7 @@ Socket::~Socket()
 		close(this->_fd);
 	
 	if (this->_handler.getCGI() && this->_handler.getCGI()->getPid() != 0)
-		LOG_DEB(this->_sockAddr.getIp().getIpString() + " closed connection");
+		LOG_INFO("Socket" << this->_sockAddr << " closed");
 }
 
 bool Socket::operator==(const Socket& obj)
@@ -129,7 +129,7 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 			this->_rxBuffer.getBufferUnused(), 0);
 	
 		if (bytes == -1)
-			throw SocketReadException();
+			throw std::runtime_error("read failed");
 			
 		this->_rxBuffer.setBufferUsed(bytes);
 		this->_handler.onRead(em, this);
@@ -139,10 +139,7 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 		if (dynamic_cast<const HttpSevereExceptions*>(&e))
 			this->_handler.setConnectionClose(*this);
 		if (e.getCode() > 399)
-		{
-			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
-			LOG_ERROR(e.getCode());
-		}
+			LOG_ERROR("Client/Server HTTP errror " << e.getCode());
 		setError((HttpBase::HttpCode)e.getCode(), em);
 	}
 	catch(const std::exception& e)
@@ -176,6 +173,8 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 		
 		if (this->_reset && this->_txBuffer.isBufferRead())
 		{
+			LOG_INFO(this->_resp.getStatusCode() << " " << this->_req.getMethod() << " " 
+					 << this->_req.getUri() << " " << this->_req.getHttpVersion());
 			if (!this->_keepAlive)
 				this->_sockm.remove(*this, em);
 			else
@@ -187,10 +186,7 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 		if (dynamic_cast<const HttpSevereExceptions*>(&e))
 			this->_handler.setConnectionClose(*this);
 		if (e.getCode() > 399)
-		{
-			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
-			LOG_ERROR(e.getCode());
-		}
+			LOG_ERROR("Client/Server HTTP errror " << e.getCode());
 		setError((HttpBase::HttpCode)e.getCode(), em);
 	}
 	catch(const std::exception& e)
@@ -202,10 +198,9 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 
 void Socket::onCloseEvent(int fd, EventMonitoring &em)
 {
-	LOG_DEB("Connection closed by remote");
+	LOG_INFO("Socket " << this->_sockAddr << " closed by remote");
 	this->_sockm.remove(*this, em);
 	(void)fd;
-	(void)em;
 }
 
 void Socket::onTickEvent(int fd, EventMonitoring& em)
@@ -223,10 +218,7 @@ void Socket::onTickEvent(int fd, EventMonitoring& em)
 		if (dynamic_cast<const HttpSevereExceptions*>(&e))
 			this->_handler.setConnectionClose(*this);
 		if (e.getCode() > 399)
-		{
-			LOG_ERROR("An error occured while parsing request (can be bad request as well)");
-			LOG_ERROR(e.getCode());
-		}
+			LOG_ERROR("Client/Server HTTP errror " << e.getCode());
 		setError((HttpBase::HttpCode)e.getCode(), em);
 	}
 	catch(const std::exception& e)
@@ -275,11 +267,4 @@ void Socket::setError(HttpBase::HttpCode code, EventMonitoring& em)
 	}
 	else
 		this->_sockm.remove(*this, em);
-}
-
-// Custom exceptions
-
-const char* Socket::SocketReadException::what() const throw()
-{
-	return ("Read Exception");
 }

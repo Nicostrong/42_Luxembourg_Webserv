@@ -113,8 +113,6 @@ void HttpParser::parseStartLine(HttpRequest& req)
 			req.setExtension(ext);
 		else
 			req.setExtension(ext.substr(0, slashPos));
-
-		LOG_DEB("EXTENSION HTTPPARSER : " << req.getExtension());
 	}
 	req.setHTTP(tokens.at(2));
 }

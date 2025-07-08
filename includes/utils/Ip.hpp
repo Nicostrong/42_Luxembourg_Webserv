@@ -39,7 +39,7 @@ class	Ip
 
 		in_addr_t 	_ipBytes;
 		std::string _ipString;
-		
+	
 };
 
 #endif

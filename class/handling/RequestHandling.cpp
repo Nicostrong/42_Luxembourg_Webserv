@@ -26,7 +26,7 @@ void RequestHandling::handleHeaders(Socket& sock)
 
 	sock.getHandler().getHttpParser().setState(HttpParser::HTTP_HANDLED);
 
-	LOG_DEB(req->getUri());
+	LOG_DEB(req->getMethod() << " " << req->getUri() << " " << req->getHttpVersion());
 
 	if (!ctx)
 		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
@@ -279,7 +279,7 @@ void RequestHandling::handleGet(Socket& sock)
 			
 	if (isCGI(sock))
 	{
-		LOG_DEB("IsCGI dans GET");
+		LOG_DEB("CGI Request");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		if (!checkCGIext(sock))
@@ -324,7 +324,7 @@ void RequestHandling::handlePost(Socket& sock)
 	if (isCGI(sock))
 	{
 		handleBodyLength(sock);
-		LOG_DEB("IsCGI dans POST");
+		LOG_DEB("CGI Request");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		
@@ -462,7 +462,7 @@ void RequestHandling::handleDelete(Socket& sock)
 
 	if (isCGI(sock))
 	{
-		LOG_DEB("IsCGI dans DELETE");
+		LOG_DEB("CGI Request");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 
