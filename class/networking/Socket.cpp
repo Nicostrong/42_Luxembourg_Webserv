@@ -139,7 +139,7 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 		if (dynamic_cast<const HttpSevereExceptions*>(&e))
 			this->_handler.setConnectionClose(*this);
 		if (e.getCode() > 399)
-			LOG_ERROR("Client/Server HTTP errror " << e.getCode());
+			LOG_WARNING("Client/Server HTTP errror " << e.getCode());
 		setError((HttpBase::HttpCode)e.getCode(), em);
 	}
 	catch(const std::exception& e)
@@ -173,8 +173,8 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 		
 		if (this->_reset && this->_txBuffer.isBufferRead())
 		{
-			LOG_INFO(this->_resp.getStatusCode() << " " << this->_req.getMethod() << " " 
-					 << this->_req.getUri() << " " << this->_req.getHttpVersion());
+			LOG_INFO(this->_req.getMethod() << " " << this->_req.getUri() << " " 
+					<< this->_req.getHttpVersion() << " " << this->_resp.getStatusCode());
 			if (!this->_keepAlive)
 				this->_sockm.remove(*this, em);
 			else
@@ -186,7 +186,7 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 		if (dynamic_cast<const HttpSevereExceptions*>(&e))
 			this->_handler.setConnectionClose(*this);
 		if (e.getCode() > 399)
-			LOG_ERROR("Client/Server HTTP errror " << e.getCode());
+			LOG_WARNING("Client/Server HTTP errror " << e.getCode());
 		setError((HttpBase::HttpCode)e.getCode(), em);
 	}
 	catch(const std::exception& e)
@@ -218,7 +218,7 @@ void Socket::onTickEvent(int fd, EventMonitoring& em)
 		if (dynamic_cast<const HttpSevereExceptions*>(&e))
 			this->_handler.setConnectionClose(*this);
 		if (e.getCode() > 399)
-			LOG_ERROR("Client/Server HTTP errror " << e.getCode());
+			LOG_WARNING("Client/Server HTTP errror " << e.getCode());
 		setError((HttpBase::HttpCode)e.getCode(), em);
 	}
 	catch(const std::exception& e)

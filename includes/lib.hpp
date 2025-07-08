@@ -90,6 +90,8 @@ struct t_string
 
 # define LOG_INFO(msg)	std::cerr << GREEN << "[" << getCurrentTimeStr()  << "] [INFO] " << msg << RESET << std::endl
 
+# define LOG_WARNING(msg)	std::cerr << YELLOW << "[" << getCurrentTimeStr()  << "] [WARNING] " << msg << RESET << std::endl
+
 # if DEBUG
 #  define LOG_DEB(msg)	std::cerr << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
 # else
