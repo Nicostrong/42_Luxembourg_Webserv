@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Chunk.hpp                                          :+:      :+:    :+:   */
+/*   CgiCgiChunk.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 10:53:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:21:11 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHUNK_HPP
-# define CHUNK_HPP
+#ifndef CGICHUNK_HPP
+# define CGICHUNK_HPP
 
 #include "./../lib.hpp"
 #include "./../utils/Buffer.hpp"
@@ -19,7 +19,7 @@
 #include "./../http/HttpBase.hpp"
 #include "./../http/HttpSevereExceptions.hpp"
 
-class Chunk
+class CgiChunk
 {
 	public:
 		enum State
@@ -29,11 +29,12 @@ class Chunk
 			CHUNK_DATA = 2,
 			CHUNK_END = 3,
 		};
-		Chunk();
-		Chunk(size_t limit);
-		Chunk(const Chunk& obj);
-		~Chunk();
-		Chunk&			operator=(const Chunk& obj);
+		
+		CgiChunk();
+		CgiChunk(size_t limit);
+		CgiChunk(const CgiChunk& obj);
+		~CgiChunk();
+		CgiChunk&		operator=(const CgiChunk& obj);
 		State			getState() const;
 		size_t			handleChunk(Buffer& buff);
 		static bool		isHexaValid(const std::string& hex);
@@ -47,7 +48,6 @@ class Chunk
 		size_t	_chunkSize;
 		size_t	_chunksReceived;
 		size_t	_bodySize;
-		size_t	_bodyLimit;
 		State	_state;
 };
 

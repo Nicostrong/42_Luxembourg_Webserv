@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:46:11 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/03 09:14:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 09:58:13 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,5 +157,4 @@ void ResponseHandling::reset()
     	delete this->_staticFile;
     this->_staticFile = NULL;
 }
-
        

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 11:33:07 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 09:56:40 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@
 # define BODY_BUFFER_SIZE				32768
 # define MAX_CLIENT						1024
 # define HEAD_BSIZE						8192
+# define MAX_CHUNK_SIZE					8388608
+# define MAX_CHUNKS						1024
 # define EPOLLTICK						1u << 27
 # define IDLE_TIMEOUT					75
 # define CLIENT_RECEIVING_HEAD_TIMEOUT	60

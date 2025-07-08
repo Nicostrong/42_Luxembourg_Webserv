@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/02 08:07:18 by fdehan           ###   ########.fr        #
+#    Updated: 2025/07/08 11:29:54 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -180,6 +180,7 @@ NET_SRC			=	../class/parser/CheckerTokens.cpp \
 					../class/cgi/MyCGI_gs.cpp \
 					../class/cgi/MyCGI_m.cpp \
 					../class/cgi/CgiBody.cpp \
+					../class/cgi/CgiChunk.cpp \
 					../class/HandleConfig.cpp \
 					main_networking.cpp
 
