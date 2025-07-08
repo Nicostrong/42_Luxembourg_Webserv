@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/07 14:04:03 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 08:57:28 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,10 @@ void RequestHandling::handleGet(Socket& sock)
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		if (!checkCGIext(sock))
+		{
+			LOG_DEB("FILE NOT FOUND");
 			throw HttpExceptions(HttpBase::NOT_FOUND);
+		}
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
 		return ;
@@ -326,7 +329,10 @@ void RequestHandling::handlePost(Socket& sock)
 		setAttributes(sock);
 		
 		if (!checkCGIext(sock))
-			throw HttpExceptions(HttpBase::NOT_FOUND);
+		{
+			LOG_DEB("FILE NOT FOUND");
+			throw HttpSevereExceptions(HttpBase::NOT_FOUND);
+		}
 		
 		sock.getHandler().setBodyRequired(sock);
 		LOG_DEB(req->getContentLength());
@@ -542,11 +548,10 @@ void	RequestHandling::setAttributes( Socket& socket )
 
 bool	RequestHandling::checkCGIext( Socket& sock )
 {
-	//struct stat		buffer;
+	struct stat		buffer;
 	std::string		path = sock.getReq().getPathTranslated();
 
 	LOG_DEB("CHECK CGI: " << path);
 	
-	return (true);
-	//return (stat(path, &buffer) == 0);
+	return (stat(path.c_str(), &buffer) == 0);
 }
