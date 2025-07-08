@@ -3,30 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/16 08:29:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/04/30 08:32:43 by gzenner          ###   ########.fr       */
+/*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
+/*   Updated: 2025/07/08 13:20:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lib.hpp"
-#include "../includes/HandleConfig.hpp"
+#include "./../includes/parser/ParserServerConfig.hpp"
+#include "./../includes/server/ServerManager.hpp"
+#include "./../includes/server/Server.hpp"
+#include "./../includes/events/EventMonitoring.hpp"
+#include "./../includes/networking/SocketManager.hpp"
+#include "./../includes/networking/Listener.hpp"
+#include "./../includes/networking/ListenerManager.hpp"
 
-int	main(int argc, char **argv)
+bool	g_running = true;
+
+void	handle_sigint( int signal )
 {
-	if (argc == 2)
+	if (signal == SIGINT)
+		g_running = false;
+	return ;
+}
+
+int main(int argc, char** argv)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGPIPE, SIG_IGN);
+	try
 	{
-		HandleConfig hc;
-		hc.saveRawConfig(argv[1]);
-		hc.genTmpMap();
-		hc.genWebconfMap();
-		hc.getwebconfMap();
-//		hc.printwebconfMap();
+		std::string configPath = "./config/webserver.conf";
+
+		if (argc >= 2)
+			configPath = argv[1];
+		
+		ParserServerConfig		pc(configPath);
+		ServerManager			sm(pc.getAllTokens());
+		EventMonitoring			em;
+		SocketManager			sockm;
+		ListenerManager			lm(sm, sockm, em);
+		
+		while (g_running)
+			em.updateEvents();
 	}
-	else
+	catch(const EventMonitoring::EPollCatchBypass& e)
 	{
-		std::cerr << "Usage: ./webserv <config_file>.\n";
+		return (1);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return (1);
 	}
 	return (0);
 }

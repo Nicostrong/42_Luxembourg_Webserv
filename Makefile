@@ -6,7 +6,7 @@
 #    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/08 12:40:59 by fdehan           ###   ########.fr        #
+#    Updated: 2025/07/08 12:49:53 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -137,8 +137,7 @@ SRC				=	./src/main.cpp \
 					./class/cgi/MyCGI_m.cpp \
 					./class/cgi/CgiBody.cpp \
 					./class/cgi/CgiChunk.cpp \
-					./class/HandleConfig.cpp \
-					main_networking.cpp
+					./class/HandleConfig.cpp
 
 
 OBJ				=	$(SRC:.cpp=.o)
