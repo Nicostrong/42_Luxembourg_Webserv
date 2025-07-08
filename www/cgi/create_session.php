@@ -5,7 +5,7 @@ if (!isset($_SESSION['PHPSESSID']))
 {
     $_SESSION['PHPSESSID'] = session_id();
 }
-http_response_code(302);
+http_response_code(301);
 header("Location: /");
 
 ?>

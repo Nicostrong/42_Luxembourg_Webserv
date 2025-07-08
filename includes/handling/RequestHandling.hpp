@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/24 08:42:38 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/07 13:45:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ class RequestHandling
 		static bool 		isCGI( Socket& sock );
 		static bool			isRedirect( Socket& sock );
 		static bool			isIndexFile( Socket& sock );
-		static bool			isDirctoryListing( Socket &sock );
+		static bool			checkCGIext( Socket& sock );
 		static bool			isStaticFile( Socket& sock );
+		static bool			isDirctoryListing( Socket &sock );
 		static bool			ends_with( const std::string& str, const std::string& suffix );
 
 		// Get realated

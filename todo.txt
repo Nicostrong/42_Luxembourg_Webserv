@@ -40,4 +40,4 @@
 
 //Nico
 
--isCgi not working correctly
+[X]-isCgi not working correctly

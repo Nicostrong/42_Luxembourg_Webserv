@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/05 16:00:31 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/07/07 14:04:03 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,6 @@ std::string RequestHandling::getQueryString(const std::string& request)
 
 void RequestHandling::handleGet(Socket& sock)
 {
-
 	if (isRedirect(sock))
 		return ;
 			
@@ -283,6 +282,8 @@ void RequestHandling::handleGet(Socket& sock)
 		LOG_DEB("IsCGI dans GET");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
+		if (!checkCGIext(sock))
+			throw HttpExceptions(HttpBase::NOT_FOUND);
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
 		return ;
@@ -323,6 +324,9 @@ void RequestHandling::handlePost(Socket& sock)
 		LOG_DEB("IsCGI dans POST");
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
+		
+		if (!checkCGIext(sock))
+			throw HttpExceptions(HttpBase::NOT_FOUND);
 		
 		sock.getHandler().setBodyRequired(sock);
 		LOG_DEB(req->getContentLength());
@@ -450,6 +454,19 @@ void RequestHandling::handleDelete(Socket& sock)
 	if (isRedirect(sock))
 		return ;
 
+	if (isCGI(sock))
+	{
+		LOG_DEB("IsCGI dans DELETE");
+		sock.getResp().setRespType(HttpResponse::CGI);
+		setAttributes(sock);
+
+		if (!checkCGIext(sock))
+			throw HttpExceptions(HttpBase::NOT_FOUND);
+		
+		sock.getHandler().setCGI(sock);
+		sock.getHandler().getCGI()->execCGI();
+		return ;
+	}
 	if (req->getUri().size() && *req->getUri().rbegin() == '/')
 		throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
 	
@@ -521,4 +538,15 @@ void	RequestHandling::setAttributes( Socket& socket )
 	req->setFilePath(pathTranslated);
 	req->setRedirect(loc->getDirectiveValue("return"));
 	return ;
+}
+
+bool	RequestHandling::checkCGIext( Socket& sock )
+{
+	//struct stat		buffer;
+	std::string		path = sock.getReq().getPathTranslated();
+
+	LOG_DEB("CHECK CGI: " << path);
+	
+	return (true);
+	//return (stat(path, &buffer) == 0);
 }
