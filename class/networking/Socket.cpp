@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:20 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 14:20:46 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:56:43 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/Socket.hpp"
-#include "./../../includes/networking/SocketManager.hpp"
-#include "./../../includes/handling/RequestHandling.hpp"
+#include "../../includes/networking/Socket.hpp"
+#include "../../includes/networking/SocketManager.hpp"
+#include "../../includes/handling/RequestHandling.hpp"
 
 Socket::Socket(int fd, const Endpoint& sockAddr, const Endpoint& entryAddr, 
 	ServerManager& sm, SocketManager& sockm)
@@ -214,7 +214,7 @@ void Socket::onTickEvent(int fd, EventMonitoring& em)
 	{
 		this->_handler.onTick(em, this);
 	}
-	catch(const MyCGI::CGIExit& e)
+	catch(const CGI::CGIExit& e)
 	{
 		throw EventMonitoring::EPollCatchBypass();
 	}

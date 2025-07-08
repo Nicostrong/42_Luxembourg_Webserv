@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 13:20:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:46:59 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../includes/parser/ParserServerConfig.hpp"
-#include "./../includes/server/ServerManager.hpp"
-#include "./../includes/server/Server.hpp"
-#include "./../includes/events/EventMonitoring.hpp"
-#include "./../includes/networking/SocketManager.hpp"
-#include "./../includes/networking/Listener.hpp"
-#include "./../includes/networking/ListenerManager.hpp"
+#include "../includes/server/Server.hpp"
+#include "../includes/networking/Listener.hpp"
+#include "../includes/server/ServerManager.hpp"
+#include "../includes/events/EventMonitoring.hpp"
+#include "../includes/networking/SocketManager.hpp"
+#include "../includes/networking/ListenerManager.hpp"
+#include "../includes/parser/ParserServerConfig.hpp"
 
 bool	g_running = true;
 
@@ -29,13 +29,19 @@ void	handle_sigint( int signal )
 
 int main(int argc, char** argv)
 {
+	if (argc > 2)
+	{
+		LOG_DEB("Usage: webserv [path to config file]");
+		return (0);
+	}
+	
 	signal(SIGINT, handle_sigint);
 	signal(SIGPIPE, SIG_IGN);
 	try
 	{
 		std::string configPath = "./config/webserver.conf";
 
-		if (argc >= 2)
+		if (argc == 2)
 			configPath = argv[1];
 		
 		ParserServerConfig		pc(configPath);

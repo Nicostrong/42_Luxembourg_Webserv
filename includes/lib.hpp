@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 08:12:00 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/08 09:56:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:44:19 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@
 # include <netinet/in.h>
 # include <sys/socket.h>
 
+# include <iomanip>
 # include <unistd.h>
 # include <iostream>
-# include <iomanip>
 
 # include <map>
 # include <set>
@@ -85,21 +85,22 @@ struct t_string
 	size_t len;
 };
 
-#define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
+# define PRINT_INFOS() __FILE_NAME__ << ":" << __LINE__ << " at " << __func__ << "()"
 
-//	NICO REMET CERR A LA PLACE DE COUT QUAND TU AS FINI
 # if DEBUG
-#  define LOG_DEB(msg)	std::cout << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
+#  define LOG_DEB(msg)	std::cerr << CYAN << "[" << getCurrentTimeStr()  << "] [DEBUG] " << msg << " " << PRINT_INFOS() << RESET << std::endl
 # else
 #  define LOG_DEB(msg)
 # endif
 
 # define LOG_ERROR(msg)	std::cerr << RED << "[" << getCurrentTimeStr()  << "] [ERROR] " << msg << " in " << PRINT_INFOS() << RESET << std::endl
 
-inline std::string getCurrentTimeStr() {
-	char buffer[9];
-	time_t t = std::time(NULL);
-	struct tm* tm_info = std::localtime(&t);
+inline std::string		getCurrentTimeStr()
+{
+	char			buffer[9];
+	time_t			t = std::time(NULL);
+	struct tm*		tm_info = std::localtime(&t);
+	
 	std::strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
 	return std::string(buffer);
 }

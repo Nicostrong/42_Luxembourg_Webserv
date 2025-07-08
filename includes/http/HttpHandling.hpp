@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:59:34 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 08:13:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:54:04 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define HTTPHANDLING_HPP
 
 # include "../lib.hpp"
-# include "../cgi/MyCGI.hpp"
+# include "../cgi/CGI.hpp"
 # include "./HttpParser.hpp"
 # include "./HttpExceptions.hpp"
 # include "../cgi/CgiParser.hpp"
@@ -48,7 +48,7 @@ class	HttpHandling
 		void				onRead( EventMonitoring& em, Socket* sock );
 		void				onWrite( EventMonitoring& em, Socket* sock );
 		void				onTick( EventMonitoring& em, Socket* sock );
-		void				onCgiComplete();
+		void				onCgiComplete( void );
 		void				setBodyRequired( Socket& sock );
 		void				reset( void );
 		CgiParser&			getCgiParser( void );
@@ -58,11 +58,11 @@ class	HttpHandling
 
 		/*	SETTER	*/
 		void				setCGI( Socket& socket );
-		void				setState(State state);
+		void				setState( State state );
 		void				setConnectionClose( Socket& sock );
 
 		/*	GETTER	*/
-		MyCGI*				getCGI( void );
+		CGI*				getCGI( void );
 		
 	private:
 	
@@ -73,7 +73,7 @@ class	HttpHandling
 		CgiParser			_cgiParser;
 		ResponseHandling	_resHandling;
 		CgiResponse			_cgiResp;
-		MyCGI*				_cgi;
+		CGI*				_cgi;
 		time_t				_ts;
 		State				_state;
 };

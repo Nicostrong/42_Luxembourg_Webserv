@@ -3,27 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   CgiParser.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 10:00:57 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 14:20:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:26:45 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGIPARSER_HPP
 # define CGIPARSER_HPP
 
-#include "./../lib.hpp"
-#include "./../utils/Buffer.hpp"
-#include "./../http/HttpExceptions.hpp"
-#include "./../http/HttpBase.hpp"
-#include "./CgiResponse.hpp"
+# include "./../lib.hpp"
+# include "./CgiResponse.hpp"
+# include "./../utils/Buffer.hpp"
+# include "./../http/HttpBase.hpp"
+# include "./../http/HttpExceptions.hpp"
 
 #define CGI_HEAD_BUFF 8192
 
-class CgiParser
+class   CgiParser
 {
     public:
+
         enum State
         {
 			CGI_HEAD = 0,
@@ -31,6 +32,7 @@ class CgiParser
 			CGI_BODY = 2,
 			CGI_BODY_RECEIVED = 3,
         };
+
         CgiParser();
         ~CgiParser();
 		
@@ -44,11 +46,13 @@ class CgiParser
         void                reset();
 		
     private:
+
         CgiParser(const CgiParser& obj);
         CgiParser& operator=(const CgiParser& obj);
 
         std::string _headBuffer;
 		State		_state;
+        
 };
 
 # endif

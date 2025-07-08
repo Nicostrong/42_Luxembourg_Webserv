@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/Body.hpp"
-#include "./../../includes/networking/Socket.hpp"
+#include "../../includes/networking/Body.hpp"
+#include "../../includes/networking/Socket.hpp"
 
 Body::Body(size_t bufferSize) : _buff(bufferSize), _size(0), _bytesRead(0), 
 	_isReceived(false) {}

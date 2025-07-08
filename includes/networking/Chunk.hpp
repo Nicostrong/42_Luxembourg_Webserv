@@ -3,25 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   Chunk.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:28:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 10:53:00 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:35:11 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHUNK_HPP
 # define CHUNK_HPP
 
-#include "./../lib.hpp"
-#include "./../utils/Buffer.hpp"
-#include "./../http/HttpExceptions.hpp"
-#include "./../http/HttpBase.hpp"
-#include "./../http/HttpSevereExceptions.hpp"
+# include "./../lib.hpp"
+# include "./../utils/Buffer.hpp"
+# include "./../http/HttpBase.hpp"
+# include "./../http/HttpExceptions.hpp"
+# include "./../http/HttpSevereExceptions.hpp"
 
-class Chunk
+class	Chunk
 {
 	public:
+
 		enum State
 		{
 			CHUNK_START = 0,
@@ -37,7 +38,9 @@ class Chunk
 		State			getState() const;
 		size_t			handleChunk(Buffer& buff);
 		static bool		isHexaValid(const std::string& hex);
+
 	private:
+
 		void	handleChunkStart();
 		void	handleChunkHead(Buffer& buff);
 		size_t	handleChunkData(Buffer& buff);
@@ -49,6 +52,7 @@ class Chunk
 		size_t	_bodySize;
 		size_t	_bodyLimit;
 		State	_state;
+		
 };
 
 # endif

@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   HttpRequest.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:25:07 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/03 09:16:59 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:32:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTP_REQUEST_HPP
-#define HTTP_REQUEST_HPP
+#ifndef HTTPREQUEST_HPP
+# define HTTPREQUEST_HPP
 
-#include "./../lib.hpp"
-#include "./../server/Server.hpp"
-#include "./../server/Location.hpp"
-#include "./../networking/Body.hpp"
-#include "./HttpBase.hpp"
+# include "./../lib.hpp"
+# include "./HttpBase.hpp"
+# include "./../server/Server.hpp"
+# include "./../server/Location.hpp"
+# include "./../networking/Body.hpp"
 
-class HttpRequest : public HttpBase
+class	HttpRequest : public	HttpBase
 {
 	public:
 
@@ -92,6 +92,7 @@ class HttpRequest : public HttpBase
 		const Server*		_server;
 		
 		Body*				_body;
+		
 };
 
 std::ostream	&operator<<( std::ostream &out, const HttpRequest& src_object );

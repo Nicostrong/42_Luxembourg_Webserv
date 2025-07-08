@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Directive.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 10:17:30 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/02 09:17:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:38:51 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ class	Directive
 		const std::string&					getUriReturn( void ) const;
 
 		/*	class Exception	*/
-		/*	fields empty	*/
 		class	FieldsEmpty : public std::exception
 		{
 

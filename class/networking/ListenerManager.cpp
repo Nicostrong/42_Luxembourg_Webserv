@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ListenerManager.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 23:16:22 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:12:35 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:50:00 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/ListenerManager.hpp"
+#include "../../includes/networking/ListenerManager.hpp"
 
 ListenerManager::ListenerManager(ServerManager& sm, SocketManager& sockm, 
     EventMonitoring& em)

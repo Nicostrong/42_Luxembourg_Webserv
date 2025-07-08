@@ -6,11 +6,11 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 10:25:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 17:15:54 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 15:50:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/SocketManager.hpp"
+#include "../../includes/networking/SocketManager.hpp"
 
 SocketManager::SocketManager()
 {

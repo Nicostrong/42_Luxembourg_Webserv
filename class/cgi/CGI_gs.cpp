@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MyCGI_gs.cpp                                       :+:      :+:    :+:   */
+/*   CGI_gs.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:07:04 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 11:24:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:19:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cgi/MyCGI.hpp"
+#include "../../includes/cgi/CGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************
@@ -20,7 +20,7 @@
 /*
  *	get the path of the script to execute
  */
-std::string&		MyCGI::getScriptPath( void )
+std::string&		CGI::getScriptPath( void )
 {
 	return (this->_scriptPath);
 }
@@ -28,7 +28,7 @@ std::string&		MyCGI::getScriptPath( void )
 /*
  *	get the path of the binary to execute
  */
-std::string&		MyCGI::getBinaryPath( void )
+std::string&		CGI::getBinaryPath( void )
 {
 	return (this->_binaryExec);
 }
@@ -36,7 +36,7 @@ std::string&		MyCGI::getBinaryPath( void )
 /*
  *	get the query string of the request
  */
-std::string&	MyCGI::getQuery( void )
+std::string&	CGI::getQuery( void )
 {
 	return (this->_query);
 }
@@ -44,7 +44,7 @@ std::string&	MyCGI::getQuery( void )
 /*
  *	get the number of byte read on the buffer
  */
-size_t		MyCGI::getByteRead( void )
+size_t		CGI::getByteRead( void )
 {
 	return (this->_byteRead);
 }
@@ -52,7 +52,7 @@ size_t		MyCGI::getByteRead( void )
 /*
  *	get the number of byte sended on the buffer
  */
-size_t		MyCGI::getByteSend( void )
+size_t		CGI::getByteSend( void )
 {
 	return (this->_byteSend);
 }
@@ -60,7 +60,7 @@ size_t		MyCGI::getByteSend( void )
 /*
  *	get all parameters in an array
  */
-char**		MyCGI::getParams( void )
+char**		CGI::getParams( void )
 {
 	return (this->_params);
 }
@@ -68,7 +68,7 @@ char**		MyCGI::getParams( void )
 /*
  *	geet all environnement variable in an array
  */
-char**		MyCGI::getEnv( void )
+char**		CGI::getEnv( void )
 {
 	return (this->_aEnv);
 }
@@ -76,7 +76,7 @@ char**		MyCGI::getEnv( void )
 /*
  *	get the Pipe objet to communicate with the CGI
  */
-Pipe&			MyCGI::getPipeToCGI( void )
+Pipe&			CGI::getPipeToCGI( void )
 {
 	return (this->_toCGI);
 }
@@ -84,7 +84,7 @@ Pipe&			MyCGI::getPipeToCGI( void )
 /*
  *	get the Pipe objet using by the  CGI
  */
-Pipe&			MyCGI::getPipeFromCGI( void )
+Pipe&			CGI::getPipeFromCGI( void )
 {
 	return (this->_fromCGI);
 }
@@ -92,7 +92,7 @@ Pipe&			MyCGI::getPipeFromCGI( void )
 /*
  *	get the Buffer to communicate with the CGI
  */
-Buffer&			MyCGI::getTxBuffer( void )
+Buffer&			CGI::getTxBuffer( void )
 {
 	return (this->_txBuffer);
 };
@@ -100,7 +100,7 @@ Buffer&			MyCGI::getTxBuffer( void )
 /*
  *	get the Buffer from the CGI
  */
-Buffer&			MyCGI::getRxBuffer( void )
+Buffer&			CGI::getRxBuffer( void )
 {
 	return (this->_rxBuffer);
 };
@@ -108,7 +108,7 @@ Buffer&			MyCGI::getRxBuffer( void )
 /*
  *	return the Socket object
  */
-Socket&		MyCGI::getSocket( void )
+Socket&		CGI::getSocket( void )
 {
 	return (*this->_socket);
 }
@@ -116,7 +116,7 @@ Socket&		MyCGI::getSocket( void )
 /*
  *	get the map of environnement variable
  */
-MyCGI::Map&		MyCGI::getMapEnv( void )
+CGI::Map&		CGI::getMapEnv( void )
 {
 	return (this->_mEnv);
 }
@@ -124,17 +124,17 @@ MyCGI::Map&		MyCGI::getMapEnv( void )
 /*
  *	get the pid of the parent
  */
-pid_t		MyCGI::getPid( void )
+pid_t		CGI::getPid( void )
 {
 	return (this->_pid);
 }
 
-bool	MyCGI::isCgiFinished() const
+bool	CGI::isCgiFinished() const
 {
 	return (this->_isExited && this->_isTransferFinished);
 }
 
-bool	MyCGI::isOutputFinished() const
+bool	CGI::isOutputFinished() const
 {
 	return (this->_isTransferFinished);
 }
@@ -146,7 +146,7 @@ bool	MyCGI::isOutputFinished() const
 /*
  *	reset the value of bytes read
  */
-void		MyCGI::resetByteRead( void )
+void		CGI::resetByteRead( void )
 {
 	this->_byteRead = 0;
 	return ;
@@ -154,7 +154,7 @@ void		MyCGI::resetByteRead( void )
 /*
  *	increase the value of byteread
  */
-void		MyCGI::setByteRead( size_t bytes )
+void		CGI::setByteRead( size_t bytes )
 {
 	this->_byteRead += bytes;
 	return ;
@@ -163,7 +163,7 @@ void		MyCGI::setByteRead( size_t bytes )
 /*
  *	reset the value of bytes send
  */
-void		MyCGI::resetByteSend( void )
+void		CGI::resetByteSend( void )
 {
 	this->_byteSend = 0;
 	return ;
@@ -171,7 +171,7 @@ void		MyCGI::resetByteSend( void )
 /*
  *	increase the value of bytesend
  */
-void		MyCGI::setByteSend( size_t bytes )
+void		CGI::setByteSend( size_t bytes )
 {
 	this->_byteSend += bytes;
 	return ;
@@ -180,7 +180,7 @@ void		MyCGI::setByteSend( size_t bytes )
 /*
  *	set the pid attribut
  */
-void		MyCGI::setPid( pid_t pid )
+void		CGI::setPid( pid_t pid )
 {
 	this->_pid = pid;
 	return ;

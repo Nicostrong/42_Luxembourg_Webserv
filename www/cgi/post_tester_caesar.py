@@ -1,16 +1,28 @@
 import sys
 import socket
 import json
+from urllib.parse import parse_qs, quote
 
-if len(sys.argv) != 6:
+query_string = os.environ.get('QUERY_STRING', '')
+params = parse_qs(query_string)
+shift = params.get('shift', [None])[0]
+text = params.get('text', [None])[0]
+
+if len(sys.argv) != 6 and shift is None and text is None:
     print(f"Usage:{sys.argv[0]} PORT HOST TARGETSCRIPT shift text")
     exit()
 else:
-    input_data = {
-        "shift": sys.argv[4],
-        "text": sys.argv[5],
-    }
-
+    if shift is None or text is None:
+        input_data = {
+         "shift": sys.argv[4],
+         "text": sys.argv[5],
+        }
+    else:
+        input_data = {
+         "shift": shift,
+         "text": text,
+        }
+        
     # Properly stringify as JSON
     input_str = json.dumps(input_data)
     print(f"[debug len]{len(input_str)}")

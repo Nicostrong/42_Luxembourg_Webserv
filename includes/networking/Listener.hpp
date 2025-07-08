@@ -3,29 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   Listener.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 16:40:47 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 08:50:57 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:35:58 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LISTENER_HPP
-#define LISTENER_HPP
+# define LISTENER_HPP
 
-#include "./../lib.hpp"
-#include "./../utils/Ip.hpp"
-#include "./../utils/Endpoint.hpp"
-#include "./../utils/Fd.hpp"
-#include "./../events/EventMonitoring.hpp"
-#include "./../events/IEventHandler.hpp"
-#include "./../server/ServerManager.hpp"
-#include "./Socket.hpp"
-#include "./SocketManager.hpp"
+# include "./Socket.hpp"
+# include "./../lib.hpp"
+# include "./../utils/Ip.hpp"
+# include "./../utils/Fd.hpp"
+# include "./SocketManager.hpp"
+# include "./../utils/Endpoint.hpp"
+# include "./../events/IEventHandler.hpp"
+# include "./../server/ServerManager.hpp"
+# include "./../events/EventMonitoring.hpp"
 
-class Listener : public IEventHandler
+class   Listener : public   IEventHandler
 {
     public:
+
         Listener(const Endpoint& addr, SocketManager& sockm, 
                 ServerManager& servm);
         ~Listener();
@@ -35,7 +36,9 @@ class Listener : public IEventHandler
 		void onWriteEvent(int fd, EventMonitoring& em);
 		void onCloseEvent(int fd, EventMonitoring& em);
 		void onTickEvent(int fd, EventMonitoring& em);
+
     private:
+
 		Listener(const Listener& obj);
 		Listener& operator=(const Listener& obj);
 		
@@ -43,6 +46,7 @@ class Listener : public IEventHandler
 		int				            _serverSocket;
 		SocketManager&	            _sockm;
         ServerManager&              _servm;
+        
 };
 
 #endif

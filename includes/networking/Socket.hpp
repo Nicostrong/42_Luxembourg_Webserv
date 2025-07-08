@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 08:09:29 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 10:15:04 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:37:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,28 @@
 # define SOCKET_HPP
 
 # include "./../lib.hpp"
-# include "./../utils/Buffer.hpp"
-# include "./../utils/File.hpp"
 # include "./../utils/Ip.hpp"
+# include "./../utils/File.hpp"
+# include "./../utils/Buffer.hpp"
 # include "./../utils/Endpoint.hpp"
-# include "./../events/IEventHandler.hpp"
-# include "./../events/EventMonitoring.hpp"
-# include "./../server/ServerManager.hpp"
 # include "./../http/HttpRequest.hpp"
 # include "./../http/HttpResponse.hpp"
+# include "./../http/HttpHandling.hpp"
 # include "./../http/HttpExceptions.hpp"
+# include "./../events/IEventHandler.hpp"
+# include "./../server/ServerManager.hpp"
+# include "./../events/EventMonitoring.hpp"
 # include "./../http/HttpSevereExceptions.hpp"
 # include "./../handling/ResponseHandling.hpp"
-# include "./../http/HttpHandling.hpp"
 
-# define RX_SIZE 1024
+# define RX_SIZE	1024
 
-class SocketManager;
+class	SocketManager;
 
-class Socket : public IEventHandler
+class	Socket : public	IEventHandler
 {
 	public:
+	
 		class SocketReadException : public std::exception
 		{
 			public:

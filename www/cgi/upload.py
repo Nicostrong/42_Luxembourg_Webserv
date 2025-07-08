@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    upload.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/25 09:29:06 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/05 16:25:04 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/07/08 15:16:32 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -209,18 +209,20 @@ def response():
 			<a	href="/cgi/timeout.py">Timeout</a>
 			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
-		<div class="upload-container">
-			{texte}
-			{files_list_html}
-			<div class="info">
-				<h3>Upload Information:</h3>
-				<p>All file types are accepted</p>
-			</div>
-		</div>
 		<div class="container">
-			<div id="status-section" class="user-status">
+			<div class="upload-container">
+				{texte}
+				{files_list_html}
 				<div class="info">
-					<span id="status-message">Chargement...</span>
+					<h3>Upload Information:</h3>
+					<p>All file types are accepted</p>
+				</div>
+			</div>
+			<div class="container">
+				<div id="status-section" class="user-status">
+					<div class="info">
+						<span id="status-message">Chargement...</span>
+					</div>
 				</div>
 			</div>
 		</div>

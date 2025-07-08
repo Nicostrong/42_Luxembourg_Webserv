@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   HttpParser.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:56:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/23 10:27:26 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:31:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTPPARSER_HPP
 # define HTTPPARSER_HPP
 
-# include "./../utils/Buffer.hpp"
-# include "./../networking/Body.hpp"
 # include "./HttpBase.hpp"
 # include "./HttpRequest.hpp"
 # include "./HttpExceptions.hpp"
+# include "./../utils/Buffer.hpp"
+# include "./../networking/Body.hpp"
 # include "./HttpSevereExceptions.hpp"
 
-# define SL_BSIZE 1024
+# define SL_BSIZE	1024
 
 class	Socket;
 
-class HttpParser
+class	HttpParser
 {
 	
 	public:
@@ -47,7 +47,9 @@ class HttpParser
 		void 					setState(State state);
 		State					getState() const;
 		void					reset();
+
 	private:
+	
 		void					parseStartLine(HttpRequest& req);
 		void					parseHeaders(HttpRequest& req);
 		void 					parseHeader(const std::string& line, 

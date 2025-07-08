@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Body.hpp                                    :+:      :+:    :+:   */
+/*   Body.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:21:21 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:26:16 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:34:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REQUESTBODY_HPP
-# define REQUESTBODY_HPP
+#ifndef BODY_HPP
+# define BODY_HPP
 
-#include "./../lib.hpp"
-#include "./../utils/Buffer.hpp"
-#include "./Chunk.hpp"
+# include "./../lib.hpp"
+# include "./../utils/Buffer.hpp"
+# include "./Chunk.hpp"
 
-#define RAM_BUFF 20480
-#define TMP_PATH "/tmp/"
-#define MAX_RETRY 3
+# define RAM_BUFF	20480
+# define TMP_PATH	"/tmp/"
+# define MAX_RETRY	3
 
-class Socket;
+class	Socket;
 
-class Body
+class	Body
 {
 	public:
 

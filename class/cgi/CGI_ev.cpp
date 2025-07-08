@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MyCGI_ev.cpp                                       :+:      :+:    :+:   */
+/*   CGI_ev.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/08 13:44:36 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 15:19:22 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cgi/MyCGI.hpp"
+#include "../../includes/cgi/CGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************
  *							SERVER EVENTS									   *
  ******************************************************************************/
 
-void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
+void		CGI::onReadEvent(int fd, EventMonitoring& em)
 {
 	this->_isReadEvent = true;
 	this->_rxBuffer.resetIfRead();
@@ -49,7 +49,7 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 	}
 }
 
-void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
+void		CGI::onWriteEvent(int fd, EventMonitoring& em)
 {
 	try
 	{
@@ -83,7 +83,7 @@ void		MyCGI::onWriteEvent(int fd, EventMonitoring& em)
 	}
 }
 
-void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
+void		CGI::onCloseEvent(int fd, EventMonitoring& em)
 {
 	try
 	{
@@ -101,7 +101,7 @@ void		MyCGI::onCloseEvent(int fd, EventMonitoring& em)
 	}
 }
 
-void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
+void		CGI::onTickEvent( int fd, EventMonitoring& em )
 {
 	(void)fd;
 	int status = 0;
@@ -126,7 +126,7 @@ void		MyCGI::onTickEvent( int fd, EventMonitoring& em )
 	return ;
 }
 
-void MyCGI::onCgiError(EventMonitoring& em)
+void CGI::onCgiError(EventMonitoring& em)
 {
 	int status = 0;
 	
@@ -144,7 +144,7 @@ void MyCGI::onCgiError(EventMonitoring& em)
 		kill(this->_pid, SIGKILL);
 }
 
-void MyCGI::onEndOutput(EventMonitoring& em)
+void CGI::onEndOutput(EventMonitoring& em)
 {
 	em.unmonitor(this->getPipeToCGI().getIn());
 	em.unmonitor(this->getPipeFromCGI().getOut());	this->getPipeToCGI().closeIn();
@@ -155,7 +155,7 @@ void MyCGI::onEndOutput(EventMonitoring& em)
 	this->_socket->getHandler().getCgiParser().onRead(this->_rxBuffer, *this->_socket);
 }
 
-void MyCGI::onEndInput(EventMonitoring& em)
+void CGI::onEndInput(EventMonitoring& em)
 {
 	em.unmonitor(this->getPipeToCGI().getIn());
 	this->getPipeToCGI().closeIn();

@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MyCGI_m.cpp                                        :+:      :+:    :+:   */
+/*   CGI_m.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:13:17 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 14:08:03 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 15:18:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cgi/MyCGI.hpp"
+#include "../../includes/cgi/CGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************
  *								METHOD										   *
  ******************************************************************************/
 
-void		MyCGI::execCGI( void )
+void		CGI::execCGI( void )
 {
 	char**				cmd = this->getParams();
 	
@@ -62,14 +62,14 @@ void		MyCGI::execCGI( void )
 /*
  *	output stream operator
  */
-std::ostream	&operator<<( std::ostream &out, MyCGI& src_object )
+std::ostream	&operator<<( std::ostream &out, CGI& src_object )
 {
 	std::string		query = src_object.getQuery();
 	char**			params = src_object.getParams();
 	char**			env = src_object.getEnv();
 	int				i = -1;
 
-	out	<< MAGENTA << "[DEBUG CGI]\n================= MYCGI OBJECT =================" << std::endl
+	out	<< MAGENTA << "[DEBUG CGI]\n================= CGI OBJECT =================" << std::endl
 		<< "script to execute:" << src_object.getScriptPath() << std::endl
 		<< "binary to execute:" << src_object.getBinaryPath() << std::endl
 		<< "query params for CGI:" << (query.empty() ? "NULL" : query) << std::endl
@@ -87,6 +87,6 @@ std::ostream	&operator<<( std::ostream &out, MyCGI& src_object )
 	out << "\tPIPE IN: " << src_object.getPipeFromCGI().getIn()
 		<< "\tPIPE OUT: " << src_object.getPipeFromCGI().getOut() << std::endl;
 	out << "PID parent: " << src_object.getPid() << std::endl;
-	out	<< "=================== END MYCGI ==================" << RESET;
+	out	<< "=================== END CGI ==================" << RESET;
 	return (out);
 }

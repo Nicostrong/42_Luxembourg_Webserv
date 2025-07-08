@@ -3,25 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 08:24:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/05 09:35:41 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:33:10 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTP_RESPONSE
-# define HTTP_RESPONSE
+#ifndef HTTPRESPONSE_HPP
+# define HTTPRESPONSE_HPP
 
-#include "./../lib.hpp"
-#include "./../utils/Buffer.hpp"
-#include "./../utils/Uri.hpp"
-#include "./HttpBase.hpp"
-#include "./HttpRequest.hpp"
+# include "./../lib.hpp"
+# include "./HttpBase.hpp"
+# include "./HttpRequest.hpp"
+# include "./../utils/Uri.hpp"
+# include "./../utils/Buffer.hpp"
 
-class HttpResponse: public HttpBase
+class	HttpResponse: public	HttpBase
 {
 	public:
+
 		enum ResponseType
 		{
 			UNKNOWN = 0,
@@ -44,7 +45,9 @@ class HttpResponse: public HttpBase
 		void				setRespType(ResponseType type);
 		ResponseType		getRespType() const;
 		void				encodeHead(const std::string data);
+
 	private:
+	
 		void				streamHeaders(std::stringstream& ss) const;
 
 		ResponseType	_respType;

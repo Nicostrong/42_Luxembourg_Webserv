@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   EventData.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:17:51 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/20 10:47:10 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:27:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENT_DATA_HPP
 # define EVENT_DATA_HPP
 
-#include "./IEventHandler.hpp"
-#include "./EventMonitoring.hpp"
+# include "./IEventHandler.hpp"
+# include "./EventMonitoring.hpp"
 
-class EventData
+class	EventData
 {
 	public:
 
@@ -37,10 +37,12 @@ class EventData
 		void					onTick() const;
 
 	private:
+
 		const int 				_fd;
 		IEventHandler* 			_ctx;
 		EventMonitoring*		_em;
 		bool					_canceled;
+		
 };
 
 #endif

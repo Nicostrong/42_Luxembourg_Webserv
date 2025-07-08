@@ -13,15 +13,16 @@
 #ifndef CGICHUNK_HPP
 # define CGICHUNK_HPP
 
-#include "./../lib.hpp"
-#include "./../utils/Buffer.hpp"
-#include "./../http/HttpExceptions.hpp"
-#include "./../http/HttpBase.hpp"
-#include "./../http/HttpSevereExceptions.hpp"
+# include "./../lib.hpp"
+# include "./../utils/Buffer.hpp"
+# include "./../http/HttpBase.hpp"
+# include "./../http/HttpExceptions.hpp"
+# include "./../http/HttpSevereExceptions.hpp"
 
-class CgiChunk
+class	CgiChunk
 {
 	public:
+
 		enum State
 		{
 			CHUNK_START = 0,
@@ -38,7 +39,9 @@ class CgiChunk
 		State			getState() const;
 		size_t			handleChunk(Buffer& buff);
 		static bool		isHexaValid(const std::string& hex);
+
 	private:
+
 		void	handleChunkStart();
 		void	handleChunkHead(Buffer& buff);
 		size_t	handleChunkData(Buffer& buff);
@@ -49,6 +52,7 @@ class CgiChunk
 		size_t	_chunksReceived;
 		size_t	_bodySize;
 		State	_state;
+
 };
 
 # endif

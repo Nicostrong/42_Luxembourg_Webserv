@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   Buffer.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 10:05:10 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/16 18:29:52 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:40:05 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUFFER_HPP
 # define BUFFER_HPP
 
-#include "./../lib.hpp"
+# include "../lib.hpp"
 
-class Buffer
+class	Buffer
 {
     public:
+
 		class NoSpaceAvailable : public std::exception {
 			public:
 				const char * what () const throw();
@@ -26,7 +27,9 @@ class Buffer
         Buffer(size_t bufferSize);
         Buffer(const Buffer& obj);
         ~Buffer();
+
         Buffer&						operator=(const Buffer& obj);
+
 		std::vector<char>&			getVector();
 		const std::vector<char>&	getVector() const;
 		char*						getData();
@@ -64,11 +67,14 @@ class Buffer
 		void 						alignData();
 		void 						reset();
 		void						resetIfRead();
+
     private:
+
         std::vector<char>	_buffer;
         size_t				_bufferSize;
 		size_t				_bufferUsed;
 		size_t				_bufferRead;
+		
 };
 
 std::ostream& operator<<(std::ostream& os, const Buffer& obj);

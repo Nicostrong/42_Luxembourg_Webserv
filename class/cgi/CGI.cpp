@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MyCGI.cpp                                          :+:      :+:    :+:   */
+/*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:09:40 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/07 14:03:51 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 15:18:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cgi/MyCGI.hpp"
+#include "../../includes/cgi/CGI.hpp"
 #include "../../includes/networking/Socket.hpp"
 
 /*******************************************************************************
  *						CONSTRUCTOR / DESTRUCTOR							   *
  ******************************************************************************/
 
-MyCGI::MyCGI( Socket& socket )
-	: _byteRead(0), _byteSend(0), _params(NULL), _aEnv(NULL), _toCGI(), _fromCGI(), _txBuffer(BUFF_SIZE),
-	_rxBuffer(BUFF_SIZE), _socket(&socket), _pid(-1), _exitCode(0), 
-	_isCloseEvent(false), _isReadEvent(false), _isTransferFinished(false), _isExited(false)
+CGI::CGI( Socket& socket )
+	: _byteRead(0), _byteSend(0), _params(NULL), _aEnv(NULL), _toCGI(), 
+	_fromCGI(), _txBuffer(BUFF_SIZE), _rxBuffer(BUFF_SIZE), _socket(&socket),
+	_pid(-1), _exitCode(0), _isCloseEvent(false), _isReadEvent(false),
+	_isTransferFinished(false), _isExited(false)
 {
 	socket.getHandler().setState(HttpHandling::CGI_SENDING);
 	Fd::setNonBlocking(getPipeToCGI().getIn());
@@ -37,7 +38,7 @@ MyCGI::MyCGI( Socket& socket )
 	return ;
 }
 
-MyCGI::~MyCGI( void )
+CGI::~CGI( void )
 {
 	int		i = -1;
 	int		status = 0;
@@ -78,7 +79,7 @@ MyCGI::~MyCGI( void )
 /*
 *	initialise all key environnement map with empty string value
 */
-void		MyCGI::initMap( void )
+void		CGI::initMap( void )
 {
 	this->_mEnv["REDIRECT_STATUS"] = "";
 	this->_mEnv["SCRIPT_FILENAME"] = "";
@@ -105,11 +106,10 @@ void		MyCGI::initMap( void )
 	return ;
 }
 
-
 /*
-*	normalize the path to remove the "/../"
-*/
-std::string		MyCGI::normalizePath( const std::string& path )
+ *	normalize the path to remove the "/../"
+ */
+std::string		CGI::normalizePath( const std::string& path )
 {
 	std::vector<std::string>		parts;
 	std::stringstream				ss(path);
@@ -130,29 +130,24 @@ std::string		MyCGI::normalizePath( const std::string& path )
 		else
 			parts.push_back(part);
 	}
-	
+
 	std::string		result;
 
-	//if (isAbsolute)
-	//	result = "/";
-	
 	for (size_t i = 0; i < parts.size(); ++i)
 	{
 		if (i > 0 || isAbsolute)
 			result += "/";
 		result += parts[i];
 	}
-	
 	if (result.empty())
 		result = ".";
-	
 	return (result);
 }
 
 /*
 *	complete the environnement map withh all value
 */
-void		MyCGI::setMap( void )
+void		CGI::setMap( void )
 {
 	std::ostringstream		oss;
 	HttpRequest*			req = &this->_socket->getReq();
@@ -192,9 +187,9 @@ void		MyCGI::setMap( void )
 }
 
 /*
-*	create a new environnement array
-*/
-void		MyCGI::setEnv( void )
+ *	create a new environnement array
+ */
+void		CGI::setEnv( void )
 {
 	Map::iterator		it;
 	size_t				i = 0;
@@ -213,11 +208,11 @@ void		MyCGI::setEnv( void )
 }
 
 /*
-*	SetParams check if the script is a php script and complete the array with
-*	all values, for php we need just the path of the binary to execute without
-*	the script php to execute
-*/
-void		MyCGI::setParams( void )
+ *	SetParams check if the script is a php script and complete the array with
+ *	all values, for php we need just the path of the binary to execute without
+ *	the script php to execute
+ */
+void		CGI::setParams( void )
 {
 	const std::string&		scriptName = getMapEnv()["SCRIPT_NAME"];
 	const std::string		suffix = ".php";
@@ -241,7 +236,7 @@ void		MyCGI::setParams( void )
 	return;
 }
 
-void		MyCGI::checkCGI( void )
+void		CGI::checkCGI( void )
 {
 	if (this->_scriptPath.empty() || this->_binaryExec.empty())
 		throw CGIError("empty variable on CGIobject");
@@ -256,27 +251,27 @@ void		MyCGI::checkCGI( void )
  *								EXCEPTION 									   *
  ******************************************************************************/
 
-MyCGI::CGIError::CGIError( const std::string &error ) throw()
+CGI::CGIError::CGIError( const std::string &error ) throw()
 {
 	this->_msg = RED"[ERROR CGI] " + error + RESET;
 	return ;
 }
 
-MyCGI::CGIError::~CGIError( void ) throw()
+CGI::CGIError::~CGIError( void ) throw()
 {
 	return ;
 }
 
-const char*		MyCGI::CGIError::what() const throw()
+const char*		CGI::CGIError::what() const throw()
 {
 	return (this->_msg.c_str());
 }
 
-MyCGI::CGIExit::CGIExit() throw() : _msg("Cgi exit") {}
+CGI::CGIExit::CGIExit() throw() : _msg("Cgi exit") {}
 
-MyCGI::CGIExit::~CGIExit( void ) throw() {}
+CGI::CGIExit::~CGIExit( void ) throw() {}
 
-const char*		MyCGI::CGIExit::what() const throw()
+const char*		CGI::CGIExit::what() const throw()
 {
 	return (this->_msg.c_str());
 }

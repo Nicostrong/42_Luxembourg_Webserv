@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/08 12:49:53 by fdehan           ###   ########.fr        #
+#    Updated: 2025/07/08 16:04:42 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 ################################################################################
 
 CXX				=	c++
-CXXFLAGS		=	-Wall -Werror -Wextra -g
+CXXFLAGS		=	-Wall -Werror -Wextra -g -O3 -MMD
 CXX_OPT			=	-std=c++98
 CXX_DEF			=	-DDEBUG=1
 
@@ -23,10 +23,11 @@ DEB				=	valgrind
 DEB_OPT			=	--tool=memcheck \
 					--leak-check=full \
 					--show-leak-kinds=all \
-					--track-fds=yes
+					--track-origins=yes \
+					--track-fds=yes \
+					--trace-children=yes
 
-
-ARG0			=	
+ARG0			=	"./config/webserver.conf"
 
 ARG1			=	
 
@@ -37,27 +38,6 @@ ARG3			=
 ARG4			=	
 
 RM				=	rm -f
-
-################################################################################
-#	Librairies																   #
-################################################################################
-
-LIB_LIBFT_DIR	=	
-LIB_PRINTF_DIR	=	
-LIB_GNL_DIR		=	
-
-LIBFT_NAME		=	
-FTPRINTF_NAME	=	
-LIB_GNL_NAME	=	
-
-LIB_PROG		=
-LIB_OPTI		=
-LIB_OPTI		=
-LIB_NAME		=
-
-MYLIBS			=	
-
-MYLIBS_BONUS	=	
 
 ################################################################################
 #	Mandatory part															   #
@@ -131,28 +111,18 @@ SRC				=	./src/main.cpp \
 					./class/cgi/CgiParser.cpp \
 					./class/cgi/CgiResponse.cpp \
 					./class/cgi/CgiResponseHandling.cpp \
-					./class/cgi/MyCGI.cpp \
-					./class/cgi/MyCGI_ev.cpp \
-					./class/cgi/MyCGI_gs.cpp \
-					./class/cgi/MyCGI_m.cpp \
+					./class/cgi/CGI.cpp \
+					./class/cgi/CGI_ev.cpp \
+					./class/cgi/CGI_gs.cpp \
+					./class/cgi/CGI_m.cpp \
 					./class/cgi/CgiBody.cpp \
-					./class/cgi/CgiChunk.cpp \
-					./class/HandleConfig.cpp
-
+					./class/cgi/CgiChunk.cpp
 
 OBJ				=	$(SRC:.cpp=.o)
 
+DEP				=	$(SRC:.cpp=.d)
+
 NAME			=	webserv
-
-################################################################################
-#	Bonus part																   #
-################################################################################
-
-SRC_BONUS		=	
-
-OBJ_BONUS		=	$(SRC_BONUS:.cpp=.o)
-
-NAME_BONUS		=	
 
 ################################################################################
 #	Tester part
@@ -162,7 +132,7 @@ SRC_TESTER		=
 BONUS_TESTER	=	
 
 OBJ_TESTER		=	$(SRC_TESTER:.cpp=.o)
-OBJ_BONUS_TESTER=	$(BONUS_TESTER:.cpp=.o)
+OBJ_BONUS_TESTER=	
 
 TESTER			=	
 TESTER_BONUS	=	
@@ -223,7 +193,7 @@ SLEEP_TIME		=	0.001
 
 define compile_c_to_o
 	@$(eval CURRENT_FILE=$(shell echo $$(($(CURRENT_FILE)+1))))
-	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CXX_DEF) -c -o $@ $<
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CXX_DEF) -c $< -o $@
 	@printf $(BLUE)"\r\033[K\033[0KCompiling files => $< ["
 	@for i in $$(seq 0 $$(($(CURRENT_FILE)*100/$(NUM_FILES)))); do \
 		printf $(YELLOW)"="; \
@@ -273,7 +243,7 @@ all: 		$(NAME)
 
 $(NAME):	NUM_FILES=$(NB_SRC)
 $(NAME):	$(OBJ)
-	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(OBJ) $(MYLIBS) -o $(NAME)
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(OBJ) $(MYLIBS) -o $(NAME)
 	@echo "$(CGREEN)The programm $(NAME) successfully compilled"
 
 %.o :		%.cpp
@@ -281,26 +251,15 @@ $(NAME):	$(OBJ)
 
 deb:			all
 	@echo "$(BBLUE)==========	RUN DEBUG MODE	==========$(RESET)"
-ifeq ($(arg),ARG0)
 	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG0) $(DEB_OUT)
-else ifeq ($(arg),ARG1)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG1) $(DEB_OUT)
-else ifeq ($(arg),ARG2)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG2) $(DEB_OUT)
-else ifeq ($(arg),ARG3)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG3) $(DEB_OUT)
-else ifeq ($(arg),ARG4)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(ARG4) $(DEB_OUT)
-else ifneq ($(arg),)
-	$(DEB) $(DEB_OPT) ./$(NAME) $(arg) $(DEB_OUT)
-else
-	@echo "$(RESET)Usage: make deb arg=ARG0|ARG1|ARG2|ARG3|ARG4|personal_arg"
-endif
 
 clean:
 	$(call delete_progress, ./src/*.o)
 	$(call delete_progress, ./class/*.o)
 	$(call delete_progress, ./class/*/*.o)
+	$(call delete_progress, ./src/*.d)
+	$(call delete_progress, ./class/*.d)
+	$(call delete_progress, ./class/*/*.d)
 
 fclean: 	clean
 	$(call delete_file, $(NAME))
@@ -309,4 +268,6 @@ re : 		fclean all
 
 help:
 	@echo "usage: make"
-	@echo "usage: make deb_webserv for running with valgrind"
+	@echo "usage: make deb for running with valgrind"
+
+-include $(DEP)

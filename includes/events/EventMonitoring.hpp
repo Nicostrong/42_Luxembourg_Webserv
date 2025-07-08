@@ -3,28 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   EventMonitoring.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:31 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 08:06:53 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:28:24 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENTMONITORING_HPP
 # define EVENTMONITORING_HPP
 
-#include "./../lib.hpp"
-#include "./EventData.hpp"
-#include "./IEventHandler.hpp"
-#include "./../utils/Fd.hpp"
+# include "./../lib.hpp"
+# include "./EventData.hpp"
+# include "./../utils/Fd.hpp"
+# include "./IEventHandler.hpp"
 
-#define MAX_CONNECTIONS 4096
-#define MAX_EVENTS 4096
-#define TIMEOUT_POLL 5000
+# define MAX_CONNECTIONS 4096
+# define MAX_EVENTS 4096
+# define TIMEOUT_POLL 5000
 
-class EventMonitoring
+class	EventMonitoring
 {
 	public:
+
 		class PollFullException : public std::exception {
 			public:
 				const char * what () const throw();
@@ -59,7 +60,9 @@ class EventMonitoring
 		void monitorUpdate(int fd, uint32_t events);
 		void unmonitor(int fd);
 		void updateEvents();
+
 	private:
+
 		EventMonitoring(const EventMonitoring &obj);
 		EventMonitoring& operator=(const EventMonitoring& obj);
 
@@ -68,6 +71,7 @@ class EventMonitoring
 		std::list<epoll_event>		_openFds;
 		size_t 						_clientsConnected;
 		int 						_epollFd;
+		
 };
 
 #endif

@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   Endpoint.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 20:53:33 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:29:19 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:40:40 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENDPOINT_HPP
 # define ENDPOINT_HPP
 
-#include "./../lib.hpp"
-#include "./Ip.hpp"
+# include "./Ip.hpp"
+# include "../lib.hpp"
 
-class Endpoint
+class   Endpoint
 {
     public:
+
         Endpoint(const Ip& ip, size_t port);
         Endpoint(const Endpoint& obj);
         ~Endpoint();
+
         Endpoint& operator=(const Endpoint& obj);
 
 		const Ip&		getIp() const;
@@ -29,7 +31,9 @@ class Endpoint
 
 		static Endpoint	getEntryAddress(int fd);
 		static Endpoint	getEndpoint(sockaddr_in endpoint);
+
     private:
+    
         Ip		_ip;
         size_t	_port;
         

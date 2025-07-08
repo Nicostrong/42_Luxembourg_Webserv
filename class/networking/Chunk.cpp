@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Chunk.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:27:27 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 11:12:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:49:48 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/Chunk.hpp"
+#include "../../includes/networking/Chunk.hpp"
 
 Chunk::Chunk() : _bytesReceived(0), _chunkSize(0), _chunksReceived(0), _bodySize(0), _bodyLimit(0), _state(CHUNK_START) {}
 

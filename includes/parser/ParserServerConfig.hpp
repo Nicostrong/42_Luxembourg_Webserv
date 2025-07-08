@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:07:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 08:44:43 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 15:38:11 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
  *	- split the file in block of server
  *	- tokenize each block of server
  */
-class ParserServerConfig
+class	ParserServerConfig
 {
 
 	private:

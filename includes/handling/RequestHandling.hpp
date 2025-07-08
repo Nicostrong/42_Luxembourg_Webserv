@@ -6,26 +6,25 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:28:00 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/07 13:45:24 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 15:29:55 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUESTHANDLING_HPP
 # define REQUESTHANDLING_HPP
 
-#define SUPPORTED_HTTPVER "HTTP/1.1"
+# define SUPPORTED_HTTPVER "HTTP/1.1"
 
 # include "../lib.hpp"
+# include "../cgi/CGI.hpp"
 # include "../utils/Uri.hpp"
-# include "../utils/Endpoint.hpp"
+# include "../server/Server.hpp"
 # include "../http/HttpBase.hpp"
+# include "../utils/Endpoint.hpp"
 # include "../http/HttpRequest.hpp"
 # include "../http/HttpResponse.hpp"
-# include "../server/Server.hpp"
-//# include "./HandleCGI.hpp"
-# include "../cgi/MyCGI.hpp"
 
-class RequestHandling
+class	RequestHandling
 {
 	public:
 

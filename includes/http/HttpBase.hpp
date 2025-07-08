@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   HttpBase.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 09:50:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:31:04 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HTTP_BASE_HPP
 # define HTTP_BASE_HPP
 
-#define ALLOWED_URI_SPECIALS "-_.~:@/?&=#%+[]!$()*,;"
-#define ALLOWED_HEADER_VAL "_ :;.,\\/\"'?!(){}[]@<>=-+*#$&`|~^%"
+# define ALLOWED_URI_SPECIALS	"-_.~:@/?&=#%+[]!$()*,;"
+# define ALLOWED_HEADER_VAL		"_ :;.,\\/\"'?!(){}[]@<>=-+*#$&`|~^%"
 
 
-#include "./../lib.hpp"
-#include "./../utils/Buffer.hpp"
+# include "./../lib.hpp"
+# include "./../utils/Buffer.hpp"
 
-class HttpBase
+class	HttpBase
 {
 	public:
+
 		enum HttpCode
 		{
 			NONE = 0,
@@ -134,7 +135,9 @@ class HttpBase
 		static std::string normalizeHeaderName(const std::string& name);
 		static std::string normalizeHeaderValue(const std::string& uri);
 		static std::string normalizeUri(const std::string& uri);
+
 	protected:
+
 		HttpBase();
 		static void 		formatIndividualFile(std::ostringstream& oss, 
 			const std::string& filePath, std::string fileName);
@@ -153,7 +156,9 @@ class HttpBase
 		std::list<std::string> _cookies;
 		bool		_transferEncoding;
 		bool 		_isComplete;
+
 	private:
+	
 };
 		
 

@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MyCGI.hpp                                          :+:      :+:    :+:   */
+/*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 10:58:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/04 11:22:27 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:52:56 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MYCGI
-# define MYCGI
+#ifndef CGI_HPP
+# define CGI_HPP
 
 # include "../lib.hpp"
+# include "../utils/Fd.hpp"
 # include "../utils/Uri.hpp"
 # include "../utils/Pipe.hpp"
 # include "../utils/Buffer.hpp"
-# include "../utils/Fd.hpp"
 # include "../server/Location.hpp"
 # include "../networking/Body.hpp"
 # include "../events/IEventHandler.hpp"
@@ -27,7 +27,7 @@
 
 class	Socket;
 
-class	MyCGI:	public IEventHandler
+class	CGI:	public IEventHandler
 {
 
 	public:
@@ -59,10 +59,10 @@ class	MyCGI:	public IEventHandler
 		bool			_isExited;		//	Does the cgi is finished
 
 
-		MyCGI( void );
-		MyCGI( const MyCGI& );
+		CGI( void );
+		CGI( const CGI& );
 
-		MyCGI&			operator=( const MyCGI & );
+		CGI&			operator=( const CGI & );
 
 		void			setMap( void );
 		void			setEnv( void );
@@ -78,8 +78,8 @@ class	MyCGI:	public IEventHandler
 
 	public:
 
-		MyCGI( Socket& socket );
-		~MyCGI( void );
+		CGI( Socket& socket );
+		~CGI( void );
 
 		/*	GETTER	*/
 		std::string&	getScriptPath( void );
@@ -148,6 +148,6 @@ class	MyCGI:	public IEventHandler
 		};
 };
 
-std::ostream	&operator<<( std::ostream &out, MyCGI& src_object );
+std::ostream	&operator<<( std::ostream &out, CGI& src_object );
 
 #endif

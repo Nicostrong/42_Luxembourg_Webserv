@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   CgiResponse.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:37:15 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/05 09:48:28 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:27:10 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGIRESPONSE_HPP
 # define CGIRESPONSE_HPP
 
-#include "./../lib.hpp"
-#include "./CgiBody.hpp"
-#include "./../http/HttpBase.hpp"
+# include "./../lib.hpp"
+# include "./CgiBody.hpp"
+# include "./../http/HttpBase.hpp"
 
-class CgiResponse
+class	CgiResponse
 {
 	public:
+
 		CgiResponse();
 		~CgiResponse();
 
@@ -61,6 +62,7 @@ class CgiResponse
 		void										reset();
 
     private:
+
 		CgiResponse(const CgiResponse& obj);
 		CgiResponse& operator=(const CgiResponse& obj);
 
@@ -75,6 +77,7 @@ class CgiResponse
 		bool								_isError;
 		bool								_isEof;
 		bool								_isTe;
+		
 };
 
 #endif

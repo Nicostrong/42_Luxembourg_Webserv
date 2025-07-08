@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HttpHandling.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 19:58:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/07 15:38:08 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:55:41 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,11 +182,11 @@ void HttpHandling::reset()
 
 void		HttpHandling::setCGI( Socket& socket )
 {
-	this->_cgi = new MyCGI(socket);
+	this->_cgi = new CGI(socket);
 	return ;
 }
 
-MyCGI*		HttpHandling::getCGI( void )
+CGI*		HttpHandling::getCGI( void )
 {
 	return (this->_cgi);
 }

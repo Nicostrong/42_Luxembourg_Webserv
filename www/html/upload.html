@@ -25,36 +25,38 @@
 			<a	href="/cgi/timeout.py">Timeout</a>
 			<a	href="/cgi/fish.py">Fish</a>
 		</nav>
-		<div class="upload-container">
-			<h2>Choose your upload method:</h2>
-			<form id="uploadForm" action="/cgi/upload.py" method="post" enctype="multipart/form-data">
-				<div class="upload-methods">
-					<div class="method-section">
-						<div class="method-title">Individual File Selection</div>
-						<div id="fileInputs">
-							<div class="file-input-group">
-								<input type="file" name="file1" id="file1" required>
+		<div class="container">
+			<div class="upload-container">
+				<h2>Choose your upload method:</h2>
+				<form id="uploadForm" action="/cgi/upload.py" method="post" enctype="multipart/form-data">
+					<div class="upload-methods">
+						<div class="method-section">
+							<div class="method-title">Individual File Selection</div>
+							<div id="fileInputs">
+								<div class="file-input-group">
+									<input type="file" name="file1" id="file1" required>
+								</div>
+							</div>
+							<button type="button" class="add-file-btn" onclick="addFileInput()">
+								(+) Add Another File
+							</button>
+							<div class="file-info">
+								Click "Add Another File" to select multiple files individually
 							</div>
 						</div>
-						<button type="button" class="add-file-btn" onclick="addFileInput()">
-							(+) Add Another File
-						</button>
+					</div>
+					
+					<div class="submit-section">
+						<button type="submit" class="submit-btn">Upload Files</button>
 						<div class="file-info">
-							Click "Add Another File" to select multiple files individually
+							All file types are accepted
 						</div>
 					</div>
-				</div>
-				
-				<div class="submit-section">
-					<button type="submit" class="submit-btn">Upload Files</button>
-					<div class="file-info">
-						All file types are accepted
+				</form>
+				<div id="status-section" class="user-status">
+					<div class="info">
+						<span id="status-message">Chargement...</span>
 					</div>
-				</div>
-			</form>
-			<div id="status-section" class="user-status">
-				<div class="info">
-					<span id="status-message">Chargement...</span>
 				</div>
 			</div>
 		</div>
