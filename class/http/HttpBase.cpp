@@ -232,7 +232,6 @@ bool HttpBase::canBeValidPath(const std::string& path)
 	if (*path.begin() != '/')
 		return (false);
 	std::string::const_iterator it;
-	bool flag = false;
 
 	for (it = path.begin(); it != path.end(); ++it) 
 	{
@@ -245,16 +244,8 @@ bool HttpBase::canBeValidPath(const std::string& path)
 		}
 		if (!isCharValid)
 			return (false);
-		if (*it == '/')
-		{
-			if (flag)
-				return (false);
-			else
-				flag = true;
-		}
-		else
-			flag = false;
 	}
+
 	return (true);
 }
 
@@ -317,14 +308,47 @@ std::string HttpBase::normalizeHeaderName(const std::string& name)
 
 std::string HttpBase::normalizeUri(const std::string& uri)
 {
-	std::string normalized;
-	
-	std::string::const_iterator it;
-	for (it = uri.begin(); it != uri.end(); ++it) 
-		normalized.push_back(std::tolower(*it));
+	std::string res = "/";
+	std::string nRes;
+	std::vector<std::string> segments;
+	std::stringstream ss(uri);
+	std::string segment;
 
-	//Should treat % things
-	return (normalized);
+	while (std::getline(ss, segment, '/')) {
+		if (!segment.empty())
+			segments.push_back(segment);
+	}
+	
+	std::vector<std::string> nSegments;
+	std::vector<std::string>::const_iterator segIt;
+
+	for (segIt = segments.begin(); segIt != segments.end(); ++segIt) 
+	{
+		if (*segIt == "..") 
+		{
+			if (!nSegments.empty())
+				nSegments.pop_back();
+		}
+		else if (*segIt != ".")
+			nSegments.push_back(*segIt);
+	}
+
+	for (segIt = nSegments.begin(); segIt != nSegments.end(); ++segIt) {
+        res.append(*segIt);
+		if (segIt + 1 != nSegments.end())
+			res.append("/");
+    }
+
+	if (uri.size() > 0 && *uri.rbegin() == '/' &&
+		res.size() > 0 && *res.rbegin() != '/')
+		res.append("/");
+
+	std::string::const_iterator it;
+	for (it = res.begin(); it != res.end(); ++it) 
+		nRes.push_back(std::tolower(*it));
+	
+	LOG_DEB("Uri normalized: " << res);
+	return (res);
 }
 
 std::string HttpBase::normalizeHeaderValue(const std::string& uri)

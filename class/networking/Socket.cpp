@@ -173,8 +173,10 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 		
 		if (this->_reset && this->_txBuffer.isBufferRead())
 		{
-			LOG_INFO(this->_req.getMethod() << " " << this->_req.getUri() << " " 
-					<< this->_req.getHttpVersion() << " " << this->_resp.getStatusCode());
+			if (this->_req.getMethod().size() && this->_req.getUri().size() && 
+				this->_req.getHttpVersion().size())
+				LOG_INFO(this->_req.getMethod() << " " << this->_req.getUri() << " " 
+						<< this->_req.getHttpVersion() << " " << this->_resp.getStatusCode());
 			if (!this->_keepAlive)
 				this->_sockm.remove(*this, em);
 			else

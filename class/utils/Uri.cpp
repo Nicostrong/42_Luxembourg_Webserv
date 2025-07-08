@@ -95,7 +95,6 @@ std::string Uri::buildRealRelative(const Server& serv, const Location* loc,
 	if (rootDirective)
 		rootPath = rootDirective->getValue();
 	rootPath = trimSlashEnd(rootPath);
-	LOG_DEB("Path constructed from relative: " + uri);
 	return (rootPath + uri);
 }
 

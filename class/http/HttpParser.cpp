@@ -94,7 +94,7 @@ void HttpParser::parseStartLine(HttpRequest& req)
 	size_t queryPos = tokens.at(1).find('?');
 	
 	req.setMethod(tokens.at(0));
-	req.setUri(tokens.at(1).substr(0, queryPos));
+	req.setUri(HttpBase::normalizeUri(tokens.at(1).substr(0, queryPos)));
 
 	if (queryPos != std::string::npos)
 		req.setQueryParams(tokens.at(1).substr(queryPos + 1));

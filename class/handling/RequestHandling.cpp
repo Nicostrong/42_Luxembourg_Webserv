@@ -29,7 +29,7 @@ void RequestHandling::handleHeaders(Socket& sock)
 	LOG_DEB(req->getMethod() << " " << req->getUri() << " " << req->getHttpVersion());
 
 	if (!ctx)
-		throw HttpExceptions(HttpBase::INTERNAL_SERVER_ERROR);
+		throw HttpSevereExceptions(HttpBase::INTERNAL_SERVER_ERROR);
 
 	req->setServer(*ctx);
 	resp->addHeader("Content-Length", 0);
@@ -39,16 +39,24 @@ void RequestHandling::handleHeaders(Socket& sock)
 		throw HttpSevereExceptions(HttpBase::HTTP_VERSION_NOT_SUPPORTED);
 	
 	if (!MethodHTTP::isMethodImplemented(req->getMethod()))
-		throw HttpExceptions(HttpBase::NOT_IMPLEMENTED);
+		throw HttpSevereExceptions(HttpBase::NOT_IMPLEMENTED);
 
 	req->setLoc(
 		ctx->getMatchingLoc(req->getUri()));
 
 	if (!req->getLoc())
+	{
+		if (req->getMethod() == "POST")
+			throw HttpSevereExceptions(HttpBase::NOT_FOUND);
 		throw HttpExceptions(HttpBase::NOT_FOUND);
+	}
 
 	if (!req->getLoc()->getMethod()->isAllowed(req->getMethod()))
+	{
+		if (req->getMethod() == "POST")
+			throw HttpSevereExceptions(HttpBase::METHOD_NOT_ALLOWED);
 		throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
+	}
 
 	req->setPathTranslated(
 			Uri::buildRealAbsolute(*ctx, req->getLoc(), req->getUri()));
