@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/06/21 16:06:10 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/07/08 12:40:59 by fdehan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,19 +64,81 @@ MYLIBS_BONUS	=
 ################################################################################
 
 SRC				=	./src/main.cpp \
-					./class/Directive.cpp \
-					./class/Location.cpp \
-					./class/MethodHTTP.cpp \
-					./class/Server.cpp \
-					./class/HttpBase.cpp \
-					./class/HttpRequest.cpp \
-					./class/EventMonitoring.cpp \
-					./class/EventData.cpp \
-					./class/HttpResponse.cpp \
-					./class/Socket.cpp \
+					./class/parser/CheckerTokens.cpp \
+					./class/parser/CheckerTokens_e.cpp \
+					./class/parser/CheckerTokens_m.cpp \
+					./class/parser/CheckerTokens_p.cpp \
+					./class/parser/ParserServerConfig.cpp \
+					./class/parser/ParserServerConfig_p.cpp \
+					./class/parser/ParserServerConfig_e.cpp \
+					./class/parser/ParserServerConfig_gs.cpp \
+					./class/parser/Token.cpp \
+					./class/parser/Token_m.cpp \
+					./class/parser/Token_p.cpp \
+					./class/parser/Token_e.cpp \
+					./class/parser/Token_gs.cpp \
+					./class/server/CGIDirective_e.cpp \
+					./class/server/CGIDirective_gs.cpp \
+					./class/server/CGIDirective_m.cpp \
+					./class/server/CGIDirective.cpp \
+					./class/server/Directive_e.cpp \
+					./class/server/Directive_gs.cpp \
+					./class/server/Directive_m.cpp \
+					./class/server/Directive.cpp \
+					./class/server/Location_e.cpp \
+					./class/server/Location_gs.cpp \
+					./class/server/Location_m.cpp \
+					./class/server/Location.cpp \
+					./class/server/MethodHTTP_e.cpp \
+					./class/server/MethodHTTP_gs.cpp \
+					./class/server/MethodHTTP_m.cpp \
+					./class/server/MethodHTTP.cpp \
+					./class/server/Server_e.cpp \
+					./class/server/Server_ev.cpp \
+					./class/server/Server_gs.cpp \
+					./class/server/Server_p.cpp \
+					./class/server/Server_m.cpp \
+					./class/server/Server.cpp \
+					./class/server/ServerManager_gs.cpp \
+					./class/server/ServerManager_m.cpp \
+					./class/server/ServerManager_p.cpp \
+					./class/server/ServerManager.cpp \
+					./class/utils/Buffer.cpp \
+					./class/utils/Endpoint.cpp \
+					./class/utils/File.cpp \
+					./class/utils/Ip.cpp \
+					./class/utils/Pipe.cpp \
+					./class/utils/Ressource.cpp \
+					./class/utils/Uri.cpp \
+					./class/utils/Fd.cpp \
+					./class/events/EventData.cpp \
+					./class/events/EventMonitoring.cpp \
+					./class/http/HttpBase.cpp \
+					./class/http/HttpExceptions.cpp \
+					./class/http/HttpParser.cpp \
+					./class/http/HttpRequest.cpp \
+					./class/http/HttpResponse.cpp \
+					./class/http/HttpSevereExceptions.cpp \
+					./class/http/HttpHandling.cpp \
+					./class/networking/Body.cpp \
+					./class/networking/Chunk.cpp \
+					./class/networking/Listener.cpp \
+					./class/networking/ListenerManager.cpp \
+					./class/networking/Socket.cpp \
+					./class/networking/SocketManager.cpp \
+					./class/handling/RequestHandling.cpp \
+					./class/handling/ResponseHandling.cpp \
+					./class/cgi/CgiParser.cpp \
+					./class/cgi/CgiResponse.cpp \
+					./class/cgi/CgiResponseHandling.cpp \
+					./class/cgi/MyCGI.cpp \
+					./class/cgi/MyCGI_ev.cpp \
+					./class/cgi/MyCGI_gs.cpp \
+					./class/cgi/MyCGI_m.cpp \
+					./class/cgi/CgiBody.cpp \
+					./class/cgi/CgiChunk.cpp \
 					./class/HandleConfig.cpp \
-					./class/RequestHandling.cpp \
-					./class/Ressource.cpp
+					main_networking.cpp
 
 
 OBJ				=	$(SRC:.cpp=.o)
@@ -206,7 +268,7 @@ endef
 #	Rules																	   #
 ################################################################################
 
-.PHONY : all $(NAME) deb clean fclean re
+.PHONY : all $(NAME) deb clean fclean re help
 
 all: 		$(NAME)
 
@@ -239,10 +301,13 @@ endif
 clean:
 	$(call delete_progress, ./src/*.o)
 	$(call delete_progress, ./class/*.o)
-	$(call delete_progress, ./class/parsing/*.o)
-	$(call delete_progress, ./class/server/*.o)
+	$(call delete_progress, ./class/*/*.o)
 
 fclean: 	clean
 	$(call delete_file, $(NAME))
 
 re : 		fclean all
+
+help:
+	@echo "usage: make"
+	@echo "usage: make deb_webserv for running with valgrind"
