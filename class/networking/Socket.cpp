@@ -144,7 +144,7 @@ void Socket::onReadEvent(int fd, EventMonitoring &em)
 	}
 	catch(const std::exception& e)
 	{
-		LOG_DEB(e.what());
+		LOG_ERROR("An internal server error has occured");
 		setError(HttpBase::INTERNAL_SERVER_ERROR, em);
 	}
 }
@@ -191,7 +191,7 @@ void Socket::onWriteEvent(int fd, EventMonitoring &em)
 	}
 	catch(const std::exception& e)
 	{
-		LOG_DEB(e.what());
+		LOG_ERROR("An internal server error has occured");
 		setError(HttpBase::INTERNAL_SERVER_ERROR, em);
 	}
 }
@@ -223,7 +223,7 @@ void Socket::onTickEvent(int fd, EventMonitoring& em)
 	}
 	catch(const std::exception& e)
 	{
-		LOG_DEB(e.what());
+		LOG_ERROR("An internal server error has occured");
 		setError(HttpBase::INTERNAL_SERVER_ERROR, em);
 	}
 	(void)fd;

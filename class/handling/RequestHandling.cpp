@@ -167,7 +167,6 @@ bool RequestHandling::isRedirect(Socket& sock)
 	
 	sock.getReq().setRedirect(redirectDirective->getValue());
 	sock.getResp().addHeader("Location", redirectDirective->getUriReturn());
-	LOG_DEB(redirectDirective->getCodeReturn());
 	sock.getResp().setStatusCode((HttpBase::HttpCode)redirectDirective->getCodeReturn());
 	sock.getResp().setRespType(HttpResponse::REDIRECT);
 	return (true);
@@ -283,10 +282,8 @@ void RequestHandling::handleGet(Socket& sock)
 		sock.getResp().setRespType(HttpResponse::CGI);
 		setAttributes(sock);
 		if (!checkCGIext(sock))
-		{
-			LOG_DEB("FILE NOT FOUND");
 			throw HttpExceptions(HttpBase::NOT_FOUND);
-		}
+		
 		sock.getHandler().setCGI(sock);
 		sock.getHandler().getCGI()->execCGI();
 		return ;
@@ -332,7 +329,6 @@ void RequestHandling::handlePost(Socket& sock)
 			throw HttpSevereExceptions(HttpBase::NOT_FOUND);
 		
 		sock.getHandler().setBodyRequired(sock);
-		LOG_DEB(req->getContentLength());
 		if (!req->isTE() && req->getContentLength() < 1)
 			handleBody(sock);
 		return ;
@@ -475,8 +471,6 @@ void RequestHandling::handleDelete(Socket& sock)
 	}
 	if (req->getUri().size() && *req->getUri().rbegin() == '/')
 		throw HttpExceptions(HttpBase::METHOD_NOT_ALLOWED);
-	
-	LOG_DEB(req->getUri());
 
 	checkFileExistDelete(path);
 
