@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 13:37:38 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/24 08:45:20 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 12:48:31 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ class	ServerManager
 		int				getNbServer( void ) const;
 
 		/*	Method	*/
-		void		startAll( void );
-
 		bool		isValidPort( size_t port ) const;
 				
 };

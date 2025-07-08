@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:01:27 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/20 06:59:28 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 12:37:32 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ Token*		Token::tokenize( const std::string& input )
 
 	try
 	{
+		setNbServer();
 		while (iss >> word)
 		{
 			if (word == "server")
 			{
 				Token*		serverTok = new Token(Token::SERVER, word);
-				
+
+				incServer();
 				attachToken(head, current, serverTok);
 				inServer = true;
 			}
@@ -62,6 +64,8 @@ Token*		Token::tokenize( const std::string& input )
 			throw Token::TokenError("Mismatched braces: some '{' or '}' are not closed properly");
 		if (inLocation || inErrorBlk || inHTTP || inServer)
 			throw Token::TokenError("Unclosed block.");
+		if (getNbServer() > 128)
+			throw Token::TokenError("Number of server To height (max 128 servers)");
 	}
 	catch ( const std::exception& e )
 	{

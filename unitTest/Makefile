@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/08 11:29:54 by fdehan           ###   ########.fr        #
+#    Updated: 2025/07/08 13:55:00 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 CXX				=	c++
 CXXFLAGS		=	-Wall -Werror -Wextra -g -O3
 CXX_OPT			=	-std=c++98
-CXX_DEF			=	-DDEBUG=1
+#CXX_DEF			=	-DDEBUG=1
 
 DEB				=	valgrind
 DEB_OPT			=	--tool=memcheck \
@@ -329,22 +329,22 @@ all: 		help
 
 server:		NUM_FILES=$(NB_SERVER)
 server:		$(SERVER_OBJ)
-	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(SERVER_OBJ) $(MYLIBS) -o $(SERVER_NAME)
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(SERVER_OBJ) $(MYLIBS) -o $(SERVER_NAME)
 	@echo "$(CGREEN)The programm $(SERVER_NAME) successfully compilled"
 
 networking:	NUM_FILES=$(NB_NET)
 networking:	$(NET_OBJ)
-	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(NET_OBJ) $(MYLIBS) -o $(NET_NAME)
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(NET_OBJ) $(MYLIBS) -o $(NET_NAME)
 	@echo "$(CGREEN)The programm $(NET_NAME) successfully compilled"
 
 parser:		NUM_FILES=$(NB_PAR)
 parser:		$(PAR_OBJ)
-	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(PAR_OBJ) $(MYLIBS) -o $(PAR_NAME)
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(PAR_OBJ) $(MYLIBS) -o $(PAR_NAME)
 	@echo "$(CGREEN)The programm $(PAR_NAME) successfully compilled"
 
 func:	NUM_FILES=$(NB_FUNC)
 func:	$(FUNC_OBJ)
-	$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(FUNC_OBJ) $(MYLIBS) -o $(FUNC_NAME)
+	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(FUNC_OBJ) $(MYLIBS) -o $(FUNC_NAME)
 	@echo "$(CGREEN)The programm $(FUNC_NAME) successfully compilled"
 
 %.o :		%.cpp

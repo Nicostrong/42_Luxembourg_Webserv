@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:13:20 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/26 10:27:26 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 13:35:51 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void			ServerManager::splitServerToken( Token *head )
 		else
 			head = head->getNext();
 	}
-	std::list<Token*>::iterator		it;
 #ifdef DEBUG
+	std::list<Token*>::iterator		it;
 	for (it = this->_lServerToken.begin(); it != this->_lServerToken.end(); it++)
 	{
-		std::cout << "PRINT TOKEN LIST" << std::endl;
+		LOG_DEB("PRINT TOKEN LIST");
 		(*it)->printToken();
 	}
 #endif

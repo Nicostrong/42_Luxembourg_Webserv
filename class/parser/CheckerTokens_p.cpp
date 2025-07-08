@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 09:26:39 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/01 10:18:01 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 13:42:46 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		CheckerTokens::validateTokens( void )
 	checkSemicolonBeforeBlockEnd();
 	checkUnexpectedSemicolons();
 	checkDuplicatedKeysInScope();
-	checkpath();
+	//checkpath();
 	checkValue();
 	checkMethodHTTP();
 	checkUniqValue();
@@ -507,13 +507,13 @@ const Token*		CheckerTokens::validate_error_block( const Token* current )
 /*
  *	Check if the path is valid for all value in token list
  */
-void		CheckerTokens::checkpath(void)
+/*void		CheckerTokens::checkpath(void)
 {
 	const Token*		current = this->_head;
 	char				cwd[PATH_MAX];
 
 	if (getcwd(cwd, sizeof(cwd)))
-		std::cout << "[DEBUG] Current working directory: " << cwd << std::endl;
+		LOG_DEB("Current working directory: " << cwd);
 
 	while (current)
 	{
@@ -550,7 +550,7 @@ void		CheckerTokens::checkpath(void)
 		current = current->getNext();
 	}
 	return ;
-}
+}*/
 
 void		CheckerTokens::checkUniqValue( void )
 {
@@ -592,7 +592,6 @@ void		CheckerTokens::checkListen( void )
 
 	if (!(iss >> port) || !iss.eof())
 		throw CheckerError("Port is not a valid integer.");
-	LOG_DEB(port);
 	if (port <= 0 || port > 65535)
 		throw CheckerError("Value of port not valid.");
 	return ;
@@ -610,7 +609,6 @@ bool		CheckerTokens::validCode( std::string code )
 		LOG_DEB(intCode);
 		return (false);
 	}
-	LOG_DEB(intCode);
 	if (intCode < 300 || intCode >= 400)
 		return (false);
 	return (true);

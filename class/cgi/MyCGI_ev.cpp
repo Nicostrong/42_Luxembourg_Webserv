@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:38:05 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/08 07:54:02 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 13:44:36 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ void		MyCGI::onReadEvent(int fd, EventMonitoring& em)
 		ssize_t		bytes = read(fd, this->_rxBuffer.getDataUnused(), 
 									this->_rxBuffer.getBufferUnused());
 
-		//std::cout << "DEBUG CGI on READ" << std::endl;
-		//std::cout << "nb bytes lu: " << bytes << std::endl;
-		//std::cout << "size du buff " << getRxBuffer().getBufferSize() << std::endl;
-		
-		//std::cout << "TOTAL READ: " << getByteRead() << std::endl;
-		
-		std::cerr << "Bytes read: " << bytes << std::endl; 
 		if (bytes == -1)
 			throw CGIError("Error reading pipe from GCI");
 

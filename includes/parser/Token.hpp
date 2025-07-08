@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:56:03 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 11:28:02 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 12:29:42 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  *	Each token is a part of the configuration file, like a key, a value, a brace
  *	or a semicolon.
  */
-class 	Token
+class	Token
 {
 
 	public:
@@ -53,6 +53,7 @@ class 	Token
 
 		/*	GETTER	*/
 		int							getType( void ) const;
+		static int					getNbServer( void );
 		
 		std::string					getTypeName( void ) const;
 		std::string					getValue( void ) const;
@@ -60,6 +61,8 @@ class 	Token
 		Token*						getNext( void ) const;
 
 		/*	SETTER	*/
+		static void					incServer( void );
+		static void					setNbServer( void );
 		void						setNextToNull( void  );
 
 		/*	METHOD	*/
@@ -92,6 +95,7 @@ class 	Token
 		Type						_type;
 		std::string					_value;
 		Token*						_next;
+		static int					_nbServer;
 
 		Token( const Token& src_obj );
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ressource.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:45:19 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:21:43 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:14:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 # include "./../lib.hpp"
 
-#define RESSOURCE_BUFFER_SIZE 1024
+#define RESSOURCE_BUFFER_SIZE	1024
+#define MAX_SIZE				5242880		//	5 Mo
 
 class Ressource
 {

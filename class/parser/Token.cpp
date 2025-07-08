@@ -6,11 +6,13 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 06:55:53 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/26 10:29:27 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 12:32:16 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser/Token.hpp"
+
+int		Token::_nbServer = 0;
 
 /*******************************************************************************
  *						CONSTRUCTOR / DESTRUCTOR							   *

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ressource.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:51:46 by fdehan            #+#    #+#             */
-/*   Updated: 2025/06/05 09:13:37 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:15:18 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 Ressource::Ressource(const std::string loc) : _loc(loc), _raw(), _isFail(false)
 {
-	
-	std::ifstream res(loc.c_str());
-	std::stringstream resStream;
+	struct stat				buffer;
 
+	if (stat(loc.c_str(), &buffer) == 0 && buffer.st_size > MAX_SIZE)
+		throw std::runtime_error("Config file tobig (Max size 5Mo)");
+
+	std::ifstream			res(loc.c_str());
+	std::stringstream		resStream;
+	
 	if (!res || !res.is_open()) 
 	{
 		this->_isFail = true;

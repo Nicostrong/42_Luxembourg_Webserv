@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 11:34:15 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 13:53:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -551,7 +551,5 @@ bool	RequestHandling::checkCGIext( Socket& sock )
 	struct stat		buffer;
 	std::string		path = sock.getReq().getPathTranslated();
 
-	LOG_DEB("CHECK CGI: " << path);
-	
 	return (stat(path.c_str(), &buffer) == 0);
 }

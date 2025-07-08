@@ -14,13 +14,10 @@ length=$(echo "$post_data" | awk -F '&' '{
 
 echo "Length: $length" > /tmp/debug
 
-# to uncomment at school42
-pwd=$(cat /dev/urandom | base92 $length | head -n 1)
-#pwd=$(base32 < /dev/urandom | head -c $length 2> /dev/null)
+pwd=$(base32 < /dev/urandom 2> /dev/null | head -c $length 2> /dev/null)
 
 echo "pwd : $pwd" >> /tmp/debug
 
-pwd=$(base32 < /dev/urandom | head -c 50 2> /dev/null)
 echo -ne "Status: 301\r\n"
 echo -ne "Location: /html/pwd_generator.html?pwd=\"$pwd\"\r\n"
 echo -ne "\r\n"

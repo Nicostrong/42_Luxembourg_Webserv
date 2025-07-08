@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 15:28:11 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/10 08:58:32 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 10:24:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@ Location::Location( Token*& tokens ): _method(NULL)
 		std::cerr << e.what() << std::endl;
 	}
 	return ;
+}
+
+/*
+ *	Default Location if no location block on the config file
+ */
+Location::Location( void )
+{
+	this->_path = "/";
+	this->_method = new MethodHTTP();
 }
 
 /*

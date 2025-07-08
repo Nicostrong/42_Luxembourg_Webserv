@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server_p.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:41:24 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/07/08 09:59:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 13:54:14 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ void		Server::checkerServer( void )
 {
 	if (this->_lPorts.empty())
 		throw std::runtime_error("need port value");
-	//if (this->)
-	
+	if (this->_mLocations.find("/") == this->_mLocations.end())
+		this->_mLocations["/"] = new Location();
+	return ;
 }

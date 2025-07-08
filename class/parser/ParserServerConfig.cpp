@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParserServerConfig.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:15:01 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/30 13:59:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 13:36:38 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,6 @@ ParserServerConfig::ParserServerConfig( const std::string& filename )
 		file.isFail() ? throw FileError() : content = file.getRaw();
 		content.empty() ? throw EmptyConfigError() : formatString(content);
 		head = Token::tokenize(this->_formatedString);
-#ifdef DEBUG
-		//head->printToken();
-#endif
 		this->_allTokens = head;
 		if (!this->_allTokens)	
 			throw EmptyConfigError();

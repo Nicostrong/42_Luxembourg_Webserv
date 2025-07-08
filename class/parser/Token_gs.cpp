@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:47:16 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/19 13:24:30 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 13:34:03 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,22 @@ Token*		Token::getNext( void ) const
 void		Token::printToken( bool isNext ) const
 {
 	if (!isNext)
-		std::cout << "\t";
-	std::cout	<< "Token [" << this->getTypeName() << "] - Value: "
-				<< this->_value << std::endl;
+		LOG_DEB("\t");
+	LOG_DEB(RESET"Token [" << this->getTypeName() << "] - Value: " << this->_value);
 	if (this->_next)
 	{
-		std::cout << "Next -> ";
+		LOG_DEB(RESET"Next -> ");
 		this->_next->printToken(true);
 	}
 	return ;
+}
+
+/*
+ *	get the number of server on the config file
+ */
+int			Token::getNbServer( void )
+{
+	return (_nbServer);
 }
 
 /*******************************************************************************
@@ -93,6 +100,24 @@ void		Token::printToken( bool isNext ) const
  */
 void			Token::setNextToNull( void )
 {
-	this->_next = NULL;
+	_next = NULL;
+	return ;
+}
+
+/*
+ *	increase the value of number of server
+ */
+void			Token::incServer( void )
+{
+	_nbServer++;
+	return ;
+}
+
+/*
+ *	init the value of static variable to 0
+ */
+void			Token::setNbServer( void )
+{
+	_nbServer = 0;
 	return ;
 }

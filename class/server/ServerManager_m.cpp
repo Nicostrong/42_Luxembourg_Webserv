@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerManager_m.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:32:59 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/06/04 15:20:45 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 12:48:17 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,7 @@
  *								METHOD										   *
  ******************************************************************************/
 
-/*
- *	Start all server
- */
-void		ServerManager::startAll( void )
-{
-	/*std::set<Server*>::iterator		it;
-
-	for (it = this->_sServers.begin(); it != this->_sServers.end(); ++it)
-		(*it)->start();*/
-	return ;
-}
-
-/*
+ /*
  *	Check if the port is valid for any server
  */
 bool		ServerManager::isValidPort( size_t port ) const

@@ -6,7 +6,7 @@
 /*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 17:08:23 by nicostrong        #+#    #+#             */
-/*   Updated: 2025/06/24 16:22:55 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 13:42:54 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class	CheckerTokens
 
 		CheckerTokens		&operator=(  const CheckerTokens& src_obj );
 		
-		void				checkpath( void );
+		//void				checkpath( void );
 		void				checkValue( void );
 		void				checkListen( void );
 		void				checkReturn( void );
