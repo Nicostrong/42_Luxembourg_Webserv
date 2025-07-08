@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 20:18:53 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/01 17:49:49 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 12:30:12 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,18 @@ void	handle_sigint( int signal )
 	return ;
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGPIPE, SIG_IGN);
-	//signal(SIGSEGV, SIG_IGN);
 	try
 	{
-		ParserServerConfig		pc("../config/webserv.conf");
+		std::string configPath = "../config/webserv.conf";
+
+		if (argc >= 2)
+			configPath = argv[1];
+		
+		ParserServerConfig		pc(configPath);
 		ServerManager			sm(pc.getAllTokens());
 		EventMonitoring			em;
 		SocketManager			sockm;
