@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandling.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
+/*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 08:57:28 by nfordoxc         ###   Luxembourg.lu     */
+/*   Updated: 2025/07/08 09:45:02 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,10 +329,7 @@ void RequestHandling::handlePost(Socket& sock)
 		setAttributes(sock);
 		
 		if (!checkCGIext(sock))
-		{
-			LOG_DEB("FILE NOT FOUND");
 			throw HttpSevereExceptions(HttpBase::NOT_FOUND);
-		}
 		
 		sock.getHandler().setBodyRequired(sock);
 		LOG_DEB(req->getContentLength());
@@ -381,7 +378,7 @@ void RequestHandling::handleTE(Socket& sock)
 	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
 
 	if (value != "chunked")
-		throw HttpExceptions(HttpBase::NOT_IMPLEMENTED);
+		throw HttpSevereExceptions(HttpBase::NOT_IMPLEMENTED);
 	
 	sock.getReq().setTE(true);
 }
@@ -392,14 +389,14 @@ void RequestHandling::handleContentLength(Socket& sock)
 
 	if (value.empty() || 
 		value.find_first_not_of("0123456789") != std::string::npos)
-		throw HttpExceptions(HttpBase::BAD_REQUEST);
+		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 
 	std::istringstream iss(value);
 	size_t cl;
     iss >> cl;
 
 	if (iss.fail())
-		throw HttpExceptions(HttpBase::BAD_REQUEST);
+		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
 	
 	sock.getReq().setContentLength(cl);
 }
