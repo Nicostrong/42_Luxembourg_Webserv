@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:56:02 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/04 16:19:13 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:30:48 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,33 @@ void CgiBody::onBodyReceivedEof( Buffer& buff )
 	writeInFile(buff, buff.getBufferUnread());
 	
 	this->_fBuff.flush();
+}
+
+void CgiBody::onBodyReceivedTE( Buffer& buff )
+{
+	if (buff.getBufferUnread() < 1 || 
+		this->_cgiChunk.getState() == CgiChunk::CHUNK_END)
+		return ;
+
+	size_t		len = this->_cgiChunk.handleChunk(buff);
+
+	while (len > 0 || this->_cgiChunk.getState() == CgiChunk::CHUNK_START)
+	{
+		len -= writeInMemory(buff, len);
+
+		if (len > 0)
+		{
+			openTmpFile();
+			writeInFile(buff, len);
+		}
+
+		len = this->_cgiChunk.handleChunk(buff);
+	}
+
+	if (this->_cgiChunk.getState() == CgiChunk::CHUNK_END)
+	{
+		this->_fBuff.flush();
+		this->_isReceived = true;
+	}
+	return ;
 }

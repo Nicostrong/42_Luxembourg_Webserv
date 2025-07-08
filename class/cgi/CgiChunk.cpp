@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Chunk.cpp                                          :+:      :+:    :+:   */
+/*   CgiChunk.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:27:27 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 11:12:40 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:25:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./../../includes/networking/Chunk.hpp"
+#include "./../../includes/cgi/CgiChunk.hpp"
 
-Chunk::Chunk() : _bytesReceived(0), _chunkSize(0), _chunksReceived(0), _bodySize(0), _bodyLimit(0), _state(CHUNK_START) {}
+CgiChunk::CgiChunk() : _bytesReceived(0), _chunkSize(0), _chunksReceived(0), _bodySize(0), _state(CHUNK_START) {}
 
-Chunk::Chunk(size_t limit) : _bytesReceived(0), _chunkSize(0), _chunksReceived(0), _bodySize(0), _bodyLimit(limit), _state(CHUNK_START) {}
+CgiChunk::CgiChunk(const CgiChunk& obj) : _bytesReceived(obj._bytesReceived), _chunkSize(obj._chunkSize), _chunksReceived(obj._chunksReceived), 
+	_bodySize(obj._bodySize), _state(obj._state) {}
 
-Chunk::Chunk(const Chunk& obj) : _bytesReceived(obj._bytesReceived), _chunkSize(obj._chunkSize), _chunksReceived(obj._chunksReceived), 
-	_bodySize(obj._bodySize), _bodyLimit(obj._bodyLimit), _state(obj._state) {}
+CgiChunk::~CgiChunk() {}
 
-Chunk::~Chunk() {}
-
-Chunk& Chunk::operator=(const Chunk& obj)
+CgiChunk& CgiChunk::operator=(const CgiChunk& obj)
 {
 	if (this != &obj)
 	{
@@ -29,18 +27,17 @@ Chunk& Chunk::operator=(const Chunk& obj)
 		this->_chunkSize = obj._chunkSize;
 		this->_chunksReceived = obj._chunksReceived;
 		this->_bodySize = obj._bodySize;
-		this->_bodyLimit = obj._bodyLimit;
 		this->_state = obj._state;
 	}
 	return (*this);
 }
 
-Chunk::State Chunk::getState() const
+CgiChunk::State CgiChunk::getState() const
 {
 	return (this->_state);
 }
 
-size_t Chunk::handleChunk(Buffer& buff)
+size_t CgiChunk::handleChunk(Buffer& buff)
 {
 	switch (this->_state)
 	{
@@ -62,16 +59,14 @@ size_t Chunk::handleChunk(Buffer& buff)
 
 //Helpers
 
-void Chunk::handleChunkStart()
+void CgiChunk::handleChunkStart()
 {
 	this->_chunksReceived++;
-	if (this->_chunksReceived > MAX_CHUNKS)
-		throw HttpSevereExceptions(HttpBase::CONTENT_TOO_LARGE);
 	this->_state = CHUNK_HEAD;
 }
 
 
-void Chunk::handleChunkHead(Buffer& buff)
+void CgiChunk::handleChunkHead(Buffer& buff)
 {
 	buff.alignData();
 	
@@ -90,19 +85,14 @@ void Chunk::handleChunkHead(Buffer& buff)
 	this->_chunkSize = convertHexa(
 		std::string(buff.getDataUnread(), std::min(pos, buff.find(';'))));
 	
-	if (this->_chunkSize > MAX_CHUNK_SIZE)
-		throw HttpSevereExceptions(HttpBase::CONTENT_TOO_LARGE);
-	
 	LOG_DEB(this->_chunkSize);
 	this->_bodySize += this->_chunkSize;
 	
-	if (this->_bodyLimit && this->_bodySize > this->_bodyLimit)
-		throw HttpSevereExceptions(HttpBase::CONTENT_TOO_LARGE);
 	buff.setBufferRead(pos - buff.getBufferRead() + 2);
 	this->_state = CHUNK_DATA;
 }
 
-size_t Chunk::handleChunkData(Buffer& buff)
+size_t CgiChunk::handleChunkData(Buffer& buff)
 {
 	if (this->_bytesReceived == this->_chunkSize)
 	{
@@ -127,7 +117,7 @@ size_t Chunk::handleChunkData(Buffer& buff)
 	return (len);
 }
 
-size_t Chunk::convertHexa(const std::string& str)
+size_t CgiChunk::convertHexa(const std::string& str)
 {
 	std::istringstream iss(str);
 	size_t res;
@@ -138,7 +128,7 @@ size_t Chunk::convertHexa(const std::string& str)
 	return (res);
 }
 
-bool Chunk::isHexaValid(const std::string& hex)
+bool CgiChunk::isHexaValid(const std::string& hex)
 {
 	if (hex.size() > sizeof(size_t) * 2 || hex.empty() || 
 		hex.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos)

@@ -56,7 +56,7 @@ class Body
 		Body&				operator=( const Body& obj );
 
 		void				openTmpFile( void );
-		void				onBodyReceivedTE( Buffer& buff );
+		virtual void		onBodyReceivedTE( Buffer& buff );
 		void				onBodyReceivedLength( Buffer& buff, size_t bodyLen );
 
 		size_t				writeInMemory( Buffer& buff, size_t max );

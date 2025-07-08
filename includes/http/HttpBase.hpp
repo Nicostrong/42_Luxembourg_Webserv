@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:02:41 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/05 09:46:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 09:50:25 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class HttpBase
 			GONE = 410,
 			LENGTH_REQUIRED = 411,
 			PRECONDITION_FAILED = 412,
-			PAYLOAD_TOO_LARGE = 413,
+			CONTENT_TOO_LARGE = 413,
 			URI_TOO_LONG = 414,
 			UNSUPPORTED_MEDIA_TYPE = 415,
 			RANGE_NOT_SATISFIABLE = 416,

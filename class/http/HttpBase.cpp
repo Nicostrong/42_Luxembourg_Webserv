@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:07:01 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/05 09:49:42 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 09:50:53 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ std::string	HttpBase::getStrStatusCode(size_t statusCode)
 		case 410: return "Gone";
 		case 411: return "Length Required";
 		case 412: return "Precondition Failed";
-		case 413: return "Payload Too Large";
+		case 413: return "Content Too Large";
 		case 414: return "URI Too Long";
 		case 415: return "Unsupported Media Type";
 		case 416: return "Range Not Satisfiable";

@@ -6,7 +6,7 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:27:32 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/08 09:45:02 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 09:51:05 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,6 +397,9 @@ void RequestHandling::handleContentLength(Socket& sock)
 
 	if (iss.fail())
 		throw HttpSevereExceptions(HttpBase::BAD_REQUEST);
+
+	if (cl > sock.getReq().getServer()->getMaxSizeBody())
+		throw HttpSevereExceptions(HttpBase::CONTENT_TOO_LARGE);
 	
 	sock.getReq().setContentLength(cl);
 }
