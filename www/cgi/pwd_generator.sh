@@ -14,7 +14,7 @@ length=$(echo "$post_data" | awk -F '&' '{
 
 echo "Length: $length" > /tmp/debug
 
-pwd=$(base32 < /dev/urandom 2> /dev/null | head -c $length 2> /dev/null)
+pwd=$(base64 < /dev/urandom 2> /dev/null | head -c $length 2> /dev/null)
 
 echo "pwd : $pwd" >> /tmp/debug
 
