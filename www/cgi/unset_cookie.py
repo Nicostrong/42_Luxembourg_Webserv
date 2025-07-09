@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 15:22:48 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/09 09:18:55 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/09 13:42:12 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ html = """
 			<h10>redirection to index in 5 secondes ...</h10>
 			<script>
 				setTimeout(function() {
-				window.location.href = '/index.html';
+				window.location.href = '/html/index.html';
 				}, 5000);
 
 				console.log('Redirection programmée dans 10 secondes...');

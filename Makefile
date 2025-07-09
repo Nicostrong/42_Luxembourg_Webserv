@@ -6,7 +6,7 @@
 #    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 08:27:57 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/08 16:04:42 by nfordoxc         ###   Luxembourg.lu      #
+#    Updated: 2025/07/09 13:41:25 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -244,7 +244,7 @@ all: 		$(NAME)
 $(NAME):	NUM_FILES=$(NB_SRC)
 $(NAME):	$(OBJ)
 	@$(CXX) $(CXXFLAGS) $(CXX_OPT) $(CC_DEF) $(OBJ) $(MYLIBS) -o $(NAME)
-	@echo "$(CGREEN)The programm $(NAME) successfully compilled"
+	@echo "$(CGREEN)The programm $(NAME) successfully compiled"
 
 %.o :		%.cpp
 	$(call compile_c_to_o)
