@@ -6,13 +6,13 @@
 /*   By: fdehan <fdehan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:21:05 by fdehan            #+#    #+#             */
-/*   Updated: 2025/07/02 08:06:25 by fdehan           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:24:41 by fdehan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./../../includes/events/EventMonitoring.hpp"
 
-EventMonitoring::EventMonitoring() :  _events(MAX_EVENTS),
+EventMonitoring::EventMonitoring() :  _events(4096),
 	_clientsConnected(0)
 {
 	this->_epollFd = epoll_create(MAX_EVENTS);
@@ -50,8 +50,8 @@ void EventMonitoring::monitor(int fd, uint32_t events,
 {
 	epoll_event event;
 
-	if (this->_clientsConnected + 1 == MAX_CONNECTIONS)
-		throw PollFullException();
+	if (this->_clientsConnected >= this->_events.size())
+		this->_events.resize(this->_events.size() * 2);
 
 	event.events = events;
 	event.data.ptr = new EventData(fd, ctx, *this);
