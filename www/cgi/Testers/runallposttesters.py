@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 10:59:30 by gzenner           #+#    #+#              #
-#    Updated: 2025/07/08 11:11:21 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/09 09:21:03 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ localhost = "localhost"
 shift = "50"
 
 sp.run(["clear"])
+print("\033[38;2;0;200;0m")
 sp.run(["python3", "post_tester_caesar.py", port, localhost, "caesar.py", shift, "Hello World"])
 sp.run(["python3", "post_tester_calculator.py", port, localhost, "calculator.py", "25", "25", "*"])
 sp.run(["python3", "post_tester_cheerup.py", port, localhost, "cheerup.py", "minishell"])

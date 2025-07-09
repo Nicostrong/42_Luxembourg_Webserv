@@ -6,7 +6,7 @@
 #    By: gzenner <gzenner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 10:59:30 by gzenner           #+#    #+#              #
-#    Updated: 2025/07/09 09:13:27 by gzenner          ###   ########.fr        #
+#    Updated: 2025/07/09 09:19:58 by gzenner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,10 @@ localhost = "localhost"
 shift = "50"
 
 sp.run(["clear"])
-print("Good Requests:")
+print("\033[38;2;0;200;0mGood Requests:")
 sp.run(["python3", "get_tester.py", port, localhost, "/"])
 
-print("Bad Requests:")
+print("\033[38;2;200;0;0mBad Requests:")
 sp.run(["python3", "get_tester.py", port, localhost, "/a"])
 sp.run(["python3", "get_tester.py", port, localhost, "/asasccasacs"])
 sp.run(["python3", "get_tester.py", port, localhost, "/index.html"])
