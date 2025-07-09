@@ -1,6 +1,7 @@
 import sys
 import socket
 import json
+import os
 from urllib.parse import parse_qs, quote
 
 query_string = os.environ.get('QUERY_STRING', '')
