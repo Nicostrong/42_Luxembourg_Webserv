@@ -1,9 +1,0 @@
-Le web server doit :
-
-    1)  traiter les requete HTTP
-    2)  gerer une journalisations des events (garde une trace de toute les requetes, erreurs, ... )
-    3)  l authentification (pour donner acces ou non a certains fichier)
-    4)  limite la bande passante (limite la quantite de donnee qu il peut transmettre ou traiter)
-    5)  gerer l espace de stockage pour autoriser ou non les depots de fichiers
-    6)  language de programmation (php ou python) pour traduire les pages en .php ou .py et les envoyer en .html
-    
