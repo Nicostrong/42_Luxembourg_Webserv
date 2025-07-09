@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    fish.py                                            :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+         #
+#    By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/01 11:37:13 by nfordoxc          #+#    #+#              #
-#    Updated: 2025/07/05 16:23:06 by nicostrong       ###   Luxembourg.lu      #
+#    Updated: 2025/07/09 09:25:23 by nfordoxc         ###   Luxembourg.lu      #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,12 +36,12 @@ html = """
 			<a	href="/html/upload.html">Upload</a>
 			<a	href="/html/download.html">Download</a>
 			<a	href="/html/delete.html">Delete</a>
-			<a	href="/html/new.html">New</a>
 			<a	href="/html/pwd_generator.html">PWD generator</a>
 			<a	href="/cgi/hello_world.py">Hello World Python</a>
 			<a	href="/cgi/hello_world.php">Hello World PHP</a>
 			<a	href="/cgi/timeout.py">Timeout</a>
 			<a	href="/cgi/fish.py">Fish</a>
+			<a	href="/cgi/notfound.py">Not Found GET</a>
 		</nav>
 		<div class="container">
 			<img src="/images/418.png" alt="Error 418" width="800" height="400" style="display:block;" />
