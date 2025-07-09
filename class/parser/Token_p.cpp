@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Token_p.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicostrong <nicostrong@student.42.fr>      +#+  +:+       +#+        */
+/*   By: nfordoxc <nfordoxc@42luxembourg.lu>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 07:35:46 by nfordoxc          #+#    #+#             */
-/*   Updated: 2025/05/17 11:48:43 by nicostrong       ###   Luxembourg.lu     */
+/*   Updated: 2025/07/09 07:57:57 by nfordoxc         ###   Luxembourg.lu     */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser/Token.hpp"
+#include "../../includes/http/HttpBase.hpp"
 
 /*******************************************************************************
  *							PRIVATE METHOD									   *
@@ -193,7 +194,7 @@ Token*		Token::createLocation(	std::istringstream& iss, Token*& head,
 	if (!(iss >> path))
 		throw Token::TokenError("Expected path after 'location'");
 
-	std::transform(path.begin(), path.end(), path.begin(), static_cast<int(*)(int)>(std::tolower));
+	path = HttpBase::normalizeUri(path);
 	
 	Token*		locKey = new Token(Token::LOCATION, path);
 
